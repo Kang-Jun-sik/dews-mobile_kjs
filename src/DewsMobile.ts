@@ -4,7 +4,7 @@ import { html, css, LitElement, property, customElement } from 'lit-element';
  * OpenWC Default Element
  */
 @customElement('dews-mobile')
-export class DewsMobile extends LitElement {
+export default class DewsMobile extends LitElement {
   static styles = css`
     :host {
       display: block;
