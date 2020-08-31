@@ -1,1 +1,1 @@
-export { DewsMobile } from './src/DewsMobile.js';
+export { default as DewsMobile } from './src/DewsMobile.js';

@@ -51,7 +51,13 @@
   },
   "prettier": {
     "singleQuote": true,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "htmlWhitespaceSensitivity": "css",
+    "semi": true,
+    "printWidth": 120,
+    "tabWidth": 2,
+    "useTabs": false,
+    "trailingComma": "all"
   },
   "husky": {
     "hooks": {

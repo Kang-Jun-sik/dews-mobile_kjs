@@ -1,8 +1,8 @@
 /* eslint-disable */
 // import/no-extraneous-dependencies,@typescript-eslint/no-var-requires
-const { createDefaultConfig } = require('@open-wc/testing-karma')
+const { createDefaultConfig } = require('@open-wc/testing-karma');
 
-const merge = require('deepmerge')
+const merge = require('deepmerge');
 
 module.exports = config => {
   config.set(
@@ -26,6 +26,6 @@ module.exports = config => {
         },
       },
     }),
-  )
-  return config
-}
+  );
+  return config;
+};
