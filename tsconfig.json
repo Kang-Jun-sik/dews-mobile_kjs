@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2018",                               // 사용할 ECMAScript 버전 설정
+    "module": "esnext",                               // 모듈 설정
+    "moduleResolution": "node",                       // 모듈 해석 방식 설정
+    "noEmitOnError": true,                            // 에러 발생시 결과파일을 저장여부'
+    "lib": ["es2017", "dom"],                         // 컴파일에 포함될라이브러리 파일 목록
+    "strict": true,                                   // 모든 엄격한 타입 검사 옵션을 활성화여부
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,             // export default 를 export 한 값들을 가지는 객체로 설정
+                                                      // export class Foo { member: string; } 을 할시 (b.ts)
+                                                      // export default { Foo } 가 기본으로 설정된다.
+
+    "experimentalDecorators": true,                   // ES Decorator에 대한 실험적 기능 사용 여부
+                                                      // vue에서는 vue와 Typescript를 같이 쓸때는 활성화를 권장하고 있다.
+    "importHelpers": true,                            // tslib에서 helpers (e.g. __extends, __rest, etc..)를 가져온다.
+                                                      // 중복코드를 없애기 위한 최적화용 옵션
+    "outDir": "dist",                                 // 출력할 디렉토리
+    "sourceMap": true,                                // 소스맵(*.map) 파일 생성 여부
+    "inlineSources": true,                            // 변환전 파일 .ts 코드를 결과코드에 추가여부
+    "rootDir": "./"                                   // 입력파일의 rootDir 설정
+                                                      // outDir옵션을 사용할때만 사용
+  },
+  "include": ["**/*.ts"]                              // 컴파일할 파일 경로를 설정
+}
