@@ -1,4 +1,4 @@
-import { html, css, property, customElement, PropertyValues, eventOptions } from 'lit-element';
+import { html, css, property, customElement } from 'lit-element';
 import DewsMobileBasePage from './DewsMobileBasePage.js';
 
 @customElement('custom-page')
@@ -15,14 +15,10 @@ export default class CustomPage extends DewsMobileBasePage {
   }
   opened = true;
 
-  __Click() {
-    console.log('click');
-    this.opened = !this.opened;
-  }
 
   render() {
     return html`
-      <form-container opened="true" title="1234" Click="${this.__Click()}">
+      <form-container opened="true" title="1234">
         <form-section></form-section>
       </form-container>
     `;
