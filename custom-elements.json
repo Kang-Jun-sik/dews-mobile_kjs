@@ -1,30 +1,270 @@
 {
-  "version": 2,
+  "version": "experimental",
   "tags": [
     {
-      "name": "dews-mobile",
-      "description": "A component with a title and an action counter",
+      "name": "mobile-page",
+      "path": "./src/components/layout/page.ts"
+    },
+    {
+      "name": "dews-area-panel",
+      "path": "./src/index.ts",
       "properties": [
         {
-          "name": "title",
-          "type": "String",
-          "description": "The title of your component",
-          "default": "Hey there"
+          "name": "styles",
+          "default": "\"_scss\""
+        }
+      ]
+    },
+    {
+      "name": "area-item",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "col",
+          "type": "number",
+          "default": "12"
         },
         {
-          "name": "counter",
-          "type": "Number",
-          "description": "An action counter",
-          "default": 0
+          "name": "hide",
+          "type": "boolean",
+          "default": "false"
         }
       ],
-      "events": [],
-      "slots": [],
-      "cssProperties": [
+      "properties": [
         {
-          "name": "--dews-mobile-text-color",
-          "description": "Main Text Color",
-          "type": "Color"
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "col",
+          "attribute": "col",
+          "type": "number",
+          "default": "12"
+        },
+        {
+          "name": "hide",
+          "attribute": "hide",
+          "type": "boolean",
+          "default": "false"
+        }
+      ]
+    },
+    {
+      "name": "dews-box",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "expandable",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "hide",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "expandable",
+          "attribute": "expandable",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "hide",
+          "attribute": "hide",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "height",
+          "type": "string"
+        },
+        {
+          "name": "slotHeight",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "dews-tabs",
+      "path": "./src/index.ts",
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "titleList"
+        }
+      ]
+    },
+    {
+      "name": "dews-tab",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "selected",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string"
+        },
+        {
+          "name": "selected",
+          "attribute": "selected",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "dews-container",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "selected",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string"
+        },
+        {
+          "name": "selected",
+          "attribute": "selected",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "main-bottom",
+      "path": "./src/main/components/ButtonTabBar.ts",
+      "attributes": [
+        {
+          "name": "button-set",
+          "description": "main/ButtonTabBar 에서 setAttribute 로 show 할 버튼 리스트 제공",
+          "type": "string",
+          "default": "\"[]\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"css`\\n    nav#bottom {\\n      position: fixed;\\n      bottom: -1px;\\n      left: 0;\\n      width: 100%;\\n      height: 50px;\\n      display: flex;\\n      background-color: #022f6f;\\n      align-items: center;\\n      text-align: center;\\n    }\\n\\n    nav#bottom button {\\n      position: relative;\\n      flex: 1;\\n      height: 100%;\\n      color: transparent;\\n    }\\n    button {\\n      background-color: transparent;\\n      border: 0;\\n    }\\n\\n    nav#bottom button.more:before {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsKICAgICAgICBmaWxsOiAjZmZmZmZmOwogICAgICAgIGZpbGwtcnVsZTogZXZlbm9kZDsKICAgICAgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPHBhdGggaWQ9IuygleuztCIgY2xhc3M9ImNscy0xIiBkPSJNNzQ0LDE0MGE5LDksMCwxLDEtOSw5QTksOSwwLDAsMSw3NDQsMTQwWm0xLjUsMTNoLTNhMC41LDAuNSwwLDAsMSwwLTFINzQzdi00aC0wLjVhMC41LDAuNSwwLDAsMSwwLTFINzQ1djVoMC41QTAuNSwwLjUsMCwwLDEsNzQ1LjUsMTUzWm0tMS41LTdhMSwxLDAsMSwxLDEtMUExLDEsMCwwLDEsNzQ0LDE0NloiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03MzUgLTE0MCkiLz4KPC9zdmc+Cg==);\\n    }\\n    nav#bottom button.add:before {\\n      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIyLjAuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAzMiAzMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMzIgMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxnPgoJCTxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBmaWxsPSIjRkZGRkZGIiBkPSJNMjMsN0g4QzcuMzU2LDcsNyw3LjM1MSw3LDhjMCwwLDAsMTQuNDQsMCwxNQoJCQljMC4wMzgsMC4wMzgsMC4yODcsMC44MTMsMSwxaDE1YzAuNjQ0LDAsMS0wLjM1MSwxLTFWOEMyNCw3LjM1MSwyMy42NDQsNywyMyw3eiBNMjAsMTZoLTR2NGgtMXYtNGgtNHYtMWg0di00aDF2NGg0VjE2eiIvPgoJPC9nPgo8L2c+Cjwvc3ZnPgo=);\\n    }\\n    nav#bottom button.search:before {\\n      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIyLjAuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAzMiAzMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMzIgMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI0ZGRkZGRiIgZD0iTTI2Ljc5NSwyNC40MDdsLTAuODI0LDAuODMybC0yLjkwNi0yLjk0MgoJYy0wLjg5NiwwLjcyNC0yLjAxOCwxLjE3NC0zLjI1NCwxLjE3NGMtMi44OTUsMC01LjI0My0yLjM3LTUuMjQzLTUuMjk0YzAtMi45MjQsMi4zNDgtNS4yOTQsNS4yNDMtNS4yOTQKCWMyLjg5NSwwLDUuMjQyLDIuMzcsNS4yNDIsNS4yOTRjMCwxLjI0OS0wLjQ0NywyLjM4My0xLjE2NCwzLjI4OEwyNi43OTUsMjQuNDA3eiBNMTkuODEsMTQuMDU5Yy0yLjI1MiwwLTQuMDc4LDEuODQ0LTQuMDc4LDQuMTE4CgljMCwyLjI3MywxLjgyNiw0LjExNyw0LjA3OCw0LjExN2MyLjI1MiwwLDQuMDc3LTEuODQ0LDQuMDc3LTQuMTE3QzIzLjg4OCwxNS45MDIsMjIuMDYyLDE0LjA1OSwxOS44MSwxNC4wNTl6IE0yMiw5SDEwdjEzaDQuMDM3CgljMC41MTcsMC44MDQsMS4yMDMsMS40NzksMi4wMTIsMS45ODlsLTcuMjA4LTAuMDFDOC4yNSwyNC4xNTcsOC4wMSwyMy42ODQsOCwyM1Y4YzAtMC42NDksMC4zNTYtMSwxLTFoMTRjMC42NDQsMCwxLDAuMzUxLDEsMQoJdjQuODI0Yy0wLjU3Ny0wLjU1NS0xLjI1LTEuMDEtMi0xLjMyMlY5eiIvPgo8L3N2Zz4K);\\n    }\\n    nav#bottom button.delete:before {\\n      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIyLjAuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAzMiAzMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMzIgMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBmaWxsPSIjRkZGRkZGIiBkPSJNMTksOVY3aC03djJIOHYxaDE1VjlIMTl6IE0xOCw5aC01VjhoNVY5eiIvPgoJPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiNGRkZGRkYiIGQ9Ik05LDIxLjk3M0M5LDI0LjE2NywxMSwyNCwxMSwyNGg5YzAsMCwyLDAuMDExLDItMi4wMjdWMTFIOQoJCVYyMS45NzN6IE0xOCwxM2gxdjloLTFWMTN6IE0xNSwxM2gxdjloLTFWMTN6IE0xMiwxM2gxdjloLTFWMTN6Ii8+CjwvZz4KPC9zdmc+Cg==);\\n    }\\n    nav#bottom button.save:before {\\n      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIyLjAuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAzMiAzMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMzIgMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI0ZGRkZGRiIgZD0iTTIyLDI0SDEwYy0wLjY0NCwwLTIsMC0yLTJWMTBjMC0yLDEuMzU2LTIsMi0yaDF2NWgxMFY4aDEKCWMwLjY0NCwwLDIsMCwyLDJ2MTJDMjQsMjQsMjIuNjQ0LDI0LDIyLDI0eiBNMjEsMTZIMTF2NmgxMFYxNnogTTEyLDhoOHY0aC04Vjh6Ii8+Cjwvc3ZnPgo=);\\n    }\\n    nav#bottom button:before {\\n      content: '';\\n      display: block;\\n      position: absolute;\\n      top: 50%;\\n      left: 50%;\\n      margin: 0;\\n      padding: 0;\\n      margin: calc(-32px / 2) 0 0 calc(-32px / 2);\\n      width: 32px;\\n      height: 32px;\\n      background: transparent no-repeat center;\\n    }\\n  `\""
+        },
+        {
+          "name": "buttonSet",
+          "attribute": "button-set",
+          "description": "main/ButtonTabBar 에서 setAttribute 로 show 할 버튼 리스트 제공",
+          "type": "string",
+          "default": "\"[]\""
+        }
+      ],
+      "events": [
+        {
+          "name": "clicked-button"
+        }
+      ]
+    },
+    {
+      "name": "main-header",
+      "path": "./src/main/components/NavigationBar.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"init\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"css`\\n    header {\\n      position: fixed;\\n      width: 100%;\\n      height: 45px;\\n      top: 0;\\n      border-bottom: 2px solid #436bc7;\\n      background-color: #1c90fb;\\n      z-index: 10;\\n      transition: 0.5s;\\n    }\\n\\n    header button.btn-back:before {\\n      content: '';\\n      display: block;\\n      width: 45px;\\n      height: 45px;\\n      background: transparent\\n        url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjQsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIxN3B4Ig0KCSBoZWlnaHQ9IjE3cHgiIHZpZXdCb3g9IjAgMCAxNyAxNyIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTcgMTciIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGcgaWQ9IndoaXRlX2JnIiBkaXNwbGF5PSJub25lIj4NCgk8cmVjdCB4PSItMjIyIiBkaXNwbGF5PSJpbmxpbmUiIHdpZHRoPSI0NjIiIGhlaWdodD0iMTciLz4NCjwvZz4NCjxnIGlkPSJibGFjayI+DQoJPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiNGRkZGRkYiIGQ9Ik0xMy41NTYsOS44NTJMOSwxNEg4TDMuNDQ0LDkuODUybDAuNjczLTAuNzRMOCwxMi42NDRWM2gxdjkuNjQ0DQoJCWwzLjg4My0zLjUzMkwxMy41NTYsOS44NTJ6Ii8+DQo8L2c+DQo8ZyBpZD0id2hpdGUiPg0KPC9nPg0KPGcgaWQ9InRleHQiPg0KPC9nPg0KPC9zdmc+DQo=)\\n        no-repeat 50%;\\n      transform: rotate(90deg);\\n    }\\n\\n    header button.btn-back {\\n      width: 45px;\\n      height: 45px;\\n    }\\n    button {\\n      background-color: transparent;\\n      border: 0;\\n    }\\n\\n    header h2.title {\\n      position: fixed;\\n      top: 0;\\n      left: 45px;\\n      width: calc(100% - 90px);\\n      height: 45px;\\n      line-height: 45px;\\n      background-color: transparent;\\n      text-align: left;\\n      color: #ffffff;\\n      font-size: 20px;\\n      z-index: 11;\\n      margin: 5px;\\n    }\\n  `\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"init\""
+        }
+      ],
+      "events": [
+        {
+          "name": "historyBack"
+        }
+      ]
+    },
+    {
+      "name": "main-page",
+      "path": "./src/main/main.ts",
+      "description": "Main System 호출 전 필요한 세팅 작업",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "id",
+          "attribute": "id",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "onPageLoaded",
+          "type": "(e: PageLoadedEventArgs) => void"
+        },
+        {
+          "name": "onPageLoading",
+          "type": "(e: PageLoadingEventArgs) => void"
+        }
+      ],
+      "events": [
+        {
+          "name": "onFocusedAreaChanged"
         }
       ]
     }
