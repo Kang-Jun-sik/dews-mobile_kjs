@@ -1,0 +1,54 @@
+@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+
+//======================================
+// dews-area-box
+//======================================
+//--------------------------------------
+// 레이아웃 영역
+//--------------------------------------
+* {
+  @include reset();
+}
+.dews-box-wrap {
+  @include area-box();
+}
+//--------------------------------------
+// 애니메이션 영역
+//--------------------------------------
+.dews-box-wrap {
+  .dews-box-title {
+    .dews-box-title-button {
+      &:after {
+        transform: rotate(180deg);
+        transition: transform 0.3s;
+        transition-timing-function: ease-in-out;
+      }
+    }
+
+    &[collapsed] {
+      .dews-box-title-button {
+        &:after {
+          transform: rotate(0deg);
+          transition: transform 0.3s;
+          transition-timing-function: ease-in-out;
+        }
+      }
+    }
+  }
+}
+
+:host([collapsed]) [part='content'] {
+  //display: block;
+  //height: 300px;
+  transition: height 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+[part='content'] {
+  //display: none;
+  overflow: hidden;
+  height: 0;
+  transition: height 0.5s;
+  transition-timing-function: ease-in-out;
+}

@@ -1,0 +1,34 @@
+import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
+import { html } from 'lit-html';
+import '../dist/js/dews-mobile.js';
+
+<Meta
+  title="MDX|Box"
+  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+  parameters={{ component: 'dews-box', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+/>
+
+<!-- 아래는 Doc 부분 -->
+# dews-accordion StoryBook
+
+## Default dews-box
+<Preview>
+  <Story name="dews-box" height="100px">
+    {html`
+    <div style='width: 360px'>
+        <dews-box title='box'>
+            <area-item slot="content"></area-item>
+        </dews-box>
+    </div>
+    `}
+  </Story>
+</Preview>
+
+
+
+## API
+
+API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
+
+<Props of="dews-box" />

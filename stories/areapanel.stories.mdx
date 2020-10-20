@@ -1,0 +1,51 @@
+import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
+import { html } from 'lit-html';
+import '../dist/js/dews-mobile.js';
+
+<Meta
+  title="MDX|Area-Panel"
+  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+  parameters={{ component: 'dews-area-panel', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+/>
+
+<!-- 아래는 Doc 부분 -->
+# dews-accordion StoryBook
+
+## Default dews-area-panel
+<Preview>
+  <Story name="dews-area-panel" height="100px">
+    {html`
+<dews-box id="box1" title="box1">
+    <dews-container></dews-container>
+</dews-box>
+<dews-area-panel id='panel1'>
+  <area-item id='item1' col="4">
+    <dews-box id="box2" title="box2"></dews-box>
+  </area-item>
+  <area-item id='item2' col="8">
+    <dews-area-panel>
+      <area-item col="6">
+        <dews-box id="box3" title="box3">
+            <dews-container></dews-container>
+        </dews-box>
+      </area-item>
+      <area-item col="6">
+        <dews-box id="box4" title="box4"></dews-box>
+      </area-item>
+    </dews-area-panel>
+  </area-item>
+</dews-area-panel>
+<dews-box id="box5" title="box5"></dews-box>
+    `}
+  </Story>
+</Preview>
+
+
+
+
+## API
+
+API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
+
+<Props of="dews-area-panel" />
