@@ -20,6 +20,11 @@ import { AreaPanel } from './components/areapanel/areapanel.js';
 import { AreaItem } from './components/areaitem/areaitem.js';
 
 import { SearchContainer } from './components/searchcontainer/searchcontainer.js';
+
+import { FormContainer } from './components/formcontainer/formcontainer.js';
+
+import { FormSection } from './components/formsection/formsection.js';
+
 import { Button } from './components/button/button.js';
 import { Textbox } from './components/textbox/textbox.js';
 import { Codepicker } from './components/codepicker/codepicker.js';
@@ -41,3 +46,9 @@ window.customElements.define('dews-tabs', Tabs);
 window.customElements.define('dews-tab', Tab);
 
 window.customElements.define('dews-search-container', SearchContainer);
+
+window.customElements.define('dews-search-container', SearchContainer);
+window.customElements.define('dews-form-container', FormContainer);
+window.customElements.define('form-section', FormSection);
+
+window.customElements.define('dews-button', Button);
