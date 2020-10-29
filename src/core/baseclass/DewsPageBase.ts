@@ -1,5 +1,7 @@
 import { DewsComponent } from './DewsComponent.js';
-import { css, CSSResult, html, TemplateResult } from 'lit-element';
+import { CSSResult, html, TemplateResult } from 'lit-element';
+import { Tabs } from '../../components/tabs/tabs.js';
+import { Box } from '../../components/box/box.js';
 
 /**
  * 업무페이지 구성
@@ -9,12 +11,14 @@ export class DewsPageBase extends DewsComponent {
   static cssTemplate: CSSResult;
   htmlTemplate: TemplateResult;
 
+  getAreaList: Array<Box | Tabs>;
+
   async connectedCallback() {
     super.connectedCallback();
     try {
       // render 전
       if (await this.updateComplete) {
-        // render 후
+        this.dispatchEvent(new CustomEvent('pageUpdateComplete', { bubbles: true, composed: true }));
         if (this.onReady) {
           await this.onReady();
         }
