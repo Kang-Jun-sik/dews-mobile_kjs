@@ -2,8 +2,427 @@
   "version": "experimental",
   "tags": [
     {
-      "name": "mobile-page",
-      "path": "./src/components/layout/page.ts"
+      "name": "dews-codepicker",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "attribute": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "events": [
+        {
+          "name": "onFocus"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "focusedAreaChanged"
+        }
+      ]
+    },
+    {
+      "name": "dews-datepicker",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "attribute": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "events": [
+        {
+          "name": "onFocus"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "focusedAreaChanged"
+        }
+      ]
+    },
+    {
+      "name": "dews-dropdownlist",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "attribute": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "events": [
+        {
+          "name": "onFocus"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "focusedAreaChanged"
+        }
+      ]
+    },
+    {
+      "name": "dews-textbox",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "placeholder",
+          "attribute": "placeholder",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "error",
+          "type": "Function",
+          "default": "\"(message: string) => {\\n    this._show(message, 'error');\\n  }\""
+        },
+        {
+          "name": "warning",
+          "type": "Function",
+          "default": "\"(message: string) => {\\n    this._show(message, 'warning');\\n  }\""
+        }
+      ],
+      "events": [
+        {
+          "name": "onFocus"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "focusedAreaChanged"
+        }
+      ]
+    },
+    {
+      "name": "dews-button",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"title\""
+        },
+        {
+          "name": "type",
+          "type": "TYPE_LIST",
+          "default": "\"default\""
+        },
+        {
+          "name": "size",
+          "type": "SIZE_LIST",
+          "default": "\"default\""
+        },
+        {
+          "name": "icon",
+          "type": "ICON_LIST | undefined"
+        },
+        {
+          "name": "link",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "ui",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"title\""
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "TYPE_LIST",
+          "default": "\"default\""
+        },
+        {
+          "name": "size",
+          "attribute": "size",
+          "type": "SIZE_LIST",
+          "default": "\"default\""
+        },
+        {
+          "name": "icon",
+          "attribute": "icon",
+          "type": "ICON_LIST | undefined"
+        },
+        {
+          "name": "link",
+          "attribute": "link",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "ui",
+          "attribute": "ui",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "focusedAreaChanged"
+        }
+      ]
     },
     {
       "name": "dews-area-panel",
@@ -12,6 +431,11 @@
         {
           "name": "styles",
           "default": "\"_scss\""
+        }
+      ],
+      "events": [
+        {
+          "name": "focusedAreaChanged"
         }
       ]
     },
@@ -47,6 +471,11 @@
           "type": "boolean",
           "default": "false"
         }
+      ],
+      "events": [
+        {
+          "name": "focusedAreaChanged"
+        }
       ]
     },
     {
@@ -59,9 +488,9 @@
           "default": "\"\""
         },
         {
-          "name": "expandable",
+          "name": "collapsed",
           "type": "boolean",
-          "default": "true"
+          "default": "false"
         },
         {
           "name": "hide",
@@ -81,10 +510,10 @@
           "default": "\"\""
         },
         {
-          "name": "expandable",
-          "attribute": "expandable",
+          "name": "collapsed",
+          "attribute": "collapsed",
           "type": "boolean",
-          "default": "true"
+          "default": "false"
         },
         {
           "name": "hide",
@@ -95,23 +524,76 @@
         {
           "name": "height",
           "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "onFocus"
         },
         {
-          "name": "slotHeight",
-          "type": "string"
+          "name": "onFocused"
+        },
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "focusedAreaChanged"
         }
       ]
     },
     {
       "name": "dews-tabs",
       "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "selected",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "hide",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
       "properties": [
         {
           "name": "styles",
           "default": "\"_scss\""
         },
         {
-          "name": "titleList"
+          "name": "selected",
+          "attribute": "selected",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "hide",
+          "attribute": "hide",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "select",
+          "type": "Function",
+          "default": "\"(select: number) => {\\n    this._select(select);\\n  }\""
+        }
+      ],
+      "events": [
+        {
+          "name": "focusIn"
+        },
+        {
+          "name": "focusBlur"
+        },
+        {
+          "name": "tabChange"
+        },
+        {
+          "name": "focusedAreaChanged"
         }
       ]
     },
@@ -124,8 +606,9 @@
           "type": "string"
         },
         {
-          "name": "selected",
-          "type": "boolean"
+          "name": "hide",
+          "type": "boolean",
+          "default": "false"
         }
       ],
       "properties": [
@@ -139,23 +622,45 @@
           "type": "string"
         },
         {
-          "name": "selected",
-          "attribute": "selected",
-          "type": "boolean"
+          "name": "hide",
+          "attribute": "hide",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "focusedAreaChanged"
         }
       ]
     },
     {
-      "name": "dews-container",
+      "name": "dews-search-container",
       "path": "./src/index.ts",
       "attributes": [
         {
           "name": "title",
-          "type": "string"
+          "type": "string | undefined"
         },
         {
-          "name": "selected",
-          "type": "boolean"
+          "name": "col",
+          "type": "number",
+          "default": "1"
+        },
+        {
+          "name": "enableCapture",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "enableSet",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "enableReset",
+          "type": "boolean",
+          "default": "false"
         }
       ],
       "properties": [
@@ -166,12 +671,36 @@
         {
           "name": "title",
           "attribute": "title",
-          "type": "string"
+          "type": "string | undefined"
         },
         {
-          "name": "selected",
-          "attribute": "selected",
-          "type": "boolean"
+          "name": "col",
+          "attribute": "col",
+          "type": "number",
+          "default": "1"
+        },
+        {
+          "name": "enableCapture",
+          "attribute": "enableCapture",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "enableSet",
+          "attribute": "enableSet",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "enableReset",
+          "attribute": "enableReset",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "focusedAreaChanged"
         }
       ]
     },
@@ -203,6 +732,9 @@
       "events": [
         {
           "name": "clicked-button"
+        },
+        {
+          "name": "focusedAreaChanged"
         }
       ]
     },
@@ -260,11 +792,6 @@
         {
           "name": "onPageLoading",
           "type": "(e: PageLoadingEventArgs) => void"
-        }
-      ],
-      "events": [
-        {
-          "name": "onFocusedAreaChanged"
         }
       ]
     }

@@ -1,0 +1,12 @@
+<div>
+  <label for="textbox">${this.title}</label>
+  <input type="text" @input="${this._onChange}" class="${this.className}" id="textbox"  ?readonly="${this.readonly}"/>
+</div>
+
+<!--
+textbox class 아무것도 없을 때 : textbox
+dropdown list : dropdown //with readonly
+code picker : datepicker //with readonly
+date picker : datepicker //with readonly
+ -->
+

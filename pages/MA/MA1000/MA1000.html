@@ -1,13 +1,24 @@
-<mobile-page page-id="ma1000">
-  <mobile-area area-title="Area1" area-id="area-id-1" button-set='["search", "more"]'>
-    <div>Area1 Content</div>
-  </mobile-area>
-  <mobile-area
-    area-title="Area2"
-    area-id="area-id-2"
-    button-set='["save", "delete", "add"]'
-    .clickSlot="${this.movePage}"
-  >
-    <a>Area2 Content</a>
-  </mobile-area>
-</mobile-page>
+<dews-area-panel>
+  <area-item col="4">
+    <dews-box title="box#1" expandable="false">
+      <dews-container></dews-container>
+    </dews-box>
+  </area-item>
+  <area-item col="8">
+    <dews-box title="box#2">
+      <dews-container></dews-container>
+    </dews-box>
+    <dews-area-panel>
+      <area-item col="6">
+        <dews-box title="box#3">
+          <dews-container></dews-container>
+        </dews-box>
+      </area-item>
+      <area-item col="6">
+        <dews-box title="box#4">
+          <dews-container></dews-container>
+        </dews-box>
+      </area-item>
+    </dews-area-panel>
+  </area-item>
+</dews-area-panel>

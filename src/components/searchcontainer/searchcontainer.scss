@@ -2,18 +2,25 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-area-tabs
+// dews-search-container
 //======================================
-
 //--------------------------------------
 // 레이아웃 영역
 //--------------------------------------
 * {
   @include reset();
 }
-:host {
-  width: 100%;
+
+.dews-search-field{
+    @include form-field();
+
+  :host([col='2']) & {
+    @include form-field(2);
+  }
 }
-.dews-tabs-wrap {
-  @include area-tabs-title();
+//--------------------------------------
+// dews-container-option-bar
+//--------------------------------------
+.dews-container-option-control {
+  @include option-control();
 }

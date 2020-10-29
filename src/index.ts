@@ -18,14 +18,26 @@ import { Tab } from './components/tab/tab.js';
 import { Tabs } from './components/tabs/tabs.js';
 import { AreaPanel } from './components/areapanel/areapanel.js';
 import { AreaItem } from './components/areaitem/areaitem.js';
-import { Container } from './components/container/container.js';
+
+import { SearchContainer } from './components/searchcontainer/searchcontainer.js';
 import { Button } from './components/button/button.js';
+import { Textbox } from './components/textbox/textbox.js';
+import { Codepicker } from './components/codepicker/codepicker.js';
+import { Datepicker } from './components/datepicker/datepicker.js';
+import { Dropdownlist } from './components/dropdownlist/dropdownlist.js';
 
 export { Tabs, Tab, Box, AreaPanel };
+
+window.customElements.define('dews-codepicker', Codepicker);
+window.customElements.define('dews-datepicker', Datepicker);
+window.customElements.define('dews-dropdownlist', Dropdownlist);
+window.customElements.define('dews-textbox', Textbox);
 window.customElements.define('dews-button', Button);
+
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);
 window.customElements.define('dews-box', Box);
 window.customElements.define('dews-tabs', Tabs);
 window.customElements.define('dews-tab', Tab);
-window.customElements.define('dews-container', Container);
+
+window.customElements.define('dews-search-container', SearchContainer);

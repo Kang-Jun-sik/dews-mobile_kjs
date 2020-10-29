@@ -1,5 +1,4 @@
 import { DewsBizPage } from '../../../src/core/baseclass/DewsBizPage.js';
-
 import _html from './MA1000.html';
 import _scss from './MA1000.scss';
 
