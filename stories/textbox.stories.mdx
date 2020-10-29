@@ -1,0 +1,72 @@
+import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
+import { html } from 'lit-html';
+import '../dist/js/dews-mobile.js';
+
+<Meta
+  title="MDX|Text Box"
+  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+  parameters={{ component: 'dews-text-box', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+/>
+
+<!-- 아래는 Doc 부분 -->
+# dews-accordion StoryBook
+
+## Default dews-text-box
+<Preview>
+  <Story name="text-box width360" height="100px">
+    {html`
+    <div style='width: 360px'>
+        <dews-box title='box' >
+            <dews-search-container split >
+                <dews-text-box class="datapicker"  title='1'></dews-text-box>
+                <dews-text-box  title='2'></dews-text-box>
+                <dews-text-box  title='3'></dews-text-box>
+                <dews-text-box  title='4'></dews-text-box>
+                <dews-text-box  title='3'></dews-text-box>
+                <dews-text-box  title='5'></dews-text-box>
+                <dews-text-box  title='6'></dews-text-box>
+                <dews-text-box  title='7'></dews-text-box>
+            </dews-search-container>
+        </dews-box>
+    </div>
+    `}
+  </Story>
+    <Story name="text-box width720" height="100px">
+        {html`
+    <div style='width: 720px'>
+        <dews-box title='box'>
+            <dews-search-container>
+                <dews-button  title='button'></dews-button>
+                <dews-text-box  title='1'></dews-text-box>
+                <dews-text-box  title='2'></dews-text-box>
+                <dews-text-box  title='3'></dews-text-box>
+                <dews-text-box  title='4'></dews-text-box>
+            </dews-search-container>
+        </dews-box>
+    </div>
+    `}
+    </Story>
+    <Story name="text-box width1280" height="100px">
+        {html`
+    <div style='width: 1280px'>
+        <dews-box title='box'>
+             <dews-search-container split >
+                <dews-text-box  title='1'></dews-text-box>
+                <dews-dropdown-list title='2'></dews-dropdown-list>
+                <dews-text-box  title='3'></dews-text-box>
+                <dews-text-box  title='4'></dews-text-box>
+            </dews-search-container>
+        </dews-box>
+    </div>
+    `}
+    </Story>
+</Preview>
+
+
+
+## API
+
+API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
+
+<Props of="dews-text-box" />

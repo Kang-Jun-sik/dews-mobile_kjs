@@ -67,19 +67,24 @@ export class Box extends DewsLayoutComponent {
     }
   }
 
-  enable(value: boolean) {
+  protected enable: Function = (value: boolean) => {
     return (this.collapsed = value);
-  }
+  };
 
-  protected updated(_changedProperties: PropertyValues) {
-    super.updated(_changedProperties);
-  }
-
-  private slotChange() {
-    this.slotHeight = `${this.shadowRoot.querySelector('.dews-box-content').clientHeight}px`;
-    if (!this.collapsed) {
-      this.height = this.slotHeight;
+  private slotChange(e) {
+    if (this.collapsed) {
+      this.height = '0px';
+    } else {
+      this.height = 'auto';
     }
+    this.updateComplete.then(() => {
+      this.slotHeight = `${this.shadowRoot.querySelector('.dews-box-content-wrap')?.clientHeight}px`;
+      if (!this.collapsed) {
+        this.height = this.slotHeight;
+      } else {
+        this.slotHeight = `${this.shadowRoot.querySelector('.dews-box-content')?.clientHeight}px`;
+      }
+    });
   }
 
   render() {

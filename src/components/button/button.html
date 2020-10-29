@@ -1,3 +1,4 @@
-<div @click="${this._clickHandler}">
-<input type="button" value="${this.title}" ?disabled="${this.disabled}"/>
-</div>
+<button ?disabled="${this.disabled}" >
+  <span class="icon"></span>
+  <span class="text">${this.title}</span>
+</button>

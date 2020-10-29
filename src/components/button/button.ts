@@ -33,13 +33,16 @@ export class Button extends DewsLayoutComponent {
   size: SIZE_LIST = SIZE_LIST.default;
 
   @property({ type: String })
-  icon: ICON_LIST;
+  icon: ICON_LIST | undefined;
 
   @property({ type: String })
   link: string | undefined;
 
   @property({ type: Boolean })
   disabled = false;
+
+  @property({ type: Boolean })
+  ui = false;
 
   connectedCallback() {
     super.connectedCallback();
@@ -51,12 +54,9 @@ export class Button extends DewsLayoutComponent {
     this.removeEventListener('focus', this._focusChange);
   }
 
-  private _clickHandler(e) {
-    console.log(e.target.title);
-  }
+  private _clickHandler() {}
 
   render() {
-    console.log(this.disabled);
     return _html.bind(this)();
   }
 }

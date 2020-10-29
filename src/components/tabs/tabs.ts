@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { internalProperty, html, property, eventOptions } from 'lit-element';
+import { internalProperty, html, property } from 'lit-element';
 
 import _html from './tabs.html';
 import _scss from './tabs.scss';
@@ -26,7 +26,7 @@ export class Tabs extends DewsLayoutComponent {
   hide: boolean = false;
 
   @internalProperty()
-  titleList;
+  private titleList;
 
   select: Function = (select: number) => {
     this._select(select);
@@ -45,12 +45,12 @@ export class Tabs extends DewsLayoutComponent {
   }
 
   private _select: Function = (select: number) => {
-    this.shadowRoot.querySelector('.title-list').querySelector('.active').className = 'title';
-    this.shadowRoot.querySelector('.title-list').querySelectorAll('.title')[select].className = 'title active';
+    this.shadowRoot.querySelector('.title-list').querySelector('.active').classList.remove('active');
+    this.shadowRoot.querySelector('.title-list').querySelectorAll('.title')[select].classList.add('active');
     this.querySelectorAll('dews-tab').forEach(tab => {
-      tab.shadowRoot.querySelector('.content').className = 'content';
+      tab.shadowRoot.querySelector('.content')?.classList?.remove('active');
     });
-    this.querySelectorAll('dews-tab')[select].shadowRoot.querySelector('.content').className = 'content active';
+    this.querySelectorAll('dews-tab')[select].shadowRoot.querySelector('.content')?.classList?.add('active');
     this.selected = select;
     // const tabChange = new Event('tabChange');
     this.dispatchEvent(new CustomEvent('tabChange', { detail: { select: select } }));
@@ -78,8 +78,7 @@ export class Tabs extends DewsLayoutComponent {
         <span>${tab.title}</span>
       </button>`;
     });
-    e.target.assignedElements()[this.selected].shadowRoot.children[0].className =
-      e.target.assignedElements()[this.selected].shadowRoot.children[0].className + ' active';
+    e.target.assignedElements()[this.selected].shadowRoot.children[0].classList.add('active');
   }
 
   render() {

@@ -9,16 +9,19 @@ suite('Box', () => {
     assert.equal(el.hide, false);
     // assert.equal(el.expandable, 'true');
   });
+
   test('Set Box Title ', async () => {
     const el: Box = await fixture(html` <dews-box title="Box"></dews-box> `);
     assert.equal(el.title, 'Box');
   });
+
   test('Set Box hide ', async () => {
     const el: Box = await fixture(html` <dews-box hide="true"></dews-box> `);
     assert.equal(el.title, '');
     assert.equal(el.hide, true);
     // assert.equal(el.expandable, true);
   });
+
   test('Set Box click ', async () => {
     const el: Box = await fixture(html` <dews-box title="box"><div style="height: 30px"></div></dews-box> `);
     assert.equal(el.title, 'box');

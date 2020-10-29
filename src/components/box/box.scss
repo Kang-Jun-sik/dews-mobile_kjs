@@ -10,6 +10,9 @@
 * {
   @include reset();
 }
+:host {
+  width: 100%;
+}
 .dews-box-wrap {
   @include area-box();
 }
@@ -36,6 +39,9 @@
       }
     }
   }
+}
+:host {
+  width: 100%;
 }
 
 :host([collapsed]) [part='content'] {
