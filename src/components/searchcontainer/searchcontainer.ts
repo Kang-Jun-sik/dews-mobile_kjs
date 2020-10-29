@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { html, internalProperty, property, TemplateResult } from 'lit-element';
+import { html, internalProperty, property } from 'lit-element';
 
 import _html from './searchcontainer.html';
 import _scss from './searchcontainer.scss';

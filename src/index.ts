@@ -46,9 +46,5 @@ window.customElements.define('dews-tabs', Tabs);
 window.customElements.define('dews-tab', Tab);
 
 window.customElements.define('dews-search-container', SearchContainer);
-
-window.customElements.define('dews-search-container', SearchContainer);
 window.customElements.define('dews-form-container', FormContainer);
 window.customElements.define('form-section', FormSection);
-
-window.customElements.define('dews-button', Button);

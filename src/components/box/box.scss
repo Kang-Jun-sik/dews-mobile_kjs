@@ -40,9 +40,6 @@
     }
   }
 }
-:host {
-  width: 100%;
-}
 
 :host([collapsed]) [part='content'] {
   //display: block;
