@@ -5,5 +5,7 @@ export interface MainInterface {
   onFocusChanged;
   start(): Promise<void>;
   onHistoryBack;
+  onPageUpdateComplete;
+  onMainLoadComplete;
   loadPage(modules: string, menuId: string, options?: object);
 }
