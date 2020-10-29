@@ -31,6 +31,10 @@ export class FormContainer extends DewsLayoutComponent {
   private _contentView() {
     const contentChildLength = this.querySelector('container-content')?.childElementCount;
     const contentChildItem = this.querySelector('container-content')?.children;
+    if (this.querySelectorAll('form-section').length <= 0) {
+      console.error('form-section 이 없습니다.');
+      return;
+    }
     if (contentChildLength <= 0 || contentChildItem == undefined) {
       return;
     }
