@@ -12,6 +12,9 @@ export { TemplateResult } from 'lit-html';
 export { PageLoadedEventArgs } from './main/PageLoadedEventArgs.js';
 export { PageLoadingEventArgs } from './main/PageLoadingEventArgs.js';
 
+// util
+export { element } from './util/InjectionElement.js';
+
 // layout 컴포넌트
 import { Box } from './components/box/box.js';
 import { Tab } from './components/tab/tab.js';
