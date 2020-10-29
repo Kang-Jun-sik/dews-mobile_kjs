@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { eventOptions, internalProperty, property, PropertyValues, html } from 'lit-element';
+import { internalProperty, property, PropertyValues } from 'lit-element';
 
 import _html from './box.html';
 import _scss from './box.scss';
@@ -23,29 +23,23 @@ export class Box extends DewsLayoutComponent {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('focusin', this._focusInEvent);
-    this.addEventListener('blur', this._blurEvent);
+    this.addEventListener('click', this._clickEvent);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('focusin', this._focusInEvent);
-    this.removeEventListener('blur', this._blurEvent);
+    this.removeEventListener('click', this._clickEvent);
   }
 
-  private _blurEvent(e) {}
+  public _blurEvent() {
+    console.log('blur');
+  }
 
-  private _focusInEvent(e) {
-    const onFocus = new Event('onFocus');
-    this.dispatchEvent(onFocus);
-
-    /*
-     * main menu 변경
-     * */
-    // this._focusChange(e);
-
-    const onFocused = new Event('onFocused');
-    this.dispatchEvent(onFocused);
+  private _clickEvent(e: Event) {
+    // 직접 일으킨 이벤트만 처리하기 위해 isTrusted 사용
+    if (e.isTrusted) {
+      this._focusChanging(e);
+    }
   }
 
   private _onToggleClick(e) {

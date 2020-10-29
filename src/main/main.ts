@@ -8,6 +8,8 @@ import { EnvironmentService } from '../env/EnvironmentService.js';
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { PageLoadedEventArgs } from './PageLoadedEventArgs.js';
 import { PageLoadingEventArgs } from './PageLoadingEventArgs.js';
+import { FocusChangingEventArgs } from './FocusChangingEventArgs.js';
+import { FocusChangedEventArgs } from './FocusChangedEventArgs.js';
 import { HistoryBackEventArgs } from './HistoryBackEventArgs.js';
 
 /**
@@ -33,6 +35,8 @@ export class Main extends LitElement implements MainInterface {
     this.$app = document.getElementById('app');
     this.pageHistoryManager = new PageHistoryManager();
     // this.focusManager = new FocusManager();
+    // this.pageHistoryManager = new PageHistoryManager();
+    this.focusManager = new FocusManager();
     // this.contentsManager = new ContentsManager();
     this.envService = new EnvironmentService();
   }
@@ -49,10 +53,18 @@ export class Main extends LitElement implements MainInterface {
     this.addEventListener('historyBack', handler);
   }
 
+  set onFocusChanging(handler: (e: FocusChangingEventArgs) => void) {
+    this.addEventListener('focusChanging', handler);
+  }
+
+  set onFocusChanged(handler: (e: FocusChangedEventArgs) => void) {
+    this.addEventListener('focusChanged', handler);
+  }
+
   // 시작점
   async start(): Promise<void> {
     await this.init();
-    this.loadMain();
+    await this.loadMain();
     // if (this.getAuthorization()) {
     // } else {
     //   // App 에서는 임의로 url 입력 후 접속하는 경우
@@ -63,25 +75,25 @@ export class Main extends LitElement implements MainInterface {
     // global variable, event 등록
   }
 
-  private loadMain() {
-    let mainEnv: MainEnvironment;
-    Promise.all([this.envService.getEnvironment()])
-      .then(env => {
-        mainEnv = env[0] as MainEnvironment;
-      })
-      .finally(() => {
-        const mainContainer = document.createElement('main-page');
-        mainContainer.setAttribute('id', 'main');
-        this.$app.append(mainContainer);
+  private async loadMain() {
+    const data = await Promise.all([this.envService.getEnvironment()]);
+    const mainEnv: MainEnvironment = data[0] as MainEnvironment;
 
-        // this.focusManager.init();
-        this.pageHistoryManager.init();
+    // this.envService.getEnvironment();
+    // await Promise.all([this.envService.getEnvironment()])
+    // .then(env => {
+    //   mainEnv = env[0] as MainEnvironment;
+    // })
+    // .finally(() => {
+    const mainContainer = document.createElement('main-page');
+    mainContainer.setAttribute('id', 'main');
+    this.$app.append(mainContainer);
 
-        if (mainEnv.initMenu) {
-          const initMenu = mainEnv.initMenu;
-          this.loadPage(initMenu.modules, initMenu.menuId);
-        }
-      });
+    if (mainEnv.initMenu) {
+      const initMenu = mainEnv.initMenu;
+      await this.loadPage(initMenu.modules, initMenu.menuId);
+    }
+    // });
   }
 
   public async loadPage(modules: string, menuId: string, options?: object) {
@@ -122,8 +134,12 @@ export class Main extends LitElement implements MainInterface {
       });
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
+    await this.updateComplete;
+    this.focusManager.init();
+    this.pageHistoryManager.init();
+    this.focusManager.init();
   }
 
   static styles = css`
