@@ -1,88 +1,64 @@
-import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+import {Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
 // import { withActions } from "storybook-prebuilt/addon-actions.js";
-import { html } from 'lit-html';
+import {html} from 'lit-html';
 import '../dist/js/dews-mobile.js';
 
 <Meta
-  title="MDX|Form Container"
-  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
-  parameters={{ component: 'dews-form-container', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+    title="MDX|Form Container"
+    decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+    parameters={{component: 'dews-form-container', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
 />
 
 <!-- 아래는 Doc 부분 -->
-# dews-accordion StoryBook
+# dews-form-container StoryBook
 
 ## Default dews-form-container
 <Preview>
-  <Story name="form-container width360" height="100px">
-    {html`
+    <Story name="form-container width360" height="100px">
+        {html`
     <div style='width: 360px;display: inline-block'>
-        <dews-tabs>
-            <dews-tab title='default'>
-               <dews-form-container title="Form Container" >
-                    <container-button data-set data-reset>
-                        <dews-button slot="button" title='확정'></dews-button>
-                    </container-button>
-                   <container-content>
-                        <form-section title='기본정보'>
-                            <dews-input  title='1'></dews-input>
-                            <dews-input  title='2'></dews-input>
-                        </form-section>
-                        <form-section title='추가정보'>
-                            <dews-input  title='3'></dews-input>
-                            <dews-input  title='4'></dews-input>
-                        </form-section>
-                   </container-content>
-                </dews-form-container>
-            </dews-tab>
-        </dews-tabs>
-        <dews-box title='box'>
-             <dews-form-container>
-                <div>
-                    <dews-button  title='button'></dews-button>
-                </div>
-                <form-section title='title#1'>
-                    <dews-input  title='1'></dews-input>
-                    <dews-input  title='2'></dews-input>
-                    <dews-input  title='3'></dews-input>
-                    <dews-input  title='4'></dews-input>
+        <dews-box title="box">
+            <dews-form-container title="1234">
+                <container-button data-set>
+                 <dews-button title='button'></dews-button>
+                </container-button>
+                <container-content>
+                <form-section title='기본정보'>
+                    <dews-textbox  title='1'></dews-textbox>
+                    <dews-textbox  title='2'></dews-textbox>
+                    <dews-textbox  title='3'></dews-textbox>
                 </form-section>
+                <form-section title='추가정보'>
+                    <dews-textbox  title='4'></dews-textbox>
+                    <dews-textbox  title='5'></dews-textbox>
+                    <dews-textbox  title='6'></dews-textbox>
+                </form-section>
+               </container-content>
             </dews-form-container>
         </dews-box>
     </div>
     `}
-  </Story>
+    </Story>
     <Story name="form-container width720" height="100px">
         {html`
     <div style='width: 720px'>
-        <dews-tabs>
-            <dews-tab title='default'>
-               <dews-form-container >
-                     <dews-button slot='button' title='button'></dews-button>
-                    <form-section title='기본정보'>
-                        <dews-input  title='1'></dews-input>
-                        <dews-input  title='2'></dews-input>
-                        <dews-input  title='3'></dews-input>
-                    </form-section>
-                    <form-section title='추가정보'>
-                        <dews-input  title='4'></dews-input>
-                        <dews-input  title='5'></dews-input>
-                        <dews-input  title='6'></dews-input>
-                    </form-section>
-                </dews-form-container>
-            </dews-tab>
-        </dews-tabs>
-        <dews-box title='box'>
-             <dews-form-container>
-                <div>
-                    <dews-button  title='button'></dews-button>
-                </div>
-                <form-section title='title#1'>
-                    <dews-input  title='1'></dews-input>
-                    <dews-input  title='2'></dews-input>
-                    <dews-input  title='3'></dews-input>
-                    <dews-input  title='4'></dews-input>
+        <dews-box title="box">
+            <dews-form-container title="1234">
+                <container-button data-set>
+                 <dews-button title='button'></dews-button>
+                </container-button>
+                <container-content>
+                <form-section title='기본정보'>
+                    <dews-textbox  title='1'></dews-textbox>
+                    <dews-textbox  title='2'></dews-textbox>
+                    <dews-textbox  title='3'></dews-textbox>
                 </form-section>
+                <form-section title='추가정보'>
+                    <dews-textbox  title='4'></dews-textbox>
+                    <dews-textbox  title='5'></dews-textbox>
+                    <dews-textbox  title='6'></dews-textbox>
+                </form-section>
+               </container-content>
             </dews-form-container>
         </dews-box>
     </div>
@@ -91,34 +67,23 @@ import '../dist/js/dews-mobile.js';
     <Story name="form-container width1280" height="100px">
         {html`
     <div style='width: 1280px'>
-       <dews-tabs>
-            <dews-tab title='default'>
-               <dews-form-container >
-                     <dews-button slot='button' title='button'></dews-button>
-                    <form-section title='기본정보'>
-                        <dews-input  title='1'></dews-input>
-                        <dews-input  title='2'></dews-input>
-                        <dews-input  title='3'></dews-input>
-                    </form-section>
-                    <form-section title='추가정보'>
-                        <dews-input  title='4'></dews-input>
-                        <dews-input  title='5'></dews-input>
-                        <dews-input  title='6'></dews-input>
-                    </form-section>
-                </dews-form-container>
-            </dews-tab>
-        </dews-tabs>
-        <dews-box title='box'>
-             <dews-form-container>
-                <div>
-                    <dews-button  title='button'></dews-button>
-                </div>
-                <form-section title='title#1'>
-                    <dews-input  title='1'></dews-input>
-                    <dews-input  title='2'></dews-input>
-                    <dews-input  title='3'></dews-input>
-                    <dews-input  title='4'></dews-input>
+        <dews-box title="box">
+            <dews-form-container title="1234">
+                <container-button data-set>
+                 <dews-button title='button'></dews-button>
+                </container-button>
+                <container-content>
+                <form-section title='기본정보'>
+                    <dews-textbox  title='1'></dews-textbox>
+                    <dews-textbox  title='2'></dews-textbox>
+                    <dews-textbox  title='3'></dews-textbox>
                 </form-section>
+                <form-section title='추가정보'>
+                    <dews-textbox  title='4'></dews-textbox>
+                    <dews-textbox  title='5'></dews-textbox>
+                    <dews-textbox  title='6'></dews-textbox>
+                </form-section>
+               </container-content>
             </dews-form-container>
         </dews-box>
     </div>
@@ -132,4 +97,4 @@ import '../dist/js/dews-mobile.js';
 
 API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
 
-<Props of="dews-form-container" />
+<Props of="dews-form-container"/>

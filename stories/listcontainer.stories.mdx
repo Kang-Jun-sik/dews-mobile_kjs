@@ -1,0 +1,127 @@
+import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
+import { html } from 'lit-html';
+import '../dist/js/dews-mobile.js';
+
+<Meta
+  title="MDX|list Container"
+  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+  parameters={{ component: 'dews-list-container', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+/>
+
+<!-- 아래는 Doc 부분 -->
+# dews-list StoryBook
+
+## Default dews-list-container
+<Preview>
+  <Story name="list-container width360" height="100px">
+    {html`
+    <container-summary style='width: 360px;display: inline-block'>
+        <dews-tabs>
+            <dews-tab title='default'>
+                <dews-list-container title="title#12">
+                    <container-button>
+                        <dews-button slot="button" title='Btn'></dews-button>
+                    </container-button>
+                    <container-summary>
+                        <span>요약 내용영역</span>
+                    </container-summary>
+                    <container-content>
+                        <dews-textbox title='title#1' ></dews-textbox>
+                    </container-content>
+                </dews-list-container>
+            </dews-tab>
+        </dews-tabs>
+        <dews-box title='box'>
+             <dews-list-container title="title#12">
+                    <container-button>
+                        <dews-button slot="button" title='Btn'></dews-button>
+                    </container-button>
+                    <container-summary>
+                        <span>요약 내용영역</span>
+                    </container-summary>
+                    <container-content>
+                        <dews-textbox title='title#1' ></dews-textbox>
+                    </container-content>
+             </dews-list-container>
+        </dews-box>
+    </div>
+    `}
+  </Story>
+    <Story name="list-container width720" height="100px">
+        {html`
+    <div style='width: 720px'>
+       <dews-tabs>
+            <dews-tab title='default'>
+                <dews-list-container title="title#12">
+                    <container-button>
+                        <dews-button slot="button" title='Btn'></dews-button>
+                    </container-button>
+                    <container-summary>
+                        <span>요약 내용영역</span>
+                    </container-summary>
+                    <container-content>
+                        <dews-textbox title='title#1' ></dews-textbox>
+                    </container-content>
+                </dews-list-container>
+            </dews-tab>
+        </dews-tabs>
+        <dews-box title='box'>
+             <dews-list-container title="title#12">
+                    <container-button>
+                        <dews-button slot="button" title='Btn'></dews-button>
+                    </container-button>
+                    <container-summary>
+                        <span>요약 내용영역</span>
+                    </container-summary>
+                    <container-content>
+                        <dews-textbox title='title#1' ></dews-textbox>
+                    </container-content>
+             </dews-list-container>
+        </dews-box>
+    </div>
+    `}
+    </Story>
+    <Story name="list-container width1280" height="100px">
+        {html`
+    <div style='width: 1280px'>
+      <dews-tabs>
+            <dews-tab title='default'>
+               <dews-list-container title="title#12">
+                    <container-button>
+                        <dews-button slot="button" title='Btn'></dews-button>
+                    </container-button>
+                    <container-summary>
+                        <span>요약 내용영역</span>
+                    </container-summary>
+                    <container-content>
+                        <dews-textbox title='title#1' ></dews-textbox>
+                    </container-content>
+               </dews-list-container>
+            </dews-tab>
+        </dews-tabs>
+        <dews-box title='box'>
+             <dews-list-container title="title#12">
+                    <container-button>
+                        <dews-button slot="button" title='Btn'></dews-button>
+                    </container-button>
+                    <container-summary>
+                        <span>요약 내용영역</span>
+                    </container-summary>
+                    <container-content>
+                        <dews-textbox title='title#1' ></dews-textbox>
+                    </container-content>
+             </dews-list-container>
+        </dews-box>
+    </div>
+    `}
+    </Story>
+</Preview>
+
+
+
+## API
+
+API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
+
+<Props of="dews-list-container" />

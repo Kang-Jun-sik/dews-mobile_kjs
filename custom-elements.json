@@ -646,21 +646,6 @@
           "name": "col",
           "type": "number",
           "default": "1"
-        },
-        {
-          "name": "enableCapture",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "enableSet",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "enableReset",
-          "type": "boolean",
-          "default": "false"
         }
       ],
       "properties": [
@@ -678,24 +663,60 @@
           "attribute": "col",
           "type": "number",
           "default": "1"
+        }
+      ],
+      "events": [
+        {
+          "name": "focusedAreaChanged"
+        }
+      ]
+    },
+    {
+      "name": "dews-form-container",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string | undefined"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
         },
         {
-          "name": "enableCapture",
-          "attribute": "enableCapture",
-          "type": "boolean",
-          "default": "false"
+          "name": "title",
+          "attribute": "title",
+          "type": "string | undefined"
+        }
+      ],
+      "events": [
+        {
+          "name": "focusedAreaChanged"
+        }
+      ]
+    },
+    {
+      "name": "form-section",
+      "path": "./src/index.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "default": "\"_scss\""
         },
         {
-          "name": "enableSet",
-          "attribute": "enableSet",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "enableReset",
-          "attribute": "enableReset",
-          "type": "boolean",
-          "default": "false"
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
         }
       ],
       "events": [
