@@ -1,8 +1,9 @@
 export interface MainInterface {
   onPageLoaded;
   onPageLoading;
+  onFocusChanging;
+  onFocusChanged;
+  start(): Promise<void>;
   onHistoryBack;
-  dispatchEvent(event: Event): boolean;
-  start();
   loadPage(modules: string, menuId: string, options?: object);
 }

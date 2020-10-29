@@ -33,13 +33,13 @@ export class Tabs extends DewsLayoutComponent {
   };
 
   private _focusIn(e) {
-    this._focusChange(e);
+    this._focusChanging(e);
     const focusIn = new CustomEvent('focusIn');
     this.dispatchEvent(focusIn);
   }
 
   private _focusBlur(e) {
-    this._focusChange(e);
+    this._focusChanging(e);
     const focusBlur = new CustomEvent('focusBlur');
     this.dispatchEvent(focusBlur);
   }

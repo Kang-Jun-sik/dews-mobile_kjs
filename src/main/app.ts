@@ -24,7 +24,7 @@ export class App implements ApplicationContext {
   public async start(): Promise<void> {
     await this.getEnvironment();
     await this.getAuthorizedUser();
-    this.main.start();
+    await this.main.start();
   }
 
   public async getEnvironment(): Promise<void> {

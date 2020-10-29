@@ -46,12 +46,12 @@ export class Button extends DewsLayoutComponent {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('focus', this._focusChange);
+    this.addEventListener('focus', this._focusChanging);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('focus', this._focusChange);
+    this.removeEventListener('focus', this._focusChanging);
   }
 
   private _clickHandler() {}
