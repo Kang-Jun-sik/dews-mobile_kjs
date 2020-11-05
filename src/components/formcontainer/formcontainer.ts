@@ -41,7 +41,7 @@ export class FormContainer extends DewsLayoutComponent {
     for (let i = 0; i < contentChildLength; i++) {
       this._contentList.push(html`${contentChildItem.item(i)}`);
     }
-    this.querySelector('container-content').remove();
+    // this.querySelector('container-content').remove();
   }
 
   private _buttonView() {
@@ -93,7 +93,7 @@ export class FormContainer extends DewsLayoutComponent {
       `,
     );
 
-    this.querySelector('container-button').remove();
+    // this.querySelector('container-button').remove();
   }
 
   connectedCallback() {

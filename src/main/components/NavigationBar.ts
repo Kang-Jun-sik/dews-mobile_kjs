@@ -1,17 +1,19 @@
 import { customElement, html, internalProperty, property } from 'lit-element';
-import { DewsComponent } from '../../core/baseclass/DewsComponent.js';
+import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
 import { HistoryBackEventArgs } from '../HistoryBackEventArgs.js';
 
 import _scss from './NavigationBar.scss';
 import { PageLoadedEventArgs } from '../PageLoadedEventArgs.js';
-import { Tabs } from '../../components/tabs/tabs.js';
-import { Box } from '../../components/box/box.js';
 import { classMap } from 'lit-html/directives/class-map';
+import { AreaType } from '../AreaType.js';
+import { AreaChangedEventArgs } from '../AreaChangedEventArgs.js';
 
 @customElement('main-header')
-export class NavigationBar extends DewsComponent {
-  static styles = _scss;
+export class NavigationBar extends DewsLayoutComponent {
+  private headerHeight: number = 53;
+  private areaDividerHeight: number = 12;
 
+  static styles = _scss;
   @property({ reflect: true })
   title: string = 'Navigation BarNavigation BarNavigation BarNavigation BarNavigation Bar';
 
@@ -24,13 +26,13 @@ export class NavigationBar extends DewsComponent {
    * 현재 업무 페이지가 가지고 있는 Area List
    */
   @internalProperty()
-  areaList: Array<Box | Tabs> = [];
+  areaList: Array<AreaType> = [];
 
   /**
    * Anchor 에서 클릭 한 Area
    */
   @internalProperty()
-  clickArea: Box | Tabs = null;
+  clickArea: AreaType = null;
 
   /**
    * Anchor / Title 전환에 필요한 Flag
@@ -44,14 +46,16 @@ export class NavigationBar extends DewsComponent {
 
     dews.app.main.onPageLoaded = (arg: PageLoadedEventArgs) => {
       console.log('navigationBar onPageLoaded');
-      const areaList: Array<Box | Tabs> = arg.openPage.getAreaList || [];
+      const areaList: Array<AreaType> = arg.openPage.getAreaList || [];
       if (areaList) {
         this.areaList = areaList;
       }
     };
 
     // scroll 이벤트 수신
-    // 1. scroll position check: = 0 , > 0
+    dews.app.main.onAreaChanged = (arg: AreaChangedEventArgs) => {
+      this.clickArea = arg.current;
+    };
   }
 
   disconnectedCallback() {
@@ -89,11 +93,11 @@ export class NavigationBar extends DewsComponent {
    *  - 클릭된 Area 를 스크롤 영역 내 시작점으로 이동
    *  - 이동 된 scroll offset 에서 헤더 영역만큼 이동
    */
-  private clickAnchor(area: Box | Tabs) {
+  private clickAnchor(area: AreaType) {
     // alert(`click: ${area.title}`);
     this.clickArea = area;
     area.scrollIntoView();
-    window.scroll(0, pageYOffset - 53);
+    window.scroll(0, pageYOffset - this.headerHeight - this.areaDividerHeight);
   }
 
   render() {

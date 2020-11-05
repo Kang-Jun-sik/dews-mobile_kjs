@@ -1,4 +1,4 @@
-import { MainEnvironment, PagePath } from '../env/MainEnvironment.js';
+import { MainEnvironment } from '../env/MainEnvironment.js';
 import { PageHistoryManager } from './PageHistoryManager.js';
 import { FocusManager } from './FocusManager.js';
 import { DewsPageBase } from '../core/baseclass/DewsPageBase.js';
@@ -11,6 +11,8 @@ import { PageLoadingEventArgs } from './PageLoadingEventArgs.js';
 import { FocusChangingEventArgs } from './FocusChangingEventArgs.js';
 import { FocusChangedEventArgs } from './FocusChangedEventArgs.js';
 import { HistoryBackEventArgs } from './HistoryBackEventArgs.js';
+import { ScrollManager } from './ScrollManager.js';
+import { AreaChangedEventArgs } from './AreaChangedEventArgs.js';
 
 /**
  * Main System 호출 전 필요한 세팅 작업
@@ -26,18 +28,17 @@ export class Main extends LitElement implements MainInterface {
   private $app: HTMLElement | null;
   private pageHistoryManager: PageHistoryManager;
   private focusManager: FocusManager;
-  private contentsManager: ContentsManager;
-
+  // private contentsManager: ContentsManager;
+  private scrollManager: ScrollManager;
   private envService: EnvironmentService;
 
   constructor() {
     super();
     this.$app = document.getElementById('app');
     this.pageHistoryManager = new PageHistoryManager();
-    // this.focusManager = new FocusManager();
-    // this.pageHistoryManager = new PageHistoryManager();
     this.focusManager = new FocusManager();
     // this.contentsManager = new ContentsManager();
+    this.scrollManager = new ScrollManager();
     this.envService = new EnvironmentService();
   }
 
@@ -67,6 +68,10 @@ export class Main extends LitElement implements MainInterface {
 
   set onFocusChanged(handler: (e: FocusChangedEventArgs) => void) {
     this.addEventListener('focusChanged', handler);
+  }
+
+  set onAreaChanged(handler: (e: AreaChangedEventArgs) => void) {
+    this.addEventListener('areaChanged', handler);
   }
 
   // 시작점
@@ -114,7 +119,6 @@ export class Main extends LitElement implements MainInterface {
         }
         const page: DewsPageBase = new pageClass.default() as DewsPageBase;
 
-        // main event
         const pageLoadingEvent = new PageLoadingEventArgs('pageLoading', { bubbles: true, composed: true });
         this.dispatchEvent(pageLoadingEvent);
 
@@ -122,13 +126,10 @@ export class Main extends LitElement implements MainInterface {
         await page.onInit();
 
         const tag = `erp10-${menuId.toLowerCase()}`;
-        // const createCustomTag = document.createElement(tag);
-        // createCustomTag.setAttribute('id', tag);
         const contents = document.getElementById('main').shadowRoot.querySelector('#contents');
         contents.appendChild(page);
         contents.getElementsByTagName(tag)[0].setAttribute('id', tag);
 
-        // main even
         this.onPageUpdateComplete = () => {
           const pageLoadedEvent = new PageLoadedEventArgs(`pageLoaded`, {
             bubbles: true,
@@ -152,6 +153,7 @@ export class Main extends LitElement implements MainInterface {
     await this.updateComplete;
     this.focusManager.init();
     this.pageHistoryManager.init();
+    this.scrollManager.init();
     // mainLoadComplete
     this.dispatchEvent(new CustomEvent('mainLoadComplete', { bubbles: true, composed: true }));
   }

@@ -7,11 +7,18 @@ import _scss from './formsection.scss';
 export class FormSection extends DewsLayoutComponent {
   static styles = _scss;
 
+  constructor() {
+    super();
+    for (let i = 0; i < this.childElementCount; i++) {
+      this._inputList.push(html`<li>${this.children.item(i)}</li>`);
+    }
+  }
+
   @property({ type: String })
   title: string = '';
 
   @internalProperty()
-  private _inputList;
+  private _inputList: Array<any> = [];
 
   connectedCallback() {
     super.connectedCallback();
@@ -20,15 +27,6 @@ export class FormSection extends DewsLayoutComponent {
   disconnectedCallback() {
     super.disconnectedCallback();
   }
-
-  private _slotChange(e) {
-    if (e.target.assignedElements().length > 0) {
-      this._inputList = e.target.assignedElements()?.map(input => {
-        return html`<li>${input}</li>`;
-      });
-    }
-  }
-
   render() {
     return _html.bind(this)();
   }

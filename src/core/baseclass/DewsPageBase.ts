@@ -1,7 +1,6 @@
 import { DewsComponent } from './DewsComponent.js';
 import { CSSResult, html, TemplateResult } from 'lit-element';
-import { Tabs } from '../../components/tabs/tabs.js';
-import { Box } from '../../components/box/box.js';
+import { AreaType } from '../../main/AreaType.js';
 
 /**
  * 업무페이지 구성
@@ -11,7 +10,7 @@ export class DewsPageBase extends DewsComponent {
   static cssTemplate: CSSResult;
   htmlTemplate: TemplateResult;
 
-  getAreaList: Array<Box | Tabs>;
+  getAreaList: Array<AreaType>;
 
   async connectedCallback() {
     super.connectedCallback();
