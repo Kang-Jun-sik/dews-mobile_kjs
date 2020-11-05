@@ -17,7 +17,7 @@ export class Box extends DewsLayoutComponent {
   hide: boolean = false;
 
   @internalProperty()
-  height: string;
+  height: string = 'auto';
 
   private slotHeight: string;
 
@@ -71,14 +71,6 @@ export class Box extends DewsLayoutComponent {
     } else {
       this.height = 'auto';
     }
-    this.updateComplete.then(() => {
-      this.slotHeight = `${this.shadowRoot.querySelector('.dews-box-content-wrap')?.clientHeight}px`;
-      if (!this.collapsed) {
-        this.height = this.slotHeight;
-      } else {
-        this.slotHeight = `${this.shadowRoot.querySelector('.dews-box-content')?.clientHeight}px`;
-      }
-    });
   }
 
   render() {

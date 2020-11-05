@@ -27,6 +27,7 @@ export class PageHistoryManager {
     this.mainShadowRoot = document.getElementById('main').shadowRoot;
 
     dews.app.main.onPageLoaded = (arg: PageLoadedEventArgs) => {
+      console.log('pageHistoryManager');
       if (!arg.cancelable) {
         console.log(arg);
         this.setPageHistory(new PageModule(arg.openPage, arg.modules, arg.menuId, arg.tag));

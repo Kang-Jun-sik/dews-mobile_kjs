@@ -3,9 +3,10 @@ export interface MainInterface {
   onPageLoading;
   onFocusChanging;
   onFocusChanged;
-  start(): Promise<void>;
   onHistoryBack;
   onPageUpdateComplete;
   onMainLoadComplete;
+  onAreaChanged;
+  start(): Promise<void>;
   loadPage(modules: string, menuId: string, options?: object);
 }

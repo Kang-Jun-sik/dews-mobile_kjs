@@ -1,11 +1,11 @@
 import { FocusChangingEventArgs } from './FocusChangingEventArgs.js';
 import { Box } from '../components/box/box.js';
-import { Tabs } from '../components/tabs/tabs.js';
 import { FocusChangedEventArgs } from './FocusChangedEventArgs.js';
+import { AreaType } from './AreaType.js';
 
 export class FocusManager {
   // 현재 포커스 받는 대상 : Area(dews-box, dews-tabs)
-  private focusElement: Box | Tabs = null;
+  private focusElement: AreaType = null;
 
   init() {
     dews.app.main.onFocusChanging = (arg: FocusChangingEventArgs) => {
