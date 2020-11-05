@@ -1,0 +1,51 @@
+import {Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
+import {html} from 'lit-html';
+import '../dist/js/dews-mobile.js';
+
+<Meta
+    title="MDX|Checkboxgroup"
+    decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+    parameters={{component: 'dews-checkbox', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
+
+<!-- 아래는 Doc 부분 -->
+# dews-checkbox StoryBook
+
+## Default dews-checkbox
+<Preview>
+    <Story name="dews-checkbox" height="100px">
+        {html`
+    <div style='width: 360px'>
+        <dews-checkbox-group>
+                    <dews-checkbox title="Check Box1" bookmark > </dews-checkbox>
+                    <dews-checkbox title="Check Box2" > </dews-checkbox>
+                    <dews-checkbox title="Check Box3" > </dews-checkbox>
+                    <dews-checkbox title="Check Box4" > </dews-checkbox>
+        </dews-checkbox-group>
+        <br/>
+        <dews-checkbox-group align='vertical'>
+                    <dews-checkbox title="Check Box1" bookmark > </dews-checkbox>
+                    <dews-checkbox title="Check Box2" > </dews-checkbox>
+                    <dews-checkbox title="Check Box3" > </dews-checkbox>
+                    <dews-checkbox title="Check Box4" > </dews-checkbox>
+        </dews-checkbox-group>
+        <br/>
+    </div>
+    <div style='width: 360px'>
+                <dews-checkbox disabled title="Check Box" > </dews-checkbox>
+    </div>
+    <div style='width: 360px'>
+                <dews-checkbox disabled checked title="Disabled Check Box" > </dews-checkbox>
+    </div>
+    `}
+    </Story>
+</Preview>
+
+
+
+## API
+
+API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
+
+<Props of="dews-checkbox"/>

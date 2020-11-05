@@ -1,0 +1,7 @@
+<span class="${this._className}" @click="${this._clickHandler}" >
+  <span class="checkbox-control"  >
+    <input type="checkbox" ?disabled="${this.disabled}" ?checked="${this.checked}"  />
+    <span  class="checkbox-shape"></span>
+  </span>
+  ${this.title==undefined?'':html`<label class="checkbox-label">${this.title}</label>`};
+</span>

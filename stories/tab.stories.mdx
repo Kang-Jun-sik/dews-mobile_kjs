@@ -1,12 +1,12 @@
-import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+import {Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
 // import { withActions } from "storybook-prebuilt/addon-actions.js";
-import { html } from 'lit-html';
+import {html} from 'lit-html';
 import '../dist/js/dews-mobile.js';
 
 <Meta
-  title="MDX|Tab"
-  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
-  parameters={{ component: 'dews-tab', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+    title="MDX|Tab"
+    decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+    parameters={{component: 'dews-tab', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
 />
 
 <!-- 아래는 Doc 부분 -->
@@ -14,11 +14,11 @@ import '../dist/js/dews-mobile.js';
 
 ## Default dews-tab
 <Preview>
-  <Story name="dews-tab" height="100px">
-    {html`
+    <Story name="dews-tab" height="100px">
+        {html`
    <dews-area-panel>
     <area-item col="6">
-        <dews-tabs id='tabs1'>
+        <dews-tabs id='tabs1' selected='2'>
                 <dews-tab title="tab1">
                     <dews-container>tab1</dews-container>
                  </dews-tab>
@@ -38,12 +38,17 @@ import '../dist/js/dews-mobile.js';
 <area-item col="6">
         <dews-tabs selected='1' >
                 <dews-tab title="tab1">
-                    <dews-container>tab1</dews-container>
+                    <dews-search-container title="Search-Container">
+                        <container-button data-set data-reset data-capture></container-button>
+                        <container-content>
+                            <dews-textbox></dews-textbox>
+                        </container-content>
+                    </dews-search-container>
                  </dews-tab>
                  <dews-tab title="tab2">
                     <dews-container>tab2</dews-container>
                  </dews-tab>
-                 <dews-tab title="tab3" hide>
+                 <dews-tab title="tab3">
                  </dews-tab>
                  <dews-tab title="tab4">
                  </dews-tab>
@@ -55,7 +60,7 @@ import '../dist/js/dews-mobile.js';
     </area-item>
  </dews-area-panel>
     `}
-  </Story>
+    </Story>
 </Preview>
 
 
@@ -64,4 +69,4 @@ import '../dist/js/dews-mobile.js';
 
 API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
 
-<Props of="dews-tab" />
+<Props of="dews-tab"/>

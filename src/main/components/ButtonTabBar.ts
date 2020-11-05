@@ -167,7 +167,7 @@ export class ButtonTabBar extends DewsLayoutComponent {
   }
 
   /**
-   * Button 클릭 시 Main 으로 event emit
+   * Checkboxgroup 클릭 시 Main 으로 event emit
    * @param buttonType
    */
   private buttonClick(e: Event) {

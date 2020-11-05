@@ -33,6 +33,8 @@ import { Textbox } from './components/textbox/textbox.js';
 import { Codepicker } from './components/codepicker/codepicker.js';
 import { Datepicker } from './components/datepicker/datepicker.js';
 import { Dropdownlist } from './components/dropdownlist/dropdownlist.js';
+import { Checkboxgroup } from './components/checkboxgroup/checkboxgroup.js';
+import { Checkbox } from './components/checkbox/checkbox.js';
 
 export { Tabs, Tab, Box, AreaPanel };
 
@@ -41,6 +43,8 @@ window.customElements.define('dews-datepicker', Datepicker);
 window.customElements.define('dews-dropdownlist', Dropdownlist);
 window.customElements.define('dews-textbox', Textbox);
 window.customElements.define('dews-button', Button);
+window.customElements.define('dews-checkbox-group', Checkboxgroup);
+window.customElements.define('dews-checkbox', Checkbox);
 
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);

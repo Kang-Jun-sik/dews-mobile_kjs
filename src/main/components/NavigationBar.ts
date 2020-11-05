@@ -83,7 +83,7 @@ export class NavigationBar extends DewsLayoutComponent {
   }
 
   private clickMenu() {
-    alert('click Menu Button');
+    alert('click Menu Checkboxgroup');
     // todo: app menu 호출
   }
 
