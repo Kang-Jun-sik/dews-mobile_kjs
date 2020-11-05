@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { internalProperty, html, property } from 'lit-element';
+import { html, property } from 'lit-element';
 
 import _html from './tabs.html';
 import _scss from './tabs.scss';
@@ -7,10 +7,34 @@ import _scss from './tabs.scss';
 export class Tabs extends DewsLayoutComponent {
   static styles = _scss;
 
+  constructor() {
+    super();
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('focusin', this._focusIn);
     this.addEventListener('blur', this._focusBlur);
+    this._firstTabUpdate();
+  }
+
+  title: string;
+
+  private _firstTabUpdate() {
+    this.title = this.children.item(0).getAttribute('title');
+    for (let i = 0; i < this.children.length; i++) {
+      const title = this.children.item(i).getAttribute('title');
+      if (i === this.selected - 1) {
+        this.children.item(i).setAttribute('active', 'true');
+        this.titleList.push(html` <button class="title active" title="${title}" @click="${this._clickHandler}">
+          <span>${title}</span>
+        </button>`);
+      } else if (!this.children.item(i).hasAttribute('hide')) {
+        this.titleList.push(html`<button class="title" title="${title}" @click="${this._clickHandler}">
+          <span>${title}</span>
+        </button>`);
+      }
+    }
   }
 
   disconnectedCallback() {
@@ -20,13 +44,12 @@ export class Tabs extends DewsLayoutComponent {
   }
 
   @property({ type: Number })
-  selected: number = 0;
+  selected: number = 1;
 
   @property({ type: Boolean })
   hide: boolean = false;
 
-  @internalProperty()
-  private titleList;
+  private titleList: Array<any> = [];
 
   select: Function = (select: number) => {
     this._select(select);
@@ -64,21 +87,6 @@ export class Tabs extends DewsLayoutComponent {
         this._select(index);
       }
     });
-  }
-
-  private slotChange(e) {
-    this.titleList = e.target.assignedElements().map((tab, index) => {
-      if (tab.hide) return;
-      if (index === this.selected) {
-        return html`<button class="title active" title="${tab.title}" @click="${this._clickHandler}">
-          <span>${tab.title}</span>
-        </button>`;
-      }
-      return html`<button class="title" title="${tab.title}" @click="${this._clickHandler}">
-        <span>${tab.title}</span>
-      </button>`;
-    });
-    e.target.assignedElements()[this.selected].shadowRoot.children[0].classList.add('active');
   }
 
   render() {

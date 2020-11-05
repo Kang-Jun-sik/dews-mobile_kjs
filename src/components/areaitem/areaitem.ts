@@ -7,14 +7,6 @@ import _scss from './areaitem.scss';
 export class AreaItem extends DewsLayoutComponent {
   static styles = _scss;
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-  }
-
   @property({ type: Number })
   col: number = 12;
 

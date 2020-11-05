@@ -13,13 +13,8 @@ export class Tab extends DewsLayoutComponent {
   @property({ type: Boolean })
   hide: boolean = false;
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-  }
+  @property({ type: Boolean })
+  active: boolean = false;
 
   render() {
     return this.hide ? null : _html.bind(this)();

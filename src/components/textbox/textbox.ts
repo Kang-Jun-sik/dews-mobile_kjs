@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { eventOptions, property } from 'lit-element';
+import { property } from 'lit-element';
 
 import _html from './textbox.html';
 import _scss from './textbox.scss';
