@@ -1,0 +1,126 @@
+<!-- normal -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">normal</label>
+
+  <div class="numeric-wrap">
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+  </div>
+</div>
+
+<!-- only prefix -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">only prefix</label>
+
+  <div class="numeric-wrap">
+    <span class="prefix">aaaaaaaa</span>
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+  </div>
+</div>
+
+<!-- only suffix -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">only suffix</label>
+
+  <div class="numeric-wrap">
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+    <span class="suffix">aaaaaaaa</span>
+  </div>
+</div>
+
+<!-- only stepper -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">only stepper</label>
+
+  <div class="numeric-wrap">
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+    <span class="stepper">
+        <button class="btn-tmp">-</button>
+        <button class="btn-tmp">+</button>
+    </span>
+  </div>
+</div>
+
+<!-- prefix + stepper -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">prefix + stepper</label>
+
+  <div class="numeric-wrap">
+    <span class="prefix">aaaaaaaa</span>
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+    <span class="stepper">
+        <button class="btn-tmp">-</button>
+        <button class="btn-tmp">+</button>
+    </span>
+  </div>
+</div>
+
+<!-- suffix + stepper -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">numeric box</label>
+
+  <div class="numeric-wrap">
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+    <span class="suffix">KRW</span>
+    <span class="stepper">
+        <button class="btn-tmp">-</button>
+        <button class="btn-tmp">+</button>
+    </span>
+  </div>
+</div>
+
+<!-- all  -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">all</label>
+
+  <div class="numeric-wrap">
+    <span class="prefix">$</span>
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+    <span class="suffix">USD</span>
+    <span class="stepper">
+        <button class="btn-tmp">-</button>
+        <button class="btn-tmp">+</button>
+    </span>
+  </div>
+</div>
+
+<!-- all  -->
+<div class="numeric-textbox-wrap">
+  <label for="numeric-box">all</label>
+
+  <div class="numeric-wrap">
+    <span class="prefix">aaaaaaaa</span>
+    <span class="numeric">
+        <input type="text" value="100,000,000,000">
+    </span>
+    <span class="suffix">오조오억원</span>
+    <span class="stepper">
+        <button class="btn-tmp">-</button>
+        <button class="btn-tmp">+</button>
+    </span>
+  </div>
+</div>
+
+
+<!--<div>-->
+<!--  <label for="textbox">${this.title}</label>-->
+<!--  <span @click="${this._focusIn}">-->
+<!--    <input type="text" disabled @beforeinput="${this._onlyNumber}" id="textbox"/>-->
+<!--  </span>-->
+<!--  <span>-->
+<!--    <input id="test" type="number" class="test"  @focusin="${this._focusIn}" @blur="${this._focusBlur}"  />-->
+<!--  </span>-->
+<!--</div>-->

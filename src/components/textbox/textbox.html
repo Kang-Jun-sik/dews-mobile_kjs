@@ -1,6 +1,35 @@
-<div>
-  <label for="textbox">${this.title}</label>
-  <input type="text" @input="${this._onChange}"  id="textbox"  ?readonly="${this.readonly}"/>
+${this.multi? html`
+<!-- textarea 일때 -->
+<div class="textbox-wrap">
+  <label for="multi-textbox">${this.title}</label>
+  <textarea @input="${this._onChange}" id="multi-textbox" ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"></textarea>
+  <!-- placeholder -->
+<!--  <textarea id="multi-textbox"  placeholder="테스트입니다"></textarea>-->
+<!--  &lt;!&ndash; normal &ndash;&gt;-->
+<!--  <textarea id="multi-textbox"  placeholder="테스트입니다">테스트입니다.</textarea>-->
+<!--  &lt;!&ndash; disabled &ndash;&gt;-->
+<!--  <textarea id="multi-textbox" disabled="disabled" placeholder="테스트입니다">테스트입니다.</textarea>-->
+<!--  &lt;!&ndash; readonly &ndash;&gt;-->
+<!--  <textarea id="multi-textbox" readonly="readonly" placeholder="테스트입니다">테스트입니다.</textarea>-->
 </div>
+`
+:html`
+<!-- input box 일때 -->
+<div class="textbox-wrap">
+  <label for="textbox">${this.title}</label>
+  <input type="text" @input="${this._onChange}" id="textbox" ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"/>
 
-
+  <!--  origin source-->
+  <!--<input type="text" @input="${this._onChange}" class="${this.className}" id="textbox"  ?readonly="${this.readonly}" value="TEST"/>-->
+  <!-- placeholder -->
+<!--  <input type="text" @input="${this._onChange}" id="textbox" ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"/>-->
+<!--  -->
+<!--  &lt;!&ndash; normal &ndash;&gt;-->
+<!--  <input type="text" @input="${this._onChange}" class="${this.className}" id="textbox"  ?readonly="${this.readonly}" value="TEST"/>-->
+<!--  &lt;!&ndash; disabled &ndash;&gt;-->
+<!--  <input type="text" disabled="disabled" @input="${this._onChange}" class="${this.className}" id="textbox"  ?readonly="${this.readonly}" value="TEST"/>-->
+<!--  &lt;!&ndash; readonly &ndash;&gt;-->
+<!--  <input type="text" @input="${this._onChange}" class="${this.className}" id="textbox"  readonly="readonly" value="TEST"/>-->
+</div>
+`
+}

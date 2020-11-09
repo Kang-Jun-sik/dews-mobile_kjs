@@ -4,9 +4,9 @@ import { html } from 'lit-html';
 import '../dist/js/dews-mobile.js';
 
 <Meta
-  title="MDX|Button"
-  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
-  parameters={{ component: 'dews-button', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+    title="MDX|Button"
+    decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+    parameters={{ component: 'dews-button', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
 />
 
 <!-- 아래는 Doc 부분 -->
@@ -14,8 +14,8 @@ import '../dist/js/dews-mobile.js';
 
 ## Default dews-button
 <Preview>
-  <Story name="dews-button" height="100px">
-    {html`
+    <Story name="dews-button" height="100px">
+        {html`
     <div style='width: 360px'>
                 <dews-button />
     </div>
@@ -26,7 +26,7 @@ import '../dist/js/dews-mobile.js';
                 <dews-button title='button' disabled />
     </div>
     `}
-  </Story>
+    </Story>
 </Preview>
 
 

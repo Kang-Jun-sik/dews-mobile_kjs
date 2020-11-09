@@ -1,67 +1,37 @@
-import {Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
 // import { withActions } from "storybook-prebuilt/addon-actions.js";
-import {html} from 'lit-html';
+import { html } from 'lit-html';
 import '../dist/js/dews-mobile.js';
 
 <Meta
-    title="MDX|Text Box"
-    decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
-    parameters={{component: 'dews-text-box', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+  title="MDX|textbox"
+  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+  parameters={{ component: 'dews-textbox', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
 />
 
 <!-- 아래는 Doc 부분 -->
-# dews-accordion StoryBook
+# dews-textbox StoryBook
 
-## Default dews-text-box
+## Default dews-textbox
 <Preview>
-    <Story name="text-box width360" height="100px">
-        {html`
+  <Story name="dews-textbox" height="100px">
+    {html`
     <div style='width: 360px'>
-        <dews-box title='box' >
-            <dews-search-container split >
+        <dews-box title='box'>
+            <dews-search-container>
                 <container-content>
-                    <dews-textbox title='2'></dews-textbox>
-                    <dews-textbox title='3'></dews-textbox>
-                    <dews-textbox title='4'></dews-textbox>
-                    <dews-textbox title='3'></dews-textbox>
-                    <dews-textbox title='5'></dews-textbox>
-                    <dews-textbox title='6'></dews-textbox>
-                    <dews-textbox title='7'></dews-textbox>
+                    <dews-textbox ></dews-textbox>
+                    <dews-textbox title='default' ></dews-textbox>
+                    <dews-textbox title='disabled' disabled></dews-textbox>
+                    <dews-textbox title='readonly' readonly></dews-textbox>
+                    <dews-textbox title='disabled readonly' disabled readonly></dews-textbox>
+                    <dews-textbox title='placeholder' placeholder="placeholder"  ></dews-textbox>
                 </container-content>
             </dews-search-container>
         </dews-box>
     </div>
     `}
-    </Story>
-    <Story name="text-box width720" height="100px">
-        {html`
-    <div style='width: 720px'>
-        <dews-box title='box'>
-            <dews-search-container>
-                <dews-button title='button'></dews-button>
-                <dews-textbox title='1'></dews-textbox>
-                <dews-textbox title='2'></dews-textbox>
-                <dews-textbox title='3'></dews-textbox>
-                <dews-textbox title='4'></dews-textbox>
-            </dews-search-container>
-        </dews-box>
-    </div>
-    `}
-    </Story>
-    <Story name="text-box width1280" height="100px">
-        {html`
-    <div style='width: 1280px'>
-        <dews-box title='box'>
-             <dews-search-container split >
-                <dews-textbox title='1'></dews-textbox>
-                <dews-dropdownlist title='2'></dews-dropdownlist>
-                <dews-textbox title='3'></dews-textbox>
-                <dews-textbox title='4'></dews-textbox>
-            </dews-search-container>
-        </dews-box>
-    </div>
-    `}
-    </Story>
+  </Story>
 </Preview>
 
 
@@ -70,4 +40,4 @@ import '../dist/js/dews-mobile.js';
 
 API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
 
-<Props of="dews-text-box"/>
+<Props of="dews-textbox" />

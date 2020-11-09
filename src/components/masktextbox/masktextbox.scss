@@ -10,24 +10,10 @@
 * {
   @include reset();
 }
-.textbox-wrap {
-  label {
-    @include label-wrap();
-  }
-  input[type='text'] {
-    @include input-wrap();
-  }
-
-  textarea {
-    @include input-wrap();
-
-    resize: none;
-    height: 64px;
-  }
+.mask-textbox-wrap {
+  @include mask-textbox-wrap();
 }
 
-
-//
 //input[type=text].dropdown {
 //  padding-right: 38px;
 //  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij4KICAgIDxwYXRoIGZpbGw9IiM5Nzk5YTgiIGQ9Ik0xNzYuNTQyIDUwNi41YS45LjkgMCAwIDEtLjc0Ny0uNDA1bC00LjA5MS02LjExNWEuOTczLjk3MyAwIDAgMS0uMDU3LS45NzQuOTA3LjkwNyAwIDAgMSAuODA2LS41MDVoOC4xODJhLjkwNi45MDYgMCAwIDEgLjgwNS41MDUuOTcxLjk3MSAwIDAgMS0uMDU5Ljk3NGwtNC4wOTEgNi4xMTVhLjkuOSAwIDAgMS0uNzQ4LjQwNXoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNjcuNTQzIC00OTMuNTA0KSIvPgo8L3N2Zz4K);
