@@ -1,0 +1,34 @@
+import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
+import { html } from 'lit-html';
+import '../dist/js/dews-mobile.js';
+
+<Meta
+  title="MDX|masktextbox"
+  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+  parameters={{ component: 'dews-masktextbox', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+/>
+
+<!-- 아래는 Doc 부분 -->
+# dews-masktextbox StoryBook
+
+## Default dews-masktextbox
+<Preview>
+  <Story name="dews-masktextbox" height="100px">
+    {html`
+    <div style='width: 360px'>
+        <dews-box title='box'>
+            <dews-masktextbox title='title'></dews-masktextbox>
+        </dews-box>
+    </div>
+    `}
+  </Story>
+</Preview>
+
+
+
+## API
+
+API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
+
+<Props of="dews-masktextbox" />

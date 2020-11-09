@@ -1,0 +1,27 @@
+@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+
+//======================================
+// dews-numerictextbox
+//======================================
+//--------------------------------------
+// 레이아웃 영역
+//--------------------------------------
+* {
+  @include reset();
+}
+.numeric-textbox-wrap {
+  @include numeric-textbox-wrap();
+
+  //button component 들어오면 지울 내용
+  .btn-tmp {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    border: solid 1px #d5d5d5;
+    background-color: #ffffff;
+
+
+  }
+
+}

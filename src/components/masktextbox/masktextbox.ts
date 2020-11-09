@@ -1,19 +1,20 @@
+import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
 import { property } from 'lit-element';
 import { DewsFormComponent } from '../../core/baseclass/DewsFormComponent.js';
-import _html from './textbox.html';
-import _scss from './textbox.scss';
+import _html from './masktextbox.html';
+import _scss from './masktextbox.scss';
 
-export class Textbox extends DewsFormComponent {
+export class Masktextbox extends DewsFormComponent {
   static styles = _scss;
 
   @property({ type: String })
   title: string = '';
 
-  @property({ type: String, reflect: true })
+  @property({ type: String })
   placeholder: string = '';
 
-  @property({ type: Boolean, reflect: true })
-  multi: boolean = false;
+  @property({ type: String })
+  format = 'password';
 
   @property({ type: Boolean, reflect: true })
   disabled: boolean = false;
@@ -24,19 +25,15 @@ export class Textbox extends DewsFormComponent {
   @property({ type: Boolean, reflect: true })
   required: boolean = false;
 
-  @property({ type: Number, attribute: 'multi-height' })
-  multiHeight: number = 50; // default 높이값...
-
   @property({ type: String })
   value: string = '';
 
-  private onChange = new CustomEvent('change', { detail: '' });
-  private onFocus = new CustomEvent('focus');
+  private onFocus = new CustomEvent('focus', { detail: { target: '' } });
+  private onChange = new CustomEvent('change', { detail: { target: '' } });
 
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('focus', this._onFocus);
-    // this.addEventListener('change', this._onChange);
     // disabled 와 readonly 중 disabled 를 우선 처리한다.
     if (this.disabled && this.readonly) {
       this.readonly = false;
@@ -49,13 +46,11 @@ export class Textbox extends DewsFormComponent {
   }
 
   private _onFocus(e) {
-    this.onFocus.initEvent(e);
-    this.dispatchEvent(this.onFocus);
+    // this.dispatchEvent(this.onFocus);
   }
   private _onChange(e) {
     this.value = e.target.value;
-    this.onChange.initCustomEvent('change', false, false, '');
-    this.dispatchEvent(this.onChange);
+    // this.dispatchEvent(this.onChange);
   }
 
   private _show(message, type) {

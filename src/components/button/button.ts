@@ -1,5 +1,5 @@
-import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
 import { property } from 'lit-element';
+import { DewsFormComponent } from '../../core/baseclass/DewsFormComponent.js';
 
 import _html from './button.html';
 import _scss from './button.scss';
@@ -20,7 +20,7 @@ export enum ICON_LIST {
   'reset' = 'reset',
 }
 
-export class Button extends DewsLayoutComponent {
+export class Button extends DewsFormComponent {
   static styles = _scss;
 
   @property({ type: String })
@@ -41,17 +41,14 @@ export class Button extends DewsLayoutComponent {
   @property({ type: Boolean })
   disabled = false;
 
-  @property({ type: Boolean })
-  ui = false;
-
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('focus', this._focusChanging);
+    // this.addEventListener('focus', this._focusChanging);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('focus', this._focusChanging);
+    // this.removeEventListener('focus', this._focusChanging);
   }
 
   private _clickHandler() {}
