@@ -1,8 +1,9 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { internalProperty, property, PropertyValues } from 'lit-element';
+import { internalProperty, property } from 'lit-element';
 
 import _html from './box.html';
 import _scss from './box.scss';
+import { MainButton, MainButtonSet } from '../../main/MainButton.js';
 
 export class Box extends DewsLayoutComponent {
   static styles = _scss;
@@ -21,14 +22,40 @@ export class Box extends DewsLayoutComponent {
 
   private slotHeight: string;
 
-  connectedCallback() {
+  // 하단 버튼
+  @property({ type: String, attribute: 'button-set' })
+  buttonSet: string = '';
+
+  public _mainButtonSet: MainButtonSet;
+
+  async connectedCallback() {
     super.connectedCallback();
+    await this.updateComplete;
+    await this.setMainButtonSet();
     this.addEventListener('click', this._clickEvent);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('click', this._clickEvent);
+  }
+  private setMainButtonSet(): Promise<void> {
+    if (this.buttonSet !== '') {
+      const mainButtonSet = new MainButtonSet();
+      this.buttonSet.split(',').forEach(item => {
+        const mainButton = mainButtonSet[item] as MainButton;
+        if (mainButton) {
+          mainButton.show();
+          mainButton.onclick = () => {
+            alert(`click: ${item}`);
+          };
+        } else {
+          console.error(`Main Button Set Error: ${this.title} ${item}`);
+        }
+      });
+      this._mainButtonSet = mainButtonSet;
+    }
+    return;
   }
 
   public _blurEvent() {
