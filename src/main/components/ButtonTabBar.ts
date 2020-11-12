@@ -1,5 +1,7 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { css, customElement, html, property } from 'lit-element';
+import { css, customElement, html, internalProperty, query, TemplateResult } from 'lit-element';
+import { FocusChangedEventArgs } from '../FocusChangedEventArgs.js';
+import { MainButtonSet } from '../MainButton.js';
 
 @customElement('main-bottom')
 export class ButtonTabBar extends DewsLayoutComponent {
@@ -73,10 +75,13 @@ export class ButtonTabBar extends DewsLayoutComponent {
       position: absolute;
       bottom: 60px;
       left: 8px;
-      display: block;
+      display: none;
       padding: 12px 0 12px;
       border-radius: 8px;
       background-color: rgba(60, 60, 67, 0.9);
+    }
+    .sub-buttons.active {
+      display: block;
     }
     .sub-button button {
       position: relative;
@@ -138,68 +143,64 @@ export class ButtonTabBar extends DewsLayoutComponent {
     }
   `;
 
-  private buttonMap: { [name: string]: string } = {
-    more: '더보기',
-    add: '추가',
-    search: '조회',
-    delete: '삭제',
-    save: '저장',
-  };
+  // 우측 버튼은 Area Active 에 따라 변경
+  // 좌측 더보기 버튼은 페이지 단위로 변경
+
+  @query('.sub-buttons')
+  subButtons: HTMLElement;
 
   /**
    * main/ButtonTabBar 에서 setAttribute 로 show 할 버튼 리스트 제공
    */
-  @property({ attribute: 'button-set' })
-  buttonSet = '[]';
+  @internalProperty()
+  mainButtonSet: MainButtonSet | undefined;
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('onFocusedAreaChanged', e => {
+    await this.updateComplete;
+    dews.app.main.onFocusChanged = (arg: FocusChangedEventArgs) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
-      const target = e.detail?.$target;
-      this.buttonSet = target?.buttonSet || '[]';
-    });
+      this.mainButtonSet = arg.focusTarget?._mainButtonSet;
+    };
   }
 
-  private getButtonTag(buttonType: string) {
-    return html`<button class="${buttonType}" @click="${this.buttonClick}">${this.buttonMap[buttonType]}</button>`;
-  }
-
-  /**
-   * Checkboxgroup 클릭 시 Main 으로 event emit
-   * @param buttonType
-   */
-  private buttonClick(e: Event) {
-    const buttonClass = (e.target as HTMLButtonElement).className;
-    alert(`click button : ${buttonClass}`);
-
-    this.dispatchEvent(
-      new CustomEvent('clicked-button', { bubbles: true, composed: true, detail: { type: buttonClass } }),
-    );
+  private clickMoreButton() {
+    this.subButtons.classList.toggle('active');
   }
 
   render() {
-    const buttonSet = (JSON.parse(this.buttonSet) as Array<string>) ?? [];
-    return html`
-      <!--      <nav id="bottom">-->
-      <!--        ${buttonSet.map(item => this.getButtonTag(item))}-->
-      <!--        <button class="add">추가</button>-->
-      <!--        <button class="search">조회</button>-->
-      <!--        <button class="delete">삭제</button>-->
-      <!--        <button class="save">저장</button>-->
-      <!--      </nav>-->
+    const mainButtonTag = (type: string, title: string): TemplateResult => {
+      if (this.mainButtonSet) {
+        if (this.mainButtonSet[type]._hidden) {
+          return html``;
+        } else {
+          return html`
+            <li class="main-button">
+              <button
+                class=${type}
+                ?disabled=${this.mainButtonSet[type]?.disabled}
+                @click="${() => this.mainButtonSet[type]?.click()}"
+              >
+                ${title}
+              </button>
+            </li>
+          `;
+        }
+      } else {
+        return html``;
+      }
+    };
 
+    return html`
       <div class="bottom">
         <div class="button-tab-bar">
           <ul class="tab-bar">
-            <li class="main-button"><button class="save">저장</button></li>
-            <li class="main-button"><button class="delete">삭제</button></li>
-            <li class="main-button"><button class="search">검색</button></li>
-            <li class="main-button"><button class="add">추가</button></li>
+            ${mainButtonTag('save', '저장')} ${mainButtonTag('delete', '삭제')} ${mainButtonTag('search', '검색')}
+            ${mainButtonTag('add', '추가')}
 
             <li class="main-button">
-              <button class="more">더보기</button>
+              <button class="more" @click="${this.clickMoreButton}">더보기</button>
 
               <div class="sub-buttons">
                 <ul>

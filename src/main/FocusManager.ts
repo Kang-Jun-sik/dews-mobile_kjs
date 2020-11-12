@@ -18,7 +18,7 @@ export class FocusManager {
       if (!arg.cancelable) {
         if (beforeFocusElement) {
           // 이전 focus 삭제
-          this.focusElement.shadowRoot.querySelector('.dews-box-wrap').classList.remove('active');
+          this.focusElement.shadowRoot.querySelector('.dews-box-wrap, .dews-tabs-wrap').classList.remove('active');
           // box 에서만 임시로 이벤트 정의
           if (this.focusElement instanceof Box && this.focusElement !== arg.focusTarget) {
             this.focusElement._blurEvent();
@@ -26,7 +26,7 @@ export class FocusManager {
         }
 
         // focus 생성
-        arg.focusTarget.shadowRoot.querySelector('.dews-box-wrap').classList.add('active');
+        arg.focusTarget.shadowRoot.querySelector('.dews-box-wrap, .dews-tabs-wrap').classList.add('active');
 
         if (this.focusElement !== arg.focusTarget) {
           // focusChanged event dispatch
