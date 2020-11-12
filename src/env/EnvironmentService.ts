@@ -8,7 +8,7 @@ export class EnvironmentService {
       const MainEnv = {
         initMenu: {
           modules: 'MA',
-          menuId: 'MA1000',
+          pageId: 'MA1000',
         },
       } as MainEnvironment;
       resolve(MainEnv);

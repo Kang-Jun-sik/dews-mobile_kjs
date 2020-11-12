@@ -5,7 +5,7 @@ import { DewsPageBase } from '../core/baseclass/DewsPageBase.js';
 import { ContentsManager } from './ContentsManager.js';
 import { MainInterface } from './MainInterface.js';
 import { EnvironmentService } from '../env/EnvironmentService.js';
-import { css, customElement, html, LitElement, property } from 'lit-element';
+import { css, customElement, html, internalProperty, LitElement, property } from 'lit-element';
 import { PageLoadedEventArgs } from './PageLoadedEventArgs.js';
 import { PageLoadingEventArgs } from './PageLoadingEventArgs.js';
 import { FocusChangingEventArgs } from './FocusChangingEventArgs.js';
@@ -22,15 +22,17 @@ export class Main extends LitElement implements MainInterface {
   @property({ reflect: true })
   id = 'main';
 
-  // @property({ attribute: 'show-header' })
-  // showHeader: boolean = true;
-
   private $app: HTMLElement | null;
   private pageHistoryManager: PageHistoryManager;
   private focusManager: FocusManager;
   // private contentsManager: ContentsManager;
   private scrollManager: ScrollManager;
   private envService: EnvironmentService;
+
+  @internalProperty()
+  private showHeader: boolean = true;
+  @internalProperty()
+  private showBottom: boolean = true;
 
   constructor() {
     super();
@@ -47,7 +49,7 @@ export class Main extends LitElement implements MainInterface {
   }
 
   set onPageUpdateComplete(handler: () => void) {
-    this.addEventListener('pageUpdateComplete', handler);
+    this.addEventListener('pageUpdateComplete', handler, { once: true });
   }
 
   set onPageLoaded(handler: (e: PageLoadedEventArgs) => void) {
@@ -85,67 +87,69 @@ export class Main extends LitElement implements MainInterface {
   }
 
   async init(): Promise<void> {
-    // global variable, event 등록
+    // app 에서 데이터
   }
 
   private async loadMain() {
     const data = await Promise.all([this.envService.getEnvironment()]);
     const mainEnv: MainEnvironment = data[0] as MainEnvironment;
 
-    // this.envService.getEnvironment();
-    // await Promise.all([this.envService.getEnvironment()])
-    // .then(env => {
-    //   mainEnv = env[0] as MainEnvironment;
-    // })
-    // .finally(() => {
+    this.showHeader = false;
+    this.showBottom = false;
+
     this.$app.append(this);
+
+    // 접근 가능한 페이지 인지 확인
+
     // main page 가 랜더링 완료되고 나서 진
     this.onMainLoadComplete = async () => {
       console.log('main load complete');
-      if (mainEnv.initMenu) {
-        const initMenu = mainEnv.initMenu;
-        await this.loadPage(initMenu.modules, initMenu.menuId);
-      }
+      // if (mainEnv.initMenu) {
+      //   const initMenu = mainEnv.initMenu;
+      await this.loadPage('');
+      // }
     };
     // });
   }
 
-  public async loadPage(modules: string, menuId: string, options?: object) {
-    // todo: change full url
-    import(`../pages/${modules}/${menuId}/${menuId}.js`)
-      .then(async pageClass => {
-        if (!customElements.get(`erp10-${menuId.toLowerCase()}`)) {
-          customElements.define(`erp10-${menuId.toLowerCase()}`, pageClass.default);
-        }
-        const page: DewsPageBase = new pageClass.default() as DewsPageBase;
+  public async loadPage(pageId: string, options?: object) {
+    if (pageId !== '') {
+      import(`/view/MOB/${pageId}`)
+        .then(async pageClass => {
+          this.showHeader = true;
+          this.showBottom = true;
+          if (!customElements.get(`erp10-${pageId.toLowerCase()}`)) {
+            customElements.define(`erp10-${pageId.toLowerCase()}`, pageClass.default);
+          }
+          const page: DewsPageBase = new pageClass.default() as DewsPageBase;
 
-        const pageLoadingEvent = new PageLoadingEventArgs('pageLoading', { bubbles: true, composed: true });
-        this.dispatchEvent(pageLoadingEvent);
+          const pageLoadingEvent = new PageLoadingEventArgs('pageLoading', { bubbles: true, composed: true });
+          this.dispatchEvent(pageLoadingEvent);
 
-        // page event
-        await page.onInit();
+          // page event
+          await page.onInit();
 
-        const tag = `erp10-${menuId.toLowerCase()}`;
-        const contents = document.getElementById('main').shadowRoot.querySelector('#contents');
-        contents.appendChild(page);
-        contents.getElementsByTagName(tag)[0].setAttribute('id', tag);
+          const tag = `erp10-${pageId.toLowerCase()}`;
+          const contents = document.getElementById('main').shadowRoot.querySelector('#contents');
+          contents.appendChild(page);
+          contents.getElementsByTagName(tag)[0].setAttribute('id', tag);
 
-        this.onPageUpdateComplete = () => {
-          const pageLoadedEvent = new PageLoadedEventArgs(`pageLoaded`, {
-            bubbles: true,
-            composed: true,
-          });
-          pageLoadedEvent.openPage = page;
-          pageLoadedEvent.modules = modules;
-          pageLoadedEvent.menuId = menuId;
-          pageLoadedEvent.tag = tag;
+          this.onPageUpdateComplete = () => {
+            const pageLoadedEvent = new PageLoadedEventArgs(`pageLoaded`, {
+              bubbles: true,
+              composed: true,
+            });
+            pageLoadedEvent.openPage = page;
+            pageLoadedEvent.pageId = pageId;
+            pageLoadedEvent.tag = tag;
 
-          this.dispatchEvent(pageLoadedEvent);
-        };
-      })
-      .catch(error => {
-        console.log(error);
-      });
+            this.dispatchEvent(pageLoadedEvent);
+          };
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 
   async connectedCallback() {
@@ -174,9 +178,10 @@ export class Main extends LitElement implements MainInterface {
       position: relative;
       overflow: hidden;
       width: 100%;
-      min-height: calc(100vh - 53px - 56px);
-      margin: 53px 0 0;
-      padding-top: 12px;
+      // min-height: calc(100vh - 53px - 56px);
+      // margin: 53px 0 0;
+      padding: 53px 0 0;
+      // padding-top: 53px;
       background-color: #efeff4;
     }
     .footer {
@@ -200,7 +205,7 @@ export class Main extends LitElement implements MainInterface {
   `;
   render() {
     return html`
-      <main-header></main-header>
+      ${this.showHeader ? html`<main-header></main-header>` : html``}
       <div id="contents"></div>
       <div class="footer">
         <img
@@ -208,7 +213,7 @@ export class Main extends LitElement implements MainInterface {
           alt="erp10"
         />
       </div>
-      <main-bottom></main-bottom>
+      ${this.showBottom ? html`<main-bottom></main-bottom>` : html``}
     `;
   }
 }

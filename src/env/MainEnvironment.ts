@@ -6,6 +6,6 @@ export interface MainEnvironment {
 
 export interface PagePath {
   modules: string;
-  menuId: string;
+  pageId: string;
   option?: object;
 }

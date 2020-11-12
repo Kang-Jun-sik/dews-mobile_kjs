@@ -8,5 +8,5 @@ export interface MainInterface {
   onMainLoadComplete;
   onAreaChanged;
   start(): Promise<void>;
-  loadPage(modules: string, menuId: string, options?: object);
+  loadPage(pageId: string, options?: object);
 }

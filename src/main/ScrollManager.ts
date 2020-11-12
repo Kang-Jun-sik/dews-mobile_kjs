@@ -26,10 +26,10 @@ export class ScrollManager {
     return Array.from(this.areaOffsetMap.keys()).sort((a, b) => (a > b ? -1 : 1));
   }
   public init() {
-    dews.app.main.onPageLoaded = async (e: PageLoadedEventArgs) => {
+    dews.app.main.onPageLoaded = async (arg: PageLoadedEventArgs) => {
       console.log('ScrollManager');
       this.currentArea = null;
-      this.areaList = e.openPage.getAreaList;
+      this.areaList = arg.openPage.getAreaList;
       await this.getAreaOffset();
       window.onscroll = () => {
         const pageYOffset = window.pageYOffset;
@@ -51,12 +51,14 @@ export class ScrollManager {
    *   number : Area 의 시작점
    */
   private async getAreaOffset(): Promise<void> {
-    this.areaList.forEach(item => {
-      // 절대좌표 : (window.pageYOffset + item.getBoundingClientRect().top) - this.headerHeight;
-      const areaOffset =
-        window.pageYOffset + item.getBoundingClientRect().top - this.headerHeight - this.areaDividerHeight;
-      this.areaOffsetMap.set(areaOffset, item);
-    });
+    if (this.areaList) {
+      this.areaList.forEach(item => {
+        // 절대좌표 : (window.pageYOffset + item.getBoundingClientRect().top) - this.headerHeight;
+        const areaOffset =
+          window.pageYOffset + item.getBoundingClientRect().top - this.headerHeight - this.areaDividerHeight;
+        this.areaOffsetMap.set(areaOffset, item);
+      });
+    }
   }
 
   private checkScrollPosition(pageYOffset) {
