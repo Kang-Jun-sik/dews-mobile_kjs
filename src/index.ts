@@ -38,6 +38,8 @@ import { Masktextbox } from './components/masktextbox/masktextbox.js';
 import { Checkboxgroup } from './components/checkboxgroup/checkboxgroup.js';
 import { Checkbox } from './components/checkbox/checkbox.js';
 import { Drowerlayout } from './components/drowerlayout/drowerlayout.js';
+import { Radiobutton } from './components/radiobutton/radiobutton.js';
+import { Radiobuttongroup } from './components/radiobuttongroup/radiobuttongroup.js';
 
 export { Tabs, Tab, Box, AreaPanel };
 
@@ -49,6 +51,8 @@ window.customElements.define('dews-masktextbox', Masktextbox);
 window.customElements.define('dews-numerictextbox', Numerictextbox);
 window.customElements.define('dews-textbox', Textbox);
 window.customElements.define('dews-button', Button);
+window.customElements.define('dews-radiobutton', Radiobutton);
+window.customElements.define('dews-radiobutton-group', Radiobuttongroup);
 window.customElements.define('dews-checkbox-group', Checkboxgroup);
 window.customElements.define('dews-checkbox', Checkbox);
 
