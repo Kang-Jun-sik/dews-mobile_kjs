@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { html, property } from 'lit-element';
+import { html, property, PropertyValues } from 'lit-element';
 
 import _html from './tabs.html';
 import _scss from './tabs.scss';
@@ -12,7 +12,7 @@ export class Tabs extends DewsLayoutComponent {
     this.addEventListener('focusin', this._focusIn);
     this.addEventListener('blur', this._focusBlur);
     this.updateComplete;
-    console.log('Tabs UpdateComplete');
+    // console.log('Tabs UpdateComplete');
     this._firstTabUpdate();
   }
 
@@ -42,7 +42,7 @@ export class Tabs extends DewsLayoutComponent {
   }
 
   @property({ type: Number })
-  selected: number = 1;
+  selected: number = 0;
 
   @property({ type: Boolean })
   hide: boolean = false;
@@ -52,6 +52,13 @@ export class Tabs extends DewsLayoutComponent {
   select: Function = (select: number) => {
     this._select(select);
   };
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this.updateComplete.then(() => {
+      this._select(this.selected);
+    });
+  }
 
   private _focusIn(e) {
     this._focusChanging(e);
@@ -66,7 +73,7 @@ export class Tabs extends DewsLayoutComponent {
   }
 
   private _select: Function = (select: number) => {
-    this.shadowRoot.querySelector('.title-list').querySelector('.active').classList.remove('active');
+    this.shadowRoot.querySelector('.title-list').querySelector('.active')?.classList?.remove('active');
     this.shadowRoot.querySelector('.title-list').querySelectorAll('.title')[select].classList.add('active');
     this.querySelectorAll('dews-tab').forEach(tab => {
       tab.shadowRoot.querySelector('.content')?.classList?.remove('active');
