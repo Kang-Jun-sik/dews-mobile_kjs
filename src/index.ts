@@ -35,6 +35,7 @@ import { Datepicker } from './components/datepicker/datepicker.js';
 import { Dropdownlist } from './components/dropdownlist/dropdownlist.js';
 import { Checkboxgroup } from './components/checkboxgroup/checkboxgroup.js';
 import { Checkbox } from './components/checkbox/checkbox.js';
+import { Drowerlayout } from './components/drowerlayout/drowerlayout.js';
 
 export { Tabs, Tab, Box, AreaPanel };
 
@@ -55,3 +56,5 @@ window.customElements.define('dews-tab', Tab);
 window.customElements.define('dews-search-container', SearchContainer);
 window.customElements.define('dews-form-container', FormContainer);
 window.customElements.define('form-section', FormSection);
+
+window.customElements.define('drower-layout', Drowerlayout);

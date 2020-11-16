@@ -67,6 +67,10 @@ export class Textbox extends DewsFormComponent {
     // }
   }
 
+  click() {
+    this.shadowRoot.querySelector('input').focus();
+  }
+
   error: Function = (message: string) => {
     this._show(message, 'error');
   };

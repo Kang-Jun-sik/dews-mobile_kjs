@@ -10,9 +10,17 @@
 * {
   @include reset();
 }
-.dropdown-list-wrap {
-  @include dropdown-list-wrap();
+
+@include layer-drawer();
+
+.layer-drawer .layer.layer-bottom {
+  transition: height 1s ease-in-out 0s;
 }
-.drawer-dropdown {
-  @include drawer-dropdown-wrap();
+:host([active]) .layer-drawer .layer.layer-bottom {
+  height: calc(100vh - 134px);
+  transition: height 1s ease-in-out 0s;
 }
+:host([active]) .layer-drawer .layer.layer-bottom.little_moving {
+  transition: inherit !important
+}
+
