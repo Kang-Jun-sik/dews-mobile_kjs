@@ -4,26 +4,63 @@ import { html } from 'lit-html';
 import '../dist/js/dews-mobile.js';
 
 <Meta
-  title="MDX|Button"
+  title="MDX|DropDownList"
   decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
-  parameters={{ component: 'dews-button', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  parameters={{ component: 'dews-DropDownList', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
 />
 
 <!-- 아래는 Doc 부분 -->
-# dews-button StoryBook
+# dews-DropDownList StoryBook
 
-## Default dews-button
+## Default dews-DropDownList
 <Preview>
-  <Story name="dews-button" height="100px">
+  <Story name="dews-dropdownlist" height="100px">
     {html`
     <div style='width: 360px'>
-                <dews-dropdownlist></dews-dropdownlist>
-    </div>
-    <div style='width: 360px'>
-                <dews-dropdownlist></dews-dropdownlist>
-    </div>
-    <div style='width: 360px'>
-                <dews-dropdownlist></dews-dropdownlist>
+                <dews-dropdownlist title='multi' multi>
+                    <dropdownlist-item title='DATA-1'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-2'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-3'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-4'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-5'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-6'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-7'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-8'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-9'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-10'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-11'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-12'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-13'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-14'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-15'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-16'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-17'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-18'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-19'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-20'></dropdownlist-item>
+                </dews-dropdownlist>
+                <dews-dropdownlist title='single'>
+                    <dropdownlist-item title='DATA-1'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-2'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-3'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-4'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-5'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-6'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-7'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-8'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-9'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-10'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-11'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-12'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-13'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-14'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-15'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-16'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-17'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-18'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-19'></dropdownlist-item>
+                    <dropdownlist-item title='DATA-20'></dropdownlist-item>
+                </dews-dropdownlist>
     </div>
     `}
   </Story>
@@ -35,4 +72,4 @@ import '../dist/js/dews-mobile.js';
 
 API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
 
-<Props of="dews-box" />
+<Props of="dews-DropDownList" />

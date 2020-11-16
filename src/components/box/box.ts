@@ -58,9 +58,7 @@ export class Box extends DewsLayoutComponent {
     return;
   }
 
-  public _blurEvent() {
-    console.log('blur');
-  }
+  public _blurEvent() {}
 
   private _clickEvent(e: Event) {
     // 직접 일으킨 이벤트만 처리하기 위해 isTrusted 사용
