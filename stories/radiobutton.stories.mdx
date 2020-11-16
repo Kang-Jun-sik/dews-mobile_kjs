@@ -1,0 +1,43 @@
+import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
+import { html } from 'lit-html';
+import '../dist/js/dews-mobile.js';
+
+<Meta
+  title="MDX|Radiobutton"
+  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+  parameters={{ component: 'dews-radiobutton', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+/>
+
+<!-- 아래는 Doc 부분 -->
+# dews-radiobutton StoryBook
+
+## Default dews-radiobutton
+<Preview>
+  <Story name="dews-radiobutton" height="100px">
+    {html`
+    <div style='width: 360px'>
+                <dews-radiobutton-group title="title!!">
+                    <dews-radiobutton title='button1' checked></dews-radiobutton>
+                    <dews-radiobutton title='button2' disabled checked ></dews-radiobutton>
+                    <dews-radiobutton title='button3'></dews-radiobutton>
+                </dews-radiobutton-group>
+    </div>
+    <div style='width: 360px'>
+               <dews-radiobutton-group title="title!!" disabled align='vertical'>
+                    <dews-radiobutton title='button1'></dews-radiobutton>
+                    <dews-radiobutton title='button2' checked disabled></dews-radiobutton>
+                    <dews-radiobutton title='button3'></dews-radiobutton>
+                </dews-radiobutton-group>
+    </div>
+    `}
+  </Story>
+</Preview>
+
+
+
+## API
+
+API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
+
+<Props of="dews-radiobutton" />
