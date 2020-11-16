@@ -1,12 +1,12 @@
-import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+import {Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
 // import { withActions } from "storybook-prebuilt/addon-actions.js";
-import { html } from 'lit-html';
+import {html} from 'lit-html';
 import '../dist/js/dews-mobile.js';
 
 <Meta
-  title="MDX|Numerictextbox"
-  decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
-  parameters={{ component: 'dews-numerictextbox', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+    title="MDX|Numerictextbox"
+    decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
+    parameters={{component: 'dews-numerictextbox', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
 />
 
 <!-- 아래는 Doc 부분 -->
@@ -14,15 +14,21 @@ import '../dist/js/dews-mobile.js';
 
 ## Default dews-numerictextbox
 <Preview>
-  <Story name="dews-numerictextbox" height="100px">
-    {html`
+    <Story name="dews-numerictextbox" height="100px">
+        {html`
     <div style='width: 360px'>
         <dews-box title='box'>
-            <dews-numerictextbox title='title'></dews-numerictextbox>
+            <dews-numerictextbox format="#,###0.000">
+                 <numericbox-button step="500"></numericbox-button>
+            </dews-numerictextbox>
+        </dews-box>
+        <dews-box title='box'>
+            <dews-numerictextbox disabled title='title' prefix='$'  suffix='백만원'>
+            </dews-numerictextbox>
         </dews-box>
     </div>
     `}
-  </Story>
+    </Story>
 </Preview>
 
 
@@ -31,4 +37,4 @@ import '../dist/js/dews-mobile.js';
 
 API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
 
-<Props of="dews-numerictextbox" />
+<Props of="dews-numerictextbox"/>

@@ -13,8 +13,15 @@ export class Tab extends DewsLayoutComponent {
   @property({ type: Boolean })
   hide: boolean = false;
 
-  @property({ type: Boolean })
-  active: boolean = false;
+  async connectedCallback() {
+    super.connectedCallback();
+    await this.updateComplete;
+    console.log('Tab UpdateComplete');
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+  }
 
   render() {
     return this.hide ? null : _html.bind(this)();
