@@ -107,6 +107,7 @@ export class Box extends DewsLayoutComponent {
   }
 
   render() {
+    console.log('render');
     return this.hide ? null : _html.bind(this)();
   }
 }
