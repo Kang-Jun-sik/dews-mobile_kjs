@@ -12,6 +12,10 @@
 }
 .mask-textbox-wrap {
   @include mask-textbox-wrap();
+
+}
+:host([format="password"]) input {
+  -webkit-text-security: disc;
 }
 
 //input[type=text].dropdown {

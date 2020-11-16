@@ -33,6 +33,8 @@ import { Textbox } from './components/textbox/textbox.js';
 import { Codepicker } from './components/codepicker/codepicker.js';
 import { Datepicker } from './components/datepicker/datepicker.js';
 import { Dropdownlist } from './components/dropdownlist/dropdownlist.js';
+import { Numerictextbox } from './components/numerictextbox/numerictextbox.js';
+import { Masktextbox } from './components/masktextbox/masktextbox.js';
 import { Checkboxgroup } from './components/checkboxgroup/checkboxgroup.js';
 import { Checkbox } from './components/checkbox/checkbox.js';
 import { Drowerlayout } from './components/drowerlayout/drowerlayout.js';
@@ -42,6 +44,9 @@ export { Tabs, Tab, Box, AreaPanel };
 window.customElements.define('dews-codepicker', Codepicker);
 window.customElements.define('dews-datepicker', Datepicker);
 window.customElements.define('dews-dropdownlist', Dropdownlist);
+
+window.customElements.define('dews-masktextbox', Masktextbox);
+window.customElements.define('dews-numerictextbox', Numerictextbox);
 window.customElements.define('dews-textbox', Textbox);
 window.customElements.define('dews-button', Button);
 window.customElements.define('dews-checkbox-group', Checkboxgroup);

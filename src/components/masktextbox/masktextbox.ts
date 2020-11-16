@@ -25,11 +25,19 @@ export class Masktextbox extends DewsFormComponent {
   @property({ type: Boolean, reflect: true })
   required: boolean = false;
 
+  @property({ attribute: 'data-mask' })
+  mask = '000-000';
+
+  @property({ attribute: 'data-prompt' })
+  prompt = '_';
+
   @property({ type: String })
   value: string = '';
 
   private onFocus = new CustomEvent('focus', { detail: { target: '' } });
   private onChange = new CustomEvent('change', { detail: { target: '' } });
+  private event = new Event('input');
+  private _disabled = true;
 
   connectedCallback() {
     super.connectedCallback();
@@ -37,12 +45,37 @@ export class Masktextbox extends DewsFormComponent {
     // disabled 와 readonly 중 disabled 를 우선 처리한다.
     if (this.disabled && this.readonly) {
       this.readonly = false;
+    } else if (this.readonly) {
+      this._disabled = false;
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('focus', this._onFocus);
+  }
+
+  private _spanClick() {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+    const $el = this.shadowRoot.querySelectorAll('span');
+    $el[0].style.display = 'none';
+    $el[1].style.display = 'block';
+    this.shadowRoot.querySelectorAll('input')[1].focus();
+  }
+
+  private _inputChange(e) {
+    this.value = e.target.value;
+    this.dispatchEvent(this.event);
+  }
+
+  private _blur() {
+    const $el = this.shadowRoot.querySelectorAll('input');
+    const $span = this.shadowRoot.querySelectorAll('span');
+    $el[0].value = $el[1].value;
+    $span[0].style.display = 'block';
+    $span[1].style.display = 'none';
   }
 
   private _onFocus(e) {

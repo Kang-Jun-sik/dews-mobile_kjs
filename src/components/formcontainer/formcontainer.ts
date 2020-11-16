@@ -7,6 +7,13 @@ import _scss from './formcontainer.scss';
 export class FormContainer extends DewsLayoutComponent {
   static styles = _scss;
 
+  constructor() {
+    super();
+    this._contentView();
+    this._buttonView();
+    this._customButtonView();
+  }
+
   @property({ type: String })
   title: string | undefined;
 
@@ -98,9 +105,6 @@ export class FormContainer extends DewsLayoutComponent {
 
   connectedCallback() {
     super.connectedCallback();
-    this._contentView();
-    this._buttonView();
-    this._customButtonView();
   }
 
   disconnectedCallback() {
@@ -108,6 +112,7 @@ export class FormContainer extends DewsLayoutComponent {
   }
 
   render() {
+    console.log('form-container-render');
     return _html.bind(this)();
   }
 }

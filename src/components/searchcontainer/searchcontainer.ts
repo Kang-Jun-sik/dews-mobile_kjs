@@ -45,7 +45,7 @@ export class SearchContainer extends DewsLayoutComponent {
     for (let i = 0; i < contentChildLength; i++) {
       this._contentList.push(html`<li>${contentChildItem.item(i)}</li>`);
     }
-    this.querySelector('container-content').remove();
+    // this.querySelector('container-content').remove();
   }
 
   private _buttonView() {
@@ -75,11 +75,14 @@ export class SearchContainer extends DewsLayoutComponent {
       );
     }
   }
+  constructor() {
+    super();
+    this._contentView();
+    this._buttonView();
+  }
 
   connectedCallback() {
     super.connectedCallback();
-    this._contentView();
-    this._buttonView();
   }
 
   disconnectedCallback() {

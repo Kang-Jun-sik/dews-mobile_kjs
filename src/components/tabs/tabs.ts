@@ -7,14 +7,12 @@ import _scss from './tabs.scss';
 export class Tabs extends DewsLayoutComponent {
   static styles = _scss;
 
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
     this.addEventListener('focusin', this._focusIn);
     this.addEventListener('blur', this._focusBlur);
+    this.updateComplete;
+    console.log('Tabs UpdateComplete');
     this._firstTabUpdate();
   }
 

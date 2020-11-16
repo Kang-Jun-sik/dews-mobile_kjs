@@ -26,7 +26,7 @@ export class ListContainer extends DewsLayoutComponent {
     for (let i = 0; i < contentChildLength; i++) {
       this._contentList.push(html`${contentChildItem.item(i)}`);
     }
-    this.querySelector('container-content').remove();
+    // this.querySelector('container-content').remove();
   }
 
   private _customButtonView() {
@@ -49,7 +49,7 @@ export class ListContainer extends DewsLayoutComponent {
         </div>
       `,
     );
-    this.querySelector('container-button').remove();
+    // this.querySelector('container-button').remove();
   }
 
   private _summaryView() {
@@ -70,7 +70,7 @@ export class ListContainer extends DewsLayoutComponent {
       </div>
     `);
 
-    this.querySelector('container-summary').remove();
+    // this.querySelector('container-summary').remove();
   }
 
   connectedCallback() {

@@ -30,12 +30,16 @@ export class Textbox extends DewsFormComponent {
   @property({ type: String })
   value: string = '';
 
-  private onChange = new CustomEvent('change', { detail: '' });
-  private onFocus = new CustomEvent('focus');
+  private onFocus = new CustomEvent('focus', { detail: { target: '' } });
+  private onChange = new CustomEvent('change', { detail: { target: '' } });
 
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('focus', this._onFocus);
+    // disabled 와 readonly 중 disabled 를 우선 처리한다.
+    if (this.disabled && this.readonly) {
+      this.readonly = false;
+    }
     // this.addEventListener('change', this._onChange);
     // disabled 와 readonly 중 disabled 를 우선 처리한다.
     if (this.disabled && this.readonly) {
@@ -54,7 +58,7 @@ export class Textbox extends DewsFormComponent {
   }
   private _onChange(e) {
     this.value = e.target.value;
-    this.onChange.initCustomEvent('change', false, false, '');
+    this.onChange.initCustomEvent('change', false, false, e);
     this.dispatchEvent(this.onChange);
   }
 
