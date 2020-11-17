@@ -16,6 +16,13 @@ export class Tabs extends DewsLayoutComponent {
     this._firstTabUpdate();
   }
 
+  @property({ type: Number })
+  selected: number = 0;
+
+  @property({ type: Boolean })
+  hide: boolean = false;
+
+  @property({ type: String })
   title: string;
 
   private _firstTabUpdate() {
@@ -40,12 +47,6 @@ export class Tabs extends DewsLayoutComponent {
     this.removeEventListener('focusin', this._focusIn);
     this.removeEventListener('blur', this._focusBlur);
   }
-
-  @property({ type: Number })
-  selected: number = 0;
-
-  @property({ type: Boolean })
-  hide: boolean = false;
 
   private titleList: Array<any> = [];
 

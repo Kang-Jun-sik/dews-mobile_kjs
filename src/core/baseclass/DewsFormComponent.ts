@@ -8,6 +8,7 @@ import { LitElement } from 'lit-element';
 export abstract class DewsFormComponent extends DewsComponent {
   connectedCallback() {
     super.connectedCallback();
+
     this.updateComplete.then(async () => {
       const children = this.shadowRoot.querySelectorAll('*');
       await Promise.all(

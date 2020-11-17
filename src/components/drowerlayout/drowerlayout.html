@@ -1,10 +1,9 @@
-<div class="layer-drawer" @touchmove="${this._touchMove}" @touchend="${this._touchEnd}" @mousemove="${this._mouseMove}"
-     @mouseup="${this._mouseUp}">
+<div class="layer-drawer" @touchmove="${this._touchMove}" @touchend="${this._touchEnd}">
 <!--  <div class="layer-drawer">-->
   <div class="overlay"></div>
   <div class="layer layer-bottom" style="height: ${this._height};">
     <div class="layer-moving-button">
-      <span class="moving-button" @touchstart="${this._touchStart}" @mousedown="${this._mouseDown}"></span>
+      <span class="moving-button" @touchstart="${this._touchStart}"></span>
     </div>
     <div class="layer-content">
       <slot></slot>

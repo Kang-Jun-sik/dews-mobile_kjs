@@ -86,7 +86,7 @@ export class Numerictextbox extends DewsFormComponent {
     this.removeEventListener('focus', this._onFocus);
   }
 
-  private _beforeInput(e) {
+  private _beforeInput(e: any) {
     this.value = e.target.value;
     // 숫자 및 - . 입력처리
     if (
@@ -132,12 +132,12 @@ export class Numerictextbox extends DewsFormComponent {
     $input[0].value = this.numberWithCommas($input[1].value);
   }
 
-  private _onFocus(e) {
+  private _onFocus(e: Event) {
     // this.onFocus.detail.target = e.target;
     // this.dispatchEvent(this.onFocus);
   }
 
-  private _inputChange(e) {
+  private _inputChange(e: any) {
     if (e.data == '-') {
       e.target.value = -this.value;
     }
@@ -147,7 +147,7 @@ export class Numerictextbox extends DewsFormComponent {
     }
   }
 
-  private _focusIn(e) {
+  private _focusIn(e: Event) {
     if (this.disabled || this.readonly) {
       return;
     }
@@ -158,7 +158,7 @@ export class Numerictextbox extends DewsFormComponent {
     this.shadowRoot.querySelectorAll('input')[1].focus();
   }
 
-  private _focusBlur(e) {
+  private _focusBlur(e: Event) {
     const $spanView = this.shadowRoot.querySelector<HTMLElement>('span.view');
     const $spanMask = this.shadowRoot.querySelector<HTMLElement>('span.mask');
     const $input = this.shadowRoot.querySelectorAll('input');
@@ -168,41 +168,43 @@ export class Numerictextbox extends DewsFormComponent {
     $spanMask.style.display = 'none';
   }
 
-  private numberWithCommas(num) {
-    this.value = num;
+  private numberWithCommas(num: string) {
+    this.value = Number(num);
     const decimalLength = this.format.split('.')[1].length; // 소수점
     const commaPosition = this.format.split('.')[0].split(',')[1].length; // 콤마 위치
 
     // 반올림 처리
     switch (this.round) {
       case 'round': {
-        num = Math.round(num * Math.pow(10, decimalLength)) / Math.pow(10, decimalLength);
+        num = (Math.round(Number(num) * Math.pow(10, decimalLength)) / Math.pow(10, decimalLength)).toString();
         break;
       }
       case 'ceil': {
-        num = Math.ceil(num * Math.pow(10, decimalLength)) / Math.pow(10, decimalLength);
+        num = (Math.ceil(Number(num) * Math.pow(10, decimalLength)) / Math.pow(10, decimalLength)).toString();
         break;
       }
       case 'floor': {
-        num = Math.floor(num * Math.pow(10, decimalLength)) / Math.pow(10, decimalLength);
+        num = (Math.floor(Number(num) * Math.pow(10, decimalLength)) / Math.pow(10, decimalLength)).toString();
         break;
       }
     }
-    num = num.toString().split('.');
-    if (num[0].length <= commaPosition) {
+
+    const numAraay: string[] = num.toString().split('.');
+    if (numAraay[0].length <= commaPosition) {
       return num;
     }
-    const count = Math.ceil(num[0].length / commaPosition);
+
+    const count = Math.ceil(numAraay[0].length / commaPosition);
     const newNum = [];
     for (let i = 0; i < count; i++) {
-      newNum.unshift(num[0].slice(-commaPosition * (i + 1), num[0].length - commaPosition * i));
+      newNum.unshift(numAraay[0].slice(-commaPosition * (i + 1), numAraay[0].length - commaPosition * i));
     }
     newNum.join(',');
-    if (num.length == 2) {
-      if (num[1].length > decimalLength) {
-        return newNum.join(',') + '.' + num[1].slice(0, decimalLength).toString();
+    if (numAraay.length == 2) {
+      if (numAraay[1].length > decimalLength) {
+        return newNum.join(',') + '.' + numAraay[1].slice(0, decimalLength).toString();
       }
-      return newNum.join(',') + '.' + num[1].toString();
+      return newNum.join(',') + '.' + numAraay[1].toString();
     } else {
       return newNum.join(',');
     }
