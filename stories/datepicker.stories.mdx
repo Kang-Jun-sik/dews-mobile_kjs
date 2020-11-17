@@ -1,27 +1,24 @@
 import { Story, Preview, Meta, Props, withKnobs, withWebComponentsKnobs  } from '@open-wc/demoing-storybook';
+// import { withActions } from "storybook-prebuilt/addon-actions.js";
 import { html } from 'lit-html';
 import '../dist/js/dews-mobile.js';
 
 <Meta
-  title="MDX|Box"
+  title="MDX|Datepicker"
   decorators={[withKnobs, withWebComponentsKnobs]} // withActions('mouseover', 'click .btn')
-  parameters={{ component: 'dews-box', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  parameters={{ component: 'dews-datepicker', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
 />
 
 <!-- 아래는 Doc 부분 -->
-# dews-box StoryBook
+# dews-datepicker StoryBook
 
-## Default dews-box
+## Default dews-datepicker
 <Preview>
-  <Story name="dews-box" height="100px">
+  <Story name="dews-datepicker" height="100px">
     {html`
     <div style='width: 360px'>
-        <dews-box title='box'>
-            <dews-serach-container >
-                <dews-button  title='button' />
-                <dews-textbox  title='button' />
-            </dews-serach-container>
-        </dews-box>
+                <dews-datepicker>
+                </dews-datepicker>
     </div>
     `}
   </Story>
@@ -33,4 +30,4 @@ import '../dist/js/dews-mobile.js';
 
 API 문서는 .mdx 에 `<Props of="component name">` 으로 등록
 
-<Props of="dews-box" />
+<Props of="dews-datepicker" />

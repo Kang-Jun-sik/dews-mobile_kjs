@@ -16,6 +16,9 @@ export class Drowerlayout extends DewsFormComponent {
   @property({ type: String })
   height: string | undefined;
 
+  @property({ type: Boolean })
+  scrollEnabled: boolean = false;
+
   @internalProperty()
   private _height = '0px';
 
@@ -28,48 +31,15 @@ export class Drowerlayout extends DewsFormComponent {
   private _moveState: boolean = false;
   private close = new Event('close');
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-  }
-
-  _blur() {
-    console.log('blur');
-  }
-
-  private _mouseMove(e) {
-    const $el: HTMLElement = this.shadowRoot.querySelector('.layer-bottom');
-    if (this._moveState) {
-      this._height = `${this._defaultHeight + (this._moveStart - e.screenY)}px`;
-    }
-  }
-
-  private _mouseDown(e) {
-    this._moveState = true;
-    this._moveStart = e.screenY;
-    this._defaultHeight = this.shadowRoot.querySelector('.layer-bottom').clientHeight;
-    // this.shadowRoot.querySelector('.layer-drawer').classList.add('moving');
-  }
-
-  private _mouseUp(e) {
-    this._moveState = false;
-    this._moveEnd = e.screenY;
-    // this.shadowRoot.querySelector('.layer-drawer').classList.remove('moving');
-    if (Math.abs(this._moveStart - this._moveEnd) < 5) {
-      this.dispatchEvent(this.close);
-    }
-  }
-
   private _touchMove(e) {
-    e.preventDefault();
-    e.passive = true;
-    e.capture = true;
-    const $el: HTMLElement = this.shadowRoot.querySelector('.layer-bottom');
-    if (this._moveState) {
-      this._height = `${this._defaultHeight + (this._moveStart - e.changedTouches[0].screenY)}px`;
+    if (this.scrollEnabled) {
+      e.preventDefault();
+      e.passive = true;
+      e.capture = true;
+      const $el: HTMLElement = this.shadowRoot.querySelector('.layer-bottom');
+      if (this._moveState) {
+        this._height = `${this._defaultHeight + (this._moveStart - e.changedTouches[0].screenY)}px`;
+      }
     }
   }
 
@@ -81,6 +51,10 @@ export class Drowerlayout extends DewsFormComponent {
     if (Math.abs(this._moveStart - this._moveEnd) < 5) {
       this.dispatchEvent(this.close);
     }
+  }
+
+  private _close() {
+    this.dispatchEvent(this.close);
   }
 
   private _touchStart(e) {

@@ -40,6 +40,7 @@ import { Masktextbox } from './components/masktextbox/masktextbox.js';
 import { Drowerlayout } from './components/drowerlayout/drowerlayout.js';
 import { Radiobutton } from './components/radiobutton/radiobutton.js';
 import { Radiobuttongroup } from './components/radiobuttongroup/radiobuttongroup.js';
+import { ListContainer } from './components/listcontainer/listcontainer.js';
 
 export { Tabs, Tab, Box, AreaPanel };
 
@@ -64,6 +65,7 @@ window.customElements.define('dews-tab', Tab);
 
 window.customElements.define('dews-search-container', SearchContainer);
 window.customElements.define('dews-form-container', FormContainer);
+window.customElements.define('dews-list-container', ListContainer);
 window.customElements.define('form-section', FormSection);
 
 window.customElements.define('drower-layout', Drowerlayout);

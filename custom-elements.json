@@ -86,11 +86,6 @@
           "default": "\"\""
         },
         {
-          "name": "placeholder",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
           "name": "disabled",
           "type": "boolean",
           "default": "false"
@@ -104,6 +99,14 @@
           "name": "value",
           "type": "string",
           "default": "\"\""
+        },
+        {
+          "name": "min",
+          "type": "string"
+        },
+        {
+          "name": "max",
+          "type": "string"
         }
       ],
       "properties": [
@@ -114,12 +117,6 @@
         {
           "name": "title",
           "attribute": "title",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "placeholder",
-          "attribute": "placeholder",
           "type": "string",
           "default": "\"\""
         },
@@ -140,14 +137,16 @@
           "attribute": "value",
           "type": "string",
           "default": "\"\""
-        }
-      ],
-      "events": [
-        {
-          "name": "onFocus"
         },
         {
-          "name": "onChange"
+          "name": "min",
+          "attribute": "min",
+          "type": "string"
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string"
         }
       ]
     },
@@ -1029,7 +1028,7 @@
         {
           "name": "selected",
           "type": "number",
-          "default": "1"
+          "default": "0"
         },
         {
           "name": "hide",
@@ -1050,7 +1049,7 @@
           "name": "selected",
           "attribute": "selected",
           "type": "number",
-          "default": "1"
+          "default": "0"
         },
         {
           "name": "hide",
@@ -1202,6 +1201,11 @@
           "type": "string | undefined"
         },
         {
+          "name": "scrollEnabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "drower",
           "type": "\"bottom\" | \"right\"",
           "default": "\"bottom\""
@@ -1227,6 +1231,12 @@
           "name": "height",
           "attribute": "height",
           "type": "string | undefined"
+        },
+        {
+          "name": "scrollEnabled",
+          "attribute": "scrollEnabled",
+          "type": "boolean",
+          "default": "false"
         },
         {
           "name": "drower",
