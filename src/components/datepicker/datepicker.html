@@ -52,7 +52,7 @@
 
         <div class="calendar-content" @touchstart="${this._touchStartHandler}" @touchend="${this._touchEndHandler}"
              @touchmove="${this._touchMoveHandler}">
-          <div class="calendar-flip-wrap calendar-date-wrap">
+          <div class="calendar-flip-wrap">
             ${this._backView}
             ${this._nowView}
             ${this._nextView}
@@ -60,4 +60,5 @@
         </div>
       </div>
     </div>
+  </div>
 </drower-layout>
