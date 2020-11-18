@@ -67,12 +67,9 @@ export class Datepicker extends DewsFormComponent {
       this.readonly = false;
     }
     const today = new Date();
-    // this._backView = this._dayPickerView(today.getFullYear(), today.getMonth());
-    // this._nowView = this._dayPickerView();
-    this._backView = this._monthPickerView();
-    this._nowView = this._monthPickerView();
-    this._nextView = this._monthPickerView();
-    // this._nextView = this._dayPickerView(today.getFullYear(), today.getMonth() + 2);
+    this._backView = this._dayPickerView(today.getFullYear(), today.getMonth());
+    this._nowView = this._dayPickerView();
+    this._nextView = this._dayPickerView(today.getFullYear(), today.getMonth() + 2);
     this._viewYear = new Date().getFullYear();
     this._viewMonth = new Date().getMonth() + 1;
     this._modeView = `${this._viewYear}-${this._viewMonth > 10 ? this._viewMonth : '0' + this._viewMonth}`;
@@ -223,11 +220,19 @@ export class Datepicker extends DewsFormComponent {
           </div>`
         );
       } else {
-        _yearView.push(
-          html`<div class="year" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
-            <span>${todayYearStart + i}</span>
-          </div>`
-        );
+        if (todayYearStart + i === this._setYear) {
+          _yearView.push(
+            html`<div class="year select" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
+              <span>${todayYearStart + i}</span>
+            </div>`
+          );
+        } else {
+          _yearView.push(
+            html`<div class="year" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
+              <span>${todayYearStart + i}</span>
+            </div>`
+          );
+        }
       }
     }
     return html`<div class="calendar-year">${_yearView}</div>`;
@@ -676,8 +681,6 @@ export class Datepicker extends DewsFormComponent {
   }
 
   render() {
-    console.log(this._setMonth, this._setYear, this._setDay);
-
     return template.call(this);
   }
 }
