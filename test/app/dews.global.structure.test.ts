@@ -1,5 +1,5 @@
 import { expect } from '@open-wc/testing';
-import '../src/dews-mobile.js';
+import '../../src/dews-mobile.js';
 
 describe('dews 글로벌 API 구조 확인 테스트', () => {
   it('dews.app 구조 확인', () => {

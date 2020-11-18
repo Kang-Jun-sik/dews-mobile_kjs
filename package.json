@@ -19,6 +19,7 @@
     "wca": "web-component-analyzer analyze src --outFile custom-elements.json"
   },
   "devDependencies": {
+    "@dews/dews-mobile-core": "^0.1.0",
     "@open-wc/building-rollup": "^1.0.0",
     "@open-wc/demoing-storybook": "^2.0.0",
     "@open-wc/eslint-config": "^4.0.0",

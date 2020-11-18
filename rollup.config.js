@@ -13,9 +13,7 @@ export default argv => {
     workbox: false,
     polyfillsLoader: false,
     outputDir: devMode ? './.tmp/dist/mobile' : './dist/mobile',
-    nodeResolve: {
-      browser: true
-    },
+    nodeResolve: true,
     html: {
       flatten: false,
       inject: true,
@@ -24,7 +22,7 @@ export default argv => {
     }
   });
 
-  const config = merge(baseConfig, {
+  return merge(baseConfig, {
     input: './index.html',
     preserveEntrySignatures: true,
     treeshake: true,
@@ -47,6 +45,4 @@ export default argv => {
       })
     ]
   });
-
-  return config;
 };

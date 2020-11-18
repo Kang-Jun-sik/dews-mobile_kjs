@@ -1,5 +1,5 @@
 import { customElement, html, LitElement } from 'lit-element';
-import { autoWired } from '../core/di/exports.js';
+import { autoWired } from '@dews/dews-mobile-core';
 import { MyDependency } from './ApplicationContext.js';
 import { ApplicationMainInterface } from './ApplicationMainInterface.js';
 

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { singleton } from '../../../core/di/exports.js';
+import { singleton } from '@dews/dews-mobile-core';
 import { SystemEnvironmentsProviderBase } from '../SystemEnvironmentsProviderBase.js';
 
 @singleton()

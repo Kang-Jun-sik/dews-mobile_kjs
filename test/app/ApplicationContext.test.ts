@@ -1,6 +1,7 @@
 import { expect } from '@open-wc/testing';
+import { container } from '@dews/dews-mobile-core';
 import { StandaloneEnvironmentsProvider } from '../../src/app/env/standalone/StandaloneEnvironmentsProvider.js';
-import { SystemType, container, SystemEnvironmentsProviderBase, dependencySymbols } from '../../src/dews-mobile.js';
+import { SystemType, SystemEnvironmentsProviderBase, dependencySymbols } from '../../src/dews-mobile.js';
 
 describe('ApplicationContext 테스트', () => {
   beforeEach(async () => {

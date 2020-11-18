@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { injectable } from '../../../core/di/exports.js';
+import { injectable } from '@dews/dews-mobile-core';
 import { AuthenticationManagerInterface } from '../../auth/AuthenticationManagerInterface.js';
 
 @injectable()

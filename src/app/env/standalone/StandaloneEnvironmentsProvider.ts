@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { container, singleton } from '../../../core/di/exports.js';
+import { container, singleton } from '@dews/dews-mobile-core';
 import { StandaloneAuthenticationManager } from './StandaloneAuthenticationManager.js';
 import { SystemEnvironmentsProviderBase } from '../SystemEnvironmentsProviderBase.js';
 

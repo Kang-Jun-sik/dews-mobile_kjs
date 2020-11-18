@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import { injectable, container } from '../core/di/exports.js';
+import { injectable, container } from '@dews/dews-mobile-core';
 import { ApplicationMainInterface } from './ApplicationMainInterface.js';
 import { SystemEnvironmentsProviderBase } from './env/SystemEnvironmentsProviderBase.js';
 import { SystemType } from './SystemTypeEnum.js';
