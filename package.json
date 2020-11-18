@@ -1,11 +1,11 @@
 {
+  "name": "@dews/dews-mobile",
+  "version": "0.1.0",
+  "description": "Webcomponent dews-mobile following open-wc recommendations",
+  "author": "dews-mobile",
+  "license": "MIT",
+  "types": "./dist/mobile/types/dews-mobile.d.ts",
   "scripts": {
-    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
-    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
-    "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
-    "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "format": "npm run format:eslint && npm run format:prettier",
     "test": "web-test-runner",
     "test:coverage": "web-test-runner --coverage",
     "test:watch": "web-test-runner --watch",
@@ -14,9 +14,13 @@
     "dev:watch": "npm run dev:build && concurrently \"gulp watch\" \"tsc --watch\" \"rollup -c rollup.config.js --dev true --watch\"",
     "dev:storybook": "npm run dev:build && concurrently \"gulp watch\" \"tsc --watch\" \"start-storybook --node-resolve --watch --open\"",
     "dev:demo": "npm run dev:build && web-dev-server --root-dir .tmp/dist --app-index mobile/index.html --open --compatibility none --watch",
-    "release:build": "rimraf dist && gulp build && tsc && rollup -c rollup.config.js --dev false",
+    "release:build": "rimraf dist && gulp build && tsc && rollup -c rollup.config.js --dev false && tsc -p tsconfig.declaration.json",
     "release:demo": "npm run release:build && web-dev-server --root-dir dist --app-index mobile/index.html --open --compatibility none",
     "wca": "web-component-analyzer analyze src --outFile custom-elements.json"
+  },
+  "dependencies": {
+    "lit-element": "^2.0.1",
+    "lit-html": "^1.0.0"
   },
   "devDependencies": {
     "@dews/dews-mobile-core": "^0.1.0",
@@ -68,15 +72,8 @@
       "git add"
     ]
   },
-  "name": "dews-mobile",
-  "version": "0.1.0",
-  "description": "Webcomponent dews-mobile following open-wc recommendations",
-  "author": "dews-mobile",
-  "license": "MIT",
-  "browser": "./dist/mobile/index.html",
-  "module": "./dist/mobile/js/dews-mobile.5bfeaa9d.js",
-  "dependencies": {
-    "lit-element": "^2.0.1",
-    "lit-html": "^1.0.0"
+  "repository": {
+    "type": "git",
+    "url": "https://git.comet.duzon.net/front-end/dews-mobile.git"
   }
 }

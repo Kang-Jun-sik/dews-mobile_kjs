@@ -2,7 +2,18 @@ import 'reflect-metadata';
 
 export * from './app/exports.js';
 
+import { DewsMobileInterface } from './app/DewsMobileInterface.js';
+
+declare global {
+  interface Window {
+    dews: DewsMobileInterface;
+  }
+
+  const dews: DewsMobileInterface;
+}
+
 import { app } from './app/ApplicationContext.js';
+
 window.dews = {
   app
 };
