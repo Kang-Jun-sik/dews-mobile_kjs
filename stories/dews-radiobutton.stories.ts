@@ -7,8 +7,8 @@ export default {
 
 export const RadioButton = () => html`<div style="width: 360px">
     <dews-radiobutton-group title="title!!">
-      <dews-radiobutton title="button1" checked></dews-radiobutton>
-      <dews-radiobutton title="button2" disabled checked></dews-radiobutton>
+      <dews-radiobutton title="button1"></dews-radiobutton>
+      <dews-radiobutton title="button2"></dews-radiobutton>
       <dews-radiobutton title="button3"></dews-radiobutton>
     </dews-radiobutton-group>
   </div>

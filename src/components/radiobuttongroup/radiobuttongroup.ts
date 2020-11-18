@@ -1,5 +1,5 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
-import { html, property, TemplateResult } from 'lit-element';
+import { html, internalProperty, property, TemplateResult } from 'lit-element';
 
 import template from './radiobuttongroup.html';
 import scss from './radiobuttongroup.scss';
@@ -16,7 +16,10 @@ export class Radiobuttongroup extends DewsFormComponent {
   @property({ type: String })
   align: 'horizontal' | 'vertical' = 'horizontal';
 
+  @internalProperty()
   private $_radioButtonListTemp: Array<TemplateResult> = [];
+
+  @internalProperty()
   private _radioButton: TemplateResult | undefined;
 
   connectedCallback() {
@@ -25,7 +28,7 @@ export class Radiobuttongroup extends DewsFormComponent {
   }
 
   private _radioButtonView() {
-    const $el = this.children;
+    const $el: HTMLCollection = this.children;
     const $checkedList: Array<Element> = [];
     for (let i = 0; i < $el.length; i++) {
       if (this.disabled) {
@@ -55,7 +58,7 @@ export class Radiobuttongroup extends DewsFormComponent {
     const $el = this.shadowRoot!.querySelectorAll('dews-radiobutton');
     if ((e.target as HTMLElement).localName == 'dews-radiobutton') {
       for (let i = 0; i < $el.length; i++) {
-        if ($el.item(i) !== e.target && (e.target as HTMLElement).hasAttribute('disabled')) {
+        if ($el.item(i) !== e.target && !(e.target as HTMLElement).hasAttribute('disabled')) {
           $el.item(i).removeAttribute('checked');
         }
       }

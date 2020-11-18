@@ -1,11 +1,11 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, internalProperty, property, TemplateResult } from 'lit-element';
 
-import _html from './datepicker.html';
-import _scss from './datepicker.scss';
+import template from './datepicker.html';
+import scss from './datepicker.scss';
 
 export class Datepicker extends DewsFormComponent {
-  static styles = _scss;
+  static styles = scss;
 
   @property({ type: String })
   title = '';
@@ -387,6 +387,8 @@ export class Datepicker extends DewsFormComponent {
   private _modeClickHandler(e: MouseEvent): void {
     this._selectRemove();
     if (this._mode === 'day') {
+      console.log('변경');
+      console.log(this._monthPickerView);
       this._backView = this._monthPickerView();
       this._nowView = this._monthPickerView();
       this._nextView = this._monthPickerView();
@@ -670,6 +672,6 @@ export class Datepicker extends DewsFormComponent {
   }
 
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

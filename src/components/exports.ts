@@ -17,6 +17,7 @@ import { ListContainer } from './listcontainer/listcontainer.js';
 import { SearchContainer } from './searchcontainer/searchcontainer.js';
 import { Tabs } from './tabs/tabs.js';
 import { Tab } from './tab/tab.js';
+import { Datepicker } from './datepicker/datepicker.js';
 
 export {
   Checkbox,
@@ -37,5 +38,6 @@ export {
   ListContainer,
   SearchContainer,
   Tabs,
-  Tab
+  Tab,
+  Datepicker
 };

@@ -18,11 +18,11 @@
 </div>
 
 
-<drower-layout @close="${this._close}"  ?active="${this.active}">
+<drower-layout @close="${this._close}" ?active="${this.active}">
   <div class="drawer-date-picker">
     <div class="titlebar">
       <div class="title">${this.title}</div>
-      <button class="confirm-button">적용</button>
+      <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
       ${this.$nextBtn}
     </div>
 
@@ -30,8 +30,8 @@
 
       <div class="layer-date-picker-input-wrap">
         <span class="layer-date-picker-input">
-            <input type="text">
-            <!--  input text component  -->
+            <dews-masktextbox></dews-masktextbox>
+          <!--  input text component  -->
         </span>
         <button class="clear-button">
           <span>초기화</span>
@@ -41,60 +41,23 @@
       <div class="layer-calendar-wrap">
         <div class="calender-header">
           <div class="header">
-            <button class="prev calendar-button" @click="${this._backAnimation}"><span>이전</span></button>
-            <button class="fast calendar-button"><span>${this._viewYear}-${this._viewMonth}</span></button>
-            <button class="next calendar-button" @click="${this._nextAnimation}"><span>다음</span></button>
+            <button class="prev calendar-button" @click="${this._beforeAnimation}"><span>이전</span></button>
+            <button class="fast calendar-button" @click="${this._modeClickHandler}"><span>${this._modeView}</span>
+            </button>
+            <button class="next calendar-button" @click="${this._afterAnimation}"><span>다음</span></button>
           </div>
 
-          <button class="today calendar-button" @click="${this._nowBtn}"><span>오늘</span></button>
+          <button class="today calendar-button" @click="${this._nowClickHandler}"><span>오늘</span></button>
         </div>
 
-        <div class="calendar-content" @touchstart="${this._touchStartHandler}" @touchend="${this._touchEndHandler}" @touchmove="${this._touchMoveHandler}">
-          <!-- .calendar-flip-wrap 의 width는 calendar-date(width) * 3  -->
-          <!-- 현재 위치 : transform: translate3d(-726px, 0px, 0px); -->
-          <!-- 이동 시, transform: translate3d((이 값 변경)px, 0px, 0px); -->
-          <!-- 만약 위 style로 변경되지 않을 경우, 수정 필요  -->
-          <div class="calendar-flip-wrap">
-            <!-- .calendar-date 의 width == .calendar-content 의 width size  -->
-            <div class="calendar-date">
-            <span class="day-name">일</span>
-            <span class="day-name">월</span>
-            <span class="day-name">화</span>
-            <span class="day-name">수</span>
-            <span class="day-name">목</span>
-            <span class="day-name">금</span>
-            <span class="day-name">토</span>
-            ${this._dateView1}
-          </div>
-
-            <div class="calendar-date">
-              <span class="day-name">일</span>
-              <span class="day-name">월</span>
-              <span class="day-name">화</span>
-              <span class="day-name">수</span>
-              <span class="day-name">목</span>
-              <span class="day-name">금</span>
-              <span class="day-name">토</span>
-              ${this._dateView2}
-            </div>
-
-            <div class="calendar-date">
-              <span class="day-name">일</span>
-              <span class="day-name">월</span>
-              <span class="day-name">화</span>
-              <span class="day-name">수</span>
-              <span class="day-name">목</span>
-              <span class="day-name">금</span>
-              <span class="day-name">토</span>
-              ${this._dateView3}
-            </div>
+        <div class="calendar-content" @touchstart="${this._touchStartHandler}" @touchend="${this._touchEndHandler}"
+             @touchmove="${this._touchMoveHandler}">
+          <div class="calendar-flip-wrap calendar-date-wrap">
+            ${this._backView}
+            ${this._nowView}
+            ${this._nextView}
           </div>
         </div>
-
-
       </div>
     </div>
-  </div>
-
-
 </drower-layout>
