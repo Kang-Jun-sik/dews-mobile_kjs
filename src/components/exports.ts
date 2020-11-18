@@ -17,3 +17,4 @@ export { ListContainer } from './listcontainer/listcontainer.js';
 export { SearchContainer } from './searchcontainer/searchcontainer.js';
 export { Tabs } from './tabs/tabs.js';
 export { Tab } from './tab/tab.js';
+export { Datepicker } from './datepicker/datepicker.js';
