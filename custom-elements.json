@@ -2,39 +2,26 @@
   "version": "experimental",
   "tags": [
     {
-      "name": "dews-codepicker",
-      "path": "./src/index.ts",
+      "name": "dews-mobile",
+      "path": "./src/DewsMobile.ts",
       "attributes": [
         {
+          "name": "page",
+          "type": "string",
+          "default": "\"main\""
+        },
+        {
           "name": "title",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "placeholder",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "required",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "value",
           "type": "string",
           "default": "\"\""
         }
       ],
       "properties": [
         {
-          "name": "styles",
-          "default": "\"_scss\""
+          "name": "page",
+          "attribute": "page",
+          "type": "string",
+          "default": "\"main\""
         },
         {
           "name": "title",
@@ -43,42 +30,85 @@
           "default": "\"\""
         },
         {
-          "name": "placeholder",
-          "attribute": "placeholder",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "disabled",
-          "attribute": "disabled",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "required",
-          "attribute": "required",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "value",
-          "attribute": "value",
-          "type": "string",
-          "default": "\"\""
-        }
-      ],
-      "events": [
-        {
-          "name": "onFocus"
-        },
-        {
-          "name": "onChange"
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"styles\""
         }
       ]
     },
     {
-      "name": "dews-datepicker",
-      "path": "./src/index.ts",
+      "name": "dews-mobile-app",
+      "path": "./src/app/dews-mobile-app.ts",
+      "properties": [
+        {
+          "name": "dependency",
+          "type": "MyDependency"
+        },
+        {
+          "name": "appVersion",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "main-page",
+      "path": "./src/app/main/main.ts",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "string",
+          "default": "\"main\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "id",
+          "attribute": "id",
+          "type": "string",
+          "default": "\"main\""
+        },
+        {
+          "name": "onMainLoadComplete",
+          "type": "() => void"
+        },
+        {
+          "name": "onPageUpdateComplete",
+          "type": "() => void"
+        },
+        {
+          "name": "onPageLoaded",
+          "type": "(e: PageLoadedEventArgs) => void"
+        },
+        {
+          "name": "onPageLoading",
+          "type": "(e: PageLoadingEventArgs) => void"
+        },
+        {
+          "name": "onHistoryBack",
+          "type": "(e: HistoryBackEventArgs) => void"
+        },
+        {
+          "name": "onFocusChanging",
+          "type": "(e: FocusChangingEventArgs) => void"
+        },
+        {
+          "name": "onFocusChanged",
+          "type": "(e: FocusChangedEventArgs) => void"
+        },
+        {
+          "name": "onAreaChanged",
+          "type": "(e: AreaChangedEventArgs) => void"
+        },
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"css`\\n    .page-hide {\\n      display: none;\\n    }\\n    .page-show {\\n      display: block;\\n    }\\n    * {\\n      margin: 0;\\n      padding: 0;\\n      box-sizing: border-box;\\n    }\\n    #contents {\\n      position: relative;\\n      overflow: hidden;\\n      width: 100%;\\n      // min-height: calc(100vh - 53px - 56px);\\n      // margin: 53px 0 0;\\n      padding: 53px 0 0;\\n      // padding-top: 53px;\\n      background-color: #efeff4;\\n    }\\n    .footer {\\n      position: relative;\\n      height: calc(100vh - 53px);\\n      background-color: #efeff4;\\n    }\\n    .footer img {\\n      display: block;\\n      margin: 0 auto;\\n      padding-top: 48px;\\n    }\\n    @media screen and (min-width: 1024px) {\\n      .footer {\\n        height: 56px;\\n      }\\n      .footer img {\\n        display: none;\\n      }\\n    }\\n  `\""
+        }
+      ]
+    },
+    {
+      "name": "drower-layout",
+      "path": "./src/components/drowerlayout/drowerlayout.ts",
       "attributes": [
         {
           "name": "title",
@@ -86,33 +116,30 @@
           "default": "\"\""
         },
         {
-          "name": "disabled",
+          "name": "active",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "required",
+          "name": "height",
+          "type": "string | undefined"
+        },
+        {
+          "name": "scrollEnabled",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "value",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "min",
-          "type": "string"
-        },
-        {
-          "name": "max",
-          "type": "string"
+          "name": "drower",
+          "type": "\"bottom\" | \"right\"",
+          "default": "\"bottom\""
         }
       ],
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -121,38 +148,38 @@
           "default": "\"\""
         },
         {
-          "name": "disabled",
-          "attribute": "disabled",
+          "name": "active",
+          "attribute": "active",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "required",
-          "attribute": "required",
+          "name": "height",
+          "attribute": "height",
+          "type": "string | undefined"
+        },
+        {
+          "name": "scrollEnabled",
+          "attribute": "scrollEnabled",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "value",
-          "attribute": "value",
-          "type": "string",
-          "default": "\"\""
-        },
+          "name": "drower",
+          "attribute": "drower",
+          "type": "\"bottom\" | \"right\"",
+          "default": "\"bottom\""
+        }
+      ],
+      "events": [
         {
-          "name": "min",
-          "attribute": "min",
-          "type": "string"
-        },
-        {
-          "name": "max",
-          "attribute": "max",
-          "type": "string"
+          "name": "close"
         }
       ]
     },
     {
       "name": "dews-dropdownlist",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -178,7 +205,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -218,7 +246,7 @@
     },
     {
       "name": "dews-masktextbox",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -269,7 +297,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -350,11 +379,12 @@
     },
     {
       "name": "dews-numerictextbox",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "placeholder",
@@ -383,7 +413,8 @@
         },
         {
           "name": "prefix",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "suffix",
@@ -423,12 +454,14 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
           "attribute": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "placeholder",
@@ -463,7 +496,8 @@
         {
           "name": "prefix",
           "attribute": "prefix",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "suffix",
@@ -518,7 +552,7 @@
     },
     {
       "name": "dews-textbox",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -564,7 +598,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -636,7 +671,7 @@
     },
     {
       "name": "dews-button",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -670,7 +705,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -710,7 +746,7 @@
     },
     {
       "name": "dews-checkbox-group",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -726,7 +762,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -744,11 +781,12 @@
     },
     {
       "name": "dews-checkbox",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "disabled",
@@ -769,12 +807,14 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
           "attribute": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "disabled",
@@ -806,11 +846,12 @@
     },
     {
       "name": "dews-radiobutton",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "readonly",
@@ -831,12 +872,14 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
           "attribute": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "readonly",
@@ -865,7 +908,7 @@
     },
     {
       "name": "dews-radiobutton-group",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -886,7 +929,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -910,17 +954,18 @@
     },
     {
       "name": "dews-area-panel",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         }
       ]
     },
     {
       "name": "area-item",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "col",
@@ -936,7 +981,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "col",
@@ -954,7 +1000,7 @@
     },
     {
       "name": "dews-box",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -980,7 +1026,8 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
@@ -1023,7 +1070,7 @@
     },
     {
       "name": "dews-tabs",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "selected",
@@ -1034,16 +1081,18 @@
           "name": "hide",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
         }
       ],
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
-        },
-        {
-          "name": "title",
-          "type": "string"
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "selected",
@@ -1056,6 +1105,12 @@
           "attribute": "hide",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "select",
@@ -1077,11 +1132,12 @@
     },
     {
       "name": "dews-tab",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
-          "type": "string"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "hide",
@@ -1092,12 +1148,14 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
           "attribute": "title",
-          "type": "string"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "hide",
@@ -1109,11 +1167,12 @@
     },
     {
       "name": "dews-search-container",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "col",
@@ -1124,12 +1183,14 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
           "attribute": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "col",
@@ -1141,28 +1202,55 @@
     },
     {
       "name": "dews-form-container",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
         }
       ],
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
           "attribute": "title",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
+        }
+      ]
+    },
+    {
+      "name": "dews-list-container",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
         }
       ]
     },
     {
       "name": "form-section",
-      "path": "./src/index.ts",
+      "path": "./src/dews-mobile.ts",
       "attributes": [
         {
           "name": "title",
@@ -1173,216 +1261,14 @@
       "properties": [
         {
           "name": "styles",
-          "default": "\"_scss\""
+          "type": "CSSResult",
+          "default": "\"scss\""
         },
         {
           "name": "title",
           "attribute": "title",
           "type": "string",
           "default": "\"\""
-        }
-      ]
-    },
-    {
-      "name": "drower-layout",
-      "path": "./src/index.ts",
-      "attributes": [
-        {
-          "name": "title",
-          "type": "string | undefined"
-        },
-        {
-          "name": "active",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "height",
-          "type": "string | undefined"
-        },
-        {
-          "name": "scrollEnabled",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "drower",
-          "type": "\"bottom\" | \"right\"",
-          "default": "\"bottom\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "styles",
-          "default": "\"_scss\""
-        },
-        {
-          "name": "title",
-          "attribute": "title",
-          "type": "string | undefined"
-        },
-        {
-          "name": "active",
-          "attribute": "active",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "height",
-          "attribute": "height",
-          "type": "string | undefined"
-        },
-        {
-          "name": "scrollEnabled",
-          "attribute": "scrollEnabled",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "drower",
-          "attribute": "drower",
-          "type": "\"bottom\" | \"right\"",
-          "default": "\"bottom\""
-        }
-      ],
-      "events": [
-        {
-          "name": "close"
-        }
-      ]
-    },
-    {
-      "name": "main-bottom",
-      "path": "./src/main/components/ButtonTabBar.ts",
-      "properties": [
-        {
-          "name": "styles",
-          "type": "CSSResult",
-          "default": "\"css`\\n    * {\\n      margin: 0;\\n      padding: 0;\\n      box-sizing: border-box;\\n    }\\n    ul,\\n    li,\\n    ol {\\n      list-style: none;\\n    }\\n    button {\\n      border: 0;\\n      border-radius: 0;\\n      background-color: transparent;\\n      outline: 0;\\n    }\\n    .bottom {\\n      position: fixed;\\n      z-index: 3000;\\n      bottom: 0;\\n      left: 0;\\n      width: 100%;\\n    }\\n    .button-tab-bar {\\n      position: relative;\\n      padding: 8px 20px 8px 28px;\\n      background-color: rgba(28, 144, 251, 0.95);\\n    }\\n    .tab-bar {\\n      display: flex;\\n      flex-flow: row-reverse nowrap;\\n      align-items: center;\\n    }\\n    .main-button {\\n      margin-right: 25px;\\n      font-size: 0;\\n    }\\n    .main-button:first-child {\\n      margin-right: 0;\\n    }\\n    .main-button:last-child {\\n      flex: auto;\\n    }\\n    .main-button > button {\\n      position: relative;\\n      width: 40px;\\n      height: 40px;\\n      margin: 0;\\n      padding: 0;\\n      background-size: 24px 24px;\\n      background-repeat: no-repeat;\\n      background-position: center center;\\n      font-size: 0;\\n    }\\n    .main-button > button:active:after {\\n      content: '';\\n      position: absolute;\\n      top: 0;\\n      left: 0;\\n      display: block;\\n      width: 40px;\\n      height: 40px;\\n      border-radius: 100%;\\n      background: rgba(255, 255, 255, 0.1);\\n    }\\n    .sub-buttons {\\n      position: absolute;\\n      bottom: 60px;\\n      left: 8px;\\n      display: none;\\n      padding: 12px 0 12px;\\n      border-radius: 8px;\\n      background-color: rgba(60, 60, 67, 0.9);\\n    }\\n    .sub-buttons.active {\\n      display: block;\\n    }\\n    .sub-button button {\\n      position: relative;\\n      width: 100%;\\n      padding: 8px 20px 8px 56px;\\n      color: #ffffff;\\n      border: 0;\\n\\n      font-size: 16px;\\n      text-align: left;\\n      line-height: 24px;\\n    }\\n    .sub-button button:before {\\n      content: '';\\n      position: absolute;\\n      width: 24px;\\n      height: 24px;\\n      top: 9px;\\n      left: 20px;\\n      background-color: transparent;\\n      background-size: 24px 24px;\\n      background-repeat: no-repeat;\\n    }\\n    .sub-button button:active:after {\\n      content: '';\\n      position: absolute;\\n      top: 0;\\n      left: 0;\\n      display: block;\\n      width: 100%;\\n      height: 100%;\\n      background: rgba(255, 255, 255, 0.12);\\n    }\\n\\n    .save {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJpY19idGJfc2F2ZV90ZXJfbWwiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxkZWZzPgogICAgICAgIDxzdHlsZT4KICAgICAgICAgICAgLmNscy0ze2ZpbGw6I2ZmZn0KICAgICAgICA8L3N0eWxlPgogICAgPC9kZWZzPgogICAgPGcgaWQ9ImljIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyOSAxKSI+CiAgICAgICAgPHBhdGggaWQ9Iu2MqOyKpCIgZD0iTTEwNjMgNDY2LjVhMSAxIDAgMCAwLTEgMXYxNmExIDEgMCAwIDAgMSAxaDE2YTEgMSAwIDAgMCAxLTF2LTEyLjU4NmwtNC40MTQtNC40MTRIMTA2M20wLTJoMTNhMSAxIDAgMCAxIC43MDcuMjkzbDUgNWExIDEgMCAwIDEgLjI5My43MDd2MTNhMyAzIDAgMCAxLTMgM2gtMTZhMyAzIDAgMCAxLTMtM3YtMTZhMyAzIDAgMCAxIDMtM3oiIGNsYXNzPSJjbHMtMyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEwODggLTQ2NC41KSIvPgogICAgICAgIDxwYXRoIGlkPSLrubzquLAiIGQ9Ik0yIDhIMFYwYTEgMSAwIDAgMSAxLTFoMTBhMSAxIDAgMCAxIDEgMXY4aC0yVjEuNWEuNS41IDAgMCAwLS41LS41aC03YS41LjUgMCAwIDAtLjUuNVY4eiIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjMgMTIpIi8+CiAgICAgICAgPHBhdGggaWQ9Iu2Vqey5mOq4sCIgZD0iTS0xIDZhMSAxIDAgMCAxLTEtMVYwaDJ2NGg3YTEgMSAwIDAgMSAwIDJ6IiBjbGFzcz0iY2xzLTMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMSAyKSIvPgogICAgPC9nPgo8L3N2Zz4K);\\n    }\\n    .delete {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNC4wMDYiIHZpZXdCb3g9IjAgMCAyNCAyNC4wMDYiPgogICAgPGc+CiAgICAgICAgPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEwNjE3IDE3OTg2YTMuMDA5IDMuMDA5IDAgMCAxLTMtM3YtMTVoLS45YTEgMSAwIDEgMSAwLTJoMTIuOXYtMWExIDEgMCAwIDAtMS0xaC00YTEgMSAwIDAgMC0xIDF2MWgtMnYtMWEzIDMgMCAwIDEgMy0zaDRhMyAzIDAgMCAxIDMgM3YxaC0yIDYuOWExIDEgMCAxIDEgMCAyaC0uOXYxNWEzLjAwNyAzLjAwNyAwIDAgMS0zIDN6bS0xLTNhMSAxIDAgMCAwIDEgMWgxMmExIDEgMCAwIDAgMS0xdi0xNWgtMTR6bTgtM3YtOGExIDEgMCAxIDEgMiAwdjhhMSAxIDAgMSAxLTIgMHptLTQgMHYtOGExIDEgMCAwIDEgMiAwdjhhMSAxIDAgMCAxLTIgMHoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI5IDEuMDA0KSB0cmFuc2xhdGUoLTEwNjQwIC0xNzk2My4wMDIpIi8+CiAgICA8L2c+Cjwvc3ZnPgo=);\\n    }\\n    .search {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJpY19idGJfaW5xdWlyeV90ZXJfbWwiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxkZWZzPgogICAgICAgIDxzdHlsZT4KICAgICAgICAgICAgLmNscy0ze2ZpbGw6I2ZmZn0KICAgICAgICA8L3N0eWxlPgogICAgPC9kZWZzPgogICAgPGcgaWQ9ImljIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyOSAxKSI+CiAgICAgICAgPHBhdGggaWQ9Iuu5vOq4sCIgZD0iTTYzMDkgMTkzNDFoLTdhMy4wMDUgMy4wMDUgMCAwIDEtMy0zdi0xNmEzIDMgMCAwIDEgMy0yLjk5NGgxNmEzIDMgMCAwIDEgMyAyLjk5NHY3aC0ydi03YTEgMSAwIDAgMC0xLTFoLTE2YTEgMSAwIDAgMC0xIDF2MTZhMSAxIDAgMCAwIDEgMWg3djJ6IiBjbGFzcz0iY2xzLTMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC02MzI3IC0xOTMxOSkiLz4KICAgICAgICA8cGF0aCBpZD0i7ZWp7LmY6riwIiBkPSJNOC4yNzIgOS42ODVMNi44OTQgOC4zMDlhNC41IDQuNSAwIDEgMSAxLjQxNS0xLjQxNWwxLjM3NyAxLjM3N2ExIDEgMCAxIDEtMS40MTQgMS40MTR6TTIgNC41QTIuNSAyLjUgMCAxIDAgNC41IDIgMi41IDIuNSAwIDAgMCAyIDQuNXoiIGNsYXNzPSJjbHMtMyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTE3IDExKSIvPgogICAgPC9nPgo8L3N2Zz4K);\\n    }\\n    .add {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJpY19idGJfYWRkX3Rlcl9tbCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPgogICAgPGRlZnM+CiAgICAgICAgPHN0eWxlPgogICAgICAgICAgICAuY2xzLTN7ZmlsbDojZmZmfQogICAgICAgIDwvc3R5bGU+CiAgICA8L2RlZnM+CiAgICA8ZyBpZD0iaWMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI5IDEpIj4KICAgICAgICA8cGF0aCBpZD0i7KCV7IKs6rCB7ZiVIiBkPSJNOTAzMSAxOTczOGgtMTZhMy4wMDYgMy4wMDYgMCAwIDEtMy0zdi0xNmEzIDMgMCAwIDEgMy0zaDE2YTMgMyAwIDAgMSAzIDN2MTZhMyAzIDAgMCAxLTMgM3ptLTE2LTIwYTEgMSAwIDAgMC0xIDF2MTZhMSAxIDAgMCAwIDEgMWgxNmExIDEgMCAwIDAgMS0xdi0xNmExIDEgMCAwIDAtMS0xeiIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOTA0MCAtMTk3MTYpIi8+CiAgICAgICAgPHBhdGggaWQ9Iu2Vqey5mOq4sCIgZD0iTTYzODQgMTkzNzB2LTNoLTNhMSAxIDAgMSAxIDAtMmgzdi0zYTEgMSAwIDAgMSAyIDB2M2gzYTEgMSAwIDEgMSAwIDJoLTN2M2ExIDEgMCAxIDEtMiAweiIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNjQwMiAtMTkzNTUpIi8+CiAgICA8L2c+Cjwvc3ZnPgo=);\\n    }\\n    .more {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJpY19idGJfbW9yZV90ZXJfbWwiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxkZWZzPgogICAgICAgIDxzdHlsZT4KICAgICAgICAgICAgLmNscy0ze2ZpbGw6I2ZmZn0KICAgICAgICA8L3N0eWxlPgogICAgPC9kZWZzPgogICAgPGcgaWQ9ImljIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTYxIDE5MjgxKSI+CiAgICAgICAgPGNpcmNsZSBpZD0i7YOA7JuQXzEiIGN4PSIyIiBjeT0iMiIgcj0iMiIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNjU1MSAtMTkyODApIi8+CiAgICAgICAgPGNpcmNsZSBpZD0i7YOA7JuQXzIiIGN4PSIyIiBjeT0iMiIgcj0iMiIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNjU1MSAtMTkyNzEpIi8+CiAgICAgICAgPGNpcmNsZSBpZD0i7YOA7JuQXzMiIGN4PSIyIiBjeT0iMiIgcj0iMiIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNjU1MSAtMTkyNjIpIi8+CiAgICA8L2c+Cjwvc3ZnPgo=);\\n    }\\n\\n    .info:before {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJpY19jaXJfaW5mb190ZXJfbWQiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4Mj0iMSIgeTI9IjEiIGdyYWRpZW50VW5pdHM9Im9iamVjdEJvdW5kaW5nQm94Ij4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYjY3NGZmIi8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzEyNjFmZiIvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPHN0eWxlPgogICAgICAgICAgICAuY2xzLTN7ZmlsbDojZmZmfQogICAgICAgIDwvc3R5bGU+CiAgICA8L2RlZnM+CiAgICA8ZyBpZD0iaWMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEgMSkiPgogICAgICAgIDxwYXRoIGlkPSJQYXRoIiBkPSJNMTEgMjJhMTEgMTEgMCAxIDEgMTEtMTEgMTEuMDEyIDExLjAxMiAwIDAgMS0xMSAxMXptMC0yMGE5IDkgMCAxIDAgOSA5IDkuMDEgOS4wMSAwIDAgMC05LTl6IiBjbGFzcz0iY2xzLTMiLz4KICAgICAgICA8cGF0aCBpZD0iUGF0aC0yIiBkPSJNMSAwYTEgMSAwIDAgMC0xIDF2NGExIDEgMCAwIDAgMiAwVjFhMSAxIDAgMCAwLTEtMSIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMCAxMCkiLz4KICAgICAgICA8cGF0aCBpZD0iUGF0aC0zIiBkPSJNMS41Ni4xNzFhMS42MTggMS42MTggMCAwIDAtLjE4LS4xIDEuMjA5IDEuMjA5IDAgMCAwLS4xOC0uMDUgMS4wMTggMS4wMTggMCAwIDAtLjkxLjI3QTEuMDUyIDEuMDUyIDAgMCAwIDAgMWExLjA1MiAxLjA1MiAwIDAgMCAuMjkuNzFBMS4wNTIgMS4wNTIgMCAwIDAgMSAyYTEuNSAxLjUgMCAwIDAgLjItLjAyLjYzNi42MzYgMCAwIDAgLjE4LS4wNi43NTcuNzU3IDAgMCAwIC4xOC0uMDlsLjE1LS4xMmExLjE1NSAxLjE1NSAwIDAgMCAuMjEtLjMzQS44MzguODM4IDAgMCAwIDIgMWExLjAzMyAxLjAzMyAwIDAgMC0uMjktLjcxLjc4OS43ODkgMCAwIDAtLjE1LS4xMiIgY2xhc3M9ImNscy0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMCA2LjAwMikiLz4KICAgIDwvZz4KPC9zdmc+Cg==);\\n    }\\n    .share:before {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxnPgogICAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xMzEyNiAxNDQ2OGEzLjk3OSAzLjk3OSAwIDAgMSAuMTU3LTEuMTExbC01LjMxNS0zLjA3MWE0IDQgMCAxIDEtLjA0NS01LjY3NWw1LjM0NS0zLjA4NmE0LjAxIDQuMDEgMCAxIDEgMSAxLjczNWwtNS4zIDMuMDZhNCA0IDAgMCAxIC4wMTggMi4yNGw1LjMyNyAzLjA3N2E0IDQgMCAxIDEtMS4xODcgMi44MzF6bTIgMGEyIDIgMCAxIDAgMi0yIDIgMiAwIDAgMC0yIDJ6bS0xMi03YTIgMiAwIDEgMCAyLTIgMi4wMDYgMi4wMDYgMCAwIDAtMiAyem0xMi03YTIgMiAwIDEgMCAyLTIgMi4wMDYgMi4wMDYgMCAwIDAtMiAyeiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjkgMSkgdHJhbnNsYXRlKC0xMzE0MS4wMDMgLTE0NDQ5Ljk5OCkiLz4KICAgIDwvZz4KPC9zdmc+Cg==);\\n    }\\n    .print:before {\\n      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxnPgogICAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xMzE5MyAxNDQ3MmExIDEgMCAwIDEtMS0xdi0zaC0xYTMgMyAwIDAgMS0zLTN2LTVhMyAzIDAgMCAxIDMtM2gxdi02YTEgMSAwIDAgMSAxLTFoMTJhMSAxIDAgMCAxIDEgMXY2aDFhMyAzIDAgMCAxIDMgM3Y1YTMuMDA1IDMuMDA1IDAgMCAxLTMgM2gtMXYzYTEgMSAwIDAgMS0xIDF6bTEtMi4xMjVoMTBWMTQ0NjQuMjQ5aC0xMHptMTMtMy44NzlhMSAxIDAgMCAwIDEtMXYtNWExIDEgMCAwIDAtMS0xaC0xNmExIDEgMCAwIDAtMSAxdjVhMSAxIDAgMCAwIDEgMWgxdi0zYTEgMSAwIDAgMSAxLTFoMTJhMSAxIDAgMCAxIDEgMXYzem0tMTMtOS4xMmgxMHYtNC42MjdoLTEweiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjkgMSkgdHJhbnNsYXRlKC0xMzIxNi4wMDIgLTE0NDQ5Ljk5OCkiLz4KICAgIDwvZz4KPC9zdmc+Cg==);\\n    }\\n  `\""
-        },
-        {
-          "name": "subButtons",
-          "type": "HTMLElement"
-        },
-        {
-          "name": "mainButtonSet",
-          "description": "main/ButtonTabBar 에서 setAttribute 로 show 할 버튼 리스트 제공",
-          "type": "MainButtonSet | undefined"
-        }
-      ]
-    },
-    {
-      "name": "main-header",
-      "path": "./src/main/components/NavigationBar.ts",
-      "attributes": [
-        {
-          "name": "title",
-          "type": "string",
-          "default": "\"Navigation BarNavigation BarNavigation BarNavigation BarNavigation Bar\""
-        },
-        {
-          "name": "anchor",
-          "description": "Anchor / Title 전환에 필요한 Flag",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "properties": [
-        {
-          "name": "styles",
-          "default": "\"_scss\""
-        },
-        {
-          "name": "title",
-          "attribute": "title",
-          "type": "string",
-          "default": "\"Navigation BarNavigation BarNavigation BarNavigation BarNavigation Bar\""
-        },
-        {
-          "name": "titleTooltipFlag",
-          "description": "Tooltip : title 길이에 상관 없이 클릭시 무조건 노출",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "areaList",
-          "description": "현재 업무 페이지가 가지고 있는 Area List",
-          "type": "AreaType[]",
-          "default": "[]"
-        },
-        {
-          "name": "clickArea",
-          "description": "Anchor 에서 클릭 한 Area",
-          "type": "AreaType"
-        },
-        {
-          "name": "activeAnchorFlag",
-          "attribute": "anchor",
-          "description": "Anchor / Title 전환에 필요한 Flag",
-          "type": "boolean",
-          "default": "false"
-        }
-      ]
-    },
-    {
-      "name": "main-page",
-      "path": "./src/main/main.ts",
-      "description": "Main System 호출 전 필요한 세팅 작업",
-      "attributes": [
-        {
-          "name": "id",
-          "type": "string",
-          "default": "\"main\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "id",
-          "attribute": "id",
-          "type": "string",
-          "default": "\"main\""
-        },
-        {
-          "name": "styles",
-          "type": "CSSResult",
-          "default": "\"css`\\n    .page-hide {\\n      display: none;\\n    }\\n    .page-show {\\n      display: block;\\n    }\\n    * {\\n      margin: 0;\\n      padding: 0;\\n      box-sizing: border-box;\\n    }\\n    #contents {\\n      position: relative;\\n      overflow: hidden;\\n      width: 100%;\\n      // min-height: calc(100vh - 53px - 56px);\\n      // margin: 53px 0 0;\\n      padding: 53px 0 0;\\n      // padding-top: 53px;\\n      background-color: #efeff4;\\n    }\\n    .footer {\\n      position: relative;\\n      height: calc(100vh - 53px);\\n      background-color: #efeff4;\\n    }\\n    .footer img {\\n      display: block;\\n      margin: 0 auto;\\n      padding-top: 48px;\\n    }\\n    @media screen and (min-width: 1024px) {\\n      .footer {\\n        height: 56px;\\n      }\\n      .footer img {\\n        display: none;\\n      }\\n    }\\n  `\""
-        },
-        {
-          "name": "onPageLoaded",
-          "type": "(e: PageLoadedEventArgs) => void"
-        },
-        {
-          "name": "onPageLoading",
-          "type": "(e: PageLoadingEventArgs) => void"
-        },
-        {
-          "name": "onFocusChanging",
-          "type": "(e: FocusChangingEventArgs) => void"
-        },
-        {
-          "name": "onFocusChanged",
-          "type": "(e: FocusChangedEventArgs) => void"
-        },
-        {
-          "name": "onHistoryBack",
-          "type": "(e: HistoryBackEventArgs) => void"
-        },
-        {
-          "name": "onPageUpdateComplete",
-          "type": "() => void"
-        },
-        {
-          "name": "onMainLoadComplete",
-          "type": "() => void"
-        },
-        {
-          "name": "onAreaChanged",
-          "type": "(e: AreaChangedEventArgs) => void"
-        }
-      ],
-      "events": [
-        {
-          "name": "mainLoadComplete"
         }
       ]
     }

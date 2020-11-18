@@ -1,3 +1,1 @@
-# dews-mobile
-
-DEWS/UI Mobile Framework
+# DEWS/UI Mobile Framework
