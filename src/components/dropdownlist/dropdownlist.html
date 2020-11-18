@@ -1,0 +1,70 @@
+<div class="dropdown-list-wrap" @click="${this._clickHandler}">
+  <label for="">${this.title}</label>
+  <span class="select-wrap">
+    <span class="select-shape">
+      <span class="select-input">
+          ${this.select[0]}
+      </span>
+      ${(this.select.length >= 2 && this.multi)
+      ?html`
+            <span class="select-multi">
+                외 <strong>${this.select.length-1}</strong>건
+            </span>`
+      : ''}
+    </span>
+    <span class="select-icon dropdown-icon"></span>
+  </span>
+</div>
+
+
+${this.multi?html`
+<drower-layout @close="${this._close}" ?active="${this.active}" scrollEnabled>
+  <div class="drawer-dropdown-multi">
+    <div class="titlebar">
+      <div class="title">${this.title}</div>
+      <!-- <button class="confirm-button">ได้รับการยืนยัน</button> -->
+      <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
+      ${this.$nextBtn}
+    </div>
+    <div class="control" @touchstart="${this._touchStart}" @touchmove="${this._touchMove}">
+      <ul class="list">
+        <li  @click="${this._allChecked}">
+          <span class="text">전체선택</span>
+          <span class="checkbox" data-value="allCheck">
+                  <dews-checkbox></dews-checkbox>
+                </span>
+        </li>
+        ${this.$itemList}
+        <!--        <li>-->
+        <!--          <span class="text">DATA 01</span>-->
+        <!--          <span class="checkbox">-->
+        <!--            <dews-checkbox></dews-checkbox>-->
+        <!--&lt;!&ndash;              <input type="checkbox" checked="checked">&ndash;&gt;-->
+        <!--          </span>-->
+        </li>
+      </ul>
+    </div>
+  </div>
+</drower-layout>
+` :html`
+<drower-layout @close="${this._close}"  ?active="${this.active}" scrollEnabled>
+  <div class="drawer-dropdown-single">
+    <div class="titlebar">
+      <div class="title">${this.title}</div>
+      <!-- <button class="confirm-button">ได้รับการยืนยัน</button> -->
+      <!--      <button class="confirm-button" @click="${this._confirm}">적용</button>-->
+      <!--      <button class="next-icon-button"><span>다음</span></button>-->
+    </div>
+    <div class="control" @touchstart="${this._touchStart}" @touchmove="${this._touchMove}">
+      <ul class="list">
+        ${this.$itemList}
+      </ul>
+    </div>
+  </div>
+</drower-layout>
+` }
+
+
+
+
+
