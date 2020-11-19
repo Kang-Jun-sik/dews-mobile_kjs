@@ -107,7 +107,7 @@
       ]
     },
     {
-      "name": "drower-layout",
+      "name": "drawer-layout",
       "path": "./src/components/drowerlayout/drowerlayout.ts",
       "attributes": [
         {

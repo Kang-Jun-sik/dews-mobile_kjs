@@ -16,9 +16,8 @@
   </span>
 </div>
 
-
 ${this.multi?html`
-<drower-layout @close="${this._close}" ?active="${this.active}" scrollEnabled>
+<drawer-layout @close="${this._close}" ?active="${this.active}" scrollEnabled>
   <div class="drawer-dropdown-multi">
     <div class="titlebar">
       <div class="title">${this.title}</div>
@@ -35,25 +34,17 @@ ${this.multi?html`
                 </span>
         </li>
         ${this.$itemList}
-        <!--        <li>-->
-        <!--          <span class="text">DATA 01</span>-->
-        <!--          <span class="checkbox">-->
-        <!--            <dews-checkbox></dews-checkbox>-->
-        <!--&lt;!&ndash;              <input type="checkbox" checked="checked">&ndash;&gt;-->
-        <!--          </span>-->
+
         </li>
       </ul>
     </div>
   </div>
-</drower-layout>
+</drawer-layout>
 ` :html`
-<drower-layout @close="${this._close}"  ?active="${this.active}" scrollEnabled>
+<drawer-layout class="drawer-layout" @close="${this._close}"  ?active="${this.active}" scrollEnabled>
   <div class="drawer-dropdown-single">
     <div class="titlebar">
       <div class="title">${this.title}</div>
-      <!-- <button class="confirm-button">ได้รับการยืนยัน</button> -->
-      <!--      <button class="confirm-button" @click="${this._confirm}">적용</button>-->
-      <!--      <button class="next-icon-button"><span>다음</span></button>-->
     </div>
     <div class="control" @touchstart="${this._touchStart}" @touchmove="${this._touchMove}">
       <ul class="list">
@@ -61,7 +52,7 @@ ${this.multi?html`
       </ul>
     </div>
   </div>
-</drower-layout>
+</drawer-layout>
 ` }
 
 

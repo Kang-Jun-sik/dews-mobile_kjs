@@ -1,11 +1,11 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { customElement, internalProperty, property, PropertyValues } from 'lit-element';
 
-import template from './drowerlayout.html';
-import scss from './drowerlayout.scss';
+import template from './drawerlayout.html';
+import scss from './drawerlayout.scss';
 
-@customElement('drower-layout')
-export class Drowerlayout extends DewsFormComponent {
+@customElement('drawer-layout')
+export class Drawerlayout extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String })

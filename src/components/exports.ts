@@ -8,7 +8,7 @@ export { Numerictextbox } from './numerictextbox/numerictextbox.js';
 export { Masktextbox } from './masktextbox/masktextbox.js';
 export { Box } from './box/box.js';
 export { Dropdownlist } from './dropdownlist/dropdownlist.js';
-export { Drowerlayout } from './drowerlayout/drowerlayout.js';
+export { Drawerlayout } from './drawerlayout/drawerlayout.js';
 export { AreaPanel } from './areapanel/areapanel.js';
 export { AreaItem } from './areaitem/areaitem.js';
 export { FormContainer } from './formcontainer/formcontainer.js';
