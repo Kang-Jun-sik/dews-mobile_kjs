@@ -11,16 +11,19 @@ export class Datepicker extends DewsFormComponent {
   title = '';
 
   @property({ type: Boolean })
-  disabled = false;
+  disabled: boolean | undefined = false;
 
   @property({ type: Boolean })
-  readonly = false;
+  readonly: boolean | undefined = false;
 
   @property({ type: Boolean })
-  required = false;
+  required: boolean | undefined = false;
 
   @property({ type: String })
-  value = '';
+  value: string | undefined;
+
+  @internalProperty()
+  _value: string | undefined = '';
 
   @property({ type: String })
   min: string | undefined;
@@ -29,7 +32,7 @@ export class Datepicker extends DewsFormComponent {
   max: string | undefined;
 
   @internalProperty()
-  private active = false;
+  private active: boolean | undefined = false;
 
   @internalProperty()
   private _backView: TemplateResult | undefined;
@@ -105,23 +108,12 @@ export class Datepicker extends DewsFormComponent {
     const length = Math.ceil((firstDay + lastDate) / 7) + 1;
     for (let i = 1; i < length; i++) {
       for (let j = 1; j <= 7; j++) {
-        if (i == 1 && j <= firstDay) {
+        if ((i == 1 && j <= firstDay) || count > lastDate) {
           _dateView.push(
-            html`<div
-              class="day day-disabled"
-              data-value="${last[todayMonth] - (firstDay - j)}"
-              @click="${this._beforeDayClickHandler}"
-            >
-              <span>${last[todayMonth] - (firstDay - j)}</span>
+            html`<div class="day day-disabled">
+              <span></span>
             </div>`
           );
-        } else if (count > lastDate) {
-          _dateView.push(
-            html`<div class="day day-disabled" data-value="${count - lastDate}" @click="${this._afterDayClickHandler}">
-              <span>${count - lastDate}</span>
-            </div>`
-          );
-          count++;
         } else {
           if (j === 1 || j === 7) {
             if (this._setMonth === todayMonth + 1 && this._setYear == todayYear && count === this._setDay) {
@@ -281,6 +273,23 @@ export class Datepicker extends DewsFormComponent {
     }
   }
 
+  private _inputChangeHandler(e: InputEvent) {
+    // const year: number | undefined = Number((e.target as HTMLInputElement).value.split('-')[0]) as number;
+    // const month: number | undefined = Number((e.target as HTMLInputElement).value.split('-')[1]) as number;
+    // const day: number | undefined = Number((e.target as HTMLInputElement).value.split('-')[2]) as number;
+    // console.log(year, month, day);
+    let value = (e.target as HTMLInputElement).value;
+    value = value.split('-').join();
+    let year: string | undefined;
+    let month: string | undefined;
+    if (value.length >= 4) {
+      year = value.slice(0, 4);
+    }
+    if (value.length >= 6) {
+      month = value.slice(4, 6);
+    }
+  }
+
   //  각 n월 클릭 핸들러
   private _monthClickHandler(e: MouseEvent): void {
     const $el = e.currentTarget as HTMLElement;
@@ -290,10 +299,35 @@ export class Datepicker extends DewsFormComponent {
       });
     });
     $el.classList.toggle('select');
-    this._setYear = this._viewYear;
     this._viewMonth = Number($el.dataset.value);
-    this._setViewSet();
+    this._modeViewSet();
     this._modeChange('day');
+  }
+
+  private _beforeInputHandler(e: InputEvent) {
+    console.log(/\d/.exec(e.data!) == null && e.data != null && e.data != '.' && e.data != '-');
+  }
+
+  private _inputClickHandler() {
+    console.log('click');
+    const $mask: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.mask') as HTMLElement;
+    const $view: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.view') as HTMLElement;
+    $mask.style.display = 'block';
+    $view.style.display = 'none';
+    ($mask.firstElementChild as HTMLInputElement).focus();
+  }
+
+  private _inputBlurHandler() {
+    const $mask: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.mask') as HTMLElement;
+    const $view: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.view') as HTMLElement;
+    $mask.style.display = 'none';
+    $view.style.display = 'block';
+  }
+
+  private _inputChange() {
+    this._value = `${this._setYear}-${this._setMonth! >= 10 ? this._setMonth : '0' + this._setMonth}-${
+      this._setDay! < 10 ? '0' + this._setDay : this._setDay
+    }`;
   }
 
   //  각 n일 클릭 핸들러
@@ -304,53 +338,24 @@ export class Datepicker extends DewsFormComponent {
     this._setYear = this._viewYear;
     this._setMonth = this._viewMonth;
     this._setDay = Number((e.currentTarget as HTMLElement).dataset.value);
-  }
-
-  private _beforeDayClickHandler(e: Event): void {
-    const $el: HTMLElement = e.currentTarget as HTMLElement;
-    this._selectRemove();
-    $el.classList.add('select');
-    if (this._viewMonth! < 1) {
-      this._setYear = this._viewYear! - 1;
-      this._setMonth = 12;
-    } else {
-      this._setYear = this._viewYear;
-      this._setMonth = this._viewMonth! - 1;
-    }
-    this._setDay = Number($el.dataset.value);
-    this._beforeAnimation();
-  }
-
-  private _afterDayClickHandler(e: Event): void {
-    const $el: HTMLElement = e.currentTarget as HTMLElement;
-    this._selectRemove();
-    $el.classList.add('select');
-    if (this._viewMonth! > 11) {
-      this._setYear = this._viewYear! + 1;
-      this._setMonth = 1;
-    } else {
-      this._setYear = this._viewYear;
-      this._setMonth = this._viewMonth! + 1;
-    }
-    this._setDay = Number($el.dataset.value);
-    this._afterAnimation();
+    this._inputChange();
   }
 
   private _yearClickHandler(e: Event): void {
     const $el: HTMLElement = e.currentTarget as HTMLElement;
     this._selectRemove();
     $el.classList.add('select');
-    this._setYear = Number($el.dataset.value);
-    this._viewYear = this._setYear;
-    this._setViewSet();
+    this._viewYear = Number($el.dataset.value);
+    this._modeViewSet();
     this._modeChange('month');
   }
 
+  private _inputBlur(e: FocusEvent) {
+    console.log(e);
+  }
+
   private _confirmClickHandler(): void {
-    this.value = `${this._setYear}${this._setMonth! >= 10 ? this._setMonth : '0' + this._setMonth}${
-      this._setDay! < 10 ? '0' + this._setDay : this._setDay
-    }`;
-    console.log(this.value);
+    this.value = this._value;
   }
 
   //  선택한 대상 select 클래스를 제거
@@ -371,7 +376,7 @@ export class Datepicker extends DewsFormComponent {
    * 다음버튼 UI 처리 및 animation 처리
    * */
   private _afterAnimation(): void {
-    const $el: HTMLElement = this.shadowRoot!.querySelector('drower-layout')!.querySelector(
+    const $el: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
       '.calendar-flip-wrap'
     ) as HTMLElement;
     if (this._touchMoveX === 0) {
@@ -383,7 +388,7 @@ export class Datepicker extends DewsFormComponent {
     } else {
       this._count = 0;
       $el.style.transform = `translate3d(${-(
-        this.shadowRoot!.querySelector('drower-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3
+        this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3
       )}px, 0px, 0px)`;
       this._afterViewSet();
       this._modeViewChange();
@@ -395,9 +400,9 @@ export class Datepicker extends DewsFormComponent {
   private _modeClickHandler(): void {
     this._selectRemove();
     if (this._mode === 'day') {
-      this._backView = this._monthPickerView();
-      this._nowView = this._monthPickerView();
-      this._nextView = this._monthPickerView();
+      this._backView = this._monthPickerView(this._viewYear! - 1);
+      this._nowView = this._monthPickerView(this._viewYear);
+      this._nextView = this._monthPickerView(this._viewYear! + 1);
     } else if (this._mode === 'month') {
       this._backView = this._yearPickerView(this._viewYear! - 10);
       this._nowView = this._yearPickerView(this._viewYear);
@@ -468,18 +473,18 @@ export class Datepicker extends DewsFormComponent {
   }
 
   //  셋버튼 HTML 템플릿 설정
-  private _setViewSet() {
+  private _modeViewSet() {
     if (this._mode === 'month') {
       if (this._viewMonth! + 1 <= 1) {
-        this._backView = this._dayPickerView(this._setYear, 12);
+        this._backView = this._dayPickerView(this._viewYear, 12);
       } else {
-        this._backView = this._dayPickerView(this._setYear, this._viewMonth! - 1);
+        this._backView = this._dayPickerView(this._viewYear, this._viewMonth! - 1);
       }
-      this._nowView = this._dayPickerView(this._setYear, this._viewMonth);
+      this._nowView = this._dayPickerView(this._viewYear, this._viewMonth);
       if (this._viewMonth! + 1 > 12) {
-        this._nextView = this._dayPickerView(this._setYear! + 1, 1);
+        this._nextView = this._dayPickerView(this._viewYear! + 1, 1);
       } else {
-        this._nextView = this._dayPickerView(this._setYear, this._viewMonth! + 1);
+        this._nextView = this._dayPickerView(this._viewYear, this._viewMonth! + 1);
       }
     } else if (this._mode === 'year') {
       this._backView = this._monthPickerView(this._viewYear! - 1);
@@ -492,7 +497,7 @@ export class Datepicker extends DewsFormComponent {
    * 이전버튼 UI 처리 및 animation 처리
    * */
   private _beforeAnimation(): void {
-    const $el: HTMLElement = this.shadowRoot!.querySelector('drower-layout')!.querySelector(
+    const $el: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
       '.calendar-flip-wrap'
     ) as HTMLElement;
     if (this._touchMoveX === 0) {
@@ -504,7 +509,7 @@ export class Datepicker extends DewsFormComponent {
     } else {
       this._count = 0;
       $el.style.transform = `translate3d(${-(
-        this.shadowRoot!.querySelector('drower-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3
+        this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3
       )}px, 0px, 0px)`;
       this._beforeViewSet();
       this._modeViewChange();
@@ -550,12 +555,15 @@ export class Datepicker extends DewsFormComponent {
    *  현재 날짜 이동
    * */
   private _nowClickHandler(): void {
+    if (this._viewYear !== this._setYear && this._viewMonth !== this._setMonth) {
+      this._selectRemove();
+    }
     const today: Date = new Date();
     const todayYear: number = today.getFullYear();
     const todayMonth: number = today.getMonth();
-    this._selectRemove();
     this._viewYear = todayYear;
     this._viewMonth = todayMonth + 1;
+
     if (todayMonth < 1) {
       this._backView = this._dayPickerView(todayYear - 1, 12);
     } else {
@@ -599,6 +607,14 @@ export class Datepicker extends DewsFormComponent {
     }
   }
 
+  private _removeClickHandler() {
+    this._value = '';
+    this._setMonth = undefined;
+    this._setYear = undefined;
+    this._setDay = undefined;
+    this._selectRemove();
+  }
+
   //  터치 이벤트 처리 ex) 스와이프 효과를 위해 처리
   private _touchMoveHandler(e: TouchEvent) {
     let $el: HTMLElement = e.currentTarget as HTMLElement;
@@ -607,7 +623,7 @@ export class Datepicker extends DewsFormComponent {
     this._touchMoveX =
       e.changedTouches[0].pageX -
       this._touchStartPoint! -
-      this.shadowRoot!.querySelector('drower-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3;
+      this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3;
 
     $el.style.transform = `translate3d(${this._touchMoveX}px, 0px, 0px)`;
   }
@@ -619,7 +635,7 @@ export class Datepicker extends DewsFormComponent {
   private _touchEndHandler(e: TouchEvent) {
     // const $el: HTMLElement = (e.currentTarget! as HTMLElement).children[0] as HTMLElement;
     // const scrollX: number =
-    //   this.shadowRoot!.querySelector('drower-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3;
+    //   this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3;
     if (e.changedTouches[0].pageX > this._touchStartPoint! + 5) {
       this._beforeAnimation();
     } else if (e.changedTouches[0].pageX < this._touchStartPoint! - 5) {
@@ -639,7 +655,7 @@ export class Datepicker extends DewsFormComponent {
       if (
         e.clientY <
         window.innerHeight -
-          this.shadowRoot!.querySelector('drower-layout')!.shadowRoot!.querySelector('.layer-bottom')!.clientHeight
+          this.shadowRoot!.querySelector('.drawer-layout')!.shadowRoot!.querySelector('.layer-bottom')!.clientHeight
       ) {
         if (this.count! > 0) {
           this._close();
@@ -652,6 +668,7 @@ export class Datepicker extends DewsFormComponent {
 
   private _clickHandler(e: MouseEvent): void {
     if (!this.disabled && !this.readonly && this.active === false) {
+      this.shadowRoot!.querySelector('.select-wrap')!.classList.add('focus');
       this._open();
       this._scrollChange();
     }
@@ -670,6 +687,7 @@ export class Datepicker extends DewsFormComponent {
   private domEvent: EventListener = this._domClickHandler.bind(this) as EventListener;
 
   private _close(): void {
+    this.shadowRoot!.querySelector('.select-wrap')!.classList.remove('focus');
     this.active = false;
     this.count = 0;
     document.removeEventListener('click', this.domEvent);

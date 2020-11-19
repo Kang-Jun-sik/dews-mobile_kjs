@@ -1,6 +1,6 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
-import { Drowerlayout } from '../drowerlayout/drowerlayout.js';
+import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
 
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
@@ -193,7 +193,7 @@ export class Dropdownlist extends DewsFormComponent {
 
   private _clickHandler(e: MouseEvent) {
     if (!this.disabled && !this.readonly) {
-      const $el: Drowerlayout | null = this.shadowRoot!.querySelector('drower-layout');
+      const $el: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout');
       window.scrollTo(
         0,
         window.pageYOffset +
@@ -235,7 +235,7 @@ export class Dropdownlist extends DewsFormComponent {
       if (
         e.clientY <
         window.innerHeight -
-          this.shadowRoot!.querySelector('drower-layout')?.shadowRoot!.querySelector('.layer-bottom')?.clientHeight!
+          this.shadowRoot!.querySelector('.drawer-layout')?.shadowRoot!.querySelector('.layer-bottom')?.clientHeight!
       ) {
         if (!this.active) {
           return;
@@ -251,7 +251,7 @@ export class Dropdownlist extends DewsFormComponent {
   private _addEvent = this._domClickHandelr.bind(this);
 
   protected firstUpdated(_changedProperties: PropertyValues) {
-    this.shadowRoot!.querySelector('drower-layout')?.addEventListener('blur', this._close);
+    this.shadowRoot!.querySelector('.drawer-layout')?.addEventListener('blur', this._close);
     if (this.disabled) {
       this.shadowRoot!.querySelector('.select-wrap')?.classList.add('disabled');
     }

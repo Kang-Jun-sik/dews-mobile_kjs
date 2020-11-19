@@ -3,7 +3,7 @@
   <div class="overlay"></div>
   <div class="layer layer-bottom" style="height: ${this._height};">
     <div class="layer-moving-button">
-      <span class="moving-button" @touchstart="${this._touchStart}"></span>
+      ${this.scrollEnabled ? html`<span class="moving-button" @touchstart="${this._touchStart}"></span>`:html`<span class="fixed-button" @touchstart="${this._touchStart}"></span>`}
     </div>
     <div class="layer-content">
       <slot></slot>

@@ -1,4 +1,4 @@
-import { property } from 'lit-element';
+import { property, PropertyValues } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './textbox.html';
@@ -10,8 +10,8 @@ export class Textbox extends DewsFormComponent {
   @property({ type: String })
   title = '';
 
-  @property({ type: String, reflect: true })
-  placeholder = '';
+  @property({ type: String })
+  placeholder: string | undefined = '';
 
   @property({ type: Boolean, reflect: true })
   multi = false;
@@ -28,15 +28,11 @@ export class Textbox extends DewsFormComponent {
   @property({ type: Number, attribute: 'multi-height' })
   multiHeight = 50; // default 높이값...
 
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   value = '';
-
-  private onFocus = new CustomEvent('focus', { detail: { target: '' } });
-  private onChange = new CustomEvent('change', { detail: { target: '' } });
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('focus', this._onFocus);
     // disabled 와 readonly 중 disabled 를 우선 처리한다.
     if (this.disabled && this.readonly) {
       this.readonly = false;
@@ -50,17 +46,15 @@ export class Textbox extends DewsFormComponent {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('focus', this._onFocus);
   }
 
   private _onFocus(e: FocusEvent) {
-    this.onFocus.initEvent(e.type);
-    // this.dispatchEvent(this.onFocus);
+    this.dispatchEvent(new CustomEvent('focusin', { detail: { target: e.target as EventTarget } }));
   }
 
-  private _onChange(e: CustomEvent) {
+  private _onChange(e: InputEvent) {
     this.value = (e.target as HTMLInputElement)!.value;
-    this.dispatchEvent(this.onChange);
+    this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
   }
 
   private _show(message: string, type: string) {
@@ -83,6 +77,14 @@ export class Textbox extends DewsFormComponent {
     this._show(message, 'warning');
   };
 
+  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
+    if (_changedProperties.get('value') !== undefined && this.multi === false) {
+      (this.shadowRoot!.querySelector('.dews-input') as HTMLInputElement)!.value = this.value;
+    } else if (_changedProperties.get('value') !== undefined && this.multi === true) {
+      (this.shadowRoot!.querySelector('.dews-multi-input') as HTMLInputElement)!.value = this.value;
+    }
+    return super.shouldUpdate(_changedProperties);
+  }
   render() {
     return template.call(this);
   }

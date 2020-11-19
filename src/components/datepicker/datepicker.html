@@ -1,16 +1,9 @@
-<!--<div class="datepicker-wrap" @click="${this._clickHandler}">-->
-<!--  <label for="textbox">${this.title}</label>-->
-<!--  <input type="text" @input="${this._onChange}" class="datepicker" id="textbox"  readonly/>-->
-<!--</div>-->
-
-<!--<drower-layout @close="${this._close}"  ?active="${this.active}"></drower-layout>-->
-
-<div class="date-picker-wrap" @click="${this._clickHandler}">
+<div class="date-picker-wrap focus" @click="${this._clickHandler}">
   <label for="">${this.title}</label>
   <span class="select-wrap">
       <span class="select-shape">
           <span class="select-input">
-              YYYY-MM-DD
+              ${this.value}
           </span>
       </span>
       <span class="select-icon date-picker-icon"></span>
@@ -18,7 +11,7 @@
 </div>
 
 
-<drower-layout @close="${this._close}" ?active="${this.active}">
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}">
   <div class="drawer-date-picker">
     <div class="titlebar">
       <div class="title">${this.title}</div>
@@ -30,10 +23,18 @@
 
       <div class="layer-date-picker-input-wrap">
         <span class="layer-date-picker-input">
-            <dews-masktextbox></dews-masktextbox>
+
+          <span class="view" @click="${this._inputClickHandler}">
+            <input type="text" disabled />
+          </span>
+          <span class="mask" style="display: none">
+            <input type="number" @beforeinput="${this._beforeInputHandler}" @blur="${this._inputBlurHandler}" />
+          </span>
+<!--            <dews-textbox value="${this._value}"-->
+<!--                          @blur="${this._inputBlur}"></dews-textbox>-->
           <!--  input text component  -->
         </span>
-        <button class="clear-button">
+        <button class="clear-button" @click="${this._removeClickHandler}">
           <span>초기화</span>
         </button>
       </div>
@@ -61,4 +62,4 @@
       </div>
     </div>
   </div>
-</drower-layout>
+</drawer-layout>
