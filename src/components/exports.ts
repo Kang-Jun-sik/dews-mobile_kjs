@@ -1,9 +1,9 @@
 export { Checkbox } from './checkbox/checkbox.js';
-export { Checkboxgroup } from './checkboxgroup/checkboxgroup.js';
+export { CheckboxGroup } from './checkbox-group/checkbox-group.js';
 export { Textbox } from './textbox/textbox.js';
 export { Button } from './button/button.js';
 export { Radiobutton } from './radiobutton/radiobutton.js';
-export { Radiobuttongroup } from './radiobuttongroup/radiobuttongroup.js';
+export { RadiobuttonGroup } from './radiobutton-group/radiobutton-group.js';
 export { Numerictextbox } from './numerictextbox/numerictextbox.js';
 export { Masktextbox } from './masktextbox/masktextbox.js';
 export { Box } from './box/box.js';

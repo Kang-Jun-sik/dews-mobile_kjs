@@ -1,11 +1,11 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, property, TemplateResult } from 'lit-element';
 
-import template from './checkboxgroup.html';
-import scss from './checkboxgroup.scss';
+import template from './checkbox-group.html';
+import scss from './checkbox-group.scss';
 
 // noinspection JSUnusedLocalSymbols
-export class Checkboxgroup extends DewsFormComponent {
+export class CheckboxGroup extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String })

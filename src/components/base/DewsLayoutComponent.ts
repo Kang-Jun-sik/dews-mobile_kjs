@@ -6,7 +6,7 @@ import { LitElement } from 'lit-element';
  * Layout Component 관련
  *  - Area, Panel 등등
  */
-export abstract class DewsLayoutComponent extends DewsComponent {
+export class DewsLayoutComponent extends DewsComponent {
   // Area click 이벤트를 받아서 custom event dispatch
   protected _focusChanging(e: Event) {
     console.log(e);

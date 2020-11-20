@@ -1,10 +1,10 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, internalProperty, property, TemplateResult } from 'lit-element';
 
-import template from './radiobuttongroup.html';
-import scss from './radiobuttongroup.scss';
+import template from './radiobutton-group.html';
+import scss from './radiobutton-group.scss';
 
-export class Radiobuttongroup extends DewsFormComponent {
+export class RadiobuttonGroup extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String })

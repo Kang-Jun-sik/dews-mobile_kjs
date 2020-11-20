@@ -17,11 +17,10 @@
 </div>
 
 ${this.multi?html`
-<drawer-layout @close="${this._close}" ?active="${this.active}" scrollEnabled>
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" scrollEnabled>
   <div class="drawer-dropdown-multi">
     <div class="titlebar">
       <div class="title">${this.title}</div>
-      <!-- <button class="confirm-button">ได้รับการยืนยัน</button> -->
       <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
       ${this.$nextBtn}
     </div>
@@ -30,11 +29,10 @@ ${this.multi?html`
         <li  @click="${this._allChecked}">
           <span class="text">전체선택</span>
           <span class="checkbox" data-value="allCheck">
-                  <dews-checkbox></dews-checkbox>
-                </span>
+            <dews-checkbox class="multi-checkbox"></dews-checkbox>
+          </span>
         </li>
-        ${this.$itemList}
-
+          ${this.$itemList}
         </li>
       </ul>
     </div>

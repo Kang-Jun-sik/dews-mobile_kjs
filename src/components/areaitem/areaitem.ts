@@ -14,9 +14,9 @@ export class AreaItem extends DewsLayoutComponent {
   hide = false;
 
   render() {
-    // if (this.parentElement.localName !== 'dews-area-panel') {
-    //   return;
-    // }
+    if (this.parentElement?.localName !== 'dews-area-panel') {
+      return;
+    }
     return this.hide ? null : template.call(this);
   }
 }

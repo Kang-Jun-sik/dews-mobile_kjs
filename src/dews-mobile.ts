@@ -20,11 +20,11 @@ window.dews = {
 
 import {
   Checkbox,
-  Checkboxgroup,
+  CheckboxGroup,
   Textbox,
   Button,
   Radiobutton,
-  Radiobuttongroup,
+  RadiobuttonGroup,
   Numerictextbox,
   Masktextbox,
   Box,
@@ -47,10 +47,10 @@ window.customElements.define('dews-masktextbox', Masktextbox);
 window.customElements.define('dews-numerictextbox', Numerictextbox);
 window.customElements.define('dews-textbox', Textbox);
 window.customElements.define('dews-button', Button);
-window.customElements.define('dews-checkbox-group', Checkboxgroup);
+window.customElements.define('dews-checkbox-group', CheckboxGroup);
 window.customElements.define('dews-checkbox', Checkbox);
 window.customElements.define('dews-radiobutton', Radiobutton);
-window.customElements.define('dews-radiobutton-group', Radiobuttongroup);
+window.customElements.define('dews-radiobutton-group', RadiobuttonGroup);
 
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);

@@ -5,7 +5,7 @@ import { LitElement } from 'lit-element';
  * Form Component 관련
  *  - Checkboxgroup, Text, CheckBox 등등
  */
-export abstract class DewsFormComponent extends DewsComponent {
+export class DewsFormComponent extends DewsComponent {
   connectedCallback() {
     super.connectedCallback();
     this.updateComplete.then(async () => {
@@ -20,4 +20,6 @@ export abstract class DewsFormComponent extends DewsComponent {
       // console.log(this, 'UpdateComplete');
     });
   }
+
+  version = 'test';
 }

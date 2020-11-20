@@ -1,13 +1,23 @@
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
+import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { DewsComponent } from '../base/DewsComponent.js';
 
 // noinspection JSUnusedLocalSymbols
-export class Dropdownlist extends DewsFormComponent {
+// @ts-expect-error
+export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
   static styles = scss;
+
+  static get scopedElements() {
+    return {
+      'drawer-layout': Drawerlayout,
+      ...DewsComponent.getRegisteredComponents()
+    };
+  }
 
   @property({ type: String })
   title = '';
@@ -24,15 +34,14 @@ export class Dropdownlist extends DewsFormComponent {
   @internalProperty()
   private active = false;
 
+  @internalProperty()
+  private height: string | undefined;
+
   private _startPoint: number | undefined;
   private _count = 0;
   private _multiCheck = false;
   private $itemList: Array<TemplateResult> = [];
-
-  @internalProperty()
-  private height: string | undefined;
-
-  select: Array<string> = [];
+  private select: Array<string> = [];
   private _selectList: Array<boolean> = [];
   private $nextBtn: TemplateResult | undefined;
   private _nextItem: number | undefined;
@@ -62,7 +71,7 @@ export class Dropdownlist extends DewsFormComponent {
               <li data-value="${title}" @click="${this._multiItemSelect}">
                 <span class="text">${title}</span>
                 <span data-value="${title}" class="checkbox">
-                  <dews-checkbox></dews-checkbox>
+                  <dews-checkbox class="multi-checkbox"></dews-checkbox>
                 </span>
               </li>
             `
@@ -114,11 +123,11 @@ export class Dropdownlist extends DewsFormComponent {
 
   private _allChecked(e: MouseEvent) {
     const $el: HTMLElement = e.currentTarget as HTMLElement;
-    this._allCheckState = $el!.querySelector('dews-checkbox')?.hasAttribute('checked');
+    this._allCheckState = $el!.querySelector('.multi-checkbox')?.hasAttribute('checked');
     if ((e.target as HTMLElement).localName === 'dews-checkbox') {
       this._allCheckState = (e.target as HTMLElement).hasAttribute('checked');
     }
-    this.shadowRoot!.querySelectorAll('dews-checkbox').forEach($el => {
+    this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
       if (this._allCheckState) {
         $el.setAttribute('checked', 'true');
       } else {
@@ -136,9 +145,9 @@ export class Dropdownlist extends DewsFormComponent {
   }
 
   private _multiItemSelect(e: MouseEvent) {
-    const $el: HTMLElement = (e.currentTarget as HTMLElement).querySelector('dews-checkbox') as HTMLElement;
+    const $el: HTMLElement = (e.currentTarget as HTMLElement).querySelector('.multi-checkbox') as HTMLElement;
     if (this._allCheckState) {
-      this.shadowRoot!.querySelector('dews-checkbox')?.removeAttribute('checked');
+      this.shadowRoot!.querySelector('.multi-checkbox')?.removeAttribute('checked');
     }
     if ($el.hasAttribute('checked')) {
       if ((e.target as HTMLElement).localName !== 'dews-checkbox') {
@@ -155,7 +164,7 @@ export class Dropdownlist extends DewsFormComponent {
     this._multiCheck = true;
     this.select = [];
     this._selectList = [];
-    this.shadowRoot!.querySelectorAll('dews-checkbox').forEach($el => {
+    this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
       if ($el.hasAttribute('checked')) {
         if ($el.parentElement?.dataset.value !== 'allCheck') {
           this.select.push(($el.parentElement as HTMLDivElement).dataset.value!);
@@ -209,7 +218,7 @@ export class Dropdownlist extends DewsFormComponent {
 
   private _open() {
     this._focus();
-    this.shadowRoot!.querySelectorAll('dews-checkbox').forEach(($el, index) => {
+    this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach(($el, index) => {
       if (this._selectList[index]) {
         $el.setAttribute('checked', 'true');
       }
@@ -221,7 +230,7 @@ export class Dropdownlist extends DewsFormComponent {
   private _close() {
     this._blur();
     if (this.multi && !this._multiCheck) {
-      this.shadowRoot!.querySelectorAll('dews-checkbox').forEach($el => {
+      this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
         if ($el.hasAttribute('checked')) {
           $el.removeAttribute('checked');
         }
