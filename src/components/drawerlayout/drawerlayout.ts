@@ -4,6 +4,7 @@ import { customElement, internalProperty, property, PropertyValues } from 'lit-e
 import template from './drawerlayout.html';
 import scss from './drawerlayout.scss';
 
+@customElement('drawer-layout')
 export class Drawerlayout extends DewsFormComponent {
   static styles = scss;
 

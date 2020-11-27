@@ -13,8 +13,20 @@ export const Datepicker = () => html`<div style="width: 360px">
           <dews-form-container>
             <container-content>
               <form-section title="기본정보">
-                <dews-datepicker title="datepicker1"> </dews-datepicker>
-                <dews-datepicker title="datepicker2"> </dews-datepicker>
+                <dews-datepicker required title="datepicker1"> </dews-datepicker>
+                <dews-datepicker
+                  required
+                  spinner
+                  value="20200801"
+                  title="datepicker2"
+                  @change="${(e: Event) => {
+                    console.log(e);
+                    console.log('change');
+                  }}"
+                >
+                </dews-datepicker>
+                <dews-datepicker spinner title="datepicker3"> </dews-datepicker>
+                <dews-datepicker required holidays-visiable holidays-disabled title="datepicker4"> </dews-datepicker>
               </form-section>
             </container-content>
           </dews-form-container>
