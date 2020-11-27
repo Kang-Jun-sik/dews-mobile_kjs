@@ -210,7 +210,7 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
           this.shadowRoot!.querySelector('.dropdown-list-wrap')?.clientHeight! -
           25
       );
-      // this.height = `${this.shadowRoot.querySelector('.dropdown-list-wrap').clientHeight + 120}px`
+      this.height = `${this.shadowRoot!.querySelector('.dropdown-list-wrap')!.clientHeight + 120}px`;
       $el!.height = this.height;
       this._open();
     }

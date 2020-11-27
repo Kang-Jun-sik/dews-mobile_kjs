@@ -9,7 +9,12 @@ export const Button = () => html`<div style="width: 360px">
     <dews-button />
   </div>
   <div style="width: 360px">
-    <dews-button title="button" />
+    <dews-button
+      title="button"
+      @click="${() => {
+        console.log('click');
+      }}"
+    ></dews-button>
   </div>
   <div style="width: 360px">
     <dews-button title="button" disabled />
