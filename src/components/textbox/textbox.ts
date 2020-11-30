@@ -78,9 +78,9 @@ export class Textbox extends DewsFormComponent {
   };
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    if (_changedProperties.get('value') !== undefined && this.multi === false) {
+    if (_changedProperties.get('value') !== undefined && !this.multi) {
       (this.shadowRoot!.querySelector('.dews-input') as HTMLInputElement)!.value = this.value;
-    } else if (_changedProperties.get('value') !== undefined && this.multi === true) {
+    } else if (_changedProperties.get('value') !== undefined && this.multi) {
       (this.shadowRoot!.querySelector('.dews-multi-input') as HTMLInputElement)!.value = this.value;
     }
     return super.shouldUpdate(_changedProperties);
