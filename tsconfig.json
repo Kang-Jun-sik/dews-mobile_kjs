@@ -14,7 +14,8 @@
     "outDir": ".tmp",
     "inlineSources": true,
     "inlineSourceMap": true,
-    "rootDir": "./"
+    "rootDir": "./",
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "test/**/*.ts", "stories/**/*.ts"]
 }
