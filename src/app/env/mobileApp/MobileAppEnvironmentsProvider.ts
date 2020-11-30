@@ -1,9 +1,8 @@
-import 'reflect-metadata';
 import { singleton } from '@dews/dews-mobile-core';
-import { SystemEnvironmentsProviderBase } from '../SystemEnvironmentsProviderBase.js';
+import { SystemEnvironmentsProvider } from '../SystemEnvironmentsProvider.js';
 
 @singleton()
-export class MobileAppEnvironmentsProvider extends SystemEnvironmentsProviderBase {
+export class MobileAppEnvironmentsProvider extends SystemEnvironmentsProvider {
   configure(): Promise<void> {
     return Promise.resolve(undefined);
   }

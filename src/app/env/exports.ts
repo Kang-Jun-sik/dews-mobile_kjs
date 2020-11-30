@@ -1,1 +1,2 @@
-export * from './SystemEnvironmentsProviderBase.js';
+export * from './GlobalEnvironmentVariablesProvider.js';
+export * from './SystemEnvironmentsProvider.js';
