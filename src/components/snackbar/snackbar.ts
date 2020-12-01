@@ -4,7 +4,7 @@ import template from './snackbar.html';
 import scss from './snackbar.scss';
 
 export class Snackbar extends DewsFormComponent {
-  static style = scss;
+  static styles = scss;
 
   render() {
     return template.call(this);
