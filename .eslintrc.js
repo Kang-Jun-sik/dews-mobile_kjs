@@ -21,7 +21,8 @@ module.exports = {
     'import/named': 'off',
     'import/no-unresolved': 'off',
     'import/extensions': ['error', 'always', { ignorePackages: true }],
-    'lit-a11y/click-events-have-key-events': 'off'
+    'lit-a11y/click-events-have-key-events': 'off',
+    'lit-a11y/anchor-is-valid': 'off'
   },
   env: {
     mocha: true,

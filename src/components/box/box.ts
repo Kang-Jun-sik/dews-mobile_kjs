@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
-import { internalProperty, property } from 'lit-element';
+import { internalProperty, LitElement, property } from 'lit-element';
 
 import template from './box.html';
 import scss from './box.scss';
@@ -32,7 +32,7 @@ export class Box extends DewsLayoutComponent {
   async connectedCallback() {
     super.connectedCallback();
     await this.updateComplete;
-    await this.setMainButtonSet();
+    // await this.setMainButtonSet();
     this.addEventListener('click', this._clickEvent);
   }
 
@@ -40,6 +40,7 @@ export class Box extends DewsLayoutComponent {
     super.disconnectedCallback();
     this.removeEventListener('click', this._clickEvent);
   }
+
   private async setMainButtonSet(): Promise<void> {
     if (this.buttonSet !== '') {
       // const mainButtonSet = new MainButtonSet();
@@ -73,17 +74,12 @@ export class Box extends DewsLayoutComponent {
   }
 
   private _onToggleClick(e: Event) {
-    this._toggleOpened(e);
-  }
-
-  private _toggleOpened(e?: Event) {
     if (!this.collapsed) {
       this.collapsed = true;
       this.height = '0px';
       const close = new CustomEvent('close');
       this.dispatchEvent(close);
     } else {
-      // this.open();
       const open = new CustomEvent('open');
       this.dispatchEvent(open);
       this.collapsed = false;
@@ -99,9 +95,8 @@ export class Box extends DewsLayoutComponent {
     if (this.collapsed) {
       this.height = '0px';
     }
-    const children = this.shadowRoot!.querySelectorAll('*');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
+    const children: NodeListOf<LitElement> = this.shadowRoot!.querySelectorAll('*');
+
     await Promise.all(Array.from(children).map(c => c.updateComplete));
     this.slotHeight = `${this.shadowRoot!.querySelector('.dews-box-content-wrap')?.clientHeight}px`;
     if (!this.collapsed) {
@@ -112,7 +107,6 @@ export class Box extends DewsLayoutComponent {
   }
 
   render() {
-    console.log('render');
     return this.hide ? null : template.call(this);
   }
 }
