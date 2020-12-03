@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 
 export * from './app/exports.js';
+export * from './components/exports.js';
 
 import { DewsMobileInterface } from './app/DewsMobileInterface.js';
 

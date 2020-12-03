@@ -9,10 +9,8 @@ export class Tabs extends DewsLayoutComponent {
 
   async connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('focusin', this._focusIn);
+    this.addEventListener('click', this._focusIn);
     this.addEventListener('blur', this._focusBlur);
-    this.updateComplete;
-    // console.log('Tabs UpdateComplete');
     this._firstTabUpdate();
   }
 
@@ -44,7 +42,7 @@ export class Tabs extends DewsLayoutComponent {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('focusin', this._focusIn);
+    this.removeEventListener('click', this._focusIn);
     this.removeEventListener('blur', this._focusBlur);
   }
 

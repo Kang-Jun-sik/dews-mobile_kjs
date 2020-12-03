@@ -13,14 +13,15 @@ export const AreaPanel = () => html`<dews-box id="box1" title="box1">
       <dews-box id="box2" title="box2"> </dews-box>
     </area-item>
     <area-item id="item2" col="8">
-      <dews-area-panel>
+      <dews-box id="box2" title="box3"> </dews-box>
+      <!--<dews-area-panel>
         <area-item col="6">
           <dews-box id="box3" title="box3"> </dews-box>
         </area-item>
         <area-item col="6">
           <dews-box id="box4" title="box4"></dews-box>
         </area-item>
-      </dews-area-panel>
+      </dews-area-panel>-->
     </area-item>
   </dews-area-panel>
   <dews-box id="box5" title="box5"></dews-box>`;

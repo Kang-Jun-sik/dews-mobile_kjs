@@ -59,7 +59,7 @@ class ApplicationContext implements ApplicationContextInterface {
           target!.prepend((this.#main as unknown) as Node);
 
           await ((this.#main as unknown) as LitElement).updateComplete;
-          Object.freeze(this.#main);
+          // Object.freeze(this.#main);
         } catch (err) {
           // 인증 실패
         }
@@ -74,6 +74,7 @@ class ApplicationContext implements ApplicationContextInterface {
     //   // Mobile-app 호출 : 앱에서 제공하는 전용 function 이 있는지 여부로 판단
     //   return AppType.MobileApp;
     // }
+    console.log(location);
     if (location.search) {
       // Front-designer 호출 : querystring 에 token 매개변수가 제공됨
       const params = new URLSearchParams(location.search);
