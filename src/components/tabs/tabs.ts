@@ -1,17 +1,17 @@
-import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
+import { DewsAreaComponent } from '../base/exports.js';
 import { html, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './tabs.html';
 import scss from './tabs.scss';
 
-export class Tabs extends DewsLayoutComponent {
+export class Tabs extends DewsAreaComponent {
   static styles = scss;
 
   async connectedCallback() {
-    super.connectedCallback();
     this.addEventListener('click', this._focusIn);
     this.addEventListener('blur', this._focusBlur);
     this._firstTabUpdate();
+    await super.connectedCallback();
   }
 
   @property({ type: Number })

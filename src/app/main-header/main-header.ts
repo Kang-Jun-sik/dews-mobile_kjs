@@ -49,7 +49,7 @@ export class MainHeader extends LitElement {
     super.disconnectedCallback();
   }
 
-  public setPage(page: DewsBizPage) {
+  public init(page: DewsBizPage) {
     this.areaList = page.getAreaList || [];
     this.title = page.title;
   }

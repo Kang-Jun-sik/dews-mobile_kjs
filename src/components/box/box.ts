@@ -1,12 +1,11 @@
-import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
-import { internalProperty, LitElement, property } from 'lit-element';
+import { DewsAreaComponent } from '../base/exports.js';
+import { internalProperty, LitElement, property, PropertyValues } from 'lit-element';
 
 import template from './box.html';
 import scss from './box.scss';
-// import { MainButton, MainButtonSet } from '../../app/main/MainButtons.js';
 
 // noinspection JSUnusedLocalSymbols
-export class Box extends DewsLayoutComponent {
+export class Box extends DewsAreaComponent {
   static styles = scss;
 
   @property({ type: String, reflect: true })
@@ -23,17 +22,9 @@ export class Box extends DewsLayoutComponent {
 
   private slotHeight: string | undefined;
 
-  // 하단 버튼
-  @property({ type: String, attribute: 'button-set' })
-  buttonSet = '';
-
-  // public _mainButtonSet: MainButtonSet | undefined;
-
   async connectedCallback() {
-    super.connectedCallback();
+    await super.connectedCallback();
     await this.updateComplete;
-    // await this.setMainButtonSet();
-    this.addEventListener('click', this._clickEvent);
   }
 
   disconnectedCallback() {
@@ -41,25 +32,9 @@ export class Box extends DewsLayoutComponent {
     this.removeEventListener('click', this._clickEvent);
   }
 
-  private async setMainButtonSet(): Promise<void> {
-    if (this.buttonSet !== '') {
-      // const mainButtonSet = new MainButtonSet();
-      this.buttonSet.split(',').forEach(item => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        const mainButton = mainButtonSet[item] as MainButton;
-        if (mainButton) {
-          mainButton.show();
-          mainButton.onclick = () => {
-            alert(`click: ${item}`);
-          };
-        } else {
-          console.error(`Main Button Set Error: ${this.title} ${item}`);
-        }
-      });
-      // this._mainButtonSet = mainButtonSet;
-    }
-    return;
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this.addEventListener('click', this._clickEvent);
   }
 
   public _blurEvent() {
@@ -67,10 +42,7 @@ export class Box extends DewsLayoutComponent {
   }
 
   private _clickEvent(e: Event) {
-    // 직접 일으킨 이벤트만 처리하기 위해 isTrusted 사용
-    if (e.isTrusted) {
-      this._focusChanging(e);
-    }
+    this._focusChanging(e);
   }
 
   private _onToggleClick(e: Event) {

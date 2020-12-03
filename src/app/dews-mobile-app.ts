@@ -2,11 +2,13 @@ import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { ApplicationMainInterface } from './ApplicationMainInterface.js';
 import { PageLoadedEventArgs } from './PageLoadedEventArgs.js';
 import { MainHeader } from './main-header/main-header.js';
+import { MainBottom } from './main-bottom/main-bottom.js';
 import { container } from 'tsyringe';
 import { ScrollManager } from './ScrollManager.js';
 import { ScrollAreaChangedEventArgs } from './ScrollAreaChangedEventArgs.js';
 import { FocusChangingEventArgs } from './FocusChangingEventArgs.js';
 import { FocusManager } from './FocusManager.js';
+import { FocusChangedEventArgs } from './FocusChangedEventArgs.js';
 
 @customElement('dews-mobile-app')
 export class DewsMobileApp extends LitElement implements ApplicationMainInterface {
@@ -37,12 +39,14 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
     }, 500);
 
     const mainHeader = this.shadowRoot?.querySelector('main-header') as MainHeader;
+    const mainBottom = this.shadowRoot?.querySelector('main-bottom') as MainBottom;
 
     // 페이지가 다 로드 된 후의 이벤트핸들러
     this.addEventListener('pageLoaded', (e: Event) => {
       const args = e as PageLoadedEventArgs;
-      // 헤더에 페이지 정보 전달
-      mainHeader.setPage(args.openPage!);
+      // 헤더와 바텀에 페이지 정보 전달하면서 초기화
+      mainHeader.init(args.openPage!);
+      mainBottom.init(args.openPage!);
       // 스크롤 매니저 초기화
       this.scrollManager.init(args.openPage!);
     });
@@ -57,6 +61,12 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
     this.addEventListener('focusChanging', (e: Event) => {
       const args = e as FocusChangingEventArgs;
       this.focusManager.changeFocus(args);
+    });
+
+    this.addEventListener('focusChanged', (e: Event) => {
+      const args = e as FocusChangedEventArgs;
+      console.log(args.focusTarget);
+      mainBottom.setMainButtonSet(args);
     });
 
     this.addEventListener('setScrollOffset', () => {
