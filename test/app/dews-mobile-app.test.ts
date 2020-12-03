@@ -1,5 +1,6 @@
 import { expect } from '@open-wc/testing';
 import { DewsMobileApp } from '../../src/app/dews-mobile-app.js';
+import '../../src/dews-mobile.js';
 
 describe('앱 메인 추가 테스트', () => {
   let element: DewsMobileApp;
