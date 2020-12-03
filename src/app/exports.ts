@@ -7,3 +7,4 @@ export * from './base/exports.js';
 
 export * from './main-header/main-header.js';
 export * from './main-content/main-content.js';
+export * from './main-bottom/main-bottom.js';
