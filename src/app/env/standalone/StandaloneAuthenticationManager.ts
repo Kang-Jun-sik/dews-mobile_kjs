@@ -4,11 +4,11 @@ import { AuthenticationManagerInterface } from '../../auth/AuthenticationManager
 @singleton()
 export class StandaloneAuthenticationManager implements AuthenticationManagerInterface {
   get isAuthenticated(): boolean {
-    return false;
+    return true;
   }
 
   get token(): string | undefined {
-    return undefined;
+    return '';
   }
 
   async authenticate(): Promise<void> {

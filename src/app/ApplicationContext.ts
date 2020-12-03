@@ -48,7 +48,7 @@ class ApplicationContext implements ApplicationContextInterface {
     if (!this.#started) {
       // 인증 프로세스 수행
       const systemEnv = await this.registerConditionalDependencies();
-      if (!systemEnv.auth.isAuthenticated) {
+      if (systemEnv.auth.isAuthenticated) {
         try {
           await systemEnv.auth.authenticate();
 
@@ -86,6 +86,7 @@ class ApplicationContext implements ApplicationContextInterface {
   }
 
   private async registerConditionalDependencies(): Promise<SystemEnvironmentsProvider> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let systemEnv: { new (...args: any[]): SystemEnvironmentsProvider };
 
     switch (this.#systemType) {
