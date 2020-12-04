@@ -11,8 +11,8 @@
   @include reset();
 }
 .date-picker-wrap {
-  @include date-picker-wrap();
+  @include dews-date-picker();
 }
 .drawer-date-picker {
-  @include drawer-date-picker-wrap();
+  @include dews-drawer-date-picker();
 }

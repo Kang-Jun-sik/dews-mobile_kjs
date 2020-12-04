@@ -10,10 +10,7 @@
 * {
   @include reset();
 }
-.mask-textbox-wrap {
-  @include mask-textbox-wrap();
-
-}
-:host([format="password"]) input {
-  -webkit-text-security: disc;
-}
+@include dews-mask-textbox();
+//:host([format="password"]) input {
+//  -webkit-text-security: disc;
+//}

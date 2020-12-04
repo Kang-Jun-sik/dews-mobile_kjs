@@ -2,10 +2,10 @@
 
 <div class="mask-textbox-wrap">
   <label>${this.title}</label>
-  <span  @click="${this._spanClick}" class="password view ${this.disabled ? 'disabled' : ''}">
-    <input ?disabled="${this._disabled}" ?readonly="${this.readonly}" type="password">
+  <span  @click="${this._spanClick}" class="view ${this.disabled ? 'disabled' : ''}">
+    <input ?disabled="${this._disabled}" ?readonly="${this.readonly}" type="number">
   </span>
-  <span  style="display: none " class="password mask">
+  <span  style="display: none " class="mask">
     <input @input="${this._inputChange}" @blur="${this._blur}" type="${this.type}">
   </span>
 </div>
