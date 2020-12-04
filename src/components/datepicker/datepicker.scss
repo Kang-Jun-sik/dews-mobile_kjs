@@ -2,17 +2,16 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-textbox
+// dews-datepicker
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
+
 * {
   @include reset();
 }
-.date-picker-wrap {
-  @include dews-date-picker();
-}
-.drawer-date-picker {
-  @include dews-drawer-date-picker();
-}
+@include dews-date-picker();
+@include dews-drawer-date-picker();
+
+
+
+
+
