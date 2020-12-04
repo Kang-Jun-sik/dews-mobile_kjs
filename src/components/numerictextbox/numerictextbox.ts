@@ -59,6 +59,7 @@ export class Numerictextbox extends DewsFormComponent {
 
   private _button: TemplateResult | undefined;
   private _title: TemplateResult | undefined;
+  private _beforeValue: string | undefined = '';
 
   private onFocus = new CustomEvent('focus', { detail: { target: '' } });
   private onChange = new CustomEvent('change', { detail: { target: '' } });
@@ -88,6 +89,7 @@ export class Numerictextbox extends DewsFormComponent {
   }
 
   private _beforeInput(e: InputEvent) {
+    this._beforeValue = (e.target as HTMLInputElement).value;
     this.value = Number((e.target as HTMLInputElement)?.value);
     // 숫자 및 - . 입력처리
     if (
@@ -140,6 +142,10 @@ export class Numerictextbox extends DewsFormComponent {
 
   private _inputChange(e: InputEvent) {
     const $el: HTMLInputElement = e.target as HTMLInputElement;
+    const regex = /[^0-9]/g;
+    if ($el.value.replace(regex, '') === '') {
+      $el.value = this._beforeValue!;
+    }
     if (e.data == '-') {
       $el.value = (-this.value).toString();
     }
