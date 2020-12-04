@@ -37,11 +37,13 @@ import {
   SearchContainer,
   Tabs,
   Tab,
-  Datepicker
+  Datepicker,
+  Timepicker
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
 window.customElements.define('dews-datepicker', Datepicker);
+window.customElements.define('dews-timepicker', Timepicker);
 
 window.customElements.define('dews-masktextbox', Masktextbox);
 window.customElements.define('dews-numerictextbox', Numerictextbox);
