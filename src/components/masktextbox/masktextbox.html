@@ -2,12 +2,13 @@
 
 <div class="mask-textbox-wrap">
   <label>${this.title}</label>
-  <span  @click="${this._spanClick}" class="view ${this.disabled ? 'disabled' : ''}">
-    <input ?disabled="${this._disabled}" ?readonly="${this.readonly}" type="number">
+  <span  @click="${this._handleClick}" class="view ${this.disabled ? 'disabled' : ''}">
+    <input type="text" @focus="${this._handleClick}"
+           ?disabled="${this.disabled}" ?readonly="${this.readonly}"
+           value="${this.value}" .placeholder="${this.placeholder}">
   </span>
-  <span  style="display: none " class="mask">
-    <input @input="${this._inputChange}" @blur="${this._blur}" type="${this.type}">
+  <span style="display: none;" class="mask">
+    <input type="text" @focus="${this._focus}" @blur="${this._blur}">
   </span>
+  <span class="input-state ${this.stateType}">${this.stateMessage}</span>
 </div>
-
-
