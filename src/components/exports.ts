@@ -33,5 +33,6 @@ export { Infobox } from './infobox/infobox.js';
 export { Monthpicker } from './picker/monthpicker/monthpicker.js';
 export { Tooltip } from './tooltip/tooltip.js';
 export { Yearpicker } from './picker/yearpicker/yearpicker.js';
+export { Codepicker } from './codepicker/codepicker.js';
 export { Togglebutton } from './togglebutton/togglebutton.js';
 export { Progressbar } from './progressbar/progressbar.js';
