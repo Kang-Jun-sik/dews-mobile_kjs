@@ -19,3 +19,4 @@ export { Tabs } from './tabs/tabs.js';
 export { Tab } from './tab/tab.js';
 export { Datepicker } from './datepicker/datepicker.js';
 export { Timepicker } from './timepicker/timepicker.js';
+export { Messagebox } from './messagebox/dews-messagebox.js';
