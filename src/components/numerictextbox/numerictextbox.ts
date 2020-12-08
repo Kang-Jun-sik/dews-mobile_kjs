@@ -171,8 +171,6 @@ export class Numerictextbox extends DewsFormComponent {
     const $el: HTMLInputElement = e.target as HTMLInputElement;
     const isValid = this._numericRegex().test($el.value);
 
-    console.log(isValid);
-
     if ((this.min !== null && this.min >= 0 && $el.value.toString().charAt(0) === '-') || !isValid) {
       $el.value = this._oldValue.replace(/[^0-9.-]/g, '');
 
