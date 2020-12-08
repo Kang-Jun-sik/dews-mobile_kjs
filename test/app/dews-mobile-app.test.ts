@@ -1,5 +1,6 @@
 import { expect } from '@open-wc/testing';
 import { DewsMobileApp } from '../../src/app/dews-mobile-app.js';
+import '../../src/dews-mobile.js';
 
 describe('앱 메인 추가 테스트', () => {
   let element: DewsMobileApp;
@@ -18,11 +19,5 @@ describe('앱 메인 추가 테스트', () => {
 
   it('passes the a11y audit', async () => {
     await expect(element).shadowDom.to.be.accessible();
-  });
-
-  it('autoWired 를 이용한 프로퍼티 인젝션 테스트', () => {
-    // assert
-    expect(element.dependency).is.not.undefined;
-    expect(element.dependency.key).to.equal('test value');
   });
 });

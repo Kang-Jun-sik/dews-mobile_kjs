@@ -2,12 +2,10 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-textbox
+// dews-timepicker
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-@include dews-mask-textbox();
+@include dews-time-picker();
+@include dews-drawer-time-picker();

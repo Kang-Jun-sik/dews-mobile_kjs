@@ -1,15 +1,14 @@
-import 'reflect-metadata';
-import { injectable } from '@dews/dews-mobile-core';
+import { singleton } from '@dews/dews-mobile-core';
 import { AuthenticationManagerInterface } from '../../auth/AuthenticationManagerInterface.js';
 
-@injectable()
+@singleton()
 export class StandaloneAuthenticationManager implements AuthenticationManagerInterface {
   get isAuthenticated(): boolean {
-    return false;
+    return true;
   }
 
   get token(): string | undefined {
-    return undefined;
+    return '';
   }
 
   async authenticate(): Promise<void> {

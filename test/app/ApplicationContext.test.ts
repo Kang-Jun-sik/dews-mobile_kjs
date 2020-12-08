@@ -1,7 +1,7 @@
 import { expect } from '@open-wc/testing';
 import { container } from '@dews/dews-mobile-core';
 import { StandaloneEnvironmentsProvider } from '../../src/app/env/standalone/StandaloneEnvironmentsProvider.js';
-import { SystemType, SystemEnvironmentsProviderBase, dependencySymbols } from '../../src/dews-mobile.js';
+import { SystemType, SystemEnvironmentsProvider, dependencySymbols } from '../../src/dews-mobile.js';
 
 describe('ApplicationContext 테스트', () => {
   beforeEach(async () => {
@@ -21,8 +21,8 @@ describe('ApplicationContext 테스트', () => {
     const target = container.resolve(dependencySymbols.SystemEnvironmentsProvider);
 
     // assert
-    expect(expected).to.be.instanceOf(SystemEnvironmentsProviderBase);
-    expect(target).to.be.instanceOf(SystemEnvironmentsProviderBase);
+    expect(expected).to.be.instanceOf(SystemEnvironmentsProvider);
+    expect(target).to.be.instanceOf(SystemEnvironmentsProvider);
     expect(target).to.be.instanceOf(StandaloneEnvironmentsProvider);
     expect(target).to.equal(expected);
   });

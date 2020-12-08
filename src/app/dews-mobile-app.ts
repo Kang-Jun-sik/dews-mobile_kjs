@@ -1,6 +1,4 @@
 import { customElement, html, LitElement } from 'lit-element';
-import { autoWired } from '@dews/dews-mobile-core';
-import { MyDependency } from './ApplicationContext.js';
 import { ApplicationMainInterface } from './ApplicationMainInterface.js';
 
 @customElement('dews-mobile-app')
@@ -8,8 +6,6 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
   constructor() {
     super();
   }
-
-  @autoWired dependency!: MyDependency;
 
   get appVersion(): string {
     return '1.0.0';

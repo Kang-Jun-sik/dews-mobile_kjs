@@ -1,10 +1,11 @@
 import { LitElement } from 'lit-element';
-import { injectable, container } from '@dews/dews-mobile-core';
+import { container } from '@dews/dews-mobile-core';
 import { ApplicationMainInterface } from './ApplicationMainInterface.js';
-import { SystemEnvironmentsProviderBase } from './env/SystemEnvironmentsProviderBase.js';
+import { SystemEnvironmentsProvider } from './env/SystemEnvironmentsProvider.js';
 import { SystemType } from './SystemTypeEnum.js';
 import { dependencySymbols } from './dependencySymbols.js';
 
+/** 실핼되는 DEWS/UI Mobile 어플리케이션의 컨텍스트 객체입니다. */
 export interface ApplicationContextInterface {
   /** DEWS/UI Mobile 런타임의 버전을 가져옵니다. */
   version: string;
@@ -19,11 +20,6 @@ export interface ApplicationContextInterface {
 
   /** 어플리케이션 메인 인스턴스입니다. */
   main: ApplicationMainInterface | undefined;
-}
-
-@injectable()
-export class MyDependency {
-  key = 'test value';
 }
 
 // noinspection JSMethodCanBeStatic
@@ -52,7 +48,7 @@ class ApplicationContext implements ApplicationContextInterface {
     if (!this.#started) {
       // 인증 프로세스 수행
       const systemEnv = await this.registerConditionalDependencies();
-      if (!systemEnv.auth.isAuthenticated) {
+      if (systemEnv.auth.isAuthenticated) {
         try {
           await systemEnv.auth.authenticate();
 
@@ -89,8 +85,9 @@ class ApplicationContext implements ApplicationContextInterface {
     return SystemType.Standalone;
   }
 
-  private async registerConditionalDependencies(): Promise<SystemEnvironmentsProviderBase> {
-    let systemEnv: { new (...args: unknown[]): SystemEnvironmentsProviderBase };
+  private async registerConditionalDependencies(): Promise<SystemEnvironmentsProvider> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let systemEnv: { new (...args: any[]): SystemEnvironmentsProvider };
 
     switch (this.#systemType) {
       case SystemType.MobileApp:
@@ -104,7 +101,7 @@ class ApplicationContext implements ApplicationContextInterface {
         systemEnv = (await import('./env/standalone/StandaloneEnvironmentsProvider.js')).StandaloneEnvironmentsProvider;
         break;
     }
-    const instance = container.resolve<SystemEnvironmentsProviderBase>(systemEnv);
+    const instance = container.resolve<SystemEnvironmentsProvider>(systemEnv);
     await instance.configure();
     container.registerInstance(dependencySymbols.SystemEnvironmentsProvider, instance);
 

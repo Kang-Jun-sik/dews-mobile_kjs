@@ -1,8 +1,7 @@
-import 'reflect-metadata';
-import { injectable } from '@dews/dews-mobile-core';
+import { singleton } from '@dews/dews-mobile-core';
 import { AuthenticationManagerInterface } from '../../auth/AuthenticationManagerInterface.js';
 
-@injectable()
+@singleton()
 export class FrontDesignerAuthenticationManager implements AuthenticationManagerInterface {
   get isAuthenticated(): boolean {
     return false;

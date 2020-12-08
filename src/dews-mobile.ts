@@ -38,11 +38,12 @@ import {
   Tabs,
   Tab,
   Datepicker,
-  Snackbar
+  Timepicker
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
 window.customElements.define('dews-datepicker', Datepicker);
+window.customElements.define('dews-timepicker', Timepicker);
 
 window.customElements.define('dews-masktextbox', Masktextbox);
 window.customElements.define('dews-numerictextbox', Numerictextbox);
@@ -52,8 +53,6 @@ window.customElements.define('dews-checkbox-group', CheckboxGroup);
 window.customElements.define('dews-checkbox', Checkbox);
 window.customElements.define('dews-radiobutton', Radiobutton);
 window.customElements.define('dews-radiobutton-group', RadiobuttonGroup);
-
-window.customElements.define('dews-snackbar', Snackbar);
 
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);
