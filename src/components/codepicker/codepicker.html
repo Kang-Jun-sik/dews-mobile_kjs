@@ -1,8 +1,8 @@
-<div class="code-picker">
+<div class="code-picker" @click="${this._clickHandler}" style="height: 27px; background: yellow">
 
 </div>
 
 
-<drawer-layout class="drawer-layout">
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" scrollEnabled>
 
 </drawer-layout>
