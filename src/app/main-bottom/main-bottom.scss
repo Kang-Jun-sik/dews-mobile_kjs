@@ -32,14 +32,16 @@ button {
   align-items: center;
 }
 .main-button {
-  margin-right: 25px;
+  flex: 0 0 40px;
+  margin-left: 25px;
   font-size: 0;
-}
-.main-button:first-child {
-  margin-right: 0;
 }
 .main-button:last-child {
   flex: auto;
+  margin-left: 0;
+}
+.main-button.hide {
+  display: none;
 }
 .main-button > button {
   position: relative;
