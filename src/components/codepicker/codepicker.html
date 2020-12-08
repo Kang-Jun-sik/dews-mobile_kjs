@@ -1,8 +1,16 @@
-<div class="code-picker">
-
+<div class="code-picker code-picker-wrap" @click="${this._clickHandler}" style="height: 27px; background: yellow">
+  <label for="">${this.title}</label>
+  <span class="select-wrap">
+      <span class="select-shape">
+          <span class="select-input">
+              ${this.inputValue}
+          </span>
+      </span>
+      <span class="select-icon code-picker-icon"></span>
+  </span>
 </div>
 
 
-<drawer-layout class="drawer-layout">
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" scrollEnabled>
 
 </drawer-layout>
