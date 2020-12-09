@@ -7,7 +7,35 @@
 * {
   @include reset();
 }
+//.dews-button-group {
+//  //@include button-group();
+//}
+
 .dews-button-group {
-  //@include button-group();
+  position: relative;
+}
+.button-group-wrap {
+  width: 100%;
+}
+.button-group-wrap li {
+  display: flex;
+  align-items: flex-start;
+  flex-flow: nowrap;
+  font-size: 0;
+
+  margin-bottom: 12px;
+}
+.button-group-wrap li:last-child {
+  margin-bottom: 0;
+}
+.button-group-wrap li .dews-button {
+  flex: 1 1 auto;
+  margin-right: 8px;
+}
+.button-group-wrap li .dews-button:last-child {
+  margin-right: 0;
 }
 
+.button-group-wrap li .dews-button.icon {
+  flex: 0 0 0;
+}
