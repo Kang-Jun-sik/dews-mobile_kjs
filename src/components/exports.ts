@@ -2,6 +2,7 @@ export { Checkbox } from './checkbox/checkbox.js';
 export { CheckboxGroup } from './checkbox-group/checkbox-group.js';
 export { Textbox } from './textbox/textbox.js';
 export { Button } from './button/button.js';
+export { ButtonGroup } from './button-group/button-group.js';
 export { Radiobutton } from './radiobutton/radiobutton.js';
 export { RadiobuttonGroup } from './radiobutton-group/radiobutton-group.js';
 export { Numerictextbox } from './numerictextbox/numerictextbox.js';
