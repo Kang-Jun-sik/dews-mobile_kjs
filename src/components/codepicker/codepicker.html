@@ -12,6 +12,426 @@
 
 
 <drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" scrollEnabled>
+  <div class="drawer-code-picker">
+    <div class="titlebar">
+      <div class="title">항목명</div>
+      <button class="confirm-button">적용</button>
+      <button class="next-icon-button"><span>다음</span></button>
+    </div>
+
+    <div class="control">
+      <!-- .select-list-->
+      <div class="layer-code-list-control">
+        <div class="code-list-total">
+          <span>총 <strong>1000</strong>건</span>
+        </div>
+        <div class="code-list-checked">
+          <span class="choice-list">선택목록</span>
+          <button class="choice-list-button"> <span>99+</span> </button>
+        </div>
+        <div class="code-list-all-select">
+          <span class="code-list-checkbox-wrap">
+              <label for="code-list-checkbox" class="code-list-checkbox-label">전체선택</label>
+              <span class="checkbox-control">
+                  <input type="checkbox" id="code-list-checkbox">
+                  <span  class="checkbox-shape"></span>
+              </span>
+          </span>
+        </div>
+      </div>
+
+      <div class="layer-code-list-wrap">
+        <div class="code-list-card">
+          <div class="card-list-simple">
+            <div class="card">
+              <input type="checkbox" class="card-checkbox">
+              <ul class="list-field">
+                <li>
+                  <p class="name">거래처코드</p>
+                  <p class="item">RC002578</p>
+                </li>
+                <li>
+                  <p class="name">거래처명</p>
+                  <p class="item">㈜더존개발</p>
+                </li>
+                <li>
+                  <p class="name">사업자등록번호</p>
+                  <p class="item">100-10-12345</p>
+                </li>
+                <li>
+                  <p class="name">대표자</p>
+                  <p class="item">김더존</p>
+                </li>
+                <li>
+                  <p class="name">등록일</p>
+                  <p class="item">2020-10-27 14:29:00</p>
+                </li>
+                <li>
+                  <p class="name">매출액</p>
+                  <p class="item number">220,000,000,000</p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <input type="checkbox" class="card-checkbox">
+              <ul class="list-field">
+                <li>
+                  <p class="name">거래처코드</p>
+                  <p class="item">RC002578</p>
+                </li>
+                <li>
+                  <p class="name">거래처명</p>
+                  <p class="item">㈜더존개발</p>
+                </li>
+                <li>
+                  <p class="name">사업자등록번호</p>
+                  <p class="item">100-10-12345</p>
+                </li>
+                <li>
+                  <p class="name">대표자</p>
+                  <p class="item">김더존</p>
+                </li>
+                <li>
+                  <p class="name">등록일</p>
+                  <p class="item">2020-10-27 14:29:00</p>
+                </li>
+                <li>
+                  <p class="name">매출액</p>
+                  <p class="item number">220,000,000,000</p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <input type="checkbox" class="card-checkbox">
+              <ul class="list-field">
+                <li>
+                  <p class="name">거래처코드</p>
+                  <p class="item">RC002578</p>
+                </li>
+                <li>
+                  <p class="name">거래처명</p>
+                  <p class="item">㈜더존개발</p>
+                </li>
+                <li>
+                  <p class="name">사업자등록번호</p>
+                  <p class="item">100-10-12345</p>
+                </li>
+                <li>
+                  <p class="name">대표자</p>
+                  <p class="item">김더존</p>
+                </li>
+                <li>
+                  <p class="name">등록일</p>
+                  <p class="item">2020-10-27 14:29:00</p>
+                </li>
+                <li>
+                  <p class="name">매출액</p>
+                  <p class="item number">220,000,000,000</p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <input type="checkbox" class="card-checkbox">
+              <ul class="list-field">
+                <li>
+                  <p class="name">거래처코드</p>
+                  <p class="item">RC002578</p>
+                </li>
+                <li>
+                  <p class="name">거래처명</p>
+                  <p class="item">㈜더존개발</p>
+                </li>
+                <li>
+                  <p class="name">사업자등록번호</p>
+                  <p class="item">100-10-12345</p>
+                </li>
+                <li>
+                  <p class="name">대표자</p>
+                  <p class="item">김더존</p>
+                </li>
+                <li>
+                  <p class="name">등록일</p>
+                  <p class="item">2020-10-27 14:29:00</p>
+                </li>
+                <li>
+                  <p class="name">매출액</p>
+                  <p class="item number">220,000,000,000</p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <input type="checkbox" class="card-checkbox">
+              <ul class="list-field">
+                <li>
+                  <p class="name">거래처코드</p>
+                  <p class="item">RC002578</p>
+                </li>
+                <li>
+                  <p class="name">거래처명</p>
+                  <p class="item">㈜더존개발</p>
+                </li>
+                <li>
+                  <p class="name">사업자등록번호</p>
+                  <p class="item">100-10-12345</p>
+                </li>
+                <li>
+                  <p class="name">대표자</p>
+                  <p class="item">김더존</p>
+                </li>
+                <li>
+                  <p class="name">등록일</p>
+                  <p class="item">2020-10-27 14:29:00</p>
+                </li>
+                <li>
+                  <p class="name">매출액</p>
+                  <p class="item number">220,000,000,000</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
+      <!-- //active -->
+      <div class="layer-code-filter">
+        <div class="code-filter">
+          <div class="code-filter-search">
+            <!-- 조건 설정 시 setting 추가  -->
+            <!-- filter 사용 안 할 경우, disabled  -->
+            <button class="filter-button"><span>filiter</span></button>
+            <!-- input 활성화시 active -->
+            <span class="code-filter-input ">
+                <input type="text">
+                <button class="search-button"><span>검색</span></button>
+            </span>
+          </div>
+          <div class="code-filter-field">
+            <!--  해당 영역 component.. 처리  -->
+            <ul class="form-field">
+<!--              <li>-->
+<!--                <div class="dropdown-list-wrap">-->
+<!--                  <label for="">항목명</label>-->
+<!--                  <span class="select-wrap">-->
+<!--                      <span class="select-input">-->
+<!--                          더존비즈온 ERP 사업부문 미래기술연구소-->
+<!--                      </span>-->
+<!--                      <span class="select-multi">-->
+<!--                          외 <strong>1</strong>건-->
+<!--                      </span>-->
+<!--                      <span class="select-icon dropdown-icon">-->
+
+<!--                      </span>-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--                <div class="layer-drawer" style="display: none;">-->
+<!--                  <div class="overlay"></div>-->
+<!--                  <div class="layer layer-bottom">-->
+<!--                    <div class="layer-moving-button">-->
+<!--                      <span class="moving-button"></span>-->
+<!--                    </div>-->
+<!--                    <div class="layer-content">-->
+
+<!--                      <div class="dropdown-list-multi">-->
+<!--                        <div class="titlebar">-->
+<!--                          <div class="title">항목명</div>-->
+<!--                          <button class="confirm-button">확인</button>-->
+<!--                          <button class="next-icon-button"><span>다음</span></button>-->
+<!--                        </div>-->
+
+<!--                        <div class="control" style="display:none;">-->
+<!--                          <ul class="list">-->
+<!--                            <li class="check">-->
+<!--                              <span>DATA 01</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>데이터 이름이 짱 짱 짱 길 때에는 어떻게 되나요. 어떻게 되긴요 이렇게 되지요</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 02</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 03</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 04</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 05</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 06</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 07</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 08</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 09</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 10</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 11</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 12</span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span>DATA 13</span>-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+
+<!--                        <div class="control"  style="display:none;">-->
+<!--                          <ul class="list">-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 01</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox" checked="checked">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">데이터 이름</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 02</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 03</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 04</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 05</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 06</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 07</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 08</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 09</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                              <span class="text">DATA 10</span>-->
+<!--                              <span class="checkbox">-->
+<!--                                <input type="checkbox">-->
+<!--                              </span>-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+
+<!--                      </div>-->
+
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <div class="dropdown-list-wrap">-->
+<!--                  <label for="">항목명</label>-->
+<!--                  <span class="select-wrap focus">-->
+<!--                      <span class="select-input">-->
+<!--                          더존비즈온 ERP 사업부문 호로로록-->
+<!--                      </span>-->
+<!--                      <span class="select-multi">-->
+<!--                          외 <strong>1</strong>건-->
+<!--                      </span>-->
+<!--                      <span class="select-icon dropdonw-icon">-->
+
+<!--                      </span>-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <div class="dropdown-list-wrap">-->
+<!--                  <label for="">항목명</label>-->
+<!--                  <span class="select-wrap disabed">-->
+<!--                      <span class="select-input">-->
+<!--                          더존비즈온 ERP 사업부문 호로로록-->
+<!--                      </span>-->
+<!--                      <span class="select-multi">-->
+<!--                          외 <strong>1</strong>건-->
+<!--                      </span>-->
+<!--                      <span class="select-icon dropdonw-icon">-->
+
+<!--                      </span>-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <div class="dropdown-list-wrap">-->
+<!--                  <label for="">항목명</label>-->
+<!--                  <span class="select-wrap readonly">-->
+<!--                      <span class="select-input">-->
+<!--                          더존비즈온 ERP 사업부문 호로로록-->
+<!--                      </span>-->
+<!--                      <span class="select-multi">-->
+<!--                          외 <strong>1</strong>건-->
+<!--                      </span>-->
+<!--                      <span class="select-icon dropdonw-icon">-->
+
+<!--                      </span>-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <div class="dews-textbox">-->
+<!--                  <label for="textbox01">항목명</label>-->
+<!--                  <input type="text" id="textbox01" class="">-->
+<!--                </div>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <div class="dews-textbox">-->
+<!--                  <label for="textbox02">항목명</label>-->
+<!--                  <input type="text" id="textbox02" class="">-->
+<!--                </div>-->
+<!--              </li>-->
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </drawer-layout>
