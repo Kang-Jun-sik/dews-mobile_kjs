@@ -40,7 +40,8 @@ import {
   Tab,
   Datepicker,
   Timepicker,
-  Messagebox
+  Messagebox,
+  Dropdownbutton
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -50,8 +51,9 @@ window.customElements.define('dews-timepicker', Timepicker);
 window.customElements.define('dews-masktextbox', Masktextbox);
 window.customElements.define('dews-numerictextbox', Numerictextbox);
 window.customElements.define('dews-textbox', Textbox);
-window.customElements.define('dews-button-group', ButtonGroup);
 window.customElements.define('dews-button', Button);
+window.customElements.define('dews-dropdownbutton', Dropdownbutton);
+window.customElements.define('dews-button-group', ButtonGroup);
 window.customElements.define('dews-checkbox-group', CheckboxGroup);
 window.customElements.define('dews-checkbox', Checkbox);
 window.customElements.define('dews-radiobutton', Radiobutton);
