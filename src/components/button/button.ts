@@ -5,14 +5,14 @@ import template from './button.html';
 import scss from './button.scss';
 
 export enum TYPE_LIST {
-  'default' = 'default',
   'text' = 'text',
-  'icon' = 'icon'
+  'icon' = 'icon',
+  'icon-text' = 'iconText'
 }
 
 export enum SIZE_LIST {
-  'default' = 'default',
   'small' = 'small',
+  'medium' = 'medium',
   'large' = 'large'
 }
 
@@ -20,18 +20,25 @@ export enum ICON_LIST {
   'reset' = 'reset'
 }
 
-// noinspection JSUnusedLocalSymbols
+export enum UI_LIST {
+  'solid' = 'solid',
+  'emphasize' = 'emphasize'
+}
+
 export class Button extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String })
-  title = 'title';
+  text = '';
 
   @property({ type: String })
-  type: TYPE_LIST = TYPE_LIST.default;
+  ui = UI_LIST.solid;
 
   @property({ type: String })
-  size: SIZE_LIST = SIZE_LIST.default;
+  type: TYPE_LIST = TYPE_LIST.text;
+
+  @property({ type: String })
+  size: SIZE_LIST = SIZE_LIST.medium;
 
   @property({ type: String })
   icon: ICON_LIST | undefined;
@@ -44,12 +51,10 @@ export class Button extends DewsFormComponent {
 
   connectedCallback() {
     super.connectedCallback();
-    // this.addEventListener('focus', this._focusChanging);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    // this.removeEventListener('focus', this._focusChanging);
   }
 
   private _clickHandler() {
