@@ -2,7 +2,7 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-button
+// dews-dropdown-button
 //======================================
 //--------------------------------------
 // 레이아웃 영역
@@ -10,7 +10,71 @@
 * {
   @include reset();
 }
-@include dews-dropdownbutton();
+//@include dews-dropdownbutton();
+//버튼 어떻게 뿌릴지 몰라 일단 css 씌움
+@include dews-button();
 
 
 
+.dews-dropdown-button {
+  position: relative;
+  display: inline-block;
+  font-size: 0;
+}
+.button-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: block;
+  width: 144px;
+  height: auto;
+  padding: 5px 0;
+  border: 1px solid rgba(0,0,0, 0.12);
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.08);
+}
+.button-list button {
+  @include reset-button();
+
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+}
+.button-list button span {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  color: #111111;
+  font-size: 13px;
+  text-align: left;
+  line-height: 1.38;
+}
+.button-list button:disabled span {
+  color: rgba(60, 60, 67, 0.3);
+}
+.button-list button:active:not(:disabled) {
+  background-color: rgba(60, 60, 67, 0.04);
+}
+
+
+.dews-button.dropdown .button-icon{
+  display: none !important;
+}
+.dews-button.dropdown .button-text {
+  display: flex;
+  align-items: center;
+}
+.dews-button.dropdown .button-text:after {
+  content: '';
+  display: block;
+  float: right;
+  width: 18px;
+  height: 18px;
+  margin-left: 2px;
+  flex: 0 0 18px;
+
+  background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij4KICAgIDxwYXRoIGZpbGw9IiM5Nzk5YTgiIGQ9Ik0xNzYuNTQyIDUwNi41YS45LjkgMCAwIDEtLjc0Ny0uNDA1bC00LjA5MS02LjExNWEuOTczLjk3MyAwIDAgMS0uMDU3LS45NzQuOTA3LjkwNyAwIDAgMSAuODA2LS41MDVoOC4xODJhLjkwNi45MDYgMCAwIDEgLjgwNS41MDUuOTcxLjk3MSAwIDAgMS0uMDU5Ljk3NGwtNC4wOTEgNi4xMTVhLjkuOSAwIDAgMS0uNzQ4LjQwNXoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNjcuNTQzIC00OTMuNTA0KSIvPgo8L3N2Zz4K);
+  background-size: 18px 18px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
