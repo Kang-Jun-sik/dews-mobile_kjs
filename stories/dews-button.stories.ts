@@ -8,18 +8,23 @@ export default {
 export const Button = () => html` <div style="width: 360px">
   <dews-button text="button"></dews-button>
 
-  <h2 style="font-size:15px;">Solid small</h2>
+  <h2 style="font-size:15px;">Solid small(button group)</h2>
+
   <dews-button-group>
-    <dews-button text="Solid" size="small" disabled="true"></dews-button>
-    <dews-button text="disabled" size="small" disabled="true"></dews-button>
-    <dews-button type="icon" size="small" icon="tmp-icon"></dews-button>
-    <dews-button type="icon" size="small" icon="tmp-icon" disabled="true"></dews-button>
-    <dews-button type="icon" size="small" icon="tmp-icon" disabled="true"></dews-button>
-    <dews-button type="icon-text" text="버튼입니다." size="small" icon="tmp-icon" disabled="true"></dews-button>
+    <group-item>
+      <dews-button text="Solid" size="small"></dews-button>
+      <dews-button text="disabled" size="small" disabled="true"></dews-button>
+      <dews-button type="icon" size="small" icon="tmp-icon"></dews-button>
+    </group-item>
+    <group-item>
+      <dews-button type="icon" size="small" icon="tmp-icon" disabled="true"></dews-button>
+      <dews-button type="icon" size="small" icon="tmp-icon" disabled="true"></dews-button>
+      <dews-button type="icon-text" text="버튼입니다." size="small" icon="tmp-icon" disabled="true"></dews-button>
+    </group-item>
   </dews-button-group>
 
   <p style="height: 20px;"></p>
-  <h2 style="font-size:15px;">Emphasize small</h2>
+  <h2 style="font-size:15px;">Emphasize small(button group)</h2>
   <dews-button-group>
     <dews-button text="emphasize" ui="emphasize" size="small"></dews-button>
     <dews-button text="disabled" ui="emphasize" size="small" disabled="true"></dews-button>

@@ -17,6 +17,7 @@ export enum SIZE_LIST {
 }
 
 export enum ICON_LIST {
+  'default' = '',
   'reset' = 'reset'
 }
 
@@ -41,13 +42,16 @@ export class Button extends DewsFormComponent {
   size: SIZE_LIST = SIZE_LIST.medium;
 
   @property({ type: String })
-  icon: ICON_LIST | undefined;
+  icon: ICON_LIST = ICON_LIST.default;
 
   @property({ type: String })
   link: string | undefined;
 
   @property({ type: Boolean })
   disabled = false;
+
+  @property({ type: Boolean, reflect: true })
+  group = false;
 
   connectedCallback() {
     super.connectedCallback();
