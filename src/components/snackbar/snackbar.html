@@ -13,10 +13,10 @@
      animation-delay: 0s, 5.3s;
   아이콘 비노출 시 , .snackbar-img 삭제 또는 display: none;
  -->
-<div class="dews-snackbar success">
-  <div class="snackbar-img"></div>
+<div class="${this._className}">
+  <div class="snackbar-img" style="display: ${this._showIcon ? 'block' : 'none'};"></div>
   <div class="snackbar-text">
-    저장되었습니다.
+    ${this.message}
   </div>
 </div>
 
