@@ -14,8 +14,6 @@
 //버튼 어떻게 뿌릴지 몰라 일단 css 씌움
 @include dews-button();
 
-
-
 .dews-dropdown-button {
   position: relative;
   display: inline-block;
@@ -25,14 +23,22 @@
   position: absolute;
   top: 100%;
   left: 0;
-  display: block;
+  //display: block;
   width: 144px;
   height: auto;
   padding: 5px 0;
   border: 1px solid rgba(0,0,0, 0.12);
   background-color: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.08);
+  display: none;
 }
+
+.button-list {
+  &.selected{
+    display: block;
+  }
+}
+
 .button-list button {
   @include reset-button();
 

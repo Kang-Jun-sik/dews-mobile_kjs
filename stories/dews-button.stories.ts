@@ -13,7 +13,17 @@ export const Button = () => html` <div style="width: 360px">
   <dews-button-group>
     <group-item>
       <dews-button text="Solid" size="small"></dews-button>
-      <dews-button text="disabled" size="small" disabled="true"></dews-button>
+      <dews-dropdownbutton text="드롭다운버튼">
+        <dropdown-childbutton
+          id="btn1"
+          text="버튼1"
+          @clcik="${() => {
+            console.log('click');
+          }}"
+        ></dropdown-childbutton>
+        <dropdown-childbutton id="btn2" text="버튼2" disabled></dropdown-childbutton>
+      </dews-dropdownbutton>
+      <!--      <dews-button text="disabled" size="small" disabled="true"></dews-button>-->
       <dews-button type="icon" size="small" icon="tmp-icon"></dews-button>
     </group-item>
     <group-item>

@@ -1,3 +1,13 @@
+<span class="dews-dropdown-button ${this.group ? 'group' : ''}">
+  <button class="dews-button dropdown ${this.ui} ${this.size}" @click ="${this._clickHandler}">
+      <span class="button-icon"></span>
+      <span class="button-text">${this.text}</span>
+  </button>
+  <span class="button-list ${this._selected ? 'selected' : ''}" >
+    ${this.buttons}
+  </span>
+</span>
+
 <!--<div class="dews-dropdownbutton">-->
 <!--  <label clas="dropdown-label">-->
 <!--    ${this.text}-->
@@ -9,21 +19,14 @@
 <!--  <button type="button">버튼2</button>-->
 <!--</div>-->
 
-<!--<button class="dews-button ${this.ui} ${this.type} ${this.size} ${this.icon} ${this.disabled ? 'disabled' : ''}">-->
-<!--  <span class="button-icon"></span>-->
-<!--  <span class="button-text">${this.text}</span>-->
-<!--</button>-->
-
-<span class="dews-dropdown-button">
-
-  <button class="dews-button solid large dropdown">
-    <span class="button-icon"></span>
-    <span class="button-text">버튼버튼</span>
-  </button>
-
-  <span class="button-list">
-    <button><span>내부버튼값1</span></button>
-    <button disabled><span>비활성화 내부 버튼값 2</span></button>
-    <button><span>내부 버튼값 3 2줄 이상인 경우 줄 바꿈 처리</span></button>
-  </span>
-</span>
+<!--<span class="dews-dropdown-button">-->
+<!--  <button class="dews-button solid large dropdown">-->
+<!--    <span class="button-icon"></span>-->
+<!--    <span class="button-text">버튼버튼</span>-->
+<!--  </button>-->
+<!--  <span class="button-list">-->
+<!--    <button><span>내부버튼값1</span></button>-->
+<!--    <button disabled><span>비활성화 내부 버튼값 2</span></button>-->
+<!--    <button><span>내부 버튼값 3 2줄 이상인 경우 줄 바꿈 처리</span></button>-->
+<!--  </span>-->
+<!--</span>-->
