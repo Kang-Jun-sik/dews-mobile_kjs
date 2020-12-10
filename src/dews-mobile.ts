@@ -40,7 +40,8 @@ import {
   Datepicker,
   Timepicker,
   Messagebox,
-  Snackbar
+  Snackbar,
+  Loading
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -58,6 +59,7 @@ window.customElements.define('dews-radiobutton-group', RadiobuttonGroup);
 
 window.customElements.define('dews-messagebox', Messagebox);
 window.customElements.define('dews-snackbar', Snackbar);
+window.customElements.define('dews-loading', Loading);
 
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);
