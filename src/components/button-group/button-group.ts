@@ -8,12 +8,34 @@ export class ButtonGroup extends DewsFormComponent {
 
   private _buttons: Array<TemplateResult> = [];
 
+  @queryAll('group-item')
+  private groupItem: Array<TemplateResult> | undefined;
+
+  constructor() {
+    super();
+  }
+
   connectedCallback() {
     super.connectedCallback();
-
-    this.querySelectorAll('dews-button').forEach(button => {
-      this._buttons.push(html`${button}`);
-    });
+    const groupItem = this.querySelectorAll('group-item');
+    if (groupItem.length > 0) {
+      this.querySelectorAll('group-item').forEach(item => {
+        const row: Array<TemplateResult> = [];
+        for (let i = 0; i < item.childElementCount; i++) {
+          item.children[i].setAttribute('group', 'true');
+          console.log(item.children[i]);
+          row.push(html`${item.children[i]}`);
+        }
+        this._buttons.push(html`<li>${row}</li>`);
+      });
+    } else {
+      const row: Array<TemplateResult> = [];
+      this.querySelectorAll('dews-button').forEach(button => {
+        button.setAttribute('group', 'true');
+        row.push(html`${button}`);
+      });
+      this._buttons.push(html`<li>${row}</li>`);
+    }
   }
 
   render() {
