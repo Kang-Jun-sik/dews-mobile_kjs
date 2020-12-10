@@ -22,15 +22,20 @@ export class ButtonGroup extends DewsFormComponent {
       this.querySelectorAll('group-item').forEach(item => {
         const row: Array<TemplateResult> = [];
         for (let i = 0; i < item.childElementCount; i++) {
-          item.children[i].setAttribute('group', 'true');
-          console.log(item.children[i]);
-          row.push(html`${item.children[i]}`);
+          switch (item.children[i].tagName) {
+            case 'DEWS-BUTTON':
+            case 'DEWS-DROPDOWNBUTTON':
+              item.children[i].setAttribute('group', 'true');
+              row.push(html`${item.children[i]}`);
+              break;
+          }
         }
         this._buttons.push(html`<li>${row}</li>`);
       });
     } else {
       const row: Array<TemplateResult> = [];
-      this.querySelectorAll('dews-button').forEach(button => {
+
+      this.querySelectorAll('dews-button, dews-dropdownbutton').forEach(button => {
         button.setAttribute('group', 'true');
         row.push(html`${button}`);
       });

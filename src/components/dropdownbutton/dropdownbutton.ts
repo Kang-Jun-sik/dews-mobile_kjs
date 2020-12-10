@@ -1,4 +1,4 @@
-import { property } from 'lit-element';
+import { html, property, query, TemplateResult } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './dropdownbutton.html';
@@ -28,8 +28,16 @@ export enum UI_LIST {
 export class Dropdownbutton extends DewsFormComponent {
   static styles = scss;
 
+  @query('.button-list')
+  private buttonList: HTMLElement | undefined;
+
+  private buttons: Array<TemplateResult> = [];
+
   @property({ type: String })
   text = '';
+
+  @property({ type: String })
+  group = '';
 
   @property({ type: String })
   ui = UI_LIST.solid;
@@ -49,16 +57,39 @@ export class Dropdownbutton extends DewsFormComponent {
   @property({ type: Boolean })
   disabled = false;
 
+  @property({ type: Boolean, reflect: true })
+  _selected = false;
+
   connectedCallback() {
     super.connectedCallback();
+
+    this.querySelectorAll('dropdown-childbutton').forEach(btn => {
+      this.buttons.push(html`${btn}`);
+    });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
   }
 
-  private _clickHandler() {
-    // 클릭이벤트 핸들러
+  private _clickHandler(e: Event) {
+    e.stopPropagation();
+
+    if (!this.disabled) {
+      if (this._selected) {
+        // 닫기
+        this._selected = false;
+      } else {
+        // 열기
+        this._selected = true;
+        window.addEventListener('click', this.documentClick.bind(this, event));
+      }
+    }
+  }
+
+  private documentClick() {
+    this._selected = false;
+    window.removeEventListener('click', this.documentClick.bind(this));
   }
 
   render() {

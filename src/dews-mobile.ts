@@ -41,7 +41,8 @@ import {
   Datepicker,
   Timepicker,
   Messagebox,
-  Dropdownbutton
+  Dropdownbutton,
+  Childbutton
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -53,6 +54,7 @@ window.customElements.define('dews-numerictextbox', Numerictextbox);
 window.customElements.define('dews-textbox', Textbox);
 window.customElements.define('dews-button', Button);
 window.customElements.define('dews-dropdownbutton', Dropdownbutton);
+window.customElements.define('dropdown-childbutton', Childbutton);
 window.customElements.define('dews-button-group', ButtonGroup);
 window.customElements.define('dews-checkbox-group', CheckboxGroup);
 window.customElements.define('dews-checkbox', Checkbox);

@@ -3,6 +3,7 @@ export { CheckboxGroup } from './checkbox-group/checkbox-group.js';
 export { Textbox } from './textbox/textbox.js';
 export { Button } from './button/button.js';
 export { Dropdownbutton } from './dropdownbutton/dropdownbutton.js';
+export { Childbutton } from './dropdownbutton/childbutton.js';
 export { ButtonGroup } from './button-group/button-group.js';
 export { Radiobutton } from './radiobutton/radiobutton.js';
 export { RadiobuttonGroup } from './radiobutton-group/radiobutton-group.js';
