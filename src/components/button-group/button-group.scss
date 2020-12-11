@@ -4,37 +4,5 @@
 //======================================
 // dews-button-group
 //======================================
-ul, li, div {
-  padding: 0;
-  margin: 0;
-}
-ul,
-li,
-ol {
-  list-style: none;
-}
-a {
-  text-decoration: none;
-}
-//.dews-button-group {
-//  //@include button-group();
-//}
 
-.dews-button-group {
-  position: relative;
-}
-.button-group-wrap {
-  width: 100%;
-}
-.button-group-wrap li {
-  display: flex;
-  align-items: stretch;
-  flex-flow: nowrap;
-  font-size: 0;
-
-  margin-bottom: 12px;
-}
-.button-group-wrap li:last-child {
-  margin-bottom: 0;
-}
-
+@include dews-button-group();
