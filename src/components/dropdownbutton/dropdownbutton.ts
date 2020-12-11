@@ -4,20 +4,10 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './dropdownbutton.html';
 import scss from './dropdownbutton.scss';
 
-export enum TYPE_LIST {
-  'text' = 'text',
-  'icon' = 'icon',
-  'icon-text' = 'iconText'
-}
-
 export enum SIZE_LIST {
   'small' = 'small',
   'medium' = 'medium',
   'large' = 'large'
-}
-
-export enum ICON_LIST {
-  'reset' = 'reset'
 }
 
 export enum UI_LIST {
@@ -31,31 +21,25 @@ export class Dropdownbutton extends DewsFormComponent {
   @query('.button-list')
   private buttonList: HTMLElement | undefined;
 
-  private buttons: Array<TemplateResult> = [];
+  private childButtons: Array<TemplateResult> = [];
+
+  // 드롭다운 버튼 내부 버튼
+  public buttons: Element[] = [];
 
   @property({ type: String })
   text = '';
 
   @property({ type: String })
-  group = '';
-
-  @property({ type: String })
   ui = UI_LIST.solid;
-
-  @property({ type: String })
-  type: TYPE_LIST = TYPE_LIST.text;
 
   @property({ type: String })
   size: SIZE_LIST = SIZE_LIST.medium;
 
-  @property({ type: String })
-  icon: ICON_LIST | undefined;
-
-  @property({ type: String })
-  link: string | undefined;
-
   @property({ type: Boolean })
   disabled = false;
+
+  @property({ type: String })
+  group = ''; // 버튼그룹 내부
 
   @property({ type: Boolean, reflect: true })
   _selected = false;
@@ -64,12 +48,17 @@ export class Dropdownbutton extends DewsFormComponent {
     super.connectedCallback();
 
     this.querySelectorAll('dropdown-childbutton').forEach(btn => {
-      this.buttons.push(html`${btn}`);
+      this.buttons.push(btn);
+      this.childButtons.push(html`${btn}`);
     });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+  }
+
+  render() {
+    return template.call(this);
   }
 
   private _clickHandler(e: Event) {
@@ -82,17 +71,29 @@ export class Dropdownbutton extends DewsFormComponent {
       } else {
         // 열기
         this._selected = true;
-        window.addEventListener('click', this.documentClick.bind(this, event));
+        window.addEventListener('click', this.documentClick.bind(this), true);
       }
     }
   }
 
-  private documentClick() {
-    this._selected = false;
-    window.removeEventListener('click', this.documentClick.bind(this));
+  private documentClick(e: Event) {
+    if (this !== e.target) {
+      this._selected = false;
+    }
+
+    window.removeEventListener('click', this.documentClick.bind(this), true);
   }
 
-  render() {
-    return template.call(this);
+  /**
+   *  ID를 이용하여 내부 버튼을 가져옵니다.
+   * @param id
+   */
+  public getById(id: string) {
+    for (let i = 0; this.buttons.length; i++) {
+      if (this.buttons[i].getAttribute('id') === id) {
+        return this.buttons[i];
+      }
+    }
+    return null;
   }
 }
