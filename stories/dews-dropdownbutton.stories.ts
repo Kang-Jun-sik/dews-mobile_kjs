@@ -10,7 +10,7 @@ export const DropdownButton = () => html` <div style="width: 360px">
     <dropdown-childbutton
       id="btn1"
       text="버튼1"
-      @click="${() => {
+      @clcik="${() => {
         console.log('click');
       }}"
     ></dropdown-childbutton>
@@ -30,7 +30,7 @@ export const DropdownButton = () => html` <div style="width: 360px">
       <dropdown-childbutton
         id="btn1"
         text="버튼1"
-        @click="${() => {
+        @clcik="${() => {
           console.log('click');
         }}"
       ></dropdown-childbutton>
