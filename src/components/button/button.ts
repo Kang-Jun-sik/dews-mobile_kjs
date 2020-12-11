@@ -18,7 +18,27 @@ export enum SIZE_LIST {
 
 export enum ICON_LIST {
   'default' = '',
-  'reset' = 'reset'
+  'ico-set' = 'ico-set',
+  'ico-search' = 'ico-search',
+  'ico-add' = 'ico-add',
+  'ico-delete' = 'ico-delete',
+  'ico-save' = 'ico-save',
+  'ico-qr' = 'ico-qr',
+  'ico-barcode' = 'ico-barcode',
+  'ico-scan' = 'ico-scan',
+  'ico-download' = 'ico-download',
+  'ico-upload' = 'ico-upload',
+  'ico-up' = 'ico-up',
+  'ico-down' = 'ico-down',
+  'ico-left' = 'ico-left',
+  'ico-right' = 'ico-right',
+  'ico-excel' = 'ico-excel',
+  'ico-edit' = 'ico-edit',
+  'ico-file' = 'ico-file',
+  'ico-reset' = 'ico-reset',
+  'ico-language' = 'ico-language',
+  'ico-information' = 'ico-information',
+  'ico-subtraction' = 'ico-subtraction'
 }
 
 export enum UI_LIST {
@@ -51,7 +71,7 @@ export class Button extends DewsFormComponent {
   disabled = false;
 
   @property({ type: Boolean, reflect: true })
-  group = false;
+  group = false; //버튼 그룹 내부
 
   connectedCallback() {
     super.connectedCallback();
@@ -59,10 +79,6 @@ export class Button extends DewsFormComponent {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-  }
-
-  private _clickHandler() {
-    // 클릭이벤트 핸들러
   }
 
   render() {
