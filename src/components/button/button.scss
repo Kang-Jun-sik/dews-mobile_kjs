@@ -1,12 +1,18 @@
-button {
-  border-radius: 4px;
-  border: solid 1px #d5d5d5;
-  background-color: #ffffff;
+@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
-  padding: 4px 10px;
-  font-size: 13px;
-  line-height: 1.54;
-  letter-spacing: normal;
-  text-align: center;
-  color: rgba(60, 60, 67, 0.8);
+//======================================
+// dews-button
+//======================================
+//--------------------------------------
+// 레이아웃 영역
+//--------------------------------------
+* {
+  @include reset();
+}
+@include dews-button();
+
+/*임의로 넣음*/
+.dews-button.tmp-icon .button-icon {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij4KICAgIDxnLz4KICAgIDxwYXRoIGZpbGw9InJnYmEoNjAsNjAsNjcsMC44KSIgZD0iTTk1NjUuMzg5IDcxMzMuNjgzdi0xMWEuNS41IDAgMCAxIDEgMHYxMWEuNS41IDAgMCAxLTEgMHptLTcuNjQ2LS4yYS41LjUgMCAwIDEgMC0uNzA4bDQuMS00LjFoLTkuOTQ5YS41LjUgMCAwIDEgMC0xaDEwbC00LjE0Ni00LjE0NmEuNS41IDAgMCAxIC43MDgtLjcwNmw0Ljk1MSA0Ljk0OGEuNS41IDAgMCAxIC4xNDUuMzg2LjUuNSAwIDAgMS0uMTQ3LjM3M2wtNC45NSA0Ljk1MWEuNDk0LjQ5NCAwIDAgMS0uMzUzLjE0Ni41LjUgMCAwIDEtLjM2LS4xNDF6IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOTU1MC4zOTEgLTcxMTkuMTgyKSIvPgo8L3N2Zz4K);
 }

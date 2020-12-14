@@ -5,36 +5,64 @@ import template from './button.html';
 import scss from './button.scss';
 
 export enum TYPE_LIST {
-  'default' = 'default',
   'text' = 'text',
-  'icon' = 'icon'
+  'icon' = 'icon',
+  'icon-text' = 'iconText'
 }
 
 export enum SIZE_LIST {
-  'default' = 'default',
   'small' = 'small',
+  'medium' = 'medium',
   'large' = 'large'
 }
 
 export enum ICON_LIST {
-  'reset' = 'reset'
+  'default' = '',
+  'ico-set' = 'ico-set',
+  'ico-search' = 'ico-search',
+  'ico-add' = 'ico-add',
+  'ico-delete' = 'ico-delete',
+  'ico-save' = 'ico-save',
+  'ico-qr' = 'ico-qr',
+  'ico-barcode' = 'ico-barcode',
+  'ico-scan' = 'ico-scan',
+  'ico-download' = 'ico-download',
+  'ico-upload' = 'ico-upload',
+  'ico-up' = 'ico-up',
+  'ico-down' = 'ico-down',
+  'ico-left' = 'ico-left',
+  'ico-right' = 'ico-right',
+  'ico-excel' = 'ico-excel',
+  'ico-edit' = 'ico-edit',
+  'ico-file' = 'ico-file',
+  'ico-reset' = 'ico-reset',
+  'ico-language' = 'ico-language',
+  'ico-information' = 'ico-information',
+  'ico-subtraction' = 'ico-subtraction'
 }
 
-// noinspection JSUnusedLocalSymbols
+export enum UI_LIST {
+  'solid' = 'solid',
+  'emphasize' = 'emphasize'
+}
+
 export class Button extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String })
-  title = 'title';
+  text = '';
 
   @property({ type: String })
-  type: TYPE_LIST = TYPE_LIST.default;
+  ui = UI_LIST.solid;
 
   @property({ type: String })
-  size: SIZE_LIST = SIZE_LIST.default;
+  type: TYPE_LIST = TYPE_LIST.text;
 
   @property({ type: String })
-  icon: ICON_LIST | undefined;
+  size: SIZE_LIST = SIZE_LIST.medium;
+
+  @property({ type: String })
+  icon: ICON_LIST = ICON_LIST.default;
 
   @property({ type: String })
   link: string | undefined;
@@ -42,18 +70,15 @@ export class Button extends DewsFormComponent {
   @property({ type: Boolean })
   disabled = false;
 
+  @property({ type: Boolean, reflect: true })
+  group = false; //버튼 그룹 내부
+
   connectedCallback() {
     super.connectedCallback();
-    // this.addEventListener('focus', this._focusChanging);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    // this.removeEventListener('focus', this._focusChanging);
-  }
-
-  private _clickHandler() {
-    // 클릭이벤트 핸들러
   }
 
   render() {

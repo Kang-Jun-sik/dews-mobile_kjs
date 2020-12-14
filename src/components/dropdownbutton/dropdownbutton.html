@@ -1,0 +1,9 @@
+<span class="dews-dropdown-button ${this.group ? 'group' : ''}">
+  <button class="dews-button dropdown ${this.ui} ${this.size} ${this.disabled ? 'disabled' : ''}" @click ="${this._clickHandler}">
+      <span class="button-icon"></span>
+      <span class="button-text">${this.text}</span>
+  </button>
+  <span class="button-list ${this._selected ? 'selected' : ''}" >
+    ${this.childButtons}
+  </span>
+</span>
