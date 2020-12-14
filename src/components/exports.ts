@@ -25,3 +25,4 @@ export { Timepicker } from './timepicker/timepicker.js';
 export { Messagebox } from './messagebox/dews-messagebox.js';
 export { Snackbar } from './snackbar/snackbar.js';
 export { Loading } from './loading/loading.js';
+export { Complex } from './Complex/Complex.js';
