@@ -35,3 +35,4 @@ export { Tooltip } from './tooltip/tooltip.js';
 export { Yearpicker } from './picker/yearpicker/yearpicker.js';
 export { Togglebutton } from './togglebutton/togglebutton.js';
 export { Progressbar } from './progressbar/progressbar.js';
+export { Cardlist } from './cardlist/cardlist.js';
