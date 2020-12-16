@@ -6,3 +6,78 @@
 //======================================
 
 // @include dews-complex-component();
+
+* {
+  @include reset();
+}
+.dews-complex {
+  position: relative;
+
+  & > label {
+    @include label-wrap();
+  }
+  .complex-line {
+    display: flex;
+    flex-flow: nowrap;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 12px;
+
+    .variable {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+    .autofix {
+      flex: 0 0 auto;
+    }
+    .fix {
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+    .item {
+      margin-right: 8px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    .components.variable {
+      min-width: 90px;
+    }
+
+  }
+
+
+}
+
+
+//임시 - 다 지울 예정
+.complex-line .components label:not(.checkbox-label) {
+  display: none;
+}
+
+.dropdown-list-wrap {
+  @include dropdown-list-wrap();
+}
+
+@include dews-code-picker();
+@include numeric-textbox-wrap();
+@include dews-date-picker();
+@include dews-button();
+
+.textbox-wrap {
+  label {
+    @include label-wrap();
+  }
+  input[type='text'] {
+    @include input-wrap();
+  }
+
+  textarea {
+    @include input-wrap();
+    resize: none;
+    height: 64px;
+  }
+}
+.dews-checkbox-wrap {
+  @include checkbox-wrap();
+}
