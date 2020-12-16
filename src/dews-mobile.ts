@@ -78,7 +78,6 @@ window.customElements.define('dews-checkbox-group', CheckboxGroup);
 window.customElements.define('dews-checkbox', Checkbox);
 window.customElements.define('dews-radiobutton', Radiobutton);
 window.customElements.define('dews-radiobutton-group', RadiobuttonGroup);
-window.customElements.define('dews-cardlist', Cardlist);
 window.customElements.define('dews-complex', Complex);
 window.customElements.define('dews-togglebutton', Togglebutton);
 
