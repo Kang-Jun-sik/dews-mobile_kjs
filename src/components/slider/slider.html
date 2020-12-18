@@ -1,0 +1,224 @@
+${this.sliderType === 'range'?html`
+<div class="dews-slider">
+  <div class="slider-wrap">
+    <div class="slider-track">
+      <div
+        class="slider-selection"
+        style="left: ${this._startBtnLocation + '%'}; width:${(this._endBtnLocation-this._startBtnLocation) + '%'};"
+      ></div>
+      <button
+        class="slider-handle start"
+        style="left: calc(${this._startBtnLocation + '%'} - 7px)"
+        @touchmove="${(e:TouchEvent)=>this._touchHandler(e, 'start')}"
+      >
+        <span class="title">slider handle</span>
+      </button>
+      <button
+        class="slider-handle end"
+        @touchmove="${(e:TouchEvent)=>this._touchHandler(e, 'end')}"
+        style="left: calc(${this._endBtnLocation + '%'} - 7px)"
+      >
+        <span class="title">slider handle</span>
+      </button>
+    </div>
+  </div>
+  <div class="slider-quantity">
+    <span class="quantity-min">${ this._startValue === undefined ? this.min : this._startValue }</span>
+    <span class="quantity-max">${ this._endValue === undefined ? this.max : this._endValue }</span>
+  </div>
+</div>
+` :html`
+<div class="dews-slider stepper">
+  <div class="slider-wrap">
+    <div class="slider-track">
+      <div class="slider-selection" style="width: ${this._tickBtnLocation + '%'}"></div>
+      <button
+        class="${this._tickButtonClassName}"
+        title="drag"
+        role="slider"
+        style="left: calc(${this._tickBtnLocation + '%'} - 7px)"
+        @touchmove="${(e:TouchEvent)=>this._touchHandler(e, 'tick')}"
+        @touchstart="${this._touchStartHandler}"
+        @touchend="${this._touchEndHandler}"
+      >
+        <span class="title">slider handle</span>
+      </button>
+      <div class="slider-tooltip" style="left: calc(${this._tickBtnLocation + '%'} - ${this._tooltipLocation + 'px'})">
+        <span>${ this._tickValue === undefined ? this.min : this._tickValue }</span>
+        <span class="tip"></span>
+      </div>
+    </div>
+  </div>
+  <button class="slider-stepper minus" @click="${this._minusBtnClick}"><span></span></button>
+  <button class="slider-stepper plus" @click="${this._plusBtnClick}"><span></span></button>
+
+  <div class="slider-quantity">
+    <span class="quantity-min">${ this.min }</span>
+    <span class="quantity-max">${ this.max }</span>
+  </div>
+</div>
+<!--<div class="dews-slider stepper">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="width: 0;"></div>-->
+<!--      &lt;!&ndash; button 위치 %로 계산해서 -7px(반원 사이즈) &ndash;&gt;-->
+<!--      <button class="slider-handle" title="drag" role="slider" style="left: calc(0% - 7px)">-->
+<!--        <span class="title">slider handle</span>-->
+<!--      </button>-->
+<!--      &lt;!&ndash; button 위치와 동일하나, tooltip의 width /2 한 만큼 빼줌 &ndash;&gt;-->
+<!--      <div class="slider-tooltip" style="left: calc(0% - 18px)">-->
+<!--        <span>10</span>-->
+<!--        <span class="tip"></span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <button class="slider-stepper minus"><span></span></button>-->
+<!--  <button class="slider-stepper plus"><span></span></button>-->
+<!--</div>-->
+<!--<div class="dews-slider stepper">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="width: 40%;"></div>-->
+<!--      &lt;!&ndash; button 위치 %로 계산해서 -7px(반원 사이즈) &ndash;&gt;-->
+<!--      <button class="slider-handle" title="drag" role="slider" style="left: calc(40% - 7px)">-->
+<!--        <span class="title">slider handle</span>-->
+<!--      </button>-->
+<!--      &lt;!&ndash; button 위치와 동일하나, tooltip의 width /2 한 만큼 빼줌 &ndash;&gt;-->
+<!--      <div class="slider-tooltip" style="left: calc(40% - 18px);">-->
+<!--        <span>400</span>-->
+<!--        <span class="tip"></span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <button class="slider-stepper minus"><span></span></button>-->
+<!--  <button class="slider-stepper plus"><span></span></button>-->
+
+<!--  <div class="slider-quantity">-->
+<!--    <span class="quantity-min">0</span>-->
+<!--    <span class="quantity-max">10</span>-->
+<!--  </div>-->
+<!--</div>-->
+`}
+
+<!--<p style="padding: 5px; background-color: bisque;" >범위 슬라이더 예시 2</p>-->
+
+<!--<div class="dews-slider">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="width: 100%;"></div>-->
+<!--      <button class="slider-handle start" style="left: calc(0% - 7px);"><span class="title">slider handle</span></button>-->
+<!--      <button class="slider-handle end" style="left: calc(100% - 7px);"><span class="title">slider handle</span></button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="slider-quantity">-->
+<!--    <span class="quantity-min">0</span>-->
+<!--    <span class="quantity-max">500,000</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<p style="padding: 5px; background-color: bisque;" >범위 슬라이더 예시 3</p>-->
+
+<!--<div class="dews-slider">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="width: 15%;"></div>-->
+<!--      <button class="slider-handle start" style="left: calc(0% - 7px);"><span class="title">slider handle</span></button>-->
+<!--      <button class="slider-handle end" style="left: calc(20% - 7px);"><span class="title">slider handle</span></button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="slider-quantity">-->
+<!--    <span class="quantity-min">0</span>-->
+<!--    <span class="quantity-max">200,000</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<p style="padding: 5px; background-color: bisque;" >범위 슬라이더 예시 4</p>-->
+
+<!--<div class="dews-slider">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="left: 10%; width:20%;"></div>-->
+<!--      <button class="slider-handle start" style="left: calc(10% - 7px);"><span class="title">slider handle</span></button>-->
+<!--      <button class="slider-handle end" style="left: calc(30% - 7px);"><span class="title">slider handle</span></button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="slider-quantity">-->
+<!--    <span class="quantity-min">100,000</span>-->
+<!--    <span class="quantity-max">300,000</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<p style="padding: 5px; background-color: bisque;" >스탭퍼 슬라이더 예시 1</p>-->
+
+<!--<p style="padding: 5px; background-color: bisque;" >스탭퍼 슬라이더 예시 2</p>-->
+
+<!--<div class="dews-slider stepper">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="width:100%;"></div>-->
+<!--      &lt;!&ndash; button 위치 %로 계산해서 -7px(반원 사이즈) &ndash;&gt;-->
+<!--      <button class="slider-handle" title="drag" role="slider" style="left: calc(100% - 7px)">-->
+<!--        <span class="title">slider handle</span>-->
+<!--      </button>-->
+<!--      &lt;!&ndash; button 위치와 동일하나, tooltip의 width /2 한 만큼 빼줌 &ndash;&gt;-->
+<!--      <div class="slider-tooltip" style="left: calc(100% - 18px)">-->
+<!--        <span>10</span>-->
+<!--        <span class="tip"></span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <button class="slider-stepper minus"><span></span></button>-->
+<!--  <button class="slider-stepper plus"><span></span></button>-->
+
+<!--  <div class="slider-quantity">-->
+<!--    <span class="quantity-min">0</span>-->
+<!--    <span class="quantity-max">10</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<p style="padding: 5px; background-color: bisque;" >스탭퍼 슬라이더 예시 3</p>-->
+
+<!--<div class="dews-slider stepper">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="width: 40%;"></div>-->
+<!--      &lt;!&ndash; button 위치 %로 계산해서 -7px(반원 사이즈) &ndash;&gt;-->
+<!--      <button class="slider-handle" title="drag" role="slider" style="left: calc(40% - 7px)">-->
+<!--        <span class="title">slider handle</span>-->
+<!--      </button>-->
+<!--      &lt;!&ndash; button 위치와 동일하나, tooltip의 width /2 한 만큼 빼줌 &ndash;&gt;-->
+<!--      <div class="slider-tooltip" style="left: calc(40% - 18px);">-->
+<!--        <span>400</span>-->
+<!--        <span class="tip"></span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <button class="slider-stepper minus"><span></span></button>-->
+<!--  <button class="slider-stepper plus"><span></span></button>-->
+
+<!--  <div class="slider-quantity">-->
+<!--    <span class="quantity-min">0</span>-->
+<!--    <span class="quantity-max">10</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<p style="padding: 5px; background-color: bisque;" >스탭퍼 슬라이더 예시 4</p>-->
+
+<!--<div class="dews-slider stepper">-->
+<!--  <div class="slider-wrap">-->
+<!--    <div class="slider-track">-->
+<!--      <div class="slider-selection" style="width: 0;"></div>-->
+<!--      &lt;!&ndash; button 위치 %로 계산해서 -7px(반원 사이즈) &ndash;&gt;-->
+<!--      <button class="slider-handle" title="drag" role="slider" style="left: calc(0% - 7px)">-->
+<!--        <span class="title">slider handle</span>-->
+<!--      </button>-->
+<!--      &lt;!&ndash; button 위치와 동일하나, tooltip의 width /2 한 만큼 빼줌 &ndash;&gt;-->
+<!--      <div class="slider-tooltip" style="left: calc(0% - 18px)">-->
+<!--        <span>10</span>-->
+<!--        <span class="tip"></span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <button class="slider-stepper minus"><span></span></button>-->
+<!--  <button class="slider-stepper plus"><span></span></button>-->
+<!--</div>-->
