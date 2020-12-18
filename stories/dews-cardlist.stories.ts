@@ -5,4 +5,10 @@ export default {
   title: 'CardList'
 };
 
-export const CardList = () => html`<dews-cardlist></dews-cardlist>`;
+export const CardList = () => html`
+  <div style="width: 360px;">
+    <dews-box title="box">
+      <dews-cardlist></dews-cardlist>
+    </dews-box>
+  </div>
+`;

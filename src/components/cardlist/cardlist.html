@@ -1,1 +1,377 @@
-<div>cardList</div>
+<h5 style="padding: 10px 0 5px">1. 카드헤더/1열/펴기/더보기</h5>
+<div class="dews-card-list">
+
+  <div class="card-list-option-control">
+    <div class="card-total">
+      <span>총 <strong>2</strong>건</span>
+    </div>
+    <div class="option-control">
+      <span class="sorting-wrap">
+          <!--
+              .sorting-order 정렬
+               : 내림차순 (디폴트)
+               : 오름차순 .ascending
+          -->
+          <span class="sorting-order"></span>
+          <span class="sorting-input">수주 현황수주 현황수주 현황수주 현황수주 현황수주 현황</span>
+          <span class="sorting-icon"></span>
+      </span>
+      <!--   정렬 layer-drawer   -->
+      <div class="layer-drawer" style="display: none;">
+        <div class="overlay"></div>
+        <div class="layer layer-bottom" style="height: 500px;">
+          <div class="layer-moving-button">
+            <span class="moving-button"></span>
+          </div>
+          <div class="layer-content">
+
+            <div class="sorting-list">
+              <div class="titlebar">
+                <div class="title">항목명</div>
+                <button class="confirm-button">적용</button>
+              </div>
+
+              <div class="control" >
+                <ul class="list">
+                  <li class="sorting ascending">
+                    <span class="text">DATA 01</span>
+                  </li>
+                  <li>
+                    <span class="text">데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 02</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 03</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 04</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 05</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 06</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 07</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 08</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 09</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 10</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 11</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 12</span>
+                  </li>
+                  <li>
+                    <span class="text">DATA 13</span>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <button class="column-set"><span>Column Set</span></button>
+
+      <!--   column-set layer-drawer   -->
+      <div class="layer-drawer" style="display: none;">
+        <div class="overlay"></div>
+        <div class="layer layer-bottom" style="height: 500px;">
+          <div class="layer-moving-button">
+            <span class="moving-button"></span>
+          </div>
+          <div class="layer-content">
+
+            <div class="column-set-list">
+              <div class="titlebar">
+                <div class="title">항목명</div>
+                <button class="confirm-button">적용</button>
+              </div>
+
+              <div class="control" >
+                <div class="column-list-wrap">
+                  <table class="column-list">
+                    <tr>
+                      <td>
+                        <div class="column">
+                          <input type="checkbox" checked="checked" disabled id="column01">
+                          <label for="column01"><span>DATA 01</span></label>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="column">
+                          <input type="checkbox" checked="checked" disabled id="column02">
+                          <label for="column02"><span>데이터 이름이 길 경우에는 최대 2줄처리 되며 그 이후에는 말줄임 처리가 됩니다.</span></label>
+                        </div>
+                      </td>
+
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="column">
+                          <input type="checkbox" checked="checked" disabled id="column03">
+                          <label for="column03"><span>DATA 01</span></label>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="column">
+                          <input type="checkbox" checked="checked" id="column04">
+                          <label for="column04"><span>DATA 01</span></label>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="column">
+                          <input type="checkbox" checked="checked" id="column05">
+                          <label for="column05"><span>DATA 01</span></label>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="column">
+                          <input type="checkbox" checked="checked" id="column06">
+                          <label for="column06"><span>DATA 01</span></label>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="column">
+                          <input type="checkbox" id="column07">
+                          <label for="column07"><span>DATA 01</span></label>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="column" id="column08">
+                          <input type="checkbox" id="column08">
+                          <label for="column08"><span>DATA 01</span></label>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 전체 선택 -->
+  <div class="card-list-all-select">
+    <span class="dews-checkbox-wrap reverse">
+        <span class="checkbox-control">
+            <input type="checkbox">
+            <span class="checkbox-shape"></span>
+        </span>
+        <label class="checkbox-label">전체선택</label>
+    </span>
+  </div>
+
+  <div class="card-list-wrap">
+    <!-- scroll 영역 card-list 높이값 주기  -->
+    <!-- 접기/펴기 기능 활성화 시 card-collapse 추가  -->
+    <div class="card-list card-collapse" style="height: 300px;">
+
+      <!-- card active 시, .active 추가-->
+      <div class="card active">
+        <div class="card-header">
+          <div class="card-control">
+            <ul>
+              <li>
+                <!-- checkbox component-->
+                <dews-checkbox bookmark></dews-checkbox>
+              </li>
+              <li><button class="editing"><span>편집</span></button></li>
+              <li>
+                <!-- checkbox component-->
+                <dews-checkbox></dews-checkbox>
+              </li>
+            </ul>
+          </div>
+          <div class="title">
+            <h3>더존비즈온</h3>
+            <span class="state progress">미정</span>
+            <!--
+                완료 complete
+                진행전 standby
+                진행 progress
+                실패 failure
+                종결 closing
+            -->
+          </div>
+          <div class="sub">
+            <span>RCP201701020000</span>
+            <span>모바일 수주</span>
+          </div>
+        </div>
+
+        <ul class="list-field">
+          <!-- 접기/펴기 일 때 보여주는 항목의 경우 .open 추가  -->
+          <li class="open">
+            <p class="name">품목</p>
+            <p class="item"><a href="#">생산-제품A 외 5건</a></p>
+          </li>
+          <li class="open">
+            <p class="name">수주 수량</p>
+            <p class="item number">3,770</p>
+          </li>
+          <!--  접혀있는 항목의 경우에 .collapse 추가, 접힌거 펼칠 경우 .open 추가  -->
+          <li class="collapse">
+            <p class="name">출하예정일</p>
+            <p class="item">2020-10-27</p>
+          </li>
+          <li class="collapse">
+            <p class="name">기타 사항</p>
+            <p class="item">수수료 내용 신협환,타행환,CD,전자금융,지로,CMS,자금조정,공인인증,금융VAN,제휴업무,PG업무 </p>
+          </li>
+          <li class="collapse">
+            <p class="name">영업담당자</p>
+            <p class="item">김더존</p>
+          </li>
+        </ul>
+        <!--  collapse 추가 .open 추가  -->
+        <button class="collapse-button"></button>
+      </div>
+
+      <div class="more-button-wrap">
+        <!-- loading 시 .loading 추가 -->
+        <button class="more-button">
+          <span class="text">더보기</span>
+          <span class="count">
+              (<span class="now">30</span>/<span class="total">100</span>)
+          </span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<h5 style="padding: 10px 0 5px">2. 카드헤더X/2열/펴기X/더보기X</h5>
+<div class="dews-card-list">
+
+  <div class="card-list-option-control">
+    <div class="card-total">
+      <span>총 <strong>2</strong>건</span>
+    </div>
+    <div class="option-control">
+      <span class="sorting-wrap">
+          <!--
+              .sorting-order 정렬
+               : 내림차순 (디폴트)
+               : 오름차순 .ascending
+          -->
+          <span class="sorting-order"></span>
+          <span class="sorting-input">수주 현황수주 현황수주 현황수주 현황수주 현황수주 현황</span>
+          <span class="sorting-icon"></span>
+      </span>
+      <button class="column-set"><span>Column Set</span></button>
+    </div>
+  </div>
+
+  <!-- 전체 선택 -->
+  <div class="card-list-all-select">
+    <span class="dews-checkbox-wrap reverse">
+        <span class="checkbox-control">
+            <input type="checkbox">
+            <span class="checkbox-shape"></span>
+        </span>
+        <label class="checkbox-label">전체선택</label>
+    </span>
+  </div>
+
+  <div class="card-list-wrap">
+    <!-- scroll 영역 card-list 높이값 주기  -->
+    <!-- 2열 일 때 , .col2 넣어주기 -->
+    <div class="card-list col2" style="height: 300px;">
+
+      <!-- card active 시, .active 추가-->
+      <div class="card">
+        <ul class="list-field">
+          <li>
+            <p class="name">품목</p>
+            <p class="item"><a href="#">생산-제품A 외 5건</a></p>
+          </li>
+          <li>
+            <p class="name">수주 수량</p>
+            <p class="item number">3,770</p>
+          </li>
+          <!--  접기 일 경우에 li에 .collapse 추가, 접힌거 펼칠 경우 .open 추가  -->
+          <li>
+            <p class="name">출하예정일</p>
+            <p class="item">2020-10-27</p>
+          </li>
+          <li>
+            <p class="name">기타 사항</p>
+            <p class="item">수수료 내용 신협환,타행환,CD,전자금융,지로,CMS,자금조정,공인인증,금융VAN,제휴업무,PG업무 </p>
+          </li>
+          <li>
+            <p class="name">영업담당자</p>
+            <p class="item">김더존</p>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<h5 style="padding: 10px 0 5px">3. 조회된 내용이 없을 경우</h5>
+<div class="dews-card-list">
+
+  <div class="card-list-option-control">
+    <div class="card-total">
+      <span>총 <strong>2</strong>건</span>
+    </div>
+    <div class="option-control">
+      <span class="sorting-wrap">
+          <!--
+              .sorting-order 정렬
+               : 내림차순 (디폴트)
+               : 오름차순 .ascending
+          -->
+          <span class="sorting-order"></span>
+          <span class="sorting-input">수주 현황수주 현황수주 현황수주 현황수주 현황수주 현황</span>
+          <span class="sorting-icon"></span>
+      </span>
+      <button class="column-set"><span>Column Set</span></button>
+    </div>
+  </div>
+
+  <!-- 전체 선택 -->
+  <div class="card-list-all-select">
+    <span class="dews-checkbox-wrap reverse">
+        <span class="checkbox-control">
+            <input type="checkbox">
+            <span class="checkbox-shape"></span>
+        </span>
+        <label class="checkbox-label">전체선택</label>
+    </span>
+  </div>
+
+  <div class="card-list-wrap">
+    <div class="card-nodata">
+      <span>조회된 내역이 없습니다.</span>
+    </div>
+  </div>
+</div>
