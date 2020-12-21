@@ -14,6 +14,7 @@
 import { AreaType, DewsBizPage } from './base/exports.js';
 import { ScrollAreaChangedEventArgs } from './ScrollAreaChangedEventArgs.js';
 import { singleton } from 'tsyringe';
+import { PageLoadedEventArgs } from './PageLoadedEventArgs.js';
 
 @singleton()
 export class ScrollManager {
@@ -41,11 +42,11 @@ export class ScrollManager {
     return Array.from(this.areaOffsetMap.keys()).sort((a, b) => (a > b ? -1 : 1));
   }
 
-  public async init(page: DewsBizPage) {
+  public async init(args: PageLoadedEventArgs) {
     this.$app = document.getElementsByTagName('dews-mobile-app')[0];
     this.$header = this.$app?.shadowRoot?.querySelector('main-header');
     this.currentArea = undefined;
-    this.areaList = page.getAreaList;
+    this.areaList = (args.openPage! as DewsBizPage).areaList;
     await this.getAreaOffset();
 
     // 기존 스크롤 이벤트 제거 후 등록
@@ -62,7 +63,6 @@ export class ScrollManager {
     if (this.areaList) {
       this.areaOffsetMap.clear();
       this.areaList.forEach((item, index) => {
-        // 절대좌표 : (window.pageYOffset + item.getBoundingClientRect().top) - this.headerHeight;
         let areaOffset = window.pageYOffset + item.getBoundingClientRect().top - this.headerHeight;
         areaOffset = areaOffset - (index !== 0 ? this.areaDividerHeight : 0);
         this.areaOffsetMap.set(areaOffset, item);
@@ -93,7 +93,6 @@ export class ScrollManager {
   }
 
   private showAnchor() {
-    // custom event 로 변경해야 할 지 고민
     // 현재는 header attribute 로 anchor 만 제어함
     this.$header?.setAttribute('anchor', '');
   }

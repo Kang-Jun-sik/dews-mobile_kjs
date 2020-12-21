@@ -25,16 +25,12 @@ export class Box extends DewsAreaComponent {
   async connectedCallback() {
     await super.connectedCallback();
     await this.updateComplete;
+    this.addEventListener('click', this._clickEvent);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('click', this._clickEvent);
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues) {
-    super.firstUpdated(_changedProperties);
-    this.addEventListener('click', this._clickEvent);
   }
 
   public _blurEvent() {

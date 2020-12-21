@@ -1,10 +1,11 @@
-import { CSSResult, html, internalProperty, LitElement, TemplateResult } from 'lit-element';
+import { CSSResult, html, internalProperty, TemplateResult } from 'lit-element';
+import { DewsComponent } from '../../components/base/exports.js';
 
 /**
  * 업무페이지 구성
  *  - DewsBizPage, DewsDialogPage
  */
-export class DewsPageBase extends LitElement {
+export class DewsPageBase extends DewsComponent {
   static cssTemplate: CSSResult;
   @internalProperty()
   protected htmlTemplate: TemplateResult | undefined;

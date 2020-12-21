@@ -1,6 +1,5 @@
 import { DewsPageBase } from './DewsPageBase.js';
 import { AreaType } from './AreaType.js';
-import { PropertyValues } from 'lit-element';
 /**
  * 업무페이지 구성
  *  - page load 할 때 필요한 것들을 정의 해야 함.
@@ -8,7 +7,7 @@ import { PropertyValues } from 'lit-element';
 
 export class DewsBizPage extends DewsPageBase {
   // Area Title List
-  get getAreaList(): Array<AreaType> {
+  get areaList(): Array<AreaType> {
     const titleList: Array<AreaType> = [];
 
     const items: NodeListOf<AreaType> = this.shadowRoot!.querySelectorAll(
@@ -25,6 +24,6 @@ export class DewsBizPage extends DewsPageBase {
   async connectedCallback(): Promise<void> {
     await super.connectedCallback();
     await this.updateComplete;
-    this.getAreaList[0].click();
+    this.areaList[0].click();
   }
 }
