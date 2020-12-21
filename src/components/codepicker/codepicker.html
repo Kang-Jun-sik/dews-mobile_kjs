@@ -10,6 +10,24 @@
   </span>
 </div>
 
+<!-- multi codepicker  -->
+<div class="code-picker code-picker-wrap" @click="${this._clickHandler}" style="height: 27px; background: yellow">
+  <label for="">${this.title}</label>
+  <span class="select-wrap">
+      <span class="select-shape">
+          <span class="select-input">
+            <!--  ${this.inputValue}-->
+            더존비즈온 ERP 사업부문 텍스트가 길 경우 이렇게 나오게 됩니다.
+          </span>
+          <!--   멀티일 경우 span.select-multi 추가  -->
+          <span class="select-multi">
+            외 <strong>1</strong>건
+          </span>
+      </span>
+      <span class="select-icon code-picker-icon"></span>
+  </span>
+</div>
+
 
 <drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" scrollEnabled>
   <div class="drawer-code-picker">
