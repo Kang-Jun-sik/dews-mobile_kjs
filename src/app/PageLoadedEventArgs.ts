@@ -1,7 +1,7 @@
-import { DewsBizPage } from './base/exports.js';
+import { DewsPageBase } from './base/exports.js';
 
 export class PageLoadedEventArgs extends CustomEvent<unknown> {
-  openPage: DewsBizPage | undefined;
+  openPage: DewsPageBase | undefined;
   pageId: string | undefined;
   tag: string | undefined;
 }

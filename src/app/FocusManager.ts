@@ -10,7 +10,6 @@ export class FocusManager {
   private focusElement: AreaType | undefined;
 
   changeFocus(arg: FocusChangingEventArgs) {
-    // console.log(arg);
     let beforeFocusElement = false;
     if (this.focusElement) {
       beforeFocusElement = true;
@@ -30,7 +29,7 @@ export class FocusManager {
       arg.focusTarget?.shadowRoot?.querySelector('.dews-box-wrap, .dews-tabs-wrap')?.classList.add('active');
 
       if (this.focusElement !== arg.focusTarget) {
-        // focusChanged event dispatch
+        // focusChanged 이벤트 발생
         const focusChangedEvent = new FocusChangedEventArgs('focusChanged', { bubbles: true, composed: true });
         focusChangedEvent.focusTarget = arg.focusTarget;
         arg.target?.dispatchEvent(focusChangedEvent);

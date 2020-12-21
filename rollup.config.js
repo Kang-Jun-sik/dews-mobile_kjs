@@ -23,12 +23,14 @@ export default argv => {
   });
 
   return merge(baseConfig, {
-    input: './index.html',
+    // 프로젝트 내부 테스트용 index.html
+    // input: './index.html',
+    input: '/.tmp/src/dews-mobile.js',
     preserveEntrySignatures: true,
     treeshake: true,
     output: {
       sourcemap: devMode,
-      entryFileNames: devMode ? 'js/dews-mobile.js' : 'js/dews-mobile.[hash].js',
+      entryFileNames: 'js/dews-mobile.js',
       chunkFileNames: devMode ? 'js/dews-mobile.chunk.[name].js' : 'js/dews-mobile.chunk.[hash].js',
       assetFileNames: devMode
         ? 'assets/dews-mobile.assets.[name][extname]'

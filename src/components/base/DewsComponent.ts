@@ -28,4 +28,28 @@ export abstract class DewsComponent extends LitElement {
     }
     this.isFirstUpdated = false;
   }
+
+  protected selectElementById(id: string): Element | null {
+    let element: Element | null = this.querySelector(`#${id}`) || this.shadowRoot!.querySelector(`#${id}`);
+
+    if (!element) {
+      for (let i = 0; i < this.shadowRoot!.children.length; i++) {
+        if (this.shadowRoot?.children[i] instanceof DewsComponent) {
+          element = (this.shadowRoot?.children[i] as DewsComponent).selectElementById(id);
+          if (element) break;
+        }
+      }
+    }
+
+    if (!element) {
+      for (let i = 0; i < this.children.length; i++) {
+        if (this.children[i] instanceof DewsComponent) {
+          element = (this.children[i] as DewsComponent).selectElementById(id);
+          if (element) break;
+        }
+      }
+    }
+
+    return element;
+  }
 }

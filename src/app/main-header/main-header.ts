@@ -1,6 +1,7 @@
 import { customElement, html, internalProperty, LitElement, property, TemplateResult } from 'lit-element';
 import { DewsBizPage, AreaType } from '../base/exports.js';
 import { classMap } from 'lit-html/directives/class-map';
+import { PageLoadedEventArgs } from '../PageLoadedEventArgs.js';
 
 import scss from './main-header.scss';
 import template from './main-header.html';
@@ -49,9 +50,9 @@ export class MainHeader extends LitElement {
     super.disconnectedCallback();
   }
 
-  public init(page: DewsBizPage) {
-    this.areaList = page.getAreaList || [];
-    this.title = page.title;
+  public init(args: PageLoadedEventArgs) {
+    this.areaList = (args.openPage as DewsBizPage).areaList || [];
+    this.title = args.openPage!.title;
   }
 
   public setFocusedArea(area: AreaType) {
@@ -79,9 +80,8 @@ export class MainHeader extends LitElement {
   }
 
   private historyBack() {
-    console.log(`click historyBack`);
-    // const historyBackEvent = new HistoryBackEventArgs('historyBack', { bubbles: true, composed: true });
-    // this.dispatchEvent(historyBackEvent);
+    const historyBackEvent = new CustomEvent('historyBack', { bubbles: true, composed: true });
+    this.dispatchEvent(historyBackEvent);
   }
 
   private clickMenu() {

@@ -1,15 +1,13 @@
 import { customElement, html, internalProperty, LitElement, query, TemplateResult } from 'lit-element';
 import { MainButtonSet } from './MainButtons.js';
 import { FocusChangedEventArgs } from '../FocusChangedEventArgs.js';
-import { DewsBizPage } from '../base/exports.js';
 
 import scss from './main-bottom.scss';
+import template from './main-bottom.html';
+import { PageLoadedEventArgs } from '../PageLoadedEventArgs.js';
 
 @customElement('main-bottom')
 export class MainBottom extends LitElement {
-  // 우측 버튼은 Area Active 에 따라 변경
-  // 좌측 더보기 버튼은 페이지 단위로 변경
-
   static styles = scss;
 
   @query('.sub-buttons')
@@ -21,58 +19,53 @@ export class MainBottom extends LitElement {
   @internalProperty()
   mainButtons: MainButtonSet | undefined;
 
-  // public init(page: DewsBizPage) {}
+  public init(args: PageLoadedEventArgs) {
+    // TODO: 더보기 버튼 페이지 정보로 셋팅
+    console.log(args);
+  }
 
   public setMainButtonSet(arg: FocusChangedEventArgs) {
     this.mainButtons = arg.focusTarget?.mainButtons;
+    this.mainButtons?.renderButtonSetEvent.on('renderButtonSet', async () => {
+      await this.requestUpdate();
+    });
   }
 
-  private clickMoreButton() {
+  // 더보기 버튼 클릭 핸들러
+  private clickMoreButton(e: MouseEvent) {
+    e.stopPropagation();
     this.subButtons?.classList.toggle('active');
+
+    // 다른 부분을 클릭했을 때 더보기 영역이 사라짐
+    if (this.subButtons?.classList.contains('active')) {
+      document.addEventListener('click', this.moreButtonHandler);
+    } else {
+      document.removeEventListener('click', this.moreButtonHandler);
+    }
+  }
+
+  private moreButtonHandler = (e: MouseEvent) => {
+    this.clickMoreButton(e);
+    e.stopPropagation();
+  };
+
+  // 메인버튼 렌더링
+  private mainButtonRender(type: string, title: string): TemplateResult {
+    let result = html``;
+    if (this.mainButtons) {
+      const mainButton = this.mainButtons?.getMainButtonByType(type);
+
+      result = html`
+        <li class="main-button ${mainButton.hidden ? 'hide' : ''}">
+          <button class="${type}" @click="${(e: MouseEvent) => mainButton.click(e)}">${title}</button>
+        </li>
+      `;
+    }
+
+    return result;
   }
 
   render() {
-    const mainButtonTag = (type: string, title: string): TemplateResult => {
-      let result = html``;
-      if (this.mainButtons) {
-        const mainButton = this.mainButtons?.getMainButtonByType(type);
-
-        result = mainButton.hidden
-          ? html``
-          : html`
-              <li class="main-button">
-                <button class=${type} ?disabled=${mainButton.disabled} @click="${() => mainButton.click()}">
-                  ${title}
-                </button>
-              </li>
-            `;
-      }
-
-      return result;
-    };
-
-    return html`
-      <div class="bottom">
-        <div class="button-tab-bar">
-          <ul class="tab-bar">
-            ${mainButtonTag('save', '저장')} ${mainButtonTag('delete', '삭제')} ${mainButtonTag('search', '검색')}
-            ${mainButtonTag('add', '추가')}
-
-            <li class="main-button">
-              <button class="more" @click="${this.clickMoreButton}">더보기</button>
-
-              <div class="sub-buttons">
-                <ul>
-                  <!-- 임시 내용 -->
-                  <li class="sub-button"><button class="info">메뉴정보</button></li>
-                  <li class="sub-button"><button class="share">공유하기</button></li>
-                  <li class="sub-button"><button class="print">인쇄하기</button></li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    `;
+    return template.call(this);
   }
 }

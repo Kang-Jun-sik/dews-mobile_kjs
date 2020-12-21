@@ -1,49 +1,75 @@
 import { injectable } from 'tsyringe';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
 export class MainButton {
-  private _disabled = false;
+  public renderButtonEvent: EventEmitter;
   private _hidden = true;
-  private _onclick: Function | undefined;
+  protected _on: { [name: string]: (e: Event, ...args: unknown[]) => void } = {};
+
+  constructor() {
+    this.renderButtonEvent = new EventEmitter();
+  }
 
   public get hidden(): boolean {
     return this._hidden;
   }
 
-  public set onclick(handler: (e?: Event) => {}) {
-    this._onclick = handler;
+  /**
+   * 버튼에 이벤트를 바인딩합니다.
+   * @param name 이벤트 명
+   * @param handler 이벤트 핸들러
+   */
+  public on(name: string, handler: (e: Event, ...args: unknown[]) => void): void {
+    this._on[name] = handler;
   }
 
-  click(): void {
-    if (this.onclick) {
-      this.onclick();
-    } else {
-      console.log(this);
+  public click(e: MouseEvent): void {
+    if (this._on['click']) {
+      this._on['click'](e);
     }
   }
 
-  show() {
+  public show(): void {
     this._hidden = false;
+    this.emitRenderButtonEvent();
   }
 
-  hide() {
+  public hide(): void {
     this._hidden = true;
+    this.emitRenderButtonEvent();
   }
 
-  public disable(state: boolean) {
-    this._disabled = state;
-  }
-
-  get disabled(): boolean {
-    return this._disabled;
+  private emitRenderButtonEvent() {
+    this.renderButtonEvent.emit('renderButton', {} as EventArgs);
   }
 }
 
 @injectable()
 export class MainButtonSet {
-  public save = new MainButton();
-  public delete = new MainButton();
-  public search = new MainButton();
-  public add = new MainButton();
+  public renderButtonSetEvent: EventEmitter;
+  public save: MainButton;
+  public delete: MainButton;
+  public search: MainButton;
+  public add: MainButton;
+
+  constructor() {
+    this.renderButtonSetEvent = new EventEmitter();
+    this.save = new MainButton();
+    this.delete = new MainButton();
+    this.search = new MainButton();
+    this.add = new MainButton();
+
+    this.registerButtonRenderingEvent(this.save);
+    this.registerButtonRenderingEvent(this.delete);
+    this.registerButtonRenderingEvent(this.search);
+    this.registerButtonRenderingEvent(this.add);
+  }
+
+  private registerButtonRenderingEvent(button: MainButton) {
+    button.renderButtonEvent.on('renderButton', () => {
+      this.renderButtonSetEvent.emit('renderButtonSet', {} as EventArgs);
+    });
+  }
 
   public getMainButtonByType(type: string): MainButton {
     let result: MainButton;
