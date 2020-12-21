@@ -1,0 +1,23 @@
+@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+
+//======================================
+// dews-messagebox
+//======================================
+//--------------------------------------
+// 레이아웃 영역
+//--------------------------------------
+* {
+  @include reset();
+}
+.open-layer {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  left: 0;
+  right: 0;
+}
+
+@include dews-msgbox();
