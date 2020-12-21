@@ -1,0 +1,9 @@
+import { html } from 'lit-element';
+export default function () {
+    return html `<div class="dews-checkbox-group-wrap">
+  <span class="checkbox-group-label">${this.title}</span>
+    ${this._checkBox}
+</div>
+`;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2hlY2tib3gtZ3JvdXAuaHRtbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImNoZWNrYm94LWdyb3VwLmh0bWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLElBQUksRUFBRSxNQUFNLGFBQWEsQ0FBQztBQUNuQyxNQUFNLENBQUMsT0FBTztJQUF3QixPQUFPLElBQUksQ0FBQTt1Q0FDVixJQUFJLENBQUMsS0FBSztNQUMzQyxJQUFJLENBQUMsU0FBUzs7Q0FFbkIsQ0FBQztBQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBodG1sIH0gZnJvbSAnbGl0LWVsZW1lbnQnO1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gKHRoaXM6IGFueSkgeyByZXR1cm4gaHRtbGA8ZGl2IGNsYXNzPVwiZGV3cy1jaGVja2JveC1ncm91cC13cmFwXCI+XG4gIDxzcGFuIGNsYXNzPVwiY2hlY2tib3gtZ3JvdXAtbGFiZWxcIj4ke3RoaXMudGl0bGV9PC9zcGFuPlxuICAgICR7dGhpcy5fY2hlY2tCb3h9XG48L2Rpdj5cbmA7IH0iXX0=

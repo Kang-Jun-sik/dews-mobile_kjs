@@ -280,8 +280,12 @@ export class Timepicker extends DewsFormComponent {
       const $el = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.spinner-minute-wrap .moving-list')!;
       if ($el.children.length !== 60) {
         let min = Number(this.min?.slice(0, 2));
+        let valueMax = Number(value.slice(3, 5));
         if (Number(this.min?.slice(0, 2)) > 12) {
-          min = min - 12;
+          min -= 12;
+        }
+        if (this._setMeridiem === 'PM') {
+          valueMax += 12;
         }
 
         if (min === Number(value.slice(3, 5)) && Number(this.min?.slice(2, 4)) > Number(value.slice(6, 8))) {
@@ -290,20 +294,26 @@ export class Timepicker extends DewsFormComponent {
            * */
           this._minuteSelect(0);
           this._setMinute = Number(this.min?.slice(2, 4));
-        } else if (Number(this.max?.slice(2, 4)) < Number(value.slice(6, 8))) {
+        } else if (
+          Number(this.max?.slice(0, 2)) < valueMax &&
+          Number(this.max?.slice(2, 4)) < Number(value.slice(6, 8))
+        ) {
           /*
            * 정상적인 범위 초과의 입력
            * */
           this._minuteSelect($el.children.length - 1);
-          this._setMinute = Number(this.max?.slice(2, 4));
+          this._setMinute = Number(($el.children.item($el.children.length - 1) as HTMLElement).dataset.value);
         } else {
           /*
            * 정상적인 범위의 입력
            * */
           for (let i = 0; i < $el.children.length; i++) {
-            if (Number(($el.children.item(i) as HTMLElement).dataset.value) === Number(value.slice(6, 8))) {
+            if (
+              Number(($el.children.item(i) as HTMLElement).dataset.value) ===
+              Math.ceil(Number(value.slice(6, 8)) / this.step!) * this.step!
+            ) {
+              this._setMinute = Number(Math.ceil(Math.ceil(Number(value.slice(6, 8))) / this.step!) * this.step!);
               this._minuteSelect(i);
-              this._setMinute = Number(value.slice(6, 8));
             }
           }
         }

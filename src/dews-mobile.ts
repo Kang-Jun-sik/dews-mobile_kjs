@@ -39,6 +39,7 @@ import {
   Tabs,
   Tab,
   Datepicker,
+  Periodpicker,
   Timepicker,
   Messagebox,
   Dropdownbutton,
@@ -50,6 +51,7 @@ import {
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
 window.customElements.define('dews-datepicker', Datepicker);
+window.customElements.define('dews-periodpicker', Periodpicker);
 window.customElements.define('dews-timepicker', Timepicker);
 
 window.customElements.define('dews-masktextbox', Masktextbox);

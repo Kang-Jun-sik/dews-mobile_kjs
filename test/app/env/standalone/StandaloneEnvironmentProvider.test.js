@@ -1,0 +1,17 @@
+import { expect } from '@open-wc/testing';
+import { container } from '@dews/dews-mobile-core';
+import { DefaultGlobalEnvironmentVariables } from '../../../../src/app/env/GlobalEnvironmentVariables.js';
+import { StandaloneEnvironmentsProvider } from '../../../../src/app/env/standalone/StandaloneEnvironmentsProvider.js';
+export const StandardEnvironmentsProviderTest = () => {
+    describe('StandardEnvironmentsProvider', () => {
+        it('DI 컨테이너를 통한 기본 인스턴스 획득 및 값 획득 테스트', async () => {
+            // arrange
+            const provider = container.resolve(StandaloneEnvironmentsProvider);
+            // act
+            await provider.configure();
+            // assert
+            expect(provider.env.global).to.deep.eq(DefaultGlobalEnvironmentVariables);
+        });
+    });
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3RhbmRhbG9uZUVudmlyb25tZW50UHJvdmlkZXIudGVzdC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlN0YW5kYWxvbmVFbnZpcm9ubWVudFByb3ZpZGVyLnRlc3QudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLE1BQU0sRUFBRSxNQUFNLGtCQUFrQixDQUFDO0FBQzFDLE9BQU8sRUFBRSxTQUFTLEVBQUUsTUFBTSx3QkFBd0IsQ0FBQztBQUNuRCxPQUFPLEVBQUUsaUNBQWlDLEVBQUUsTUFBTSx1REFBdUQsQ0FBQztBQUMxRyxPQUFPLEVBQUUsOEJBQThCLEVBQUUsTUFBTSxzRUFBc0UsQ0FBQztBQUV0SCxNQUFNLENBQUMsTUFBTSxnQ0FBZ0MsR0FBRyxHQUFHLEVBQUU7SUFDbkQsUUFBUSxDQUFDLDhCQUE4QixFQUFFLEdBQUcsRUFBRTtRQUM1QyxFQUFFLENBQUMsbUNBQW1DLEVBQUUsS0FBSyxJQUFJLEVBQUU7WUFDakQsVUFBVTtZQUNWLE1BQU0sUUFBUSxHQUFHLFNBQVMsQ0FBQyxPQUFPLENBQWlDLDhCQUE4QixDQUFDLENBQUM7WUFFbkcsTUFBTTtZQUNOLE1BQU0sUUFBUSxDQUFDLFNBQVMsRUFBRSxDQUFDO1lBRTNCLFNBQVM7WUFDVCxNQUFNLENBQUMsUUFBUSxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQyxFQUFFLENBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQyxpQ0FBaUMsQ0FBQyxDQUFDO1FBQzVFLENBQUMsQ0FBQyxDQUFDO0lBQ0wsQ0FBQyxDQUFDLENBQUM7QUFDTCxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBleHBlY3QgfSBmcm9tICdAb3Blbi13Yy90ZXN0aW5nJztcbmltcG9ydCB7IGNvbnRhaW5lciB9IGZyb20gJ0BkZXdzL2Rld3MtbW9iaWxlLWNvcmUnO1xuaW1wb3J0IHsgRGVmYXVsdEdsb2JhbEVudmlyb25tZW50VmFyaWFibGVzIH0gZnJvbSAnLi4vLi4vLi4vLi4vc3JjL2FwcC9lbnYvR2xvYmFsRW52aXJvbm1lbnRWYXJpYWJsZXMuanMnO1xuaW1wb3J0IHsgU3RhbmRhbG9uZUVudmlyb25tZW50c1Byb3ZpZGVyIH0gZnJvbSAnLi4vLi4vLi4vLi4vc3JjL2FwcC9lbnYvc3RhbmRhbG9uZS9TdGFuZGFsb25lRW52aXJvbm1lbnRzUHJvdmlkZXIuanMnO1xuXG5leHBvcnQgY29uc3QgU3RhbmRhcmRFbnZpcm9ubWVudHNQcm92aWRlclRlc3QgPSAoKSA9PiB7XG4gIGRlc2NyaWJlKCdTdGFuZGFyZEVudmlyb25tZW50c1Byb3ZpZGVyJywgKCkgPT4ge1xuICAgIGl0KCdESSDsu6jthYzsnbTrhIjrpbwg7Ya17ZWcIOq4sOuzuCDsnbjsiqTthLTsiqQg7ZqN65OdIOuwjyDqsJIg7ZqN65OdIO2FjOyKpO2KuCcsIGFzeW5jICgpID0+IHtcbiAgICAgIC8vIGFycmFuZ2VcbiAgICAgIGNvbnN0IHByb3ZpZGVyID0gY29udGFpbmVyLnJlc29sdmU8U3RhbmRhbG9uZUVudmlyb25tZW50c1Byb3ZpZGVyPihTdGFuZGFsb25lRW52aXJvbm1lbnRzUHJvdmlkZXIpO1xuXG4gICAgICAvLyBhY3RcbiAgICAgIGF3YWl0IHByb3ZpZGVyLmNvbmZpZ3VyZSgpO1xuXG4gICAgICAvLyBhc3NlcnRcbiAgICAgIGV4cGVjdChwcm92aWRlci5lbnYuZ2xvYmFsKS50by5kZWVwLmVxKERlZmF1bHRHbG9iYWxFbnZpcm9ubWVudFZhcmlhYmxlcyk7XG4gICAgfSk7XG4gIH0pO1xufTtcbiJdfQ==

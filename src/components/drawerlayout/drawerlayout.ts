@@ -48,6 +48,8 @@ export class Drawerlayout extends DewsFormComponent {
     if (this._moveState) {
       this._height = `${this._defaultHeight! + (this._moveStart! - e.screenY)}px`;
     }
+
+    window.pageYOffset;
   }
 
   private _mouseDown(e: MouseEvent) {
