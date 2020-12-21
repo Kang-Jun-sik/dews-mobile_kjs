@@ -1,0 +1,9 @@
+import { html } from 'lit-element';
+export default function () {
+    return html `<div class="dews-radio-group-wrap" @click="${this._clickHandler}">
+  <span class="radio-group-label">${this.title}</span>
+  ${this._radioButton}
+</div>
+`;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmFkaW9idXR0b24tZ3JvdXAuaHRtbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInJhZGlvYnV0dG9uLWdyb3VwLmh0bWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLElBQUksRUFBRSxNQUFNLGFBQWEsQ0FBQztBQUNuQyxNQUFNLENBQUMsT0FBTztJQUF3QixPQUFPLElBQUksQ0FBQSw4Q0FBOEMsSUFBSSxDQUFDLGFBQWE7b0NBQzdFLElBQUksQ0FBQyxLQUFLO0lBQzFDLElBQUksQ0FBQyxZQUFZOztDQUVwQixDQUFDO0FBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGh0bWwgfSBmcm9tICdsaXQtZWxlbWVudCc7XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiAodGhpczogYW55KSB7IHJldHVybiBodG1sYDxkaXYgY2xhc3M9XCJkZXdzLXJhZGlvLWdyb3VwLXdyYXBcIiBAY2xpY2s9XCIke3RoaXMuX2NsaWNrSGFuZGxlcn1cIj5cbiAgPHNwYW4gY2xhc3M9XCJyYWRpby1ncm91cC1sYWJlbFwiPiR7dGhpcy50aXRsZX08L3NwYW4+XG4gICR7dGhpcy5fcmFkaW9CdXR0b259XG48L2Rpdj5cbmA7IH0iXX0=
