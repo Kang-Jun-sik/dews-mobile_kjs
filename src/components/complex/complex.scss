@@ -29,6 +29,9 @@
     }
     .autofix {
       flex: 0 0 auto;
+      span {
+        font-size: 15px;
+      }
     }
     .fix {
       flex-grow: 0;
