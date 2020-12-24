@@ -25,7 +25,7 @@ export const DropdownButton = () => html` <div style="width: 360px">
 
   <p style="height: 20px;"></p>
   <h2 style="font-size:15px;">ButtonGroup</h2>
-  <dews-button-gruop>
+  <dews-button-group>
     <dews-dropdownbutton size="small" text="드롭다운버튼">
       <dropdown-childbutton
         id="btn1"
@@ -56,11 +56,11 @@ export const DropdownButton = () => html` <div style="width: 360px">
       ></dropdown-childbutton>
       <dropdown-childbutton id="btn2" text="비활성화버튼" disabled="true"></dropdown-childbutton>
     </dews-dropdownbutton>
-  </dews-button-gruop>
+  </dews-button-group>
 
   <p style="height: 20px;"></p>
   <h2 style="font-size:15px;">ButtonGroup - emphasize</h2>
-  <dews-button-gruop>
+  <dews-button-group>
     <dews-dropdownbutton ui="emphasize" size="small" text="드롭다운버튼">
       <dropdown-childbutton
         id="btn1"
@@ -91,5 +91,5 @@ export const DropdownButton = () => html` <div style="width: 360px">
       ></dropdown-childbutton>
       <dropdown-childbutton id="btn2" text="비활성화버튼" disabled="true"></dropdown-childbutton>
     </dews-dropdownbutton>
-  </dews-button-gruop>
+  </dews-button-group>
 </div>`;
