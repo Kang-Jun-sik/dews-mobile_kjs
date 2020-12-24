@@ -26,3 +26,5 @@ export { Messagebox } from './messagebox/dews-messagebox.js';
 export { Snackbar } from './snackbar/snackbar.js';
 export { Loading } from './loading/loading.js';
 export { Complex } from './Complex/Complex.js';
+export { Slider } from './slider/slider.js';
+export { Periodpicker } from './periodpicker/periodpicker.js';

@@ -39,17 +39,20 @@ import {
   Tabs,
   Tab,
   Datepicker,
+  Periodpicker,
   Timepicker,
   Messagebox,
   Dropdownbutton,
   Childbutton,
   Snackbar,
   Loading,
-  Complex
+  Complex,
+  Slider
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
 window.customElements.define('dews-datepicker', Datepicker);
+window.customElements.define('dews-periodpicker', Periodpicker);
 window.customElements.define('dews-timepicker', Timepicker);
 
 window.customElements.define('dews-masktextbox', Masktextbox);
@@ -68,6 +71,7 @@ window.customElements.define('dews-complex', Complex);
 window.customElements.define('dews-messagebox', Messagebox);
 window.customElements.define('dews-snackbar', Snackbar);
 window.customElements.define('dews-loading', Loading);
+window.customElements.define('dews-slider', Slider);
 
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);

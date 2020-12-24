@@ -1,0 +1,13 @@
+import { html } from 'lit-element';
+export default function () {
+    return html `<div class="code-picker">
+
+</div>
+
+
+<drawer-layout class="drawer-layout" >
+
+</drawer-layout>
+`;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29kZXBpY2tlci5odG1sLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiY29kZXBpY2tlci5odG1sLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxJQUFJLEVBQUUsTUFBTSxhQUFhLENBQUM7QUFDbkMsTUFBTSxDQUFDLE9BQU87SUFBd0IsT0FBTyxJQUFJLENBQUE7Ozs7Ozs7O0NBUWhELENBQUM7QUFBQyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaHRtbCB9IGZyb20gJ2xpdC1lbGVtZW50JztcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uICh0aGlzOiBhbnkpIHsgcmV0dXJuIGh0bWxgPGRpdiBjbGFzcz1cImNvZGUtcGlja2VyXCI+XG5cbjwvZGl2PlxuXG5cbjxkcmF3ZXItbGF5b3V0IGNsYXNzPVwiZHJhd2VyLWxheW91dFwiID5cblxuPC9kcmF3ZXItbGF5b3V0PlxuYDsgfSJdfQ==
