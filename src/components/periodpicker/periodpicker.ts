@@ -105,6 +105,22 @@ export class Periodpicker extends DewsFormComponent {
     }
   }
 
+  private _confirmClickHandler() {
+    this._close();
+    this.inputValue =
+      `${this._startYear === undefined ? '____' : this._startYear}` +
+      '-' +
+      `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
+      '-' +
+      `${this._startDay === undefined ? '__' : this._startDay < 10 ? '0' + this._startDay : this._startDay}` +
+      ' ~ ' +
+      `${this._endYear === undefined ? '____' : this._endYear}` +
+      '-' +
+      `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
+      '-' +
+      `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
+  }
+
   private _inputHandler(e: InputEvent) {
     let cursor = (e.target! as HTMLInputElement).selectionStart!;
     let value = (e.target as HTMLInputElement).value;
@@ -190,9 +206,9 @@ export class Periodpicker extends DewsFormComponent {
     if (cursor === 20 && e.data !== null) {
       if (
         Number((e.target as HTMLInputElement).value.slice(0, 4)) ===
-        Number((e.target as HTMLInputElement).value.slice(13, 17)) &&
+          Number((e.target as HTMLInputElement).value.slice(13, 17)) &&
         Number((e.target as HTMLInputElement).value.slice(5, 7)) >
-        Number((e.target as HTMLInputElement).value.slice(18, 20))
+          Number((e.target as HTMLInputElement).value.slice(18, 20))
       ) {
         (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ' + value.slice(0, 10);
         change();
@@ -202,11 +218,11 @@ export class Periodpicker extends DewsFormComponent {
     if (cursor === 23 && e.data !== null) {
       if (
         Number((e.target as HTMLInputElement).value.slice(0, 4)) ===
-        Number((e.target as HTMLInputElement).value.slice(13, 17)) &&
+          Number((e.target as HTMLInputElement).value.slice(13, 17)) &&
         Number((e.target as HTMLInputElement).value.slice(5, 7)) ===
-        Number((e.target as HTMLInputElement).value.slice(18, 20)) &&
+          Number((e.target as HTMLInputElement).value.slice(18, 20)) &&
         Number((e.target as HTMLInputElement).value.slice(8, 10)) >
-        Number((e.target as HTMLInputElement).value.slice(21, 23))
+          Number((e.target as HTMLInputElement).value.slice(21, 23))
       ) {
         (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ' + value.slice(0, 10);
         change();
@@ -521,16 +537,16 @@ export class Periodpicker extends DewsFormComponent {
 
     console.log(
       this._startYear +
-      '-' +
-      this._startMonth +
-      '-' +
-      this._startDay +
-      ' ~ ' +
-      this._endYear +
-      '-' +
-      this._endMonth +
-      '-' +
-      this._endDay
+        '-' +
+        this._startMonth +
+        '-' +
+        this._startDay +
+        ' ~ ' +
+        this._endYear +
+        '-' +
+        this._endMonth +
+        '-' +
+        this._endDay
     );
   }
 
@@ -685,9 +701,9 @@ export class Periodpicker extends DewsFormComponent {
       window.scrollTo(
         0,
         window.pageYOffset +
-        this.parentElement?.getBoundingClientRect()?.top! -
-        this.shadowRoot!.querySelector('.period-picker-wrap')?.clientHeight! -
-        25
+          this.parentElement?.getBoundingClientRect()?.top! -
+          this.shadowRoot!.querySelector('.period-picker-wrap')?.clientHeight! -
+          25
       );
       this.height = `${this.shadowRoot!.querySelector('.period-picker-wrap')!.clientHeight + 120}px`;
       $el!.height = this.height;

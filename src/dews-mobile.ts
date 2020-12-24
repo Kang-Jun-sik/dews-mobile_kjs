@@ -46,8 +46,9 @@ import {
   Childbutton,
   Snackbar,
   Loading,
-  Complex,
-  Slider
+  Slider,
+  Infobox,
+  Complex
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -79,6 +80,7 @@ window.customElements.define('dews-box', Box);
 window.customElements.define('dews-tabs', Tabs);
 window.customElements.define('dews-tab', Tab);
 
+window.customElements.define('dews-infobox-container', Infobox);
 window.customElements.define('dews-search-container', SearchContainer);
 window.customElements.define('dews-form-container', FormContainer);
 window.customElements.define('dews-list-container', ListContainer);
