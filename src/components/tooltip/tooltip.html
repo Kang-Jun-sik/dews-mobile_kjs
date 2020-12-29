@@ -1,0 +1,17 @@
+<div
+  class="${this._className}"
+  style="visibility: ${this._visibility}; left: ${this._tooltipLeft}; top:${this._tooltipTop}; ${this._style}"
+>
+  <div class="tooltip-arrow"></div>
+  <div class="tooltip-box">
+    ${this._title !== undefined?html`
+    <div class="tooltip-text-box">
+      <span class="tooltip-title"> ${this._title} </span>
+    </div>
+    `:''}
+    <div class="tooltip-text-box">
+      <span class="tooltip-text">${this._text}</span>
+    </div>
+    <button type="button" class="tooltip-close-button" @click="${this._closeTooltip}">닫기</button>
+  </div>
+</div>
