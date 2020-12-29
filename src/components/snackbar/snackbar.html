@@ -1,18 +1,3 @@
-<!--
-   snackbar state class
-   승인 : success (default)
-   경고 : warning
-   에러 : error
-   정보 : info
-   로딩 : loading
-
-  1. 시간설정 기본 2초로 되어있음.
-  2. 시간 설정 변경 할 경우,
-     .dews-snackbar의 animation-delay 스타일 변경
-     ex. 5초로 변경하고 싶다.
-     animation-delay: 0s, 5.3s;
-  아이콘 비노출 시 , .snackbar-img 삭제 또는 display: none;
- -->
 <div class="${this._className}">
   <div class="snackbar-img" style="display: ${this._showIcon ? 'block' : 'none'};"></div>
   <div class="snackbar-text">
