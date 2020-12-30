@@ -1,0 +1,12 @@
+<div class="dews-toggle ${this.text !== undefined ? 'phrase' : ''}">
+  <div class="toggle-wrap">
+    <span class="toggle-label" style="display: ${this.toggleTitle !== undefined ? 'block' : 'none'}">${this.toggleTitle}</span>
+    <span class="toggle-control">
+        <span class="toggle-text" style="display: ${this.text !== undefined ? 'block' : 'none'}">${this.text}</span>
+        <label for="toggleButton">
+            <input type="checkbox" @click="${this._clickHandler}" id="toggleButton" ?disabled="${this.disabled}" ?checked="${this.on}">
+            <span class="toggle-shape"></span>
+        </label>
+    </span>
+  </div>
+</div>

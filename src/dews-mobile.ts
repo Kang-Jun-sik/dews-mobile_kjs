@@ -50,7 +50,8 @@ import {
   Infobox,
   Complex,
   Monthpicker,
-  Tooltip
+  Tooltip,
+  Togglebutton
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -71,6 +72,7 @@ window.customElements.define('dews-checkbox', Checkbox);
 window.customElements.define('dews-radiobutton', Radiobutton);
 window.customElements.define('dews-radiobutton-group', RadiobuttonGroup);
 window.customElements.define('dews-complex', Complex);
+window.customElements.define('dews-togglebutton', Togglebutton);
 
 window.customElements.define('dews-messagebox', Messagebox);
 window.customElements.define('dews-snackbar', Snackbar);
