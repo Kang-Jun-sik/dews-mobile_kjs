@@ -31,3 +31,4 @@ export { Periodpicker } from './periodpicker/periodpicker.js';
 export { Infobox } from './infobox/infobox.js';
 export { Monthpicker } from './monthpicker/monthpicker.js';
 export { Tooltip } from './tooltip/tooltip.js';
+export { Togglebutton } from './togglebutton/togglebutton.js';
