@@ -49,7 +49,6 @@ import {
   Slider,
   Infobox,
   Complex,
-  Monthpicker,
   Tooltip,
   Togglebutton,
   Yearpicker,
