@@ -65,7 +65,7 @@ export class PageHistoryManager {
       this.contents?.removeChild(removeChild!);
       this.showLastPage();
     } else {
-      // App 으로 돌아가기 필요
+      // 뒤로 갈 페이지가 없을 경우 App 으로 돌아가기 필요
     }
   }
 
@@ -73,8 +73,10 @@ export class PageHistoryManager {
   private hideOtherPages(pageModule: PageModule) {
     this.history.filter(page => {
       if (page !== pageModule) {
-        const removeChild = this.contents?.querySelector(`${page?.tag}`);
-        this.contents?.removeChild(removeChild!);
+        const hideTarget = `erp10-${page.pageId.toLowerCase()}`;
+        this.contents?.querySelector(`#${hideTarget}`)?.setAttribute('class', 'page-hide');
+        // const removeChild = this.contents?.querySelector(`${page?.tag}`);
+        // this.contents?.removeChild(removeChild!);
       }
     });
   }
@@ -82,7 +84,9 @@ export class PageHistoryManager {
   private showLastPage() {
     const lastPage = this.history.slice(-1)[0];
     if (lastPage) {
-      this.contents?.append(lastPage.page);
+      // this.contents?.append(lastPage.page);
+      const showTarget = `erp10-${lastPage.pageId.toLowerCase()}`;
+      this.contents?.querySelector(`#${showTarget}`)?.setAttribute('class', 'page-show');
       this.dispatchPageLoadedEvent(lastPage);
     }
   }

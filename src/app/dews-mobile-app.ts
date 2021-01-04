@@ -34,20 +34,25 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
 
   async connectedCallback() {
     this.pageId = location.hash.replace('#', '');
+
+    window.addEventListener('hashchange', () => {
+      this.changeMenu(location.hash.replace('#', ''));
+    });
+
     super.connectedCallback();
     await this.updateComplete;
 
     this.historyManager.setContentsElement(this.shadowRoot?.querySelector('main-content')!);
 
     // TODO 테스트용 코드 제거
-    setTimeout(() => {
-      this.changeMenu('MA1000');
-    }, 500);
-
-    setTimeout(() => {
-      console.log('newPage');
-      this.changeMenu('MA1001');
-    }, 5000);
+    // setTimeout(() => {
+    //   this.changeMenu('MA1000');
+    // }, 500);
+    //
+    // setTimeout(() => {
+    //   console.log('newPage');
+    //   this.changeMenu('MA1001');
+    // }, 5000);
 
     const mainHeader = this.shadowRoot?.querySelector('main-header') as MainHeader;
     const mainBottom = this.shadowRoot?.querySelector('main-bottom') as MainBottom;
