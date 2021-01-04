@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 
 export * from './app/exports.js';
+export * from './components/exports.js';
+export { css, html } from 'lit-element';
 
 import { DewsMobileInterface } from './app/DewsMobileInterface.js';
 

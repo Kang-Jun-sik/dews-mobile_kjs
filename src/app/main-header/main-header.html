@@ -1,0 +1,18 @@
+<div class="navigation-bar-wrap">
+  <button class="history-back-button" @click="${this.historyBack}"></button>
+  <div class="navigation-bar">
+    <header class="${this.activeAnchorFlag ? '' : 'active'}">
+      <!-- active -->
+      <h1><button @click="${this.toggleTitleTooltip}">${this.title}</button></h1>
+      <button class="all-menu-button" @click="${this.clickMenu}"></button>
+    </header>
+    <nav class="anchor-point">
+      ${this.anchorTemplate}
+    </nav>
+  </div>
+</div>
+<!-- 추가 작업 필요 -->
+<div class="title-wrap">
+  <p class="title">${this.title}</p>
+  <button class="title-close-button" @click="${this.toggleTitleTooltip}"></button>
+</div>
