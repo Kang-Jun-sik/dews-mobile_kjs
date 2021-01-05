@@ -5,19 +5,29 @@ export * from './components/exports.js';
 export { css, html } from 'lit-element';
 
 import { DewsMobileInterface } from './app/DewsMobileInterface.js';
+import { MobileAppBridgeInterface } from './app/env/mobileApp/MobileAppBridgeInterface.js';
 
 declare global {
   interface Window {
     dews: DewsMobileInterface;
+    DzMobileBridge: MobileAppBridgeInterface;
   }
 
   const dews: DewsMobileInterface;
+  const DzMobileBridge: MobileAppBridgeInterface;
 }
 
 import { app } from './app/ApplicationContext.js';
 
 window.dews = {
   app
+};
+
+window.DzMobileBridge = {
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  func_goHome: () => {
+    console.log('goHome');
+  }
 };
 
 import {
