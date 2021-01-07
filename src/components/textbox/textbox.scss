@@ -10,17 +10,4 @@
 * {
   @include reset();
 }
-.textbox-wrap {
-  label {
-    @include label-wrap();
-  }
-  input[type='text'] {
-    @include input-wrap();
-  }
-
-  textarea {
-    @include input-wrap();
-    resize: none;
-    height: 64px;
-  }
-}
+@include dews-textbox();

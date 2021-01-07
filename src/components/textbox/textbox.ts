@@ -11,6 +11,9 @@ export class Textbox extends DewsFormComponent {
   title = '';
 
   @property({ type: String })
+  type = 'text';
+
+  @property({ type: String })
   placeholder: string | undefined = '';
 
   @property({ type: Boolean, reflect: true })

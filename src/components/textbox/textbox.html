@@ -10,7 +10,7 @@ ${this.multi? html`
 <!-- input box 일때 -->
 <div class="textbox-wrap">
   <label for="textbox">${this.title}</label>
-  <input type="text" class="dews-input" @input="${this._onChange}" value="${this.value}" id="textbox"  ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"/>
+  <input type="${this.type}" class="dews-input" @input="${this._onChange}" value="${this.value}" id="textbox"  ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"/>
 </div>
 `
 }
