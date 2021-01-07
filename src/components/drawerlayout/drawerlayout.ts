@@ -48,8 +48,6 @@ export class Drawerlayout extends DewsFormComponent {
     if (this._moveState) {
       this._height = `${this._defaultHeight! + (this._moveStart! - e.screenY)}px`;
     }
-
-    window.pageYOffset;
   }
 
   private _mouseDown(e: MouseEvent) {
@@ -104,7 +102,11 @@ export class Drawerlayout extends DewsFormComponent {
     if (_changedProperties.get('active') !== undefined) {
       if (this._height !== '0px') {
         this._height = '0px';
+        setTimeout(() => {
+          (this.shadowRoot!.querySelector('.layer-drawer') as HTMLElement).style.display = 'none';
+        }, 1000);
       } else {
+        (this.shadowRoot!.querySelector('.layer-drawer') as HTMLElement).style.display = 'block';
         if (this.height === undefined) {
           this._height = `${window.innerHeight - 200}px`;
         } else {
