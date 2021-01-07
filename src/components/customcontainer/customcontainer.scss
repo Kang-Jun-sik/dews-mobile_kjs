@@ -2,11 +2,10 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-datepicker
+// dews-custom-container
 //======================================
 
 * {
   @include reset();
 }
-@include dews-date-picker();
-@include dews-drawer-date-picker();
+@include dews-custom();

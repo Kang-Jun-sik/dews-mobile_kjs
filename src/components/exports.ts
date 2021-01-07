@@ -28,6 +28,7 @@ export { Loading } from './loading/loading.js';
 export { Complex } from './Complex/Complex.js';
 export { Slider } from './slider/slider.js';
 export { Periodpicker } from './periodpicker/periodpicker.js';
+export { Customcontainer } from './customcontainer/customcontainer.js';
 export { Infobox } from './infobox/infobox.js';
 export { Monthpicker } from './monthpicker/monthpicker.js';
 export { Tooltip } from './tooltip/tooltip.js';

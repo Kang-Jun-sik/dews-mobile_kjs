@@ -49,6 +49,7 @@ import {
   Snackbar,
   Loading,
   Slider,
+  Customcontainer,
   Infobox,
   Complex,
   Tooltip,
@@ -94,4 +95,5 @@ window.customElements.define('dews-infobox-container', Infobox);
 window.customElements.define('dews-search-container', SearchContainer);
 window.customElements.define('dews-form-container', FormContainer);
 window.customElements.define('dews-list-container', ListContainer);
+window.customElements.define('dews-custom-container', Customcontainer);
 window.customElements.define('form-section', FormSection);
