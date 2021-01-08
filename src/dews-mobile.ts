@@ -55,7 +55,8 @@ import {
   Tooltip,
   Togglebutton,
   Yearpicker,
-  Monthpicker
+  Monthpicker,
+  Progressbar
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -84,6 +85,7 @@ window.customElements.define('dews-snackbar', Snackbar);
 window.customElements.define('dews-loading', Loading);
 window.customElements.define('dews-slider', Slider);
 window.customElements.define('dews-tooltip', Tooltip);
+window.customElements.define('dews-progressbar', Progressbar);
 
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);
