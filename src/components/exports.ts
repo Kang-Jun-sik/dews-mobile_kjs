@@ -34,3 +34,4 @@ export { Monthpicker } from './monthpicker/monthpicker.js';
 export { Tooltip } from './tooltip/tooltip.js';
 export { Yearpicker } from './yearpicker/yearpicker.js';
 export { Togglebutton } from './togglebutton/togglebutton.js';
+export { Progressbar } from './progressbar/progressbar.js';

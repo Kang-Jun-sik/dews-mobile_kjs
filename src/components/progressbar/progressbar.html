@@ -1,0 +1,295 @@
+<!--
+  <실제 소스>
+    1 h1, h2(버튼 포함) 모두 삭제
+    2 div.progressbar-layer를 감싸고 있는 부모 div 모두 삭제(field는 div가 하나 더 있음)
+    3 태그에 inline style은 모두 삭제
+
+  <progressbar layer 옵션>
+    - 기본은 숨김 상태, .active를 추가하면 표시.
+    - .bg-add를 추가하면 배경이 표시.
+    - 기본은 position:fixed로 전체 영역에 표시되고, .field를 추가하면 position:absolute로 변경되어 position:relative가 있는 부모 요소안에 표시.
+
+  <progressbar 형태>
+    - 기본은 프로그레스바와 텍스트(bar 하단 텍스트)만 있는 형태
+    - 타이틀(div.progressbar-title-wrap)은 div.progressbar-layer 하위에 추가
+    - 보조 텍스트(bar 상단, title 하단)는 .div.progressbar-boxes-wrap의 자식 요소로 div.progress-assistant-box를 추가.
+
+  <progressbar 텍스트>
+    - span.progress-assistant-text 또는 span.progress-text에 입력
+    - 실제 값은 하위 요소인 span.progress-assistant-value 또는 span.progress-value에 입력.
+
+  <progressbar 닫기>
+    - 진행 완료시 사용자 인지를 위해 1초 후 닫힘
+-->
+<h1>작업중!</h1>
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+wrap
+<!-- source code -->
+<div class="${this._className}">
+  <div class="progressbar-bg" @touchmove="${this._onTouchmove}" @wheel="${this._onWheel}"></div>
+  <div class="progressbar-wrap">
+    <!-- title 추가 -->
+    <div class="progressbar-title-wrap" style="display: ${this._titlebar && this._titlebar.text ? 'block' : 'none'}">
+      <div class="progressbar-title-box">
+        <span class="progressbar-title">${this._titlebar.text}</span>
+      </div>
+    </div>
+    <div class="progressbar-boxes-wrap">
+      <div class="progress-assistant-box" style="display: ${this._alterTextTemplate ? 'block' : 'none'}">
+        <span class="progress-assistant-text">
+          <!--              <span class="progressbar-assistant-value">8/10</span>-->
+          ${this._alterTextTemplate}
+        </span>
+      </div>
+      <div class="progressbar-box">
+        <div class="progressbar" style="width: ${this._progressWidth}"></div>
+      </div>
+      <div class="progressbar-text-box">
+        <span class="progressbar-text">${this._textTemplate}</span>
+        <!--          <span class="progressbar-text">${this.textTemplate}</span>-->
+      </div>
+    </div>
+  </div>
+</div>
+<!--// source code -->
+<!--</div>-->
+
+<!--<h1 style="margin-bottom: 30px;">bg 없음</h1>-->
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">기본 - 1(.field 추가)</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; ex) container &ndash;&gt;-->
+<!--  <div style="margin: 5px; padding: 5px; border: 1px solid red; box-sizing: border-box; position: relative; height: 150px; font-size: 12px;">-->
+<!--    container-->
+<!--    &lt;!&ndash; source code &ndash;&gt;-->
+<!--    <div class="progressbar-layer field active" style="position:absolute;">&lt;!&ndash; field 추가 됨 &ndash;&gt;-->
+<!--      <div class="progressbar-bg"></div>-->
+<!--      <div class="progressbar-wrap">-->
+<!--        <div class="progressbar-boxes-wrap">-->
+<!--          <div class="progressbar-box">-->
+<!--            <div class="progressbar" style="width: 70%;"></div>&lt;!&ndash; .progressbar-text-value 계산값이 width 값으로 들어감 &ndash;&gt;-->
+<!--          </div>-->
+<!--          <div class="progressbar-text-box">-->
+<!--            <span class="progressbar-text"><span class="progressbar-text-value">70%</span></span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash;// source code &ndash;&gt;-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// ex) container &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">기본 -2</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 20%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text">업데이트 중 (<span class="progressbar-text-value">1/5</span>)</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">진행 메시지 표시</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        &lt;!&ndash; 보조 text 추가 &ndash;&gt;-->
+<!--        <div class="progress-assistant-box">-->
+<!--          <span class="progress-assistant-text">-->
+<!--              <span class="progressbar-assistant-value">8/10</span>-->
+<!--          </span>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;// 보조 text 추가 &ndash;&gt;-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 80%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text">데이터를 <span class="progressbar-text-value">80%</span> 처리 중...</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">타이틀 바 표시</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      &lt;!&ndash; title 추가 &ndash;&gt;-->
+<!--      <div class="progressbar-title-wrap">-->
+<!--        <div class="progressbar-title-box">-->
+<!--          <span class="progressbar-title">품목별 데이터 업데이트</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      &lt;!&ndash;// title 추가 &ndash;&gt;-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 80%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text">데이터를 <span class="progressbar-text-value">80%</span> 처리 중...</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">파일 용량 단위로 표시</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 25%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text"><span class="progressbar-text-value">5.00 MB / 20.00 MB</span> 진행 중...</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h1 style="margin-bottom: 30px;">bg 있음</h1>-->
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">기본 - 1(.field 추가)</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; ex) container &ndash;&gt;-->
+<!--  <div style="margin: 5px; padding: 5px; border: 1px solid red; box-sizing: border-box; position: relative; height: 150px; font-size: 10px;">-->
+<!--    container-->
+<!--    &lt;!&ndash; source code &ndash;&gt;-->
+<!--    <div class="progressbar-layer field bg-add" style="display: block; position:absolute;">-->
+<!--      <div class="progressbar-bg"></div>-->
+<!--      <div class="progressbar-wrap">-->
+<!--        <div class="progressbar-boxes-wrap">-->
+<!--          <div class="progressbar-box">-->
+<!--            <div class="progressbar" style="width: 70%;"></div>-->
+<!--          </div>-->
+<!--          <div class="progressbar-text-box">-->
+<!--            <span class="progressbar-text"><span class="progressbar-text-value">70%</span></span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash;// source code &ndash;&gt;-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// ex) container &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">기본 -2</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer bg-add" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 20%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text">업데이트 중 (<span class="progressbar-text-value">1/5</span>)</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">진행 메시지 표시</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer bg-add" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        &lt;!&ndash; 보조 text 추가 &ndash;&gt;-->
+<!--        <div class="progress-assistant-box">-->
+<!--            <span class="progress-assistant-text">-->
+<!--                <span class="progressbar-assistant-value">8/10</span>-->
+<!--            </span>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;// 보조 text 추가 &ndash;&gt;-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 80%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text">데이터를 <span class="progressbar-text-value">80%</span> 처리 중...</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">타이틀 바 표시</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer bg-add" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      &lt;!&ndash; title &ndash;&gt;-->
+<!--      <div class="progressbar-title-wrap">-->
+<!--        <div class="progressbar-title-box">-->
+<!--          <span class="progressbar-title">품목별 데이터 업데이트</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      &lt;!&ndash;// title &ndash;&gt;-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 80%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text">데이터를 <span class="progressbar-text-value">80%</span> 처리 중...</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
+
+<!--<h2 style="margin: 10px 0 20px; padding: 0; font-size: 16px; letter-spacing: -1.5px;">파일 용량 단위로 표시</h2>-->
+<!--<div style="position: relative; height: 350px; border: 1px solid #ccc; font-size: 12px;">-->
+<!--  wrap-->
+<!--  &lt;!&ndash; source code &ndash;&gt;-->
+<!--  <div class="progressbar-layer bg-add" style="display: block; position:absolute;">-->
+<!--    <div class="progressbar-bg"></div>-->
+<!--    <div class="progressbar-wrap">-->
+<!--      <div class="progressbar-boxes-wrap">-->
+<!--        <div class="progressbar-box">-->
+<!--          <div class="progressbar" style="width: 25%;"></div>-->
+<!--        </div>-->
+<!--        <div class="progressbar-text-box">-->
+<!--          <span class="progressbar-text"><span class="progressbar-text-value">5.00 MB / 20.00 MB</span> 진행 중...</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;// source code &ndash;&gt;-->
+<!--</div>-->
