@@ -171,15 +171,13 @@ export class Tooltip extends DewsFormComponent {
         this._className += ' tooltip-top';
       }
 
-      if (this._closeButton) {
-        this._className += ' button-close';
-      }
-
       if (this._type === 'required') {
         this._className += ' require-tooltip';
         if (this._text === '') {
           this._text = '필수 입력 항목입니다.';
         }
+      } else if (this._type === 'normal' && this._closeButton) {
+        this._className += ' button-close';
       }
 
       if (this._title !== undefined) {
