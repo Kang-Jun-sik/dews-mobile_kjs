@@ -4,7 +4,7 @@
 >
   <div class="tooltip-arrow"></div>
   <div class="tooltip-box">
-    ${this._title !== undefined?html`
+    ${this._type === 'title'?html`
     <div class="tooltip-text-box">
       <span class="tooltip-title"> ${this._title} </span>
     </div>

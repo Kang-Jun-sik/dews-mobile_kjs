@@ -4,7 +4,7 @@ import template from './tooltip.html';
 import scss from './tooltip.scss';
 import { internalProperty, property, PropertyValues } from 'lit-element';
 
-type TOOLTIP_TYPE = 'normal' | 'required';
+type TOOLTIP_TYPE = 'normal' | 'required' | 'title';
 type TOOLTIP_POSITION = 'top' | 'bottom';
 export type TOOLTIP_OPTIONS = {
   type?: TOOLTIP_TYPE;
@@ -180,8 +180,8 @@ export class Tooltip extends DewsFormComponent {
         this._className += ' button-close';
       }
 
-      if (this._title !== undefined) {
-        this._className += ' title-tooltip';
+      if (this._type === 'title') {
+        this._className += ' title-tooltip button-close';
       }
     }
   }
