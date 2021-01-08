@@ -34,7 +34,7 @@ export const Tooltip1 = () => html`<div style="width: 360px">
     id="showTooltip"
     @click="${() => {
       showTooltip(document.querySelector('div#targetDiv2'), {
-        type: 'required',
+        // type: 'title',
         text: 'tooltipTop',
         position: 'top',
         closeButton: false,
@@ -45,6 +45,23 @@ export const Tooltip1 = () => html`<div style="width: 360px">
     }}"
   >
     showTooltipTop
+  </button>
+
+  <button
+    id="showTooltip"
+    @click="${() => {
+      showTooltip(document.querySelector('div#targetDiv2'), {
+        type: 'title',
+        text: 'title text',
+        position: 'top',
+        closeButton: false,
+        title: 'TITLE',
+        // durationTime: 2000,
+        fadeOutTime: 5000
+      });
+    }}"
+  >
+    showTitle
   </button>
 
   <button
