@@ -3,6 +3,9 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './masktextbox.html';
 import scss from './masktextbox.scss';
 import { query } from 'lit-element/lib/decorators.js';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT_TYPE = 'change' | 'focus' | 'blur';
 
 export class Masktextbox extends DewsFormComponent {
   static styles = scss;
@@ -88,7 +91,8 @@ export class Masktextbox extends DewsFormComponent {
     a: /[a-zA-Z0-9]|\s/
   };
 
-  private onChange = new Event('change');
+  //이벤트 객체 생성
+  private Event = new EventEmitter();
 
   constructor() {
     super();
@@ -236,11 +240,13 @@ export class Masktextbox extends DewsFormComponent {
     const unmasked = this._unmask(endContent, old.length - endContent.length);
     this._mask(this._maskElement, caretPosition!, caretPosition!, unmasked);
 
+    this.value = element.value;
+
     if (backward) {
       caretPosition = this._backCaret(start);
     }
     this._caret(element, caretPosition);
-    this.dispatchEvent(this.onChange);
+    this.Event.emit('change', { target: this, type: 'change', preventDefault: e.preventDefault });
   }
 
   private _backCaret(idx: number): number {
@@ -420,7 +426,7 @@ export class Masktextbox extends DewsFormComponent {
     return i;
   }
 
-  private _focus() {
+  private _focus(e: Event) {
     const value = this._viewElement!.value;
 
     if (!value) {
@@ -436,9 +442,10 @@ export class Masktextbox extends DewsFormComponent {
     }, 50);
 
     this._oldValue = value;
+    this.Event.emit('focus', { target: this, type: 'focus', preventDefault: e.preventDefault });
   }
 
-  private _blur() {
+  private _blur(e: Event) {
     let validCheck = true;
     const value = (this._viewElement.value = this._maskElement.value);
     this.viewSpan.style.display = 'block';
@@ -458,6 +465,7 @@ export class Masktextbox extends DewsFormComponent {
     } else {
       this.warning('적합하지 않은 형식입니다.');
     }
+    this.Event.emit('blur', { target: this, type: 'blur', preventDefault: e.preventDefault });
   }
 
   /**
@@ -492,5 +500,15 @@ export class Masktextbox extends DewsFormComponent {
 
   public validate() {
     return !!this.value;
+  }
+
+  // 이벤트 등록
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.off(key, handler);
   }
 }
