@@ -23,6 +23,9 @@ export class Checkbox extends DewsFormComponent {
   @property({ type: Boolean })
   bookmark = false;
 
+  @property({ type: Boolean })
+  reverse = false;
+
   private _className = 'dews-checkbox-wrap';
 
   connectedCallback() {
@@ -30,6 +33,9 @@ export class Checkbox extends DewsFormComponent {
 
     console.log('connected callback');
 
+    if (this.reverse) {
+      this._className = this._className + ' reverse';
+    }
     if (this.parentElement?.localName == 'dews-dropdownlist') {
       this._className = this._className + ' dropdown';
     }
