@@ -1,5 +1,5 @@
-@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
-@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+@import '../../../../node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import '../../../../node_modules/@dews/dews-mobile-style/scss/mixins/mixins';
 
 //======================================
 // dews-datepicker
@@ -10,3 +10,8 @@
 }
 @include dews-date-picker();
 @include dews-drawer-date-picker();
+
+
+
+
+

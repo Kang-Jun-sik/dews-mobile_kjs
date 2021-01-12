@@ -1,29 +1,11 @@
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { PickerBase } from '../picker-base.js';
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './datepicker.html';
 import scss from './datepicker.scss';
 
-export class Datepicker extends DewsFormComponent {
+export class Datepicker extends PickerBase {
   static styles = scss;
-
-  @property({ type: String })
-  title = '';
-
-  @property({ type: Boolean })
-  disabled: boolean | undefined = false;
-
-  @property({ type: Boolean })
-  readonly: boolean | undefined = false;
-
-  @property({ type: Boolean })
-  required: boolean | undefined = false;
-
-  @property({ type: String })
-  value: string | undefined;
-
-  @internalProperty()
-  inputValue: string | undefined;
 
   @property({ type: String })
   min: string | undefined = `${new Date().getFullYear() - 100}${('0' + (new Date().getMonth() + 1)).slice(-2)}${(
@@ -35,9 +17,6 @@ export class Datepicker extends DewsFormComponent {
     '0' + new Date().getDate()
   ).slice(-2)}`;
 
-  @property({ type: Boolean })
-  spinner: boolean | undefined = false;
-
   @property({ type: Boolean, attribute: 'holidays-visible' })
   visible = false;
 
@@ -46,9 +25,6 @@ export class Datepicker extends DewsFormComponent {
 
   @internalProperty()
   _value: string | undefined = '____-__-__';
-
-  @internalProperty()
-  private active: boolean | undefined = false;
 
   @internalProperty()
   private _beforeView: TemplateResult | undefined;
@@ -74,7 +50,6 @@ export class Datepicker extends DewsFormComponent {
   @internalProperty()
   private $spinnerDay: Array<TemplateResult> = [];
 
-  private count: number | undefined = 0;
   private _viewYear: number | undefined;
   private _viewMonth: number | undefined;
   private _viewDay: number | undefined;
@@ -95,10 +70,7 @@ export class Datepicker extends DewsFormComponent {
   private monthMinCheck: boolean | undefined = false;
   private monthMaxCheck: boolean | undefined = false;
   private _touchStartSpinnerPoint: number | undefined;
-  private toYear = new Date().getFullYear();
-  private toMonth = new Date().getMonth();
-  private toDay = new Date().getDate();
-  private lastDay: Array<number> = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
   private changeEvent: Event = new Event('change');
 
   constructor() {
@@ -148,183 +120,6 @@ export class Datepicker extends DewsFormComponent {
         this._spinnerPickerView();
       }
     }
-  }
-
-  click() {
-    this._open();
-  }
-
-  reset() {
-    this._removeClickHandler();
-  }
-
-  /*
-   *  day UI 처리 리턴 값은 Lit-element 의 TemplateResult 타입의 값을 리턴 한다.
-   * */
-
-  private _dayPickerView(y?: number, m?: number): TemplateResult {
-    const _dateView: Array<TemplateResult> = [];
-    let todayYear = this.toYear;
-    let todayMonth = this.toMonth;
-    _dateView.push(html` <span class="day-name">일</span>
-      <span class="day-name">월</span>
-      <span class="day-name">화</span>
-      <span class="day-name">수</span>
-      <span class="day-name">목</span>
-      <span class="day-name">금</span>
-      <span class="day-name">토</span>`);
-    if (y !== undefined && m !== undefined) {
-      todayYear = y;
-      todayMonth = m - 1;
-    }
-    const theDate: Date = new Date(todayYear, todayMonth, 1);
-    const firstDay = theDate.getDay();
-    let yearDisabled = false;
-    let monthDisabled = false;
-    let dayMaxCheck = false;
-    let dayMinCheck = false;
-    if (todayYear >= Number(this.max?.slice(0, 4))) {
-      if (todayYear > Number(this.max?.slice(0, 4))) {
-        yearDisabled = true;
-      } else if (todayMonth + 1 >= Number(this.max?.slice(4, 6))) {
-        if (todayMonth + 1 > Number(this.max?.slice(4, 6))) {
-          monthDisabled = true;
-        } else {
-          dayMaxCheck = true;
-        }
-      }
-    } else if (todayYear <= Number(this.min?.slice(0, 4))) {
-      if (todayYear < Number(this.min?.slice(0, 4))) {
-        yearDisabled = true;
-      } else if (todayMonth + 1 <= Number(this.min?.slice(4, 6))) {
-        if (todayMonth + 1 < Number(this.min?.slice(4, 6))) {
-          monthDisabled = true;
-        } else {
-          dayMinCheck = true;
-        }
-      }
-    }
-
-    if (todayYear % 400 == 0 || (todayYear % 4 == 0 && todayYear % 100 != 0)) {
-      this.lastDay[1] = 29;
-    } else {
-      this.lastDay[1] = 28;
-    }
-    const lastDate = this.lastDay[todayMonth];
-    let count = 1;
-    const length = Math.ceil((firstDay + lastDate) / 7) + 1;
-    for (let i = 1; i < length; i++) {
-      for (let j = 1; j <= 7; j++) {
-        if ((i == 1 && j <= firstDay) || count > lastDate) {
-          _dateView.push(
-            html`<div class="day day-disabled">
-              <span></span>
-            </div>`
-          );
-        } else {
-          if (j === 1 || j === 7) {
-            if (
-              yearDisabled ||
-              monthDisabled ||
-              (dayMaxCheck && count > Number(this.max?.slice(6, 8))) ||
-              (dayMinCheck && count < Number(this.min?.slice(6, 8)))
-            ) {
-              _dateView.push(
-                html`<div class="day day-disabled" data-value="${count}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else if (
-              this._setMonth === todayMonth + 1 &&
-              this._setYear == todayYear &&
-              count === this._setDay &&
-              !this.hdDisabled
-            ) {
-              if (this.visible) {
-                _dateView.push(
-                  html`<div
-                    class="day select"
-                    data-value="${count}"
-                    @click="${this.hdDisabled ? null : this._dayClickHandler}"
-                  >
-                    <span>${count}</span>
-                  </div>`
-                );
-              } else {
-                _dateView.push(
-                  html`<div class="day weekend select" data-value="${count}" @click="${this._dayClickHandler}">
-                    <span>${count}</span>
-                  </div>`
-                );
-              }
-            } else {
-              if (this.visible) {
-                _dateView.push(
-                  html`<div
-                    class="day"
-                    data-value="${count}"
-                    @click="${this.hdDisabled ? null : this._dayClickHandler}"
-                  >
-                    <span>${count}</span>
-                  </div>`
-                );
-              } else {
-                _dateView.push(
-                  html`<div
-                    class="day weekend"
-                    data-value="${count}"
-                    @click="${this.hdDisabled ? null : this._dayClickHandler}"
-                  >
-                    <span>${count}</span>
-                  </div>`
-                );
-              }
-            }
-          } else if (count === this.toDay && this.toMonth === todayMonth && this.toYear === todayYear) {
-            if (this._setMonth === todayMonth + 1 && this._setYear == todayYear && count === this._setDay) {
-              _dateView.push(
-                html`<div class="day today select" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else {
-              _dateView.push(
-                html`<div class="day today" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            }
-          } else {
-            if (
-              yearDisabled ||
-              monthDisabled ||
-              (dayMaxCheck && count > Number(this.max?.slice(6, 8))) ||
-              (dayMinCheck && count < Number(this.min?.slice(6, 8)))
-            ) {
-              _dateView.push(
-                html`<div class="day day-disabled" data-value="${count}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else if (this._setMonth === todayMonth + 1 && this._setYear == todayYear && count === this._setDay) {
-              _dateView.push(
-                html`<div class="day select" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else {
-              _dateView.push(
-                html`<div class="day" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            }
-          }
-          count++;
-        }
-      }
-    }
-    return html`<div class="calendar-date">${_dateView}</div>`;
   }
 
   /*
@@ -681,6 +476,13 @@ export class Datepicker extends DewsFormComponent {
     this._modeChange('month');
   }
 
+  //  drower layout 처리 *_*
+  private _nextBtnClickHandler(e: TouchEvent | MouseEvent): void {
+    const $el = this.parentElement?.parentElement?.children[this._afterItem!]?.children[0] as HTMLElement;
+    this._confirmClickHandler();
+    $el?.click();
+  }
+
   // 적용버튼 핸들러
   private _confirmClickHandler(): void {
     if (this.hdDisabled && !this.spinner) {
@@ -989,6 +791,10 @@ export class Datepicker extends DewsFormComponent {
     }
   }
 
+  reset() {
+    this._removeClickHandler();
+  }
+
   // 리셋버튼 클릭 핸들러
   private _removeClickHandler(): void {
     this._value = '';
@@ -1005,7 +811,6 @@ export class Datepicker extends DewsFormComponent {
       });
       this._removeCheck = true;
     }
-    this.dispatchEvent(this.changeEvent);
   }
 
   private _moveCheck: boolean | undefined = false;
@@ -1167,63 +972,6 @@ export class Datepicker extends DewsFormComponent {
       select = num;
     }
     ($el.querySelector('.day')!.children[0] as HTMLElement).style.transform = `translateY(-${select * 35}px)`;
-  }
-
-  //  drower layout 처리 *_*
-  private _nextBtnClickHandler(e: TouchEvent | MouseEvent): void {
-    const $el = this.parentElement?.parentElement?.children[this._afterItem!]?.children[0] as HTMLElement;
-    this._confirmClickHandler();
-    $el?.click();
-  }
-
-  private _domClickHandler(e: MouseEvent): void {
-    if (e.isTrusted) {
-      if (
-        e.clientY <
-        window.innerHeight -
-          this.shadowRoot!.querySelector('.drawer-layout')!.shadowRoot!.querySelector('.layer-bottom')!.clientHeight
-      ) {
-        if (this.count! > 0) {
-          this._close();
-        } else {
-          this.count!++;
-        }
-      }
-    }
-  }
-
-  private _clickHandler(e: MouseEvent): void {
-    if (!this.disabled && !this.readonly && this.active === false) {
-      this.shadowRoot!.querySelector('.select-wrap')!.classList.add('focus');
-      this._open();
-      this._scrollChange();
-    }
-  }
-
-  private _scrollChange(): void {
-    window.scrollTo(
-      0,
-      window.pageYOffset +
-        this.parentElement!.getBoundingClientRect()?.top -
-        this.shadowRoot!.querySelector('.date-picker-wrap')!.clientHeight -
-        25
-    );
-  }
-
-  private domEvent: EventListener = this._domClickHandler.bind(this) as EventListener;
-
-  private _close(): void {
-    this.shadowRoot!.querySelector('.select-wrap')!.classList.remove('focus');
-    this.active = false;
-    this.count = 0;
-    this.dispatchEvent(new Event('close'));
-    document.removeEventListener('click', this.domEvent);
-  }
-
-  private _open(): void {
-    this.active = true;
-    this.dispatchEvent(new Event('open'));
-    document.addEventListener('click', this.domEvent);
   }
 
   // spinner 기본 선택

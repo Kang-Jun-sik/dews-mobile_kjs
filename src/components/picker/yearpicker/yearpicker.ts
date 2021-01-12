@@ -1,29 +1,11 @@
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './yearpicker.html';
 import scss from './yearpicker.scss';
+import { PickerBase } from '../picker-base.js';
 
-export class Yearpicker extends DewsFormComponent {
+export class Yearpicker extends PickerBase {
   static styles = scss;
-
-  @property({ type: String })
-  title = '';
-
-  @property({ type: Boolean })
-  disabled: boolean | undefined = false;
-
-  @property({ type: Boolean })
-  readonly: boolean | undefined = false;
-
-  @property({ type: Boolean })
-  required: boolean | undefined = false;
-
-  @property({ type: String })
-  value: string | undefined;
-
-  @internalProperty()
-  inputValue: string | undefined;
 
   @property({ type: String })
   min: string | undefined = `${new Date().getFullYear() - 100}`;
@@ -31,20 +13,8 @@ export class Yearpicker extends DewsFormComponent {
   @property({ type: String })
   max: string | undefined = `${new Date().getFullYear() + 100}`;
 
-  @property({ type: Boolean })
-  spinner: boolean | undefined = false;
-
-  @property({ type: Boolean, attribute: 'holidays-visible' })
-  visible = false;
-
-  @property({ type: Boolean, attribute: 'holidays-disabled' })
-  hdDisabled = false;
-
   @internalProperty()
   private _value: string | undefined = '____';
-
-  @internalProperty()
-  private active: boolean | undefined = false;
 
   @internalProperty()
   private _beforeView: TemplateResult | undefined;
@@ -67,7 +37,6 @@ export class Yearpicker extends DewsFormComponent {
   @internalProperty()
   private $spinnerMonth: Array<TemplateResult> = [];
 
-  private count: number | undefined = 0;
   private _viewYear: number | undefined;
   private _setYear: number | undefined;
   private _count: number | undefined = 1;
@@ -82,8 +51,6 @@ export class Yearpicker extends DewsFormComponent {
   private yearMinCheck: boolean | undefined = false;
   private yearMaxCheck: boolean | undefined = false;
   private _touchStartSpinnerPoint: number | undefined;
-  private toYear = new Date().getFullYear();
-  private toMonth = new Date().getMonth();
   private changeEvent: Event = new Event('change');
 
   constructor() {
@@ -125,10 +92,6 @@ export class Yearpicker extends DewsFormComponent {
         this._spinnerPickerView();
       }
     }
-  }
-
-  click() {
-    this._open();
   }
 
   reset() {
@@ -529,56 +492,6 @@ export class Yearpicker extends DewsFormComponent {
     const $el = this.parentElement?.parentElement?.children[this._afterItem!]?.children[0] as HTMLElement;
     this._confirmClickHandler();
     $el?.click();
-  }
-
-  private _domClickHandler(e: MouseEvent): void {
-    if (e.isTrusted) {
-      if (
-        e.clientY <
-        window.innerHeight -
-          this.shadowRoot!.querySelector('.drawer-layout')!.shadowRoot!.querySelector('.layer-bottom')!.clientHeight
-      ) {
-        if (this.count! > 0) {
-          this._close();
-        } else {
-          this.count!++;
-        }
-      }
-    }
-  }
-
-  private _clickHandler(e: MouseEvent): void {
-    if (!this.disabled && !this.readonly && this.active === false) {
-      this.shadowRoot!.querySelector('.select-wrap')!.classList.add('focus');
-      this._open();
-      this._scrollChange();
-    }
-  }
-
-  private _scrollChange(): void {
-    window.scrollTo(
-      0,
-      window.pageYOffset +
-        this.parentElement!.getBoundingClientRect()?.top -
-        this.shadowRoot!.querySelector('.date-picker-wrap')!.clientHeight -
-        25
-    );
-  }
-
-  private domEvent: EventListener = this._domClickHandler.bind(this) as EventListener;
-
-  private _close(): void {
-    this.shadowRoot!.querySelector('.select-wrap')!.classList.remove('focus');
-    this.active = false;
-    this.count = 0;
-    this.dispatchEvent(new Event('close'));
-    document.removeEventListener('click', this.domEvent);
-  }
-
-  private _open(): void {
-    this.active = true;
-    this.dispatchEvent(new Event('open'));
-    document.addEventListener('click', this.domEvent);
   }
 
   // spinner 기본 선택
