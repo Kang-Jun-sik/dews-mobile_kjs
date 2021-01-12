@@ -1,4 +1,4 @@
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
+import { internalProperty, property, PropertyValues } from 'lit-element';
 import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 
@@ -62,10 +62,10 @@ export class Codepicker extends ScopedElementsMixin(DewsFormComponent) {
         0,
         window.pageYOffset +
           this.parentElement?.getBoundingClientRect()?.top! -
-          this.shadowRoot!.querySelector('.code-picker')?.clientHeight! -
+          this.shadowRoot!.querySelector('.codepicker')?.clientHeight! -
           25
       );
-      this.height = `${this.shadowRoot!.querySelector('.code-picker')!.clientHeight + 120}px`;
+      this.height = `${this.shadowRoot!.querySelector('.codepicker')!.clientHeight + 120}px`;
       $el!.height = this.height;
       this._open();
     }
