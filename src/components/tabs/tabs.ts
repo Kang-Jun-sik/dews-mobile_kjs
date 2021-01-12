@@ -3,6 +3,9 @@ import { html, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './tabs.html';
 import scss from './tabs.scss';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT = 'click' | 'blur' | 'focus' | 'change';
 
 export class Tabs extends DewsAreaComponent {
   static styles = scss;
@@ -12,6 +15,18 @@ export class Tabs extends DewsAreaComponent {
     this.addEventListener('blur', this._focusBlur);
     this._firstTabUpdate();
     await super.connectedCallback();
+  }
+
+  //이벤트 객체 생성
+  #EVENT = new EventEmitter();
+  // 이벤트 등록
+  public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
   }
 
   @property({ type: Number })
@@ -61,14 +76,12 @@ export class Tabs extends DewsAreaComponent {
 
   private _focusIn(e: FocusEvent) {
     this._focusChanging(e);
-    const focusIn = new CustomEvent('focusIn');
-    this.dispatchEvent(focusIn);
+    this.#EVENT.emit('focus', { target: this, type: 'focus' });
   }
 
   private _focusBlur(e: FocusEvent) {
     this._focusChanging(e);
-    const focusBlur = new CustomEvent('focusBlur');
-    this.dispatchEvent(focusBlur);
+    this.#EVENT.emit('blur', { target: this, type: 'blur' });
   }
 
   private _select: Function = (select: number) => {
@@ -78,11 +91,10 @@ export class Tabs extends DewsAreaComponent {
       tab.shadowRoot!.querySelector('.content')?.classList?.remove('active');
     });
     this.querySelectorAll('dews-tab')[select].shadowRoot?.querySelector('.content')?.classList?.add('active');
-    this.selected = select;
-    // const tabChange = new Event('tabChange');
-    this.dispatchEvent(new CustomEvent('tabChange', { detail: { select: select } }));
-    // this.dispatchEvent(this.eventTest);
-    // console.log(tabChange);
+    if (this.selected !== select) {
+      this.selected = select;
+      this.#EVENT.emit('change', { target: this, type: 'change' });
+    }
   };
 
   private _clickHandler(e: MouseEvent) {

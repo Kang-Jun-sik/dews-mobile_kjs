@@ -1,5 +1,6 @@
 import { property } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
 import template from './button.html';
 import scss from './button.scss';
@@ -46,6 +47,8 @@ export enum UI_LIST {
   'emphasize' = 'emphasize'
 }
 
+type EVENT_TYPE = 'click';
+
 export class Button extends DewsFormComponent {
   static styles = scss;
 
@@ -73,13 +76,36 @@ export class Button extends DewsFormComponent {
   @property({ type: Boolean, reflect: true })
   group = false; //버튼 그룹 내부
 
+  #EVENT: EventEmitter = new EventEmitter();
+
+  constructor() {
+    super();
+  }
+
   connectedCallback() {
     super.connectedCallback();
+    this.addEventListener('click', this.#event_emit);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('click', this.#event_emit);
   }
+
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
+  }
+  #event_emit = (e: Event) => {
+    switch (e.type) {
+      case 'click':
+        this.#EVENT.emit('click', { target: this, type: 'click' });
+        break;
+    }
+  };
 
   render() {
     return template.call(this);

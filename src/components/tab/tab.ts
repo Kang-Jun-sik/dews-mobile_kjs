@@ -15,8 +15,6 @@ export class Tab extends DewsLayoutComponent {
 
   async connectedCallback() {
     super.connectedCallback();
-    await this.updateComplete;
-    console.log('Tab UpdateComplete');
   }
 
   disconnectedCallback() {
