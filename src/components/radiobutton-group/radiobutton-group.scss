@@ -7,6 +7,4 @@
 * {
   @include reset();
 }
-.dews-radio-group-wrap {
-  @include radio-group-wrap();
-}
+@include dews-radio-group();
