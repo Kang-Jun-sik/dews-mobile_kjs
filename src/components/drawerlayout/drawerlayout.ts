@@ -21,7 +21,7 @@ export class Drawerlayout extends DewsFormComponent {
   scrollEnabled = false;
 
   @internalProperty()
-  private _height = '0px';
+  private _height = '-5px';
 
   @property({ type: String, reflect: true })
   drower: 'bottom' | 'right' = 'bottom';
@@ -100,13 +100,9 @@ export class Drawerlayout extends DewsFormComponent {
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('active') !== undefined) {
-      if (this._height !== '0px') {
-        this._height = '0px';
-        setTimeout(() => {
-          (this.shadowRoot!.querySelector('.layer-drawer') as HTMLElement).style.display = 'none';
-        }, 1000);
+      if (this._height !== '-5px') {
+        this._height = '-5px';
       } else {
-        (this.shadowRoot!.querySelector('.layer-drawer') as HTMLElement).style.display = 'block';
         if (this.height === undefined) {
           this._height = `${window.innerHeight - 200}px`;
         } else {
@@ -115,6 +111,10 @@ export class Drawerlayout extends DewsFormComponent {
       }
     }
     return super.shouldUpdate(_changedProperties);
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
   }
 
   render() {
