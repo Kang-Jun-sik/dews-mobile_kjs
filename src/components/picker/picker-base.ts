@@ -268,7 +268,7 @@ export class PickerBase extends DrawerBottomBase {
             ((e.currentTarget as HTMLElement)!.children.item(selectIndex) as HTMLElement)!.dataset.value
           );
           this._spinnerPickerViewChange(this._setYear, this._setMonth! - 1);
-          this._spinnerDayPositionChange();
+          this._spinnerYearPositionChange();
         } else if ((e.currentTarget as HTMLElement)!.classList.contains('month')) {
           this._setMonth = Number(
             ((e.currentTarget as HTMLElement)!.children.item(selectIndex) as HTMLElement)!.dataset.value
@@ -279,6 +279,7 @@ export class PickerBase extends DrawerBottomBase {
           this._setDay = Number(
             ((e.currentTarget as HTMLElement)!.children.item(selectIndex) as HTMLElement)!.dataset.value
           );
+          this._spinnerDayPositionChange();
         }
         this._inputChange();
         (e.currentTarget as HTMLElement)!.parentElement!.style.transform = `translateY(-${selectIndex * 35}px)`;
@@ -363,7 +364,7 @@ export class PickerBase extends DrawerBottomBase {
     if (num !== undefined) {
       select = num;
     }
-    ($el.querySelector('.day')!.children[0] as HTMLElement).style.transform = `translateY(-${select * 35}px)`;
+    ($el.querySelector('.day')?.children[0] as HTMLElement).style.transform = `translateY(-${select * 35}px)`;
   }
 
   protected _spinnerMonthPositionChange(num?: number): void {
@@ -746,4 +747,16 @@ export class PickerBase extends DrawerBottomBase {
   protected _yearClickHandler(e: MouseEvent): void {
     // 년도 클릭핸들러 오버라이드 할 대상
   }
+
+  /*
+  * 하위의 html 태그 요소 필수.!
+  *
+ <div  id="drawer" @click="${this._clickHandler}">
+
+</div>
+
+
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}">
+</drawer-layout>
+  * */
 }

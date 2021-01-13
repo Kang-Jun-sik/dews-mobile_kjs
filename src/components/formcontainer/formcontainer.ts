@@ -111,7 +111,6 @@ export class FormContainer extends DewsLayoutComponent {
   }
 
   render() {
-    console.log('form-container-render');
     return template.call(this);
   }
 }
