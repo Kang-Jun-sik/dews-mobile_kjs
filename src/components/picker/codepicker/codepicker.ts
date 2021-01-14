@@ -5,18 +5,18 @@ import template from './codepicker.html';
 import scss from './codepicker.scss';
 import { DewsFormComponent } from '../../base/DewsFormComponent.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
-import { PickerBase } from '../picker-base.js';
+import { DrawerBottomBase } from '../drawer-bottom-base.js';
 
 // noinspection JSUnusedLocalSymbols
 
-export class Codepicker extends PickerBase {
+export class Codepicker extends DrawerBottomBase {
   static styles = scss;
 
   @query('drawer-layout')
   _drawerLayout!: HTMLInputElement;
 
   @property({ type: String })
-  title: string = '';
+  title = '';
 
   @property({ type: Boolean, reflect: true })
   multi = false;
@@ -31,31 +31,31 @@ export class Codepicker extends PickerBase {
   placeholder: string | undefined = '';
 
   @property({ type: String, attribute: 'help-code' })
-  helpCode: string = '';
+  helpCode = '';
 
   @property({ type: String, attribute: 'code-field' })
-  codeField: string = '';
+  codeField = '';
 
   @property({ type: String, attribute: 'text-field' })
-  textField: string = '';
+  textField = '';
 
   @property({ type: String, attribute: 'help-params' })
   helpParams: string | object | Function = '';
 
   @property({ type: Boolean, attribute: 'help-custom' })
-  helpCustom: boolean = false;
+  helpCustom = false;
 
   @property({ type: String, attribute: 'help-view-url' }) // 생략시 도움창 View URL을 자동 생성
-  helpViewUrl: string = '';
+  helpViewUrl = '';
 
   @property({ type: String, attribute: 'help-api-url' }) // 생략시 도움창 Api URL을 자동 생성
-  helpApiUrl: string = '';
+  helpApiUrl = '';
 
   @property({ type: String, attribute: 'help-title' })
-  helpTitle: string = '';
+  helpTitle = '';
 
   @property({ type: String, attribute: 'data-control-type' })
-  dataControlType: string = 'card';
+  dataControlType = 'card';
 
   // @internalProperty()
   // private active = false;
@@ -85,16 +85,16 @@ export class Codepicker extends PickerBase {
   private text: string | undefined;
 
   @internalProperty()
-  private texts: [] = [];
+  private texts: Array<string> = [];
 
   @internalProperty()
   private code: string | undefined;
 
   @internalProperty()
-  private codes: [] = [];
+  private codes: Array<string> = [];
 
   @internalProperty()
-  private formState: boolean = false;
+  private formState = false;
 
   @internalProperty()
   private searchFormList: Array<HTMLCollection> = [];
@@ -120,9 +120,9 @@ export class Codepicker extends PickerBase {
   _confirmClickHandler() {
     const $cardList: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout .cardlist');
     const $selectItem = $cardList?.querySelectorAll('dews-checkbox');
-    let text: string = '';
-    let code: string = '';
-    let selected: object | [] = [];
+    const text = '';
+    const code = '';
+    let selected: object | Array<object> = [];
     let data;
 
     // 카드리스트의 체크된 항목을 받아오기
@@ -157,7 +157,6 @@ export class Codepicker extends PickerBase {
       //     'li > p.item[data-value="' + this.codeField + '"]'
       //   ) as HTMLParagraphElement)?.innerHTML;
 
-      // @ts-ignore
       //   (selected as []).push({ code: itemCode, text: itemText });
       // });
       selected = data;
@@ -261,8 +260,6 @@ export class Codepicker extends PickerBase {
     }
   }
 
-  private _changeControlValue(e: Event) {}
-
   // 내부 컴포넌트의 change가 발생하면 서치폼의 change가 발생하면서 컴포넌트들의 validate를 체크
   // 듀스 컨트롤 찾아서 거기서 validate가 하나라도 true 이면 state를 on 으로 변경
   private _searchFormState() {
@@ -272,8 +269,7 @@ export class Codepicker extends PickerBase {
     // console.log(searchFormField!.querySelectorAll('*[id]')); // 방법 찾기 (tag 명으로 하위 컴포넌트들 찾기)
     const formControls = searchFormField?.querySelectorAll('dews-dropdownlist, dews-numerictextbox');
 
-    // @ts-ignore
-    formControls.forEach(item => {
+    formControls?.forEach(item => {
       item.addEventListener('change', () => {
         const instance = item as any;
         this.formState = !!instance.value;
@@ -306,7 +302,7 @@ export class Codepicker extends PickerBase {
    * @param {object} data 코드와 텍스트
    */
   public setData(data: any) {
-    let isArray: boolean = false;
+    let isArray = false;
     let selected: any = undefined;
 
     if (Array.isArray(data)) {
@@ -321,10 +317,10 @@ export class Codepicker extends PickerBase {
     if (selected) {
       this.selectTotal = 1;
       // 설정할 데이터가 단독일 경우에는 바로 설정한다.
-      if (selected.hasOwnProperty(this.codeField)) {
+      if (this.codeField in selected) {
         this.code = selected[this.codeField];
       }
-      if (selected.hasOwnProperty(this.textField)) {
+      if (this.textField in selected) {
         this.text = selected[this.textField];
       }
     } else if (isArray) {
@@ -339,10 +335,8 @@ export class Codepicker extends PickerBase {
           this.codes = [];
           this.texts = [];
 
-          selected.forEach((item2: string[]) => {
-            // @ts-ignore
+          selected.forEach((item2: any) => {
             this.codes.push(item2[this.codeField]);
-            // @ts-ignore
             this.texts.push(item2[this.textField]);
           });
         }
@@ -357,14 +351,16 @@ export class Codepicker extends PickerBase {
   }
 
   public clearData() {
-    let data: any = {};
+    const data: any = {};
 
     data[this.codeField] = data[this.textField] = '';
 
     this.setData(data);
   }
 
-  public focus() {}
+  public focus() {
+    console.log('focus');
+  }
 
   public setHelpParams(helpParams: object | Function) {
     let params: any = null;
