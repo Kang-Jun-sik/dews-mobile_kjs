@@ -69,7 +69,6 @@ export class Box extends DewsAreaComponent {
       this.collapsed = false;
       this.height = this.slotHeight as string;
     }
-
     this.#EVENT.emit('click', { target: this, type: 'click', preventDefault: e.preventDefault });
   };
   protected enable: Function = (value: boolean) => {

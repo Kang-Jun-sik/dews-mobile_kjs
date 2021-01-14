@@ -203,6 +203,7 @@ export class PickerBase extends DrawerBottomBase {
 
   //  터치 이벤트 처리 ex) 스와이프 효과를 위해 처리
   private _touchMoveHandler(e: TouchEvent): void {
+    e.preventDefault();
     this._moveCheck = true;
     let $el: HTMLElement = e.currentTarget as HTMLElement;
     $el = $el.children[0] as HTMLElement;
@@ -639,9 +640,9 @@ export class PickerBase extends DrawerBottomBase {
    *  일 클릭 핸들러
    * @param e 마우스이벤트
    * */
-  protected _dayClickHandler(e: MouseEvent): void {
+  protected _dayClickHandler = (e: MouseEvent): void => {
     // 일 클릭핸들러 오버라이드 할 대상
-  }
+  };
 
   /**
    *  month UI 처리 리턴 값은 Lit-element 의 TemplateResult 타입의 값을 리턴 한다.
@@ -689,9 +690,9 @@ export class PickerBase extends DrawerBottomBase {
    * 달 클릭 핸들러
    * @param e 마우스이벤트
    * */
-  protected _monthClickHandler(e: MouseEvent): void {
+  protected _monthClickHandler = (e: MouseEvent): void => {
     // 달 클릭핸들러 오버라이드 할 대상
-  }
+  };
 
   /**
    *  year UI 처리 리턴 값은 Lit-element 의 TemplateResult 타입의 값을 리턴 한다.
