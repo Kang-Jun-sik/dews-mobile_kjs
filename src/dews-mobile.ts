@@ -64,7 +64,6 @@ window.customElements.define('dews-dropdownlist', Dropdownlist);
 window.customElements.define('dews-datepicker', Datepicker);
 window.customElements.define('dews-periodpicker', Periodpicker);
 window.customElements.define('dews-timepicker', Timepicker);
-window.customElements.define('dews-codepicker', Codepicker);
 window.customElements.define('dews-yearpicker', Yearpicker);
 window.customElements.define('dews-monthpicker', Monthpicker);
 window.customElements.define('dews-codepicker', Codepicker);
