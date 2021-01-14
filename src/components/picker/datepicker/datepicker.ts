@@ -291,6 +291,8 @@ export class Datepicker extends PickerBase {
     if (this._value?.indexOf('_')! < 0) {
       this.inputValue = this._value;
       this._close();
+    } else {
+      this._close();
     }
   };
 

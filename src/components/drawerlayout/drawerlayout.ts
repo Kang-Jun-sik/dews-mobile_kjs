@@ -21,7 +21,7 @@ export class Drawerlayout extends DewsFormComponent {
   size: 'large' | 'full' = 'large';
 
   @property({ type: String })
-  height: string | undefined;
+  height: string | undefined = '200px';
 
   @property({ type: Boolean })
   scrollEnabled = false;
@@ -32,10 +32,13 @@ export class Drawerlayout extends DewsFormComponent {
   private _moveEnd: number | undefined;
   private _defaultHeight: number | undefined;
   private _moveState: boolean | undefined = false;
+  private _moveCheck = false;
   private close: Event = new Event('close');
 
   connectedCallback() {
     super.connectedCallback();
+
+    this._height = `calc(100% - ${this.height})`;
   }
 
   disconnectedCallback() {
@@ -69,22 +72,28 @@ export class Drawerlayout extends DewsFormComponent {
   }
 
   private _touchMove(e: TouchEvent & AddEventListenerOptions) {
+    e.preventDefault();
+    e.passive = true;
+    e.capture = true;
     if (this.scrollEnabled) {
-      e.preventDefault();
-      e.passive = true;
-      e.capture = true;
       if (this._moveState) {
-        this._height = `${this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY)}px`;
+        if (
+          window.innerHeight - 30 >= this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY) &&
+          24 <= this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY)
+        ) {
+          this._moveCheck = true;
+          this._height = `${this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY)}px`;
+        }
       }
     }
   }
-
   private _touchEnd(e: TouchEvent) {
     this._moveState = false;
     this._moveEnd = e.changedTouches[0].screenY;
     this.shadowRoot!.querySelector('.layer-bottom')?.classList.remove('little_moving');
-    if (Math.abs(this._moveStart! - this._moveEnd!) < 5) {
+    if (Math.abs(this._moveStart! - this._moveEnd!) < 8) {
       this.dispatchEvent(this.close);
+      this._moveCheck = false;
     }
   }
 
@@ -101,16 +110,12 @@ export class Drawerlayout extends DewsFormComponent {
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('active') !== undefined && !this.right) {
-      if (this._height !== '-5px') {
-        this._height = '-5px';
-      } else {
-        if (this.height === undefined) {
-          this._height = `${window.innerHeight - 200}px`;
-        } else {
-          this._height = `calc(100% - ${this.height})`;
-        }
+      if ((!_changedProperties.get('active') && this._moveCheck) || this.height === '200px') {
+        this._height = `calc(100% - ${this.height})`;
+        this._moveCheck = false;
       }
     }
+
     return super.shouldUpdate(_changedProperties);
   }
 

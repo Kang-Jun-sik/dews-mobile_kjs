@@ -1,5 +1,6 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, internalProperty, property, TemplateResult } from 'lit-element';
+import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
 
 export class DrawerBottomBase extends DewsFormComponent {
   @property({ type: Boolean })
@@ -22,6 +23,7 @@ export class DrawerBottomBase extends DewsFormComponent {
     const $el = this.parentElement?.parentElement?.children[this._afterItem!]?.children[0] as HTMLElement;
     this._confirmClickHandler();
     $el?.click();
+    this._scrollChange($el);
   }
 
   protected _confirmClickHandler(): void {
@@ -74,20 +76,29 @@ export class DrawerBottomBase extends DewsFormComponent {
     }
   }
 
+  private _focus() {
+    this.shadowRoot!.querySelector('.select-wrap')?.classList.add('focus');
+  }
+
+  private _blur() {
+    this.shadowRoot!.querySelector('.select-wrap')?.classList.remove('focus');
+  }
+
   protected _clickHandler(e: MouseEvent): void {
     if (!this.disabled && !this.readonly && this.active === false) {
-      this.shadowRoot!.querySelector('.select-wrap')!.classList.add('focus');
+      const $el: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout');
+      $el!.height = `${this.shadowRoot!.getElementById('drawer')!.clientHeight + 120}px`;
+      this._scrollChange(this);
       this._open();
-      this._scrollChange();
     }
   }
 
-  protected _scrollChange(): void {
+  protected _scrollChange($el: Element): void {
     window.scrollTo(
       0,
       window.pageYOffset +
-        this.parentElement!.getBoundingClientRect()?.top -
-        this.shadowRoot!.getElementById('drawer')!.clientHeight -
+        $el.parentElement!.getBoundingClientRect()?.top -
+        $el.shadowRoot!.getElementById('drawer')!.clientHeight -
         25
     );
   }
@@ -96,12 +107,15 @@ export class DrawerBottomBase extends DewsFormComponent {
 
   protected _close(): void {
     this.shadowRoot!.querySelector('.select-wrap')!.classList.remove('focus');
-    this.active = false;
     this.count = 0;
+
+    this.active = false;
+    this._blur();
     this.dispatchEvent(new Event('close'));
     document.removeEventListener('click', this.domEvent);
   }
   protected _open(): void {
+    this._focus();
     this.active = true;
     this.dispatchEvent(new Event('open'));
     document.addEventListener('click', this.domEvent);
