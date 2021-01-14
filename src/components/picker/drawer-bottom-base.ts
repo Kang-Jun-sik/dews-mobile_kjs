@@ -13,7 +13,6 @@ export class DrawerBottomBase extends DewsFormComponent {
 
   @internalProperty()
   protected active: boolean | undefined = false;
-
   protected _afterItem: number | undefined;
   protected $nextBtn: TemplateResult | undefined;
   protected count: number | undefined = 0;

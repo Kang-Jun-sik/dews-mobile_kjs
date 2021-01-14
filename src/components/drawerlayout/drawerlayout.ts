@@ -12,7 +12,13 @@ export class Drawerlayout extends DewsFormComponent {
   title = '';
 
   @property({ type: Boolean, reflect: true })
+  right = false;
+
+  @property({ type: Boolean, reflect: true })
   active = false;
+
+  @property({ type: String })
+  size: 'large' | 'full' = 'large';
 
   @property({ type: String })
   height: string | undefined;
@@ -22,10 +28,6 @@ export class Drawerlayout extends DewsFormComponent {
 
   @internalProperty()
   private _height = '-5px';
-
-  @property({ type: String, reflect: true })
-  drower: 'bottom' | 'right' = 'bottom';
-
   private _moveStart: number | undefined;
   private _moveEnd: number | undefined;
   private _defaultHeight: number | undefined;
@@ -78,7 +80,6 @@ export class Drawerlayout extends DewsFormComponent {
   }
 
   private _touchEnd(e: TouchEvent) {
-    // e.preventDefault();
     this._moveState = false;
     this._moveEnd = e.changedTouches[0].screenY;
     this.shadowRoot!.querySelector('.layer-bottom')?.classList.remove('little_moving');
@@ -99,7 +100,7 @@ export class Drawerlayout extends DewsFormComponent {
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    if (_changedProperties.get('active') !== undefined) {
+    if (_changedProperties.get('active') !== undefined && !this.right) {
       if (this._height !== '-5px') {
         this._height = '-5px';
       } else {

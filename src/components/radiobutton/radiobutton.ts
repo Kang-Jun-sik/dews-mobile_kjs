@@ -8,7 +8,7 @@ export class Radiobutton extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String, reflect: true })
-  title = '';
+  label = '';
 
   @property({ type: Boolean })
   readonly = false;

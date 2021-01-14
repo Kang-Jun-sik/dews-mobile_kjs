@@ -366,14 +366,12 @@ export class Datepicker extends PickerBase {
       const today: Date = new Date();
       const todayYear: number = today.getFullYear();
       const todayMonth: number = today.getMonth();
-      const day = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.day.today') as HTMLElement;
       this._viewYear = todayYear;
       this._viewMonth = todayMonth + 1;
       this._setYear = todayYear;
       this._setMonth = todayMonth + 1;
       this._setDay = today.getDate();
       this._selectRemove();
-      day.classList.add('select');
       if (todayMonth < 1) {
         this._beforeView = this._dayPickerView(todayYear - 1, 12);
       } else {
