@@ -4,6 +4,8 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './numerictextbox.html';
 import scss from './numerictextbox.scss';
 
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
 export class Numerictextbox extends DewsFormComponent {
   static styles = scss;
 
@@ -67,6 +69,9 @@ export class Numerictextbox extends DewsFormComponent {
 
   private onFocus = new CustomEvent('focus', { detail: { target: '' } });
   private onChange = new CustomEvent('change', { detail: { target: '' } });
+
+  //이벤트 객체 생성
+  private Event = new EventEmitter();
 
   connectedCallback() {
     super.connectedCallback();
@@ -239,7 +244,10 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) + this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    this.dispatchEvent(this.onChange);
+    // this.dispatchEvent(this.onChange);
+
+    // 이벤트실행
+    this.Event.emit('change', { target: this });
   }
 
   private _stepperDecrement() {
@@ -255,7 +263,10 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) - this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    this.dispatchEvent(this.onChange);
+    // this.dispatchEvent(this.onChange);
+
+    // 이벤트실행
+    this.Event.emit('change', { target: this });
   }
 
   private _keydown(e: KeyboardEvent) {
@@ -294,7 +305,10 @@ export class Numerictextbox extends DewsFormComponent {
     $spanMask!.style.display = 'none';
 
     if (this._oldValue != $input[0].value) {
-      this.dispatchEvent(this.onChange);
+      // this.dispatchEvent(this.onChange);
+
+      // 이벤트실행
+      this.Event.emit('change', { target: this });
     }
   }
 
@@ -348,6 +362,16 @@ export class Numerictextbox extends DewsFormComponent {
     const $input = this.shadowRoot!.querySelectorAll('input');
 
     return $input[0].value;
+  }
+
+  // 이벤트 등록
+  public on(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.off(key, handler);
   }
 
   render() {
