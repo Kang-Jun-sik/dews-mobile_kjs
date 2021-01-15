@@ -4,9 +4,7 @@
 //======================================
 // dews-info
 //======================================
-
-
 * {
   @include reset();
 }
-@include dews-info();
+@include dews-container-infobox();

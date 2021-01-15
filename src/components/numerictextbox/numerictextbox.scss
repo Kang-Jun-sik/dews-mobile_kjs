@@ -10,9 +10,7 @@
 * {
   @include reset();
 }
-
 .undefined {
   opacity: 0;
 }
-@include numeric-textbox-wrap();
-
+@include dews-numerictextbox();

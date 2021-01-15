@@ -2,12 +2,9 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-textbox
+// dews-masktextbox
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-@include dews-mask-textbox();
+@include dews-masktextbox();
