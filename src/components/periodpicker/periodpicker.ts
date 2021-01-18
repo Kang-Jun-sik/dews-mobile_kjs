@@ -1,11 +1,10 @@
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
-
 import template from './periodpicker.html';
 import scss from './periodpicker.scss';
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
+import { PeriodPickerBase } from '../base/PeriodPickerBase.js';
 
-export class Periodpicker extends DewsFormComponent {
+export class Periodpicker extends PeriodPickerBase {
   static styles = scss;
 
   @property({ type: Boolean })
@@ -24,16 +23,16 @@ export class Periodpicker extends DewsFormComponent {
   hdDisabled = false;
 
   @property({ type: String })
-  min: string | undefined = undefined;
+  min: string | undefined = '19000101';
 
   @property({ type: String })
-  max: string | undefined = undefined;
+  max: string | undefined = '21000101';
 
   @property({ type: String })
-  end: string | undefined = '';
+  endValue: string | undefined = '';
 
   @property({ type: String })
-  start: string | undefined = '';
+  startValue: string | undefined = '';
 
   @internalProperty()
   private _value: string | undefined = '____-__-__ ~ ____-__-__';
@@ -43,9 +42,6 @@ export class Periodpicker extends DewsFormComponent {
 
   @internalProperty()
   private inputValue: string | undefined;
-
-  @internalProperty()
-  private active = false;
 
   @internalProperty()
   private _beforeView: TemplateResult = html``;
@@ -61,14 +57,6 @@ export class Periodpicker extends DewsFormComponent {
 
   private _modeView: string | undefined = '';
 
-  private _open() {
-    this.active = true;
-  }
-
-  private _close() {
-    this.active = false;
-  }
-
   private toYear = new Date().getFullYear();
   private toMonth = new Date().getMonth();
   private toDay = new Date().getDate();
@@ -78,7 +66,6 @@ export class Periodpicker extends DewsFormComponent {
 
   private _viewYear: number | undefined;
   private _viewMonth: number | undefined;
-  private _viewDate: number | undefined;
 
   private _startYear: number | undefined;
   private _startMonth: number | undefined;
@@ -101,12 +88,30 @@ export class Periodpicker extends DewsFormComponent {
   private _beforeInputHandler(e: InputEvent) {
     this._beforeValue = (e.target as HTMLInputElement).value;
     if (/\d/.exec(e.data!) == null && e.data != null) {
-      e.returnValue = false;
+      e.returnValue;
     }
   }
 
-  private _confirmClickHandler() {
+  /**
+   *  적용 버튼 클릭핸들러
+   * */
+  _confirmClickHandler = () => {
     this._close();
+    if (this._startYear !== undefined) {
+      this.startValue = `${this._startYear}${this._startMonth! < 10 ? '0' + this._startMonth! : this._startMonth}${
+        this._startDay! < 10 ? '0' + this._startDay! : this._startDay!
+      }`;
+    } else {
+      this.startValue = '';
+    }
+    if (this._endYear !== undefined) {
+      this.endValue = `${this._endYear}${this._endMonth! < 10 ? '0' + this._endMonth! : this._endMonth}${
+        this._endDay! < 10 ? '0' + this._endDay! : this._endDay!
+      }`;
+    } else {
+      this.endValue = '';
+    }
+
     this.inputValue =
       `${this._startYear === undefined ? '____' : this._startYear}` +
       '-' +
@@ -119,120 +124,222 @@ export class Periodpicker extends DewsFormComponent {
       `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
       '-' +
       `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
-  }
+  };
 
+  /**
+   * @param e 인풋이벤트
+   * 키패드 입력 처리(이벤트 핸들러)
+   * */
   private _inputHandler(e: InputEvent) {
-    let cursor = (e.target! as HTMLInputElement).selectionStart!;
+    let cursor = Number((e.target! as HTMLInputElement).selectionStart!);
     let value = (e.target as HTMLInputElement).value;
+    const minYear = Number(this.min?.slice(0, 4));
+    const maxYear = Number(this.max?.slice(0, 4));
+    const minMonth = Number(this.min?.slice(0, 6));
+    const maxMonth = Number(this.max?.slice(0, 6));
+    const minDay = Number(this.min);
+    const maxDay = Number(this.max);
     value = value.toUpperCase();
 
     if (value.search(/[^0-9-~_ ]/g) >= 0) {
       (e.target as HTMLInputElement).value = this._beforeValue!;
       (e.target as HTMLInputElement).setSelectionRange(cursor! - 1, cursor! - 1);
       return;
-    } else if (cursor === 5 && e.data !== null) {
-      // 시작년도 값 변경
-      (e.target as HTMLInputElement).value =
-        value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
-      cursor++;
-    } else if (cursor === 8 && e.data !== null) {
-      // 시작 월 값변경
-      (e.target as HTMLInputElement).value =
-        value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
-      cursor++;
-    } else if (cursor === 11 && e.data !== null) {
-      // 시작 일 값변경
-      (e.target as HTMLInputElement).value =
-        value.slice(0, cursor - 1) + ' ~ ' + value.slice(cursor - 1, cursor) + value.slice(cursor + 4, value.length);
-      cursor += 3;
-    } else if (cursor === 18 && e.data !== null) {
-      // 끝 년도 값변경
-      (e.target as HTMLInputElement).value =
-        value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
-      cursor++;
-    } else if (cursor === 21 && e.data !== null) {
-      // 끝 월 값변경
-      (e.target as HTMLInputElement).value =
-        value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
-      cursor++;
-    } else if (cursor === 24 && e.data !== null) {
-      // 끝 일 값변경
-      (e.target as HTMLInputElement).value = this._beforeValue!;
-    } else if (e.data !== null) {
-      (e.target as HTMLInputElement).value = value.slice(0, cursor) + value.slice(cursor + 1, value.length);
+    }
+    if (e.data !== null) {
+      let checkValue = 0;
+      let beforValue = 0;
+      new Date(minYear, 1, 1);
+      switch (cursor) {
+        case 4:
+          if (minYear > Number(value.slice(0, 4))) {
+            (e.target as HTMLInputElement).value = minYear + '-' + value.slice(cursor + 2, value.length);
+          } else if (maxYear < Number(value.slice(0, 4))) {
+            (e.target as HTMLInputElement).value = maxYear + '-' + value.slice(cursor + 2, value.length);
+          } else {
+            (e.target as HTMLInputElement).value = value.slice(0, cursor) + '-' + value.slice(cursor + 2, value.length);
+          }
+          cursor++;
+          break;
+        case 7:
+          if (Number(value.slice(5, 7)) > 12) {
+            (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value =
+              value.slice(0, cursor - 2) + '12' + '-' + value.slice(cursor + 1, value.length);
+            value = (e.target as HTMLInputElement).value;
+          } else if (Number(value.slice(5, 7)) < 1) {
+            (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value =
+              value.slice(0, cursor - 2) + '01' + '-' + value.slice(cursor + 1, value.length);
+            value = (e.target as HTMLInputElement).value;
+          }
+          checkValue = Number(value.slice(0, 4) + value.slice(5, 7));
+          if (minMonth > checkValue) {
+            (e.target as HTMLInputElement).value =
+              this.min!.slice(0, 4) + '-' + this.min!.slice(4, 6) + '-' + value.slice(cursor + 2, value.length);
+          } else if (maxMonth < checkValue) {
+            (e.target as HTMLInputElement).value =
+              this.max!.slice(0, 4) + '-' + this.max!.slice(4, 6) + '-' + value.slice(cursor + 2, value.length);
+          } else {
+            (e.target as HTMLInputElement).value = value.slice(0, cursor) + '-' + value.slice(cursor + 2, value.length);
+          }
+          cursor++;
+          break;
+        case 5:
+          (e.target as HTMLInputElement).value =
+            value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
+          cursor++;
+          break;
+        case 8:
+          // 시작 월 값변경
+          (e.target as HTMLInputElement).value =
+            value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
+          cursor++;
+          break;
+        case 10:
+          if (Number(value.slice(8, 10)) > this.lastDay[Number(value.slice(5, 7)) - 1]) {
+            (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value =
+              value.slice(0, cursor - 2) +
+              this.lastDay[Number(value.slice(5, 7)) - 1] +
+              '-' +
+              value.slice(cursor + 1, value.length);
+            value = (e.target as HTMLInputElement).value;
+          } else if (Number(value.slice(8, 10)) < 1) {
+            (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value =
+              value.slice(0, cursor - 2) + '01' + '-' + value.slice(cursor + 1, value.length);
+            value = (e.target as HTMLInputElement).value;
+          }
+          checkValue = Number(value.slice(0, 4) + value.slice(5, 7) + value.slice(8, 10));
+          if (minDay > checkValue) {
+            (e.target as HTMLInputElement).value =
+              this.min!.slice(0, 4) + '-' + this.min!.slice(4, 6) + '-' + this.min!.slice(6, 8) + ' ~ ____-__-__';
+          } else if (maxDay < checkValue) {
+            (e.target as HTMLInputElement).value =
+              this.max!.slice(0, 4) + '-' + this.max!.slice(4, 6) + '-' + this.max!.slice(6, 8) + ' ~ ____-__-__';
+          } else {
+            (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ____-__-__';
+          }
+          this._startYear = Number((e.target as HTMLInputElement).value.slice(0, 4));
+          this._startMonth = Number((e.target as HTMLInputElement).value.slice(5, 7));
+          this._startDay = Number((e.target as HTMLInputElement).value.slice(8, 10));
+          this._endYear = undefined;
+          this._endMonth = undefined;
+          this._endDay = undefined;
+          if (this.mode === 'day') {
+            this._dayViewChange(this._startYear, this._startMonth - 1);
+            this._daySelect();
+          }
+          cursor += 3;
+          break;
+        case 11:
+          // 시작 일 값변경
+          (e.target as HTMLInputElement).value =
+            value.slice(0, cursor - 1) +
+            ' ~ ' +
+            value.slice(cursor - 1, cursor) +
+            value.slice(cursor + 4, value.length);
+          cursor += 3;
+          break;
+        case 12:
+        case 13:
+          (e.target as HTMLInputElement).value =
+            value.slice(0, 10) + ' ~ ' + value.slice(cursor - 1, cursor) + value.slice(15, value.length);
+          cursor = 14;
+          break;
+        case 17:
+          if (
+            Number((e.target as HTMLInputElement).value.slice(0, 4)) >
+            Number((e.target as HTMLInputElement).value.slice(13, 17))
+          ) {
+            (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ____-__-__';
+            cursor = 13;
+          } else if (Number((e.target as HTMLInputElement).value.slice(13, 17)) < minYear) {
+            (e.target as HTMLInputElement).value = value.slice(0, 10) + ` ~ ${minYear}-__-__`;
+          } else if (Number((e.target as HTMLInputElement).value.slice(13, 17)) > maxYear) {
+            (e.target as HTMLInputElement).value = value.slice(0, 10) + ` ~ ${maxYear}-__-__`;
+          } else {
+            (e.target as HTMLInputElement).value = value.slice(0, cursor) + value.slice(cursor + 1, value.length);
+          }
+          cursor++;
+          break;
+        case 18:
+          // 끝 년도 값변경
+          (e.target as HTMLInputElement).value =
+            value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
+          cursor++;
+          break;
+        case 20:
+          checkValue = Number(
+            (e.target as HTMLInputElement).value.slice(13, 17) + (e.target as HTMLInputElement).value.slice(18, 20)
+          );
+          beforValue = Number(
+            (e.target as HTMLInputElement).value.slice(0, 4) + (e.target as HTMLInputElement).value.slice(5, 7)
+          );
+
+          if (checkValue <= beforValue) {
+            (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ____-__-__';
+            cursor = 13;
+          } else {
+            (e.target as HTMLInputElement).value = value.slice(0, cursor) + value.slice(cursor + 1, value.length);
+          }
+          break;
+        case 21:
+          // 끝 월 값변경
+          (e.target as HTMLInputElement).value =
+            value.slice(0, cursor - 1) + '-' + value.slice(cursor - 1, cursor) + value.slice(cursor + 2, value.length);
+          cursor++;
+          break;
+        case 23:
+          if (
+            Number((e.target as HTMLInputElement).value.slice(0, 4)) ===
+              Number((e.target as HTMLInputElement).value.slice(13, 17)) &&
+            Number((e.target as HTMLInputElement).value.slice(5, 7)) ===
+              Number((e.target as HTMLInputElement).value.slice(18, 20)) &&
+            Number((e.target as HTMLInputElement).value.slice(8, 10)) >
+              Number((e.target as HTMLInputElement).value.slice(21, 23))
+          ) {
+            (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ____-__-__';
+            cursor = 13;
+          } else {
+            (e.target as HTMLInputElement).value = value.slice(0, cursor) + value.slice(cursor + 1, value.length);
+            cursor++;
+          }
+          this._endYear = Number((e.target as HTMLInputElement).value.slice(13, 17));
+          this._endMonth = Number((e.target as HTMLInputElement).value.slice(18, 20));
+          this._endDay = Number((e.target as HTMLInputElement).value.slice(21, 23));
+          this._startYear = Number((e.target as HTMLInputElement).value.slice(0, 4));
+          this._startMonth = Number((e.target as HTMLInputElement).value.slice(5, 7));
+          this._startDay = Number((e.target as HTMLInputElement).value.slice(8, 10));
+          this._dayViewChange(this._endYear, this._endMonth - 1);
+          this._daySelect();
+          break;
+        case 24:
+          (e.target as HTMLInputElement).value = this._beforeValue!;
+          break;
+        default:
+          if (cursor > 24) {
+            (e.target as HTMLInputElement).value = this._beforeValue!;
+          } else {
+            (e.target as HTMLInputElement).value = value.slice(0, cursor) + value.slice(cursor + 1, value.length);
+          }
+      }
     } else {
-      if (cursor === 4 || cursor === 7 || cursor === 17 || cursor === 20) {
-        (e.target as HTMLInputElement).value = value.slice(0, cursor - 1) + '_-' + value.slice(cursor, value.length);
-        cursor--;
-      } else if (cursor > 9 && cursor < 13) {
-        (e.target as HTMLInputElement).value = value.slice(0, 9) + '_ ~ ' + value.slice(12, value.length);
-        cursor = 9;
-      } else {
-        (e.target as HTMLInputElement).value = value.slice(0, cursor) + '_' + value.slice(cursor, value.length);
+      switch (cursor) {
+        case 4:
+        case 7:
+        case 17:
+        case 20:
+          (e.target as HTMLInputElement).value = value.slice(0, cursor - 1) + '_-' + value.slice(cursor, value.length);
+          cursor--;
+          break;
+        case 10:
+        case 11:
+        case 12:
+          (e.target as HTMLInputElement).value = value.slice(0, 9) + '_ ~ ' + value.slice(12, value.length);
+          cursor = 9;
+          break;
+        default:
+          (e.target as HTMLInputElement).value = value.slice(0, cursor) + '_' + value.slice(cursor, value.length);
       }
     }
-
-    const change = () => {
-      this._endYear = Number((e.target as HTMLInputElement).value.slice(13, 17));
-      this._endMonth = Number((e.target as HTMLInputElement).value.slice(18, 20));
-      this._endDay = Number((e.target as HTMLInputElement).value.slice(21, 23));
-      this._startYear = Number((e.target as HTMLInputElement).value.slice(0, 4));
-      this._startMonth = Number((e.target as HTMLInputElement).value.slice(5, 7));
-      this._startDay = Number((e.target as HTMLInputElement).value.slice(8, 10));
-      if (this.mode === 'day') {
-        this._daySelect();
-      }
-    };
-
-    if (cursor === 10 && e.data !== null) {
-      this._startYear = Number((e.target as HTMLInputElement).value.slice(0, 4));
-      this._startMonth = Number((e.target as HTMLInputElement).value.slice(5, 7));
-      this._startDay = Number((e.target as HTMLInputElement).value.slice(8, 10));
-      if (this.mode === 'day') {
-        this._daySelect();
-      }
-    }
-
-    if (cursor === 17 && e.data !== null) {
-      if (
-        Number((e.target as HTMLInputElement).value.slice(0, 4)) >
-        Number((e.target as HTMLInputElement).value.slice(13, 17))
-      ) {
-        (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ' + value.slice(0, 10);
-        change();
-      }
-    }
-
-    if (cursor === 20 && e.data !== null) {
-      if (
-        Number((e.target as HTMLInputElement).value.slice(0, 4)) ===
-          Number((e.target as HTMLInputElement).value.slice(13, 17)) &&
-        Number((e.target as HTMLInputElement).value.slice(5, 7)) >
-          Number((e.target as HTMLInputElement).value.slice(18, 20))
-      ) {
-        (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ' + value.slice(0, 10);
-        change();
-      }
-    }
-
-    if (cursor === 23 && e.data !== null) {
-      if (
-        Number((e.target as HTMLInputElement).value.slice(0, 4)) ===
-          Number((e.target as HTMLInputElement).value.slice(13, 17)) &&
-        Number((e.target as HTMLInputElement).value.slice(5, 7)) ===
-          Number((e.target as HTMLInputElement).value.slice(18, 20)) &&
-        Number((e.target as HTMLInputElement).value.slice(8, 10)) >
-          Number((e.target as HTMLInputElement).value.slice(21, 23))
-      ) {
-        (e.target as HTMLInputElement).value = value.slice(0, 10) + ' ~ ' + value.slice(0, 10);
-        change();
-      }
-    }
-
-    if (cursor === 23 && e.data !== null) {
-      change();
-    }
-
     (e.target as HTMLInputElement).setSelectionRange(cursor!, cursor!);
   }
 
@@ -534,20 +641,6 @@ export class Periodpicker extends DewsFormComponent {
       `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
       '-' +
       `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
-
-    console.log(
-      this._startYear +
-        '-' +
-        this._startMonth +
-        '-' +
-        this._startDay +
-        ' ~ ' +
-        this._endYear +
-        '-' +
-        this._endMonth +
-        '-' +
-        this._endDay
-    );
   }
 
   private _touchMoveHandler(e: TouchEvent) {
@@ -689,26 +782,6 @@ export class Periodpicker extends DewsFormComponent {
     const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
     $el.style.transform = `translate3d(-${$el.clientWidth / 3}px,0px,0px)`;
     this._afterAnimation();
-  }
-
-  /**
-   *  년도 HTMLTemplate 을 반환합니다.
-   * @param e Event
-   * */
-  private _clickHandler(e: MouseEvent) {
-    if (!this.disabled && !this.readonly) {
-      const $el: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout');
-      window.scrollTo(
-        0,
-        window.pageYOffset +
-          this.parentElement?.getBoundingClientRect()?.top! -
-          this.shadowRoot!.querySelector('.period-picker-wrap')?.clientHeight! -
-          25
-      );
-      this.height = `${this.shadowRoot!.querySelector('.period-picker-wrap')!.clientHeight + 120}px`;
-      $el!.height = this.height;
-      this._open();
-    }
   }
 
   /**
@@ -868,7 +941,6 @@ export class Periodpicker extends DewsFormComponent {
         this._endDay = undefined;
       }
     }
-
     this._value =
       `${this._startYear === undefined ? '____' : this._startYear}` +
       '-' +
@@ -881,8 +953,6 @@ export class Periodpicker extends DewsFormComponent {
       `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
       '-' +
       `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
-    // this._startDay = date.getDate();
-    // this._endYear = date.getFullYear();
   }
 
   private _monthClickHandler(e: Event): void {
@@ -908,75 +978,51 @@ export class Periodpicker extends DewsFormComponent {
 
   private _daySelect(): void {
     const $el = this.shadowRoot!.querySelectorAll('.calendar-date')[1] as HTMLElement;
-    $el.querySelector('.select')?.classList.remove('select');
-    $el.querySelector('.select-start')?.classList.remove('select-start');
-    $el.querySelector('.select-end')?.classList.remove('select-end');
-    $el.querySelector('.today')?.classList.remove('today');
-
-    $el.querySelectorAll('.select-period')?.forEach($period => {
-      $period?.classList?.remove('select-period');
-    });
-
-    if (this.toYear === this._viewYear && this.toMonth + 1 === this._viewMonth) {
-      $el.querySelectorAll('.day').forEach($day => {
-        if (Number(($day as HTMLElement).dataset.value) === this.toDay) {
-          $day.classList.add('today');
-        }
-      });
-    }
-
-    if (this._viewYear === this._startYear && this._viewMonth === this._startMonth) {
-      // select-start,select 클래 생성
-      $el.querySelectorAll('.day').forEach($day => {
-        if (this._startDay === Number(($day as HTMLElement).dataset.value) && this._endDay !== undefined) {
+    $el.querySelectorAll('.day').forEach($day => {
+      $day?.classList.remove('select');
+      $day?.classList.remove('select-start');
+      $day?.classList.remove('select-end');
+      $day?.classList.remove('today');
+      $day?.classList.remove('select-period');
+      const value = Number(($day as HTMLElement).dataset.value);
+      if (this.toYear === this._viewYear && this.toMonth + 1 === this._viewMonth && value === this.toDay) {
+        $day.classList.add('today');
+      }
+      // start
+      if (this._viewYear === this._startYear && this._viewMonth === this._startMonth && this._startDay === value) {
+        if (this._endYear !== undefined) {
           $day.classList.add('select-start');
-        } else if (this._startDay === Number(($day as HTMLElement).dataset.value) && this._endDay === undefined) {
+        } else {
           $day.classList.add('select');
         }
-      });
-    }
-
-    if (this._viewYear === this._endYear && this._viewMonth === this._endMonth) {
-      // select-end 클래스 생성
-      $el.querySelectorAll('.day').forEach($day => {
-        if (this._endDay === Number(($day as HTMLElement).dataset.value)) {
-          $el.querySelector('.select')?.classList.add('select-start');
-          $el.querySelector('.select')?.classList.remove('select');
-          $day.classList.add('select-end');
-        }
-      });
-    }
-
-    if (this._viewYear! >= this._startYear! && this._viewYear! <= this._endYear!) {
-      // period 클래스 생성
-      if (
-        (this._viewMonth! > this._startMonth! && this._viewMonth! < this._endMonth!) ||
-        (this._viewYear! > this._startYear! && this._viewMonth! < this._endMonth!)
-      ) {
-        // start 와 end 가 없는 달의 영역에 period 클래스 생성
-        $el.querySelectorAll('.day').forEach($day => {
-          $day.classList.add('select-period');
-        });
-      } else if (this._viewMonth! === this._startMonth!) {
-        // start 위치의 period 클래스 생성
-        $el.querySelectorAll('.day').forEach($day => {
-          if (this._startDay! < Number(($day as HTMLElement).dataset.value)) {
-            if (this._endDay! > Number(($day as HTMLElement).dataset.value) && this._viewMonth! === this._endMonth!) {
-              $day.classList.add('select-period');
-            } else if (this._viewMonth! !== this._endMonth!) {
-              $day.classList.add('select-period');
-            }
-          }
-        });
-      } else if (this._viewMonth! === this._endMonth!) {
-        // 다른 달의 끝지점 period 클래스 생성
-        $el.querySelectorAll('.day').forEach($day => {
-          if (this._endDay! > Number(($day as HTMLElement).dataset.value)) {
-            $day.classList.add('select-period');
-          }
-        });
       }
-    }
+      // end
+      else if (this._viewYear === this._endYear && this._viewMonth === this._endMonth && this._endDay === value) {
+        $day.classList.add('select-end');
+      }
+      // period
+      else if (this._startYear !== undefined && this._endYear !== undefined) {
+        const STARTDATE = Number(
+          `${this._startYear}${this._startMonth! < 10 ? '0' + this._startMonth! : this._startMonth}${
+            this._startDay! < 10 ? '0' + this._startDay! : this._startDay!
+          }`
+        );
+        const ENDDATE = Number(
+          `${this._endYear}${this._endMonth! < 10 ? '0' + this._endMonth! : this._endMonth}${
+            this._endDay! < 10 ? '0' + this._endDay! : this._endDay!
+          }`
+        );
+        const VIEWDATE = Number(
+          `${this._viewYear}${this._viewMonth! < 10 ? '0' + this._viewMonth! : this._viewMonth}${
+            value < 10 ? '0' + value : value
+          }`
+        );
+
+        if (VIEWDATE > STARTDATE && VIEWDATE < ENDDATE) {
+          $day.classList.add('select-period');
+        }
+      }
+    });
   }
 
   private _yearSelect() {
