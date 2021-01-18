@@ -4,23 +4,7 @@
 //======================================
 // dews-search-container
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-
-.dews-search-field{
-    @include form-field();
-
-  :host([col='2']) & {
-    @include form-field(2);
-  }
-}
-//--------------------------------------
-// dews-container-option-bar
-//--------------------------------------
-.dews-container-option-control {
-  @include option-control();
-}
+@include dews-container-search();

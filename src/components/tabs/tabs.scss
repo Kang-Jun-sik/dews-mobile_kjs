@@ -11,9 +11,4 @@
 * {
   @include reset();
 }
-:host {
-  width: 100%;
-}
-.dews-tabs-wrap {
-  @include area-tabs-title();
-}
+@include dews-area-tabs();

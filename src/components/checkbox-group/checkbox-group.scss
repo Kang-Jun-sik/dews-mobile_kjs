@@ -7,7 +7,4 @@
 * {
   @include reset();
 }
-.dews-checkbox-group-wrap {
-  @include checkbox-group-wrap();
-}
-
+@include dews-checkbox-group();

@@ -4,33 +4,7 @@
 //======================================
 // dews-area-item
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-:host {
-  @include reset();
-  position: relative;
-  display: block;
-  min-height: 1px;
-}
-@include media("(min-width: #{$media-size-tablet-l})") {
-  :host {
-    padding: 0 $area-item-space;
-    flex: 1 0 100%;
-    min-width: $area-item-size-minimum-width;
-  }
-  :host(:first-of-type) {
-    padding-left: 0;
-  }
-  :host(:last-of-type) {
-    padding-right: 0;
-  }
-  @for $i from $area-item-col-size-start through $area-item-col-size-end {
-    :host([col='#{$i}']) {
-      @include item-col-size($i);
-    }
-  }
-}
+@include dews-area-item();

@@ -10,13 +10,4 @@
 * {
   @include reset();
 }
-:host {
-  display: inline-block;
-  margin: 0px;
-  padding: 0px;
-  font-size: 0;
-}
-.dews-checkbox-wrap {
-  @include checkbox-wrap();
-}
-
+@include dews-checkbox();
