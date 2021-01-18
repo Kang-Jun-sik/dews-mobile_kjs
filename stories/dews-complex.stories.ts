@@ -8,7 +8,7 @@ export default {
 export const Complex = () => html`
   <div style="width: 360px">
     <dews-complex required title="1번 조합">
-      <dews-dropdownlist required title="항목명">
+      <dews-dropdownlist title="항목명">
         <dropdownlist-item title="DATA-1"></dropdownlist-item>
         <dropdownlist-item title="DATA-2"></dropdownlist-item>
         <dropdownlist-item title="DATA-3"></dropdownlist-item>

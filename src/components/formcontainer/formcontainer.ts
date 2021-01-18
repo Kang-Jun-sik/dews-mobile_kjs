@@ -99,7 +99,6 @@ export class FormContainer extends DewsLayoutComponent {
         </div>
       `
     );
-
     // this.querySelector('container-button').remove();
   }
 
@@ -112,7 +111,6 @@ export class FormContainer extends DewsLayoutComponent {
   }
 
   render() {
-    console.log('form-container-render');
     return template.call(this);
   }
 }

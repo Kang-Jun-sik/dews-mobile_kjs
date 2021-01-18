@@ -4,7 +4,7 @@ import template from './tooltip.html';
 import scss from './tooltip.scss';
 import { internalProperty, property, PropertyValues } from 'lit-element';
 
-type TOOLTIP_TYPE = 'normal' | 'required';
+type TOOLTIP_TYPE = 'normal' | 'required' | 'title';
 type TOOLTIP_POSITION = 'top' | 'bottom';
 export type TOOLTIP_OPTIONS = {
   type?: TOOLTIP_TYPE;
@@ -171,19 +171,17 @@ export class Tooltip extends DewsFormComponent {
         this._className += ' tooltip-top';
       }
 
-      if (this._closeButton) {
-        this._className += ' button-close';
-      }
-
       if (this._type === 'required') {
         this._className += ' require-tooltip';
         if (this._text === '') {
           this._text = '필수 입력 항목입니다.';
         }
+      } else if (this._type === 'normal' && this._closeButton) {
+        this._className += ' button-close';
       }
 
-      if (this._title !== undefined) {
-        this._className += ' title-tooltip';
+      if (this._type === 'title') {
+        this._className += ' title-tooltip button-close';
       }
     }
   }

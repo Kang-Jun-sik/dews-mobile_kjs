@@ -3,6 +3,9 @@ import { property } from 'lit-element';
 
 import template from './checkbox.html';
 import scss from './checkbox.scss';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT_TYPE = 'change' | 'checked';
 
 // noinspection JSUnusedLocalSymbols
 export class Checkbox extends DewsFormComponent {
@@ -12,7 +15,7 @@ export class Checkbox extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String })
-  title = '';
+  label = '';
 
   @property({ type: Boolean })
   disabled = false;
@@ -23,13 +26,17 @@ export class Checkbox extends DewsFormComponent {
   @property({ type: Boolean })
   bookmark = false;
 
+  @property({ type: Boolean })
+  reverse = false;
+
   private _className = 'dews-checkbox-wrap';
 
   connectedCallback() {
     super.connectedCallback();
 
-    console.log('connected callback');
-
+    if (this.reverse) {
+      this._className = this._className + ' reverse';
+    }
     if (this.parentElement?.localName == 'dews-dropdownlist') {
       this._className = this._className + ' dropdown';
     }
@@ -42,8 +49,7 @@ export class Checkbox extends DewsFormComponent {
   /*
    * 이벤트 생성
    * */
-  private changeEvent = new CustomEvent('change');
-  private checkEvent = new CustomEvent('check');
+  #EVENT = new EventEmitter();
 
   /*
    * 포커스 설정
@@ -55,15 +61,23 @@ export class Checkbox extends DewsFormComponent {
     if (this.disabled) {
       return;
     }
-    this._checkedChange();
+    this.#checkedChange();
     if (this.checked) {
-      this.dispatchEvent(this.checkEvent);
+      this.#EVENT.emit('checked', { target: this, type: 'checked' });
     }
   }
 
-  private _checkedChange() {
-    this.dispatchEvent(this.changeEvent);
+  #checkedChange = () => {
     this.checked = !this.checked;
+    this.#EVENT.emit('change', { target: this, type: 'change' });
+  };
+
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
   }
 
   render() {

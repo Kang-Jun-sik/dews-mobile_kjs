@@ -6,6 +6,9 @@ import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { DewsComponent } from '../base/DewsComponent.js';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
 
 // noinspection JSUnusedLocalSymbols
 // @ts-expect-error
@@ -49,18 +52,31 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
 
   constructor() {
     super();
-    this._nextBtnView();
+    this.#nextBtnView();
+  }
+
+  //이벤트 객체 생성
+  #EVENT = new EventEmitter();
+  // 이벤트 등록
+
+  public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this._itemview();
+    this.#itemview();
     if (this.disabled && this.readonly) {
       this.readonly = false;
     }
   }
 
-  private _itemview() {
+  #itemview = () => {
     this.$itemList = [];
     for (let i = 0; i <= this.children.length; i++) {
       if (this.children.item(i)?.localName === 'dropdownlist-item') {
@@ -68,7 +84,7 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
         if (this.multi) {
           this.$itemList.push(
             html`
-              <li data-value="${title}" @click="${this._multiItemSelect}">
+              <li data-value="${title}" @click="${this._multiItemSelectHandler}">
                 <span class="text">${title}</span>
                 <span data-value="${title}" class="checkbox">
                   <dews-checkbox class="multi-checkbox"></dews-checkbox>
@@ -79,7 +95,7 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
         } else {
           this.$itemList.push(
             html`
-              <li @click="${this._singleItemSelect}" data-value="${title}">
+              <li @click="${this._singleItemSelectHandler}" data-value="${title}">
                 <span>${title}</span>
               </li>
             `
@@ -87,9 +103,9 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
         }
       }
     }
-  }
+  };
 
-  private _nextBtnView() {
+  #nextBtnView = () => {
     const $el: HTMLCollection = this.parentElement?.children as HTMLCollection;
     for (let i = 0; i <= $el.length; i++) {
       if ($el!.item(i) === this) {
@@ -113,9 +129,8 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
         }
       }
     }
-  }
+  };
 
-  // todo
   private _nextBtnClickHandler(e: MouseEvent) {
     const $el = this.parentElement?.parentElement?.children[this._nextItem!]?.children[0] as HTMLElement;
     this._confirmClickHandler();
@@ -137,15 +152,17 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
     });
   }
 
-  private _singleItemSelect(e: MouseEvent) {
+  private _singleItemSelectHandler(e: MouseEvent) {
     const $el: HTMLElement = e.currentTarget as HTMLElement;
     this.shadowRoot!.querySelector('.check')?.classList?.remove('check');
     $el.classList.add('check');
     this.select[0] = $el.dataset.value as string;
+    this.#EVENT.emit('select', { target: this, type: 'select', item: this.select[0] });
+    this.#EVENT.emit('change', { target: this, type: 'change' });
     this._close();
   }
 
-  private _multiItemSelect(e: MouseEvent) {
+  private _multiItemSelectHandler(e: MouseEvent) {
     const $el: HTMLElement = (e.currentTarget as HTMLElement).querySelector('.multi-checkbox') as HTMLElement;
     if (this._allCheckState) {
       this.shadowRoot!.querySelector('.multi-checkbox')?.removeAttribute('checked');
@@ -156,9 +173,11 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
       }
     } else {
       if ((e.target as HTMLElement).localName !== 'dews-checkbox') {
+        this.#EVENT.emit('checked', { target: this, type: 'checked' });
         $el.setAttribute('checked', 'true');
       }
     }
+    this.#EVENT.emit('change', { target: this, type: 'change' });
   }
 
   private _confirmClickHandler() {
@@ -224,8 +243,8 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
         $el.setAttribute('checked', 'true');
       }
     });
-
     this.active = true;
+    this.#EVENT.emit('open', { target: this, type: 'open' });
   }
 
   private _close() {
@@ -238,6 +257,7 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
       });
     }
     this.active = false;
+    this.#EVENT.emit('close', { target: this, type: 'close' });
   }
 
   private _domClickHandelr(e: MouseEvent) {

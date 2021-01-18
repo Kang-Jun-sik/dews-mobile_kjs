@@ -12,7 +12,13 @@ export class Drawerlayout extends DewsFormComponent {
   title = '';
 
   @property({ type: Boolean, reflect: true })
+  right = false;
+
+  @property({ type: Boolean, reflect: true })
   active = false;
+
+  @property({ type: String })
+  size: 'large' | 'full' = 'large';
 
   @property({ type: String })
   height: string | undefined;
@@ -21,11 +27,7 @@ export class Drawerlayout extends DewsFormComponent {
   scrollEnabled = false;
 
   @internalProperty()
-  private _height = '0px';
-
-  @property({ type: String, reflect: true })
-  drower: 'bottom' | 'right' = 'bottom';
-
+  private _height = '-5px';
   private _moveStart: number | undefined;
   private _moveEnd: number | undefined;
   private _defaultHeight: number | undefined;
@@ -78,7 +80,6 @@ export class Drawerlayout extends DewsFormComponent {
   }
 
   private _touchEnd(e: TouchEvent) {
-    // e.preventDefault();
     this._moveState = false;
     this._moveEnd = e.changedTouches[0].screenY;
     this.shadowRoot!.querySelector('.layer-bottom')?.classList.remove('little_moving');
@@ -99,14 +100,10 @@ export class Drawerlayout extends DewsFormComponent {
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    if (_changedProperties.get('active') !== undefined) {
-      if (this._height !== '0px') {
-        this._height = '0px';
-        setTimeout(() => {
-          (this.shadowRoot!.querySelector('.layer-drawer') as HTMLElement).style.display = 'none';
-        }, 1000);
+    if (_changedProperties.get('active') !== undefined && !this.right) {
+      if (this._height !== '-5px') {
+        this._height = '-5px';
       } else {
-        (this.shadowRoot!.querySelector('.layer-drawer') as HTMLElement).style.display = 'block';
         if (this.height === undefined) {
           this._height = `${window.innerHeight - 200}px`;
         } else {
@@ -115,6 +112,10 @@ export class Drawerlayout extends DewsFormComponent {
       }
     }
     return super.shouldUpdate(_changedProperties);
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
   }
 
   render() {

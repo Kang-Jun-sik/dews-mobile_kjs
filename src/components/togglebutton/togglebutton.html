@@ -4,7 +4,7 @@
     <span class="toggle-control">
         <span class="toggle-text" style="display: ${this.text !== undefined ? 'block' : 'none'}">${this.text}</span>
         <label for="toggleButton">
-            <input type="checkbox" @click="${this._clickHandler}" id="toggleButton" ?disabled="${this.disabled}" ?checked="${this.on}">
+            <input type="checkbox" @click="${this._clickHandler}" id="toggleButton" ?disabled="${this.disabled}" ?checked="${this.checked}">
             <span class="toggle-shape"></span>
         </label>
     </span>

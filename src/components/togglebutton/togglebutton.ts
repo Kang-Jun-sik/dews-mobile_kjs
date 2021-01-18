@@ -3,6 +3,9 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './togglebutton.html';
 import scss from './togglebutton.scss';
 import { property } from 'lit-element';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT = 'change' | 'checked';
 
 export class Togglebutton extends DewsFormComponent {
   static styles = scss;
@@ -11,7 +14,7 @@ export class Togglebutton extends DewsFormComponent {
   disabled = false;
 
   @property({ type: Boolean, reflect: true })
-  on = false;
+  checked = false;
 
   @property({ type: String, attribute: 'title' })
   toggleTitle = undefined;
@@ -23,21 +26,31 @@ export class Togglebutton extends DewsFormComponent {
     return template.call(this);
   }
 
-  private changeEvent = new CustomEvent('change');
-  private checkEvent = new CustomEvent('check');
+  //이벤트 객체 생성
+  #EVENT = new EventEmitter();
+
+  // 이벤트 등록
+  public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void): void {
+    this.#EVENT.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
+  }
 
   private _clickHandler() {
     if (this.disabled) {
       return;
     }
     this._checkedChange();
-    if (this.on) {
-      this.dispatchEvent(this.checkEvent);
+    if (this.checked) {
+      this.#EVENT.emit('checked', { target: this, type: 'checked' });
     }
   }
 
   private _checkedChange() {
-    this.dispatchEvent(this.changeEvent);
-    this.on = !this.on;
+    this.#EVENT.emit('change', { target: this, type: 'change' });
+    this.checked = !this.checked;
   }
 }
