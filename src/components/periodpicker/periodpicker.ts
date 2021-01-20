@@ -96,7 +96,7 @@ export class Periodpicker extends PeriodPickerBase {
    *  적용 버튼 클릭핸들러
    * */
   _confirmClickHandler = () => {
-    this._close();
+    super._confirmClickHandler();
     if (this._startYear !== undefined) {
       this.startValue = `${this._startYear}${this._startMonth! < 10 ? '0' + this._startMonth! : this._startMonth}${
         this._startDay! < 10 ? '0' + this._startDay! : this._startDay!
