@@ -21,17 +21,11 @@
       <div class="control">
 
         <div class="total-control">
-          <div class="dataset-total">
-            <span>${this._totalCount}</span>
-          </div>
-
-          <div class="dataset-total-delete">
-            <dews-button type="text" text="전체삭제" size="small" @click="${this._removeAllData}"></dews-button>
-          </div>
+            ${this._dataSetHeader}
         </div>
 
         <div class="dataset-list">
-          ${this._dataList}
+          ${this._dataSetList}
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ export default class DrawerRightBase extends DewsLayoutComponent {
   }
 
   private _domClickHandler(e: MouseEvent) {
-    if (e.isTrusted) {
+    if (e.isTrusted && (e.target as HTMLElement).tagName !== 'DEWS-MESSAGEBOX') {
       if (
         e.clientX <
         window.innerWidth -

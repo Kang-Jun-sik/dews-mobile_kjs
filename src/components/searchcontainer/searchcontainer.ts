@@ -6,6 +6,7 @@ import { query } from 'lit-element/lib/decorators.js';
 import { date } from '@dews/dews-mobile-core';
 import DrawerRightBase from '../base/DrawerRightBase.js';
 import { Messagebox } from '../messagebox/dews-messagebox.js';
+import { Tooltip } from '../tooltip/tooltip.js';
 
 export interface DataSet {
   userId?: string;
@@ -16,6 +17,7 @@ export interface DataSet {
 
 export interface SearchData {
   id: string;
+  title: string;
   value: string;
   dateTime: string;
 }
@@ -42,10 +44,10 @@ export class SearchContainer extends DrawerRightBase {
   private _contentList: Array<TemplateResult> = [];
 
   @internalProperty()
-  private _totalCount: Array<TemplateResult> = [];
+  private _dataSetHeader: Array<TemplateResult> = [];
 
   @internalProperty()
-  private _dataList: Array<TemplateResult> = [];
+  private _dataSetList: Array<TemplateResult> = [];
 
   /**
    * set 버튼 클릭시 처리
@@ -56,15 +58,15 @@ export class SearchContainer extends DrawerRightBase {
   }
 
   private _renderDataList() {
-    this._dataList = [];
-    this._totalCount = [];
-    this._dataList = [];
     let dataSetList;
     let isDataSet = false;
 
     if (localStorage.dataSet) {
       dataSetList = JSON.parse(localStorage.dataSet);
     }
+
+    this._dataSetList = [];
+    this._dataSetHeader = [];
 
     if (dataSetList) {
       for (let i = 0; i < dataSetList.length; i++) {
@@ -75,11 +77,24 @@ export class SearchContainer extends DrawerRightBase {
             return new Date(b[0].dateTime).getTime() - new Date(a[0].dateTime).getTime();
           });
 
-          this._totalCount.push(html`총 <strong>${dataSet.data.length}</strong>건`);
+          this._dataSetHeader.push(html`
+            <div class="dataset-total">
+              <span>총 <strong>${dataSet.data.length}</strong>건</span>
+            </div>
+
+            <div class="dataset-total-delete">
+              <dews-button
+                type="text"
+                text="전체삭제"
+                size="small"
+                @click="${this._removeAllData.bind(this)}"
+              ></dews-button>
+            </div>
+          `);
 
           for (let i = 0; i < dataSet.data.length; i++) {
             const data = dataSet.data[i];
-            this._dataList.push(
+            this._dataSetList.push(
               html`
                 <div class="dataset">
                   <div class="header">
@@ -89,7 +104,14 @@ export class SearchContainer extends DrawerRightBase {
                       <span>삭제</span>
                     </button>
                   </div>
-                  <div class="field">${data.map((i: any) => html` <button>${i.value}</button>`)}</div>
+                  <div class="field">
+                    ${data.map(
+                      (item: SearchData) =>
+                        html`<button @click="${(e: any) => this._showToolTip(e.target, item.title)}">
+                          ${item.value}
+                        </button>`
+                    )}
+                  </div>
                 </div>
               `
             );
@@ -98,10 +120,22 @@ export class SearchContainer extends DrawerRightBase {
       }
       if (!isDataSet) {
         // 등록된 정보가 없습니다 디자인 추후 추가 필요
-        this._totalCount.push(html`총 <strong>0</strong>건</>`);
       }
     } else {
-      this._totalCount.push(html`총 <strong>0</strong>건</>`);
+      // 등록된 정보가 없습니다 디자인 추후 추가 필요
+    }
+  }
+
+  private _showToolTip(target: HTMLElement, title: string) {
+    if (title) {
+      const tooltip = new Tooltip();
+      tooltip.options = {
+        type: 'normal',
+        text: title,
+        position: 'bottom'
+      };
+      tooltip._target = target;
+      tooltip.show();
     }
   }
 
@@ -115,7 +149,7 @@ export class SearchContainer extends DrawerRightBase {
       const control: any = this._contentList[i].values[0];
 
       for (let j = 0; j < data.length; j++) {
-        if (control.id === data[j].id) {
+        if (control.id && control.id === data[j].id) {
           control.value = data[j].value;
         }
       }
@@ -129,7 +163,7 @@ export class SearchContainer extends DrawerRightBase {
    */
   private _removeAllData() {
     const msgBox = new Messagebox();
-    msgBox.message = '변경된 사항이 있습니다.\n저장하시겠습니까?';
+    msgBox.message = '데이터 Set 내역을 모두 삭제하시겠습니까?';
     msgBox.options = {
       id: 'msgBox5',
       align: 'center',
@@ -138,13 +172,10 @@ export class SearchContainer extends DrawerRightBase {
     msgBox.show();
 
     msgBox.yes(() => {
-      console.log('yes');
-
       const list = JSON.parse(localStorage.dataSet);
       const dataSet: DataSet | void = this.findDataSet(list);
-      if (dataSet) {
-        dataSet.data = [];
-      }
+
+      list.splice(list.indexOf(dataSet), 1);
 
       localStorage.setItem('dataSet', JSON.stringify(list));
 
@@ -224,9 +255,11 @@ export class SearchContainer extends DrawerRightBase {
       const control: any = this._contentList[i].values[0];
       const id = control.id || '';
       const value = control.value || '';
-      if (value) {
+      const title = control.title || '';
+      if (id && value) {
         searchData.push({
           id: id,
+          title: title,
           value: value,
           dateTime: date.format(date.parse(new Date()), 'yyyy-MM-dd HH:mm:ss')
         });
