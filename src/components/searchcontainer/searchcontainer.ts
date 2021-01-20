@@ -5,6 +5,7 @@ import scss from './searchcontainer.scss';
 import { query } from 'lit-element/lib/decorators.js';
 import { date } from '@dews/dews-mobile-core';
 import DrawerRightBase from '../base/DrawerRightBase.js';
+import { Messagebox } from '../messagebox/dews-messagebox.js';
 
 export interface DataSet {
   userId?: string;
@@ -120,6 +121,35 @@ export class SearchContainer extends DrawerRightBase {
       }
     }
     this._close();
+  }
+
+  /**
+   * data-set 전체를 삭제합니다.
+   * @private
+   */
+  private _removeAllData() {
+    const msgBox = new Messagebox();
+    msgBox.message = '변경된 사항이 있습니다.\n저장하시겠습니까?';
+    msgBox.options = {
+      id: 'msgBox5',
+      align: 'center',
+      icon: 'question'
+    };
+    msgBox.show();
+
+    msgBox.yes(() => {
+      console.log('yes');
+
+      const list = JSON.parse(localStorage.dataSet);
+      const dataSet: DataSet | void = this.findDataSet(list);
+      if (dataSet) {
+        dataSet.data = [];
+      }
+
+      localStorage.setItem('dataSet', JSON.stringify(list));
+
+      this._renderDataList();
+    });
   }
 
   /**

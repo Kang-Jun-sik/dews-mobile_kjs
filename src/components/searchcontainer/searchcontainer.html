@@ -15,7 +15,7 @@
   </ul>
 </div>
 
-<drawer-layout class="drawer-layout" title="data-set" right="true" scrollEnabled @close="${this._close}" ?active="${this.active}">
+<drawer-layout class="drawer-layout" title="data-set" right="true" @close="${this._close}" ?active="${this.active}">
   <div class="drawer-dataSet">
     <div class="option-dataset">
       <div class="control">
@@ -26,7 +26,7 @@
           </div>
 
           <div class="dataset-total-delete">
-            <dews-button type="text" text="전체삭제" size="small"></dews-button>
+            <dews-button type="text" text="전체삭제" size="small" @click="${this._removeAllData}"></dews-button>
           </div>
         </div>
 
