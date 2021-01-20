@@ -4,7 +4,7 @@ import template from './searchcontainer.html';
 import scss from './searchcontainer.scss';
 import { query } from 'lit-element/lib/decorators.js';
 import { date } from '@dews/dews-mobile-core';
-import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
+import DrawerRightBase from '../base/DrawerRightBase.js';
 
 export interface DataSet {
   userId?: string;
@@ -19,7 +19,10 @@ export interface SearchData {
   dateTime: string;
 }
 
-export class SearchContainer extends DewsLayoutComponent {
+const userId = 'kuyoungjun';
+const menuId = 'MA0001';
+
+export class SearchContainer extends DrawerRightBase {
   static styles = scss;
 
   @property({ type: String })
@@ -36,25 +39,22 @@ export class SearchContainer extends DewsLayoutComponent {
 
   private _iconList: Array<TemplateResult> = [];
   private _contentList: Array<TemplateResult> = [];
-  private _dataList: Array<TemplateResult> = [];
+
+  @internalProperty()
   private _totalCount: Array<TemplateResult> = [];
 
   @internalProperty()
-  active = false;
-
-  _open() {
-    this.active = true;
-  }
-  _close() {
-    this.active = false;
-  }
+  private _dataList: Array<TemplateResult> = [];
 
   /**
    * set 버튼 클릭시 처리
    */
-  private _setClick(e: MouseEvent) {
-    const userId = 'kuyoungjun';
-    const menuId = 'MA0001';
+  private _setClick(e?: MouseEvent) {
+    this._renderDataList();
+    this._open();
+  }
+
+  private _renderDataList() {
     this._dataList = [];
     this._totalCount = [];
     this._dataList = [];
@@ -74,8 +74,6 @@ export class SearchContainer extends DewsLayoutComponent {
             return new Date(b[0].dateTime).getTime() - new Date(a[0].dateTime).getTime();
           });
 
-          console.log(dataSet.data);
-
           this._totalCount.push(html`총 <strong>${dataSet.data.length}</strong>건`);
 
           for (let i = 0; i < dataSet.data.length; i++) {
@@ -85,8 +83,8 @@ export class SearchContainer extends DewsLayoutComponent {
                 <div class="dataset">
                   <div class="header">
                     <span class="date">${data[0].dateTime}</span>
-                    <button class="apply-button" @click="${this._setData(data)}">적용</button>
-                    <button class="delete-button" @click="${this._reomveData(data)}">
+                    <button class="apply-button" @click="${this._setData.bind(this, data)}">적용</button>
+                    <button class="delete-button" @click="${this._reomveData.bind(this, dataSet.data, i)}">
                       <span>삭제</span>
                     </button>
                   </div>
@@ -104,7 +102,6 @@ export class SearchContainer extends DewsLayoutComponent {
     } else {
       this._totalCount.push(html`총 <strong>0</strong>건</>`);
     }
-    this._open();
   }
 
   /**
@@ -112,8 +109,17 @@ export class SearchContainer extends DewsLayoutComponent {
    * @param data
    * @private
    */
-  private _setData(data: SearchData) {
-    console.log('set', data);
+  private _setData(data: SearchData[]) {
+    for (let i = 0; i < this._contentList.length; i++) {
+      const control: any = this._contentList[i].values[0];
+
+      for (let j = 0; j < data.length; j++) {
+        if (control.id === data[j].id) {
+          control.value = data[j].value;
+        }
+      }
+    }
+    this._close();
   }
 
   /**
@@ -121,8 +127,17 @@ export class SearchContainer extends DewsLayoutComponent {
    * @param data
    * @private
    */
-  private _reomveData(data: SearchData) {
-    console.log('remove', data);
+  private _reomveData(data: SearchData[], index: number) {
+    const list = JSON.parse(localStorage.dataSet);
+
+    const dataSet: DataSet | void = this.findDataSet(list);
+
+    if (dataSet) {
+      dataSet.data.splice(index, 1);
+    }
+
+    localStorage.setItem('dataSet', JSON.stringify(list));
+    this._renderDataList();
   }
 
   /**
@@ -136,13 +151,20 @@ export class SearchContainer extends DewsLayoutComponent {
     }
   }
 
+  private findDataSet(list: DataSet[]): DataSet | void {
+    for (let i = 0; i < list.length; i++) {
+      const data = list[i];
+      if (data.userId === userId && data.menuId === menuId && data.containerId === this.id) {
+        return data;
+      }
+    }
+  }
+
   /**
    * capture 버튼 클릭시 처리
    * @private
    */
   private _captureClick() {
-    const userId = 'kuyoungjun';
-    const menuId = 'MA0001';
     const searchData: SearchData[] = [];
     const defalut = {
       userId: userId,
@@ -152,7 +174,7 @@ export class SearchContainer extends DewsLayoutComponent {
     };
 
     let dataSetList: DataSet[];
-    let dataSet: DataSet | undefined;
+    let dataSet: DataSet | void;
     let save = false;
 
     if (!localStorage.dataSet) {
@@ -161,13 +183,7 @@ export class SearchContainer extends DewsLayoutComponent {
       dataSetList = JSON.parse(localStorage.dataSet);
     }
 
-    for (let i = 0; i < dataSetList.length; i++) {
-      const data = dataSetList[i];
-      if (data.userId === userId && data.menuId === menuId && data.containerId === this.id) {
-        dataSet = data;
-        break;
-      }
-    }
+    dataSet = this.findDataSet(dataSetList);
 
     if (!dataSet) {
       dataSet = defalut;
@@ -204,18 +220,6 @@ export class SearchContainer extends DewsLayoutComponent {
         this.snackbar?.classList.add('fadeout');
       }, 2000);
     }
-
-    // const data = JSON.parse(localStorage.searchData)[0];
-
-    // for (let i = 0; i < this._contentList.length; i++) {
-    //   const control: any = this._contentList[i].values[0];
-    //
-    //   for (let j = 0; j < data.data.length; j++) {
-    //     if (control.id === data.data[j].id) {
-    //       control.value = data.data[j].value;
-    //     }
-    //   }
-    // }
   }
 
   /*
