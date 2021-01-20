@@ -15,7 +15,7 @@ export class Checkbox extends DewsFormComponent {
   static styles = scss;
 
   @property({ type: String })
-  label = '';
+  label: string | undefined;
 
   @property({ type: Boolean })
   disabled = false;
