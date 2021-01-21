@@ -57,7 +57,8 @@ import {
   Yearpicker,
   Monthpicker,
   Progressbar,
-  Cardlist
+  Cardlist,
+  DataSource
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -101,3 +102,4 @@ window.customElements.define('dews-form-container', FormContainer);
 window.customElements.define('dews-list-container', ListContainer);
 window.customElements.define('dews-custom-container', Customcontainer);
 window.customElements.define('form-section', FormSection);
+window.customElements.define('dews-datasource', DataSource);
