@@ -132,7 +132,8 @@ export class SearchContainer extends DrawerRightBase {
       tooltip.options = {
         type: 'normal',
         text: title,
-        position: 'bottom'
+        position: 'bottom',
+        fadeOutTime: 0
       };
       tooltip._target = target;
       tooltip.show();
