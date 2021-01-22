@@ -9,6 +9,7 @@
 }
 @include dews-cardlist();
 
+//cl-card list
 :host(cl-card) {
   //test
   display: block;
@@ -59,3 +60,4 @@
     }
   }
 }
+
