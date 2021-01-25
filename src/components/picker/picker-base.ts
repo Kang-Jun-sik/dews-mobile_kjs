@@ -1,4 +1,4 @@
-import { html, internalProperty, property, TemplateResult } from 'lit-element';
+import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { DrawerBottomBase } from './drawer-bottom-base.js';
 
 export class PickerBase extends DrawerBottomBase {
@@ -40,6 +40,8 @@ export class PickerBase extends DrawerBottomBase {
   @internalProperty()
   protected _afterView: TemplateResult | undefined;
 
+  private _touchStartPosition = -33.33333;
+  private moveCheck = false;
   protected _removeCheck: boolean | undefined = false;
   protected _moveCheck: boolean | undefined = false;
   protected _count: number | undefined = 1;
@@ -154,10 +156,11 @@ export class PickerBase extends DrawerBottomBase {
   /*
    * 이전버튼 UI 처리 및 animation 처리
    * */
+
+  private animationCheck = false;
+
   private _beforeAnimation(): void {
-    const $el: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
-      '.calendar-flip-wrap'
-    ) as HTMLElement;
+    const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
     if (this._touchMoveX === 0) {
       this._touchMoveX = -($el.clientWidth / 3);
     }
@@ -165,10 +168,9 @@ export class PickerBase extends DrawerBottomBase {
     if (this._count! <= Math.abs(this._touchMoveX!)) {
       window.requestAnimationFrame(this._beforeAnimation.bind(this));
     } else {
+      this.animationCheck = false;
       this._count = 0;
-      $el.style.transform = `translate3d(${-Math.abs(
-        this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3
-      )}px, 0px, 0px)`;
+      $el.style.transform = `translate3d(-${this.width}px, 0px, 0px)`;
       this._beforeViewSet();
       this._modeViewChange();
     }
@@ -181,9 +183,7 @@ export class PickerBase extends DrawerBottomBase {
    * 다음버튼 UI 처리 및 animation 처리
    * */
   private _afterAnimation() {
-    const $el: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
-      '.calendar-flip-wrap'
-    ) as HTMLElement;
+    const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
     if (this._touchMoveX === 0) {
       this._touchMoveX = -($el.clientWidth / 3);
     }
@@ -192,9 +192,7 @@ export class PickerBase extends DrawerBottomBase {
       window.requestAnimationFrame(this._afterAnimation.bind(this));
     } else {
       this._count = 0;
-      $el.style.transform = `translate3d(${-Math.abs(
-        this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3
-      )}px, 0px, 0px)`;
+      $el.style.transform = `translate3d(-${this.width}px, 0px, 0px)`;
       this._afterViewSet();
       this._modeViewChange();
     }
@@ -208,11 +206,9 @@ export class PickerBase extends DrawerBottomBase {
     let $el: HTMLElement = e.currentTarget as HTMLElement;
     $el = $el.children[0] as HTMLElement;
     if (!this.spinner) {
-      this._touchMoveX =
-        e.changedTouches[0].pageX -
-        this._touchStartPoint! -
-        this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.calendar-flip-wrap')!.clientWidth / 3;
-      $el.style.transform = `translate3d(${this._touchMoveX}px, 0px, 0px)`;
+      const move = -this.width! + (e.changedTouches[0].pageX - this._touchStartPoint!);
+      this.moveCheck = true;
+      $el.style.transform = `translate3d(${move}px, 0px, 0px)`;
     } else {
       const liHeight: number = $el.clientHeight;
       this._touchMoveY = this._touchStartSpinnerPoint! - (e.changedTouches[0].pageY - this._touchStartPoint!) * 1.3;
@@ -227,6 +223,7 @@ export class PickerBase extends DrawerBottomBase {
   private _touchStartHandler(e: TouchEvent): void {
     if (!this.spinner) {
       this._touchStartPoint = e.changedTouches[0].pageX;
+      // this._touchStartPosition = Number((e.currentTarget as HTMLElement).clientWidth / 3);
     } else {
       this._touchStartSpinnerPoint = Math.abs(
         Number(
@@ -250,11 +247,30 @@ export class PickerBase extends DrawerBottomBase {
 
   private _touchEndHandler(e: TouchEvent) {
     if (!this.spinner) {
-      if (e.changedTouches[0].pageX > this._touchStartPoint! + 5) {
-        this._beforeAnimation();
-      } else if (e.changedTouches[0].pageX < this._touchStartPoint! - 5) {
-        this._afterAnimation();
+      const $el = e.currentTarget as HTMLElement;
+      if (this.moveCheck) {
+        if (Math.abs(this._touchStartPoint! - e.changedTouches[0].pageX) > 100) {
+          if (this._touchStartPoint! > e.changedTouches[0].pageX) {
+            this._afterAnimation();
+            this.animationCheck = true;
+          } else {
+            this.animationCheck = true;
+            this._beforeAnimation();
+          }
+          this.moveCheck = false;
+        } else {
+          ($el.querySelector(
+            '.calendar-flip-wrap'
+          ) as HTMLDivElement).style.transform = `translate3d(-${33.333}%,0px,0px)`;
+        }
       }
+
+      // if (e.changedTouches[0].pageX > this._touchStartPoint! + 5) {
+      //   this._beforeAnimation();
+      // } else if (e.changedTouches[0].pageX < this._touchStartPoint! - 5) {
+      //   this._afterAnimation();
+      // }
+      //
     } else {
       this._touchMoveY = Math.abs(
         Number((e.currentTarget as HTMLElement).parentElement!.style.transform.split('(')[1].split('px')[0])
@@ -747,6 +763,18 @@ export class PickerBase extends DrawerBottomBase {
    * */
   protected _yearClickHandler(e: MouseEvent): void {
     // 년도 클릭핸들러 오버라이드 할 대상
+  }
+
+  private width: number | undefined;
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this.updateComplete.then(() => {
+      if (!this.spinner) {
+        const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
+        this.width = $el.clientWidth / 3;
+      }
+    });
   }
 
   /*
