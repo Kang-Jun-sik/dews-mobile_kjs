@@ -1,0 +1,63 @@
+@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+
+//======================================
+// dews-cardlist
+//======================================
+* {
+  @include reset();
+}
+@include dews-cardlist();
+
+//cl-card list
+:host(cl-card) {
+  //test
+  display: block;
+  min-width: 240px; //320px - 80px
+  width: 100%;
+  height: auto;
+  margin-bottom: $base-space-common !important;
+  padding: $base-space-common 19px $base-space-common !important;
+  border: 1px solid rgba($base-color-text-common, 0.08);
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+
+
+  .list-field {
+    li {
+      padding: 11px 0 10px;
+      border-bottom: 1px solid rgba($base-color-text-common, 0.08);
+
+      &.collapse {
+        display: none;
+        &.open {
+          display: block;
+        }
+      }
+    }
+
+    .name {
+      padding-bottom: 2px;
+      color: $base-color-text-medium;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .item {
+      color: $base-color-text-dark1;
+      font-size: 15px;
+      line-height: 1.47;
+      text-align: left;
+      a {
+        color: $base-color-text-dark1;
+        text-decoration: underline;
+        text-decoration-color: $base-color-text-dark1;
+      }
+      &.number {
+        text-align: right;
+      }
+    }
+  }
+}
+
