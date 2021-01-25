@@ -7,16 +7,7 @@ export default {
 
 export const MaskTextbox = () => html`<div style="width: 360px">
   <dews-box title="box">
-    <dews-masktextbox
-      id="masktbx1"
-      type="text"
-      title="000-000"
-      mask="000-000"
-      value="123456"
-      @change="${() => {
-        console.log('change');
-      }}"
-    ></dews-masktextbox>
+    <dews-masktextbox id="masktbx1" type="text" title="000-000" mask="000-000" value="123456"></dews-masktextbox>
     <dews-masktextbox
       id="masktbx2"
       type="text"
