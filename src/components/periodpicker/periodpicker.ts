@@ -76,9 +76,13 @@ export class Periodpicker extends PeriodPickerBase {
   private _endDay: number | undefined;
 
   private moveCheck = false;
+  private speed = 20;
 
+  private _touchMoveX = 0;
   private _count = 1;
   private _beforeValue: string | undefined;
+
+  private width: number | undefined;
 
   connectedCallback() {
     super.connectedCallback();
@@ -645,26 +649,24 @@ export class Periodpicker extends PeriodPickerBase {
 
   private _touchMoveHandler(e: TouchEvent) {
     e.preventDefault();
-    const $el = e.currentTarget as HTMLElement;
-    let move = e.changedTouches[0].pageX - this._touchStartPoint - this._touchStartPosition;
+    let $el: HTMLElement = e.currentTarget as HTMLElement;
+    $el = $el.children[0] as HTMLElement;
+    const move = -this.width! + (e.changedTouches[0].pageX - this._touchStartPoint!);
     this.moveCheck = true;
-    if (move > 0) {
-      move = 0;
-    } else if (Math.abs(move) > this._touchStartPosition * 2) {
-      move = -this._touchStartPosition * 2;
-    }
-    $el.style.transform = `translate3d(${move}px, 0px, 0px)`;
+    $el.parentElement!.style.transform = `translate3d(${move}px, 0px, 0px)`;
   }
 
-  private _beforeAnimation() {
+  private _beforeAnimation(): void {
     const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-    const position = Math.abs(Number($el.style.transform.split('(')[1].split('px')[0])) - this._count;
-    $el.style.transform = `translate3d(-${position}px,0px,0px)`;
-    if (position >= 0) {
-      window.webkitRequestAnimationFrame(this._beforeAnimation.bind(this));
+    if (this._touchMoveX === 0) {
+      this._touchMoveX = -($el.clientWidth / 3);
+    }
+    $el.style.transform = `translate3d(${this._touchMoveX! + this._count!}px, 0px, 0px)`;
+    if (this._count! <= Math.abs(this._touchMoveX!)) {
+      window.requestAnimationFrame(this._beforeAnimation.bind(this));
     } else {
-      $el.style.transform = `translate3d(-${$el.clientWidth / 3}px,0px,0px)`;
-      this._count = 1;
+      this._count = 0;
+      $el.style.transform = `translate3d(-${this.width}px, 0px, 0px)`;
       if (this.mode === 'day') {
         if (this._viewMonth === 1) {
           this._dayViewChange(this._viewYear! - 1, 11);
@@ -677,18 +679,20 @@ export class Periodpicker extends PeriodPickerBase {
         this._yearViewChange(this._beforeViewYear! - 10);
       }
     }
-    this._count++;
+    this._count = this._count! + this.speed!;
   }
 
   private _afterAnimation() {
     const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-    const position = Math.abs(Number($el.style.transform.split('(')[1].split('px')[0])) + this._count;
-    $el.style.transform = `translate3d(-${position}px,0px,0px)`;
-    if (position <= ($el.clientWidth / 3) * 2) {
-      window.webkitRequestAnimationFrame(this._afterAnimation.bind(this));
+    if (this._touchMoveX === 0) {
+      this._touchMoveX = -($el.clientWidth / 3);
+    }
+    $el.style.transform = `translate3d(${this._touchMoveX! + this._count!}px, 0px, 0px)`;
+    if (Math.abs(this._count! + this._touchMoveX!) <= ($el.clientWidth / 3) * 2) {
+      window.requestAnimationFrame(this._afterAnimation.bind(this));
     } else {
-      $el.style.transform = `translate3d(-${$el.clientWidth / 3}px,0px,0px)`;
-      this._count = 1;
+      this._count = 0;
+      $el.style.transform = `translate3d(-${this.width}px, 0px, 0px)`;
       if (this.mode === 'day') {
         if (this._viewMonth === 12) {
           this._dayViewChange(this._viewYear! + 1, 0);
@@ -701,26 +705,25 @@ export class Periodpicker extends PeriodPickerBase {
         this._yearViewChange(this._beforeViewYear! + 10);
       }
     }
-    this._count++;
+    this._count = this._count! - this.speed!;
   }
 
   private _touchStartHandler(e: TouchEvent) {
     this._touchStartPoint = e.changedTouches[0].pageX;
-    this._touchStartPosition = Number((e.currentTarget as HTMLElement).clientWidth / 3);
   }
 
   private _touchEndHandler(e: TouchEvent) {
     const $el = e.currentTarget as HTMLElement;
     if (this.moveCheck) {
-      if (Math.abs(this._touchStartPoint - e.changedTouches[0].pageX) > 100) {
-        if (this._touchStartPoint > e.changedTouches[0].pageX) {
+      if (Math.abs(this._touchStartPoint! - e.changedTouches[0].pageX) > 100) {
+        if (this._touchStartPoint! > e.changedTouches[0].pageX) {
           this._afterAnimation();
         } else {
           this._beforeAnimation();
         }
         this.moveCheck = false;
       } else {
-        $el.style.transform = `translate3d(-${$el.clientWidth / 3}px,0px,0px)`;
+        $el.style.transform = `translate3d(-${33.333}%,0px,0px)`;
       }
     }
   }
@@ -1048,6 +1051,14 @@ export class Periodpicker extends PeriodPickerBase {
     } else if (this.mode === 'year') {
       this._yearSelect();
     }
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this.updateComplete.then(() => {
+      const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
+      this.width = $el.clientWidth / 3;
+    });
   }
 
   render() {
