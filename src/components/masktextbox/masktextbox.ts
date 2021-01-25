@@ -153,7 +153,6 @@ export class Masktextbox extends DewsFormComponent {
       value = '';
     }
     if (!emptyMask) {
-      this._oldValue = value;
       element.value = value;
       return;
     }
@@ -161,7 +160,6 @@ export class Masktextbox extends DewsFormComponent {
     element.value = value ? emptyMask : '';
     this._mask(element, 0, this.maskLen!, value);
     value = element.value;
-    this._oldValue = value;
     if (document.activeElement !== this) {
       if (value === emptyMask) {
         element.value = '';
@@ -246,7 +244,6 @@ export class Masktextbox extends DewsFormComponent {
       caretPosition = this._backCaret(start);
     }
     this._caret(element, caretPosition);
-    this.Event.emit('change', { target: this, type: 'change', preventDefault: e.preventDefault });
   }
 
   private _backCaret(idx: number): number {
@@ -465,7 +462,27 @@ export class Masktextbox extends DewsFormComponent {
     } else {
       this.warning('적합하지 않은 형식입니다.');
     }
+    this._change(e);
     this.Event.emit('blur', { target: this, type: 'blur', preventDefault: e.preventDefault });
+  }
+
+  private _keyDown(e: KeyboardEvent) {
+    if (e.code === 'Enter') {
+      this._change(e);
+    }
+  }
+
+  private _change(e: Event) {
+    let value = this.value;
+
+    if (value === this.emptyMask) {
+      value = '';
+    }
+
+    if (value !== this._oldValue) {
+      this._oldValue = value;
+      this.Event.emit('change', { target: this, type: 'change', preventDefault: e.preventDefault });
+    }
   }
 
   /**
