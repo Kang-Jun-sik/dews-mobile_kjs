@@ -83,7 +83,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   @property({ type: String })
   height = '250px';
   // 카드리스트 타입
-  @property({ type: String })
+  @property({ type: String, attribute: 'column-type' })
   columnType = '1';
 
   // 카드리스트
@@ -118,14 +118,18 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _fields: CardlistFields = {};
   // 카드리스트 필드요소들
   private _fieldList: CardlistField[] = [];
+  @internalProperty()
+  private _totalCount = 0;
   // 전체 선택 요소
-  private _allSelectElement?: TemplateResult;
-  // 편의 기능 요소
-  private _controlSetElement?: TemplateResult;
+  @internalProperty()
+  private _allSelectElement?: TemplateResult | null;
   // 편의 기능 - 전체 개수 요소
-  private _totalCardCountElement?: TemplateResult;
+  @internalProperty()
+  private _totalCardCountElement?: TemplateResult | null;
+  // 편의 기능 요소
+  private _controlSetElement?: TemplateResult | null;
   // 편의 기능 - 컨트롤 요소
-  private _controlElement?: TemplateResult;
+  private _controlElement?: TemplateResult | null;
   // 편의 기능 - 정렬 요소
   private _sortElement?: TemplateResult;
   // 편의 기능 - 컬럼 선택 요소
@@ -137,19 +141,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 설정 한 옵션에 의해 보여질 요소들
   private _elements: any = {};
   private _options: any = {};
-  private _totalCount = 0;
   private _datasource?: any;
 
   // endregion
 
   private _initOptions() {
-    const sortingSetTouchEvent = () => {
-      const sortDrawerLayout = this.shadowRoot?.getElementById('sort-drawer-layout');
-      const active = !sortDrawerLayout?.getAttribute('active');
-
-      sortDrawerLayout?.setAttribute('active', String(active));
-    };
-
     const cardlistElement = this.querySelector('.cardlist');
 
     this._allSelectCheckboxElement = html`
@@ -166,12 +162,71 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     this._columnSetElement = html` <button class="column-set"><span>Column Set</span></button> `;
 
     this._sortElement = html`
-      <span id="sorting-set" class="sorting-wrap" @click=${sortingSetTouchEvent}>
+      <span id="sorting-set" class="sorting-wrap" @click="${this._sortingSetTouchEvent}">
         <span class="sorting-order"></span>
         <span class="sorting-input"></span>
         <span class="sorting-icon"></span>
       </span>
-      <drawer-layout id="sort-drawer-layout" drower="right" height="500px"></drawer-layout>
+      <drawer-layout class="sort-drawer-layout" height="500px">
+        <div class="sorting-list">
+          <div class="titlebar">
+            <div class="title">항목명</div>
+            <button class="confirm-button">적용</button>
+          </div>
+          <div class="control">
+            <ul class="list">
+              <li class="sorting ascending">
+                <span class="text">DATA 01</span>
+              </li>
+              <li>
+                <span class="text"
+                  >데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.
+                  데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.</span
+                >
+              </li>
+              <li>
+                <span class="text">DATA 02</span>
+              </li>
+              <li>
+                <span class="text">DATA 03</span>
+              </li>
+              <li>
+                <span class="text">DATA 04</span>
+              </li>
+              <li>
+                <span class="text">DATA 05</span>
+              </li>
+              <li>
+                <span class="text">DATA 06</span>
+              </li>
+              <li>
+                <span class="text">DATA 07</span>
+              </li>
+              <li>
+                <span class="text">DATA 08</span>
+              </li>
+              <li>
+                <span class="text">DATA 09</span>
+              </li>
+              <li>
+                <span class="text">DATA 10</span>
+              </li>
+              <li>
+                <span class="text">DATA 11</span>
+              </li>
+              <li>
+                <span class="text">DATA 12</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </drawer-layout>
+      <!--      <dews-dropdownlist class="sort-drawer-layout" title="정렬">-->
+      <!--        <dropdownlist-item title="TEST"></dropdownlist-item>-->
+      <!--      </dews-dropdownlist>-->
     `;
 
     this._noDataElement = html` <div class="card-nodata"><span>조회된 내역이 없습니다.</span></div> `;
@@ -222,6 +277,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
     if (this.datasource) {
       const dataList = this._datasource?._data;
+      this._totalCount = dataList.length;
       if (this._datasource?._data === undefined || this._datasource?._data?.length === 0) {
         this._cardList.push(this._noDataElement!);
       } else {
@@ -238,6 +294,22 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     this._testCardList = this._testCard;
 
     if (this._options._columnType === '2') this.shadowRoot?.querySelector('.cardlist')?.classList.add('col2');
+  };
+
+  private _sortingSetTouchEvent = () => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+    const active = !sortDrawerLayout?.getAttribute('active');
+
+    // sortDrawerLayout.$itemList.push((html `
+    //   <dropdownlist-item title="TEST"></dropdownlist-item>
+    // `));
+    //
+    // sortDrawerLayout.render();
+    //
+    // sortDrawerLayout.active = true;
+
+    // sortDrawerLayout.active = active;
+    sortDrawerLayout?.setAttribute('active', String(active));
   };
 
   private _cardClickHandler(e: any) {
@@ -399,9 +471,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   private _createAllSelectElement = () => {
     return html`
-      <div class="cardlist-all-select">
-        ${this._elements._totalCardCountElement} ${this._elements._allSelectCheckboxElement}
-      </div>
+      <div class="cardlist-all-select">${this._totalCardCountElement} ${this._elements._allSelectCheckboxElement}</div>
     `;
   };
 
@@ -418,7 +488,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   };
 
   private _createControlSetElement = () => {
-    return html` <div class="cardlist-option-control">${this._elements._controlElement}</div> `;
+    return html` <div class="cardlist-option-control">${this._controlElement}</div> `;
   };
 
   private _createElements = () => {
@@ -429,17 +499,17 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     // 전체 선택 체크박스 요소
     this._elements._allSelectCheckboxElement = this.useAllSelect ? this._allSelectCheckboxElement : null;
     // 정렬 선택, 컬럼 선택 부모 요소
-    this._elements._controlElement = this._createControlElement();
+    this._controlElement = this._createControlElement();
     // 전체 카드 개수 요소
-    this._elements._totalCardCountElement = this.useTotalCount ? this._createTotalCardCountElement() : null;
+    this._totalCardCountElement = this.useTotalCount ? this._createTotalCardCountElement() : null;
     // 전체 카드 개수, 전체 선택 체크박스 부모 요소
-    this._elements._allSelect = this.useAllSelect || this.useTotalCount ? this._createAllSelectElement() : null;
+    this._allSelectElement = this.useAllSelect || this.useTotalCount ? this._createAllSelectElement() : null;
     // 편의기능 요소
-    this._elements._controlSetElement = this.useControl ? this._createControlSetElement() : null;
+    this._controlSetElement = this.useControl ? this._createControlSetElement() : null;
   };
 
   private _getFields(): void {
-    const fieldElements = document.querySelectorAll('cardlist-field');
+    const fieldElements = this.querySelectorAll('cardlist-field');
     const fieldCount = fieldElements.length;
     const fields: CardlistFields = {};
     const fieldList: CardlistField[] = [];
@@ -500,6 +570,10 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   protected updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
     console.log('updated', this);
+    if (typeof _changedProperties.get('_totalCount') === 'number' && this._totalCount > 0) {
+      this._totalCardCountElement = this._createTotalCardCountElement();
+      this._allSelectElement = this._createAllSelectElement();
+    }
     // if (this._cardList.length > 0 && !this._activeCardElement) {
     //
     // }

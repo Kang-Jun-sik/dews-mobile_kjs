@@ -11,18 +11,14 @@ import {
 import { HttpRequestConfig } from '@dews/dews-mobile-core/dist/types/utils/comm/HttpClient';
 import { Sort, SortType } from './Sort.js';
 import { DataSourceChangeEventArgs, DataSourceRequestStartEventArgs, DataSourceRequestEndEventArgs } from './Event.js';
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { DewsDataComponent } from '../base/DewsDataComponent.js';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 type DirectionType = 'asc' | 'desc';
 
-const enum DataSourceEventType {
-  change = 'change',
-  requestStart = 'requestStart',
-  requestEnd = 'requestEnd'
-}
+type DataSourceEventType = 'change' | 'requestStart' | 'requestEnd';
 
 type GroupType<T> = {
   field: keyof T;
@@ -31,7 +27,7 @@ type GroupType<T> = {
 
 type PageType = 'scroll' | 'background' | 'button' | 'virtualScroll';
 
-export class DataSource<T extends object = object> extends DewsFormComponent {
+export class DataSource<T extends object = object> extends DewsDataComponent {
   private _data?: ObservableArray<T>;
   private _sort: Sort<T> = new Sort<T>();
   private _events: EventEmitter = new EventEmitter();
@@ -44,6 +40,15 @@ export class DataSource<T extends object = object> extends DewsFormComponent {
 
   @property({ type: Number, reflect: true })
   pageSize?: number;
+
+  @property({ type: Function, attribute: 'onchange' })
+  onChange?: (args: Partial<DataSourceChangeEventArgs<T>>) => void;
+
+  @property({ type: Function, attribute: 'onrequeststart' })
+  onRequestStart?: (args: DataSourceRequestStartEventArgs<T>) => void;
+
+  @property({ type: Function, attribute: 'onrequestend' })
+  onRequestEnd?: (args: DataSourceRequestStartEventArgs<T>) => void;
 
   // Transport CustomElement 데이터 전송
   @internalProperty()
@@ -141,7 +146,7 @@ export class DataSource<T extends object = object> extends DewsFormComponent {
    * @return {Promise} 데이터 읽고 발생하는 Promise 객체
    */
   async read(): Promise<void> {
-    this._trigger(DataSourceEventType.requestStart, { type: 'read' });
+    this._trigger('requestStart', { type: 'read' });
     if (this.localData) {
       this._data = ObservableArray.create(this.localData, this.schema?.model?.idFields);
     } else if (this.transport?.read) {
@@ -165,7 +170,7 @@ export class DataSource<T extends object = object> extends DewsFormComponent {
         }
       }
     }
-    this._trigger(DataSourceEventType.requestEnd, { type: 'read' });
+    this._trigger('requestEnd', { type: 'read' });
 
     this._bindDataEvent();
   }
@@ -270,28 +275,21 @@ export class DataSource<T extends object = object> extends DewsFormComponent {
     console.log('attributeChangedCallback');
     super.attributeChangedCallback(name, old, value);
     if (name === 'onchange') {
-      this._events.on<DataSourceChangeEventArgs<T>>('change', eval(value!));
+      // const changeHandler = eval(value!);
+      const ch = new Function('return ' + value)();
+      this._events.on<DataSourceChangeEventArgs<T>>('change', ch);
       console.log(`name: ${name}, ${old}, ${value}`);
     }
   }
 
-  @property({ type: Function, attribute: 'onchange' })
-  onChange?: (args: Partial<DataSourceChangeEventArgs<T>>) => void;
-
-  @property({ type: Function, attribute: 'onrequeststart' })
-  onRequestStart?: (args: DataSourceRequestStartEventArgs<T>) => void;
-
-  @property({ type: Function, attribute: 'onrequestend' })
-  onRequestEnd?: (args: DataSourceRequestStartEventArgs<T>) => void;
-
   private _trigger(type: DataSourceEventType, args?: any) {
     const eventArgs = Object.assign({}, args, { target: this });
     Object.freeze(args);
-    if (type === DataSourceEventType.change) {
+    if (type === 'change') {
       this._events.emit<DataSourceChangeEventArgs<T>>(type, eventArgs);
-    } else if (type === DataSourceEventType.requestStart) {
+    } else if (type === 'requestStart') {
       this._events.emit<DataSourceRequestStartEventArgs<T>>(type, eventArgs);
-    } else if (type === DataSourceEventType.requestEnd) {
+    } else if (type === 'requestEnd') {
       this._events.emit<DataSourceRequestEndEventArgs<T>>(type, eventArgs);
     }
   }

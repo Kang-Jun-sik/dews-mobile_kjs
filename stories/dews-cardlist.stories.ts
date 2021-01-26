@@ -37,7 +37,7 @@ export const CardList = () => html`
         height="500px"
         auto-bind
         datasource="datasource1"
-        columnType="2"
+        column-type="2"
         use-card-header
         use-card-collapse
         header-options=${JSON.stringify({
