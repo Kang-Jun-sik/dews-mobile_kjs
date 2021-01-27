@@ -9,7 +9,7 @@ export const ListContainer360 = () => html`<div style="width: 360px;display: inl
   <dews-tabs>
     <dews-tab title="default">
       <dews-list-container title="title#12">
-        <container-button>
+        <container-button data-set="true">
           <dews-button title="Btn" text="확정"></dews-button>
           <dews-button text="확정취소"></dews-button>
           <dews-dropdownbutton id="ddbtn1" text="드롭다운버튼">

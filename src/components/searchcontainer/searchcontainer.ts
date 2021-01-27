@@ -331,10 +331,23 @@ export class SearchContainer extends DrawerRightBase {
       );
     }
   }
+
   constructor() {
     super();
-    this._contentView();
-    this._buttonView();
+  }
+
+  private _slotChange(e: Event) {
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children.item(i)?.tagName === 'CONTAINER-BUTTON') {
+        this.shadowRoot
+          ?.querySelector('.dews-container-option-control')
+          ?.appendChild(this.children.item(i) as HTMLElement);
+      } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
+        const li = document.createElement('li');
+        li.appendChild(this.children.item(i) as HTMLElement);
+        this.shadowRoot?.querySelector('.form-field')?.appendChild(li);
+      }
+    }
   }
 
   render() {

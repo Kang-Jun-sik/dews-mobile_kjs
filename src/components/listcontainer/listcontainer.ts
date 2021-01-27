@@ -53,8 +53,8 @@ export class ListContainer extends DewsLayoutComponent {
   }
 
   private _summaryView() {
-    const summaryChildLength = this.querySelector('container-summary')?.childElementCount;
-    const summaryChildItem = this.querySelector('container-summary')?.children;
+    const summaryChildLength = this.querySelector('containersummary')?.childElementCount;
+    const summaryChildItem = this.querySelector('containersummary')?.children;
     const _summaryItem: Array<TemplateResult> = [];
 
     if (summaryChildLength! <= 0 || summaryChildItem == undefined) {
@@ -70,7 +70,7 @@ export class ListContainer extends DewsLayoutComponent {
       </div>
     `);
 
-    // this.querySelector('container-summary').remove();
+    // this.querySelector('containersummary').remove();
   }
 
   connectedCallback() {
@@ -84,8 +84,20 @@ export class ListContainer extends DewsLayoutComponent {
     super.disconnectedCallback();
   }
 
-  private _slotChange(e: TemplateResult) {
-    //slot change
+  private _slotChange(e: Event) {
+    for (let i = 0; i < this.children.length; i++) {
+      if (
+        this.children.item(i)?.tagName === 'CONTAINER-BUTTON' ||
+        this.children.item(i)?.tagName === 'CONTAINER-SUMMARY'
+      ) {
+        this.shadowRoot
+          ?.querySelector('.dews-container-option-control')
+          ?.appendChild(this.children.item(i) as HTMLElement);
+      } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
+        // const li = document.createElement('li');
+        this.shadowRoot?.querySelector('.list-field')?.appendChild(this.children.item(i) as HTMLElement);
+      }
+    }
   }
 
   render() {

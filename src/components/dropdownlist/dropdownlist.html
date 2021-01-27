@@ -1,4 +1,4 @@
-<div class="dropdown-list-wrap" @click="${this._clickHandler}">
+<div class="dropdownlist-wrap" @click="${this._clickHandler}">
   <label for="">${this.title}</label>
   <span class="select-wrap">
     <span class="select-shape">
@@ -12,13 +12,13 @@
             </span>`
       : ''}
     </span>
-    <span class="select-icon dropdown-icon"></span>
+    <span class="select-icon dropdownlist-icon"></span>
   </span>
 </div>
 
 ${this.multi?html`
 <drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" scrollEnabled>
-  <div class="drawer-dropdown-multi">
+  <div class="drawer-dropdownlist-multi">
     <div class="titlebar">
       <div class="title">${this.title}</div>
       <!-- <button class="confirm-button">ได้รับการยืนยัน</button> -->
@@ -30,10 +30,11 @@ ${this.multi?html`
         <li  @click="${this._allChecked}">
           <span class="text">전체선택</span>
           <span class="checkbox" data-value="allCheck">
-                  <dews-checkbox></dews-checkbox>
+                  <dews-checkbox ?checked="${this._allCheckState}"></dews-checkbox>
                 </span>
         </li>
-        ${this.$itemList}
+        <slot></slot>
+        <!--  ${this.$itemList}-->
 
         </li>
       </ul>
@@ -42,13 +43,14 @@ ${this.multi?html`
 </drawer-layout>
 ` :html`
 <drawer-layout class="drawer-layout" @close="${this._close}"  ?active="${this.active}" scrollEnabled>
-  <div class="drawer-dropdown-single">
+  <div class="drawer-dropdownlist-single">
     <div class="titlebar">
       <div class="title">${this.title}</div>
     </div>
     <div class="control" @touchstart="${this._touchStart}" @touchmove="${this._touchMove}">
       <ul class="list">
-        ${this.$itemList}
+        <slot></slot>
+<!--        ${this.$itemList}-->
       </ul>
     </div>
   </div>

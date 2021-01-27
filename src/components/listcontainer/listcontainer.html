@@ -1,13 +1,15 @@
-
 <div class="dews-container-option-control">
   ${this.title == undefined?null :html`<h3 class="option-sub-title">${this.title}</h3>`}
-  ${this._buttonList}
 
-  ${this._summaryList}
+
 </div>
+
 <div class="dews-list-field">
   <ul class="list-field">
-   ${this._contentList}
+<!--    ${this._contentList}-->
   </ul>
 </div>
+
+<slot @slotchange="${this._slotChange}"></slot>
+
 

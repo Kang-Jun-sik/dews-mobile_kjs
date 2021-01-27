@@ -33,29 +33,36 @@ export const CardList = () => html`
 
   <div style="width: 360px; height: 3000px;">
     <dews-box title="box">
-      <dews-cardlist
-        height="500px"
-        auto-bind
-        datasource="datasource1"
-        column-type="2"
-        use-card-header
-        use-card-collapse
-        header-options=${JSON.stringify({
-          headerTitleField: 'age',
-          firstSubTitleField: 'name',
-          secondSubTitleField: 'address',
-          useEdit: true,
-          useCheckbox: true,
-          useBookmark: true
-        })}
-        use-total-count
-        use-control-set
-        use-all-select
-      >
-        <cardlist-field name="name" field="name" title="이름"></cardlist-field>
-        <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
-        <cardlist-field name="address" field="address" title="주소"></cardlist-field>
-      </dews-cardlist>
+      <dews-list-container title="List-Container">
+        <container-button data-set>
+          <dews-button title="1234"></dews-button>
+        </container-button>
+        <container-content>
+          <dews-cardlist
+            height="500px"
+            auto-bind
+            datasource="datasource1"
+            column-type="2"
+            use-card-header
+            use-card-collapse
+            header-options=${JSON.stringify({
+              headerTitleField: 'age',
+              firstSubTitleField: 'name',
+              secondSubTitleField: 'address',
+              useEdit: true,
+              useCheckbox: true,
+              useBookmark: true
+            })}
+            use-total-count
+            use-control-set
+            use-all-select
+          >
+            <cardlist-field name="name" field="name" title="이름"></cardlist-field>
+            <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
+            <cardlist-field name="address" field="address" title="주소"></cardlist-field>
+          </dews-cardlist>
+        </container-content>
+      </dews-list-container>
     </dews-box>
   </div>
 `;
