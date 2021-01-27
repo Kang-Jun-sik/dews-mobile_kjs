@@ -15,3 +15,28 @@
   </ul>
 </div>
 
+<drawer-layout class="drawer-layout" title="data-set" right="true" @close="${this._close}" ?active="${this.active}">
+  <div class="drawer-dataSet">
+    <div class="option-dataset">
+      <div class="control">
+
+        <div class="total-control">
+            ${this._dataSetHeader}
+        </div>
+
+        <div class="dataset-list">
+          ${this._dataSetList}
+        </div>
+      </div>
+    </div>
+  </div>
+</drawer-layout>
+
+<!-- snackbar -->
+<div class="dews-snackbar dataset">
+  <div class="snackbar-img"></div>
+  <div class="snackbar-text">
+    현재 입력된 내용이 데이터 Set에 저장
+  </div>
+</div>
+
