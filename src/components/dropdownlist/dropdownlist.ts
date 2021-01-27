@@ -7,6 +7,7 @@ import scss from './dropdownlist.scss';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { DewsComponent } from '../base/DewsComponent.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+import { DropDownListItem } from './dropdownlist-item.js';
 
 type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
 
@@ -34,21 +35,29 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
   @property({ type: Boolean, reflect: true })
   readonly = false;
 
+  @property({ type: Boolean, reflect: true })
+  once = false;
+
   @internalProperty()
-  private active = false;
+  active = false;
 
   @internalProperty()
   private height: string | undefined;
 
+  @internalProperty()
+  private $itemList: Array<TemplateResult> = [];
+
   private _startPoint: number | undefined;
   private _count = 0;
   private _multiCheck = false;
-  private $itemList: Array<TemplateResult> = [];
-  private select: Array<string> = [];
+
+  select: Array<string> = [];
   private _selectList: Array<boolean> = [];
   private $nextBtn: TemplateResult | undefined;
   private _nextItem: number | undefined;
-  private _allCheckState: boolean | undefined = false;
+
+  @internalProperty()
+  _allCheckState: boolean | undefined = false;
 
   constructor() {
     super();
@@ -56,54 +65,51 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
   }
 
   //이벤트 객체 생성
-  #EVENT = new EventEmitter();
+  _EVENT = new EventEmitter();
   // 이벤트 등록
 
   public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.#EVENT.on(key, handler);
+    this._EVENT.on(key, handler);
   }
 
   // 이벤트 삭제
   public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.#EVENT.off(key, handler);
+    this._EVENT.off(key, handler);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.#itemview();
     if (this.disabled && this.readonly) {
       this.readonly = false;
     }
   }
 
-  #itemview = () => {
-    this.$itemList = [];
-    for (let i = 0; i <= this.children.length; i++) {
-      if (this.children.item(i)?.localName === 'dropdownlist-item') {
-        const title = this.children.item(i)?.getAttribute('title');
-        if (this.multi) {
-          this.$itemList.push(
-            html`
-              <li data-value="${title}" @click="${this._multiItemSelectHandler}">
-                <span class="text">${title}</span>
-                <span data-value="${title}" class="checkbox">
-                  <dews-checkbox class="multi-checkbox"></dews-checkbox>
-                </span>
-              </li>
-            `
-          );
-        } else {
-          this.$itemList.push(
-            html`
-              <li @click="${this._singleItemSelectHandler}" data-value="${title}">
-                <span>${title}</span>
-              </li>
-            `
-          );
-        }
+  private _allChecked(e: MouseEvent) {
+    const $el: HTMLElement = e.currentTarget as HTMLElement;
+    this._allCheckState = !this._allCheckState;
+    this.querySelectorAll('dropdownlist-item').forEach($el => {
+      if (this._allCheckState) {
+        ($el as DropDownListItem).checked = true;
+      } else {
+        ($el as DropDownListItem).checked = false;
       }
-    }
-  };
+    });
+  }
+
+  private _confirmClickHandler() {
+    this._multiCheck = true;
+    this.select = [];
+    this._selectList = [];
+    this.querySelectorAll('dropdownlist-item').forEach($el => {
+      if ($el.hasAttribute('checked')) {
+        this.select.push(($el as DropDownListItem).title);
+        this._selectList.push(true);
+      } else {
+        this._selectList.push(false);
+      }
+    });
+    this._close();
+  }
 
   #nextBtnView = () => {
     const $el: HTMLCollection = this.parentElement?.children as HTMLCollection;
@@ -137,66 +143,6 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
     $el?.click();
   }
 
-  private _allChecked(e: MouseEvent) {
-    const $el: HTMLElement = e.currentTarget as HTMLElement;
-    this._allCheckState = $el!.querySelector('.multi-checkbox')?.hasAttribute('checked');
-    if ((e.target as HTMLElement).localName === 'dews-checkbox') {
-      this._allCheckState = (e.target as HTMLElement).hasAttribute('checked');
-    }
-    this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
-      if (this._allCheckState) {
-        $el.setAttribute('checked', 'true');
-      } else {
-        $el.removeAttribute('checked');
-      }
-    });
-  }
-
-  private _singleItemSelectHandler(e: MouseEvent) {
-    const $el: HTMLElement = e.currentTarget as HTMLElement;
-    this.shadowRoot!.querySelector('.check')?.classList?.remove('check');
-    $el.classList.add('check');
-    this.select[0] = $el.dataset.value as string;
-    this.#EVENT.emit('select', { target: this, type: 'select', item: this.select[0] });
-    this.#EVENT.emit('change', { target: this, type: 'change' });
-    this._close();
-  }
-
-  private _multiItemSelectHandler(e: MouseEvent) {
-    const $el: HTMLElement = (e.currentTarget as HTMLElement).querySelector('.multi-checkbox') as HTMLElement;
-    if (this._allCheckState) {
-      this.shadowRoot!.querySelector('.multi-checkbox')?.removeAttribute('checked');
-    }
-    if ($el.hasAttribute('checked')) {
-      if ((e.target as HTMLElement).localName !== 'dews-checkbox') {
-        $el.removeAttribute('checked');
-      }
-    } else {
-      if ((e.target as HTMLElement).localName !== 'dews-checkbox') {
-        this.#EVENT.emit('checked', { target: this, type: 'checked' });
-        $el.setAttribute('checked', 'true');
-      }
-    }
-    this.#EVENT.emit('change', { target: this, type: 'change' });
-  }
-
-  private _confirmClickHandler() {
-    this._multiCheck = true;
-    this.select = [];
-    this._selectList = [];
-    this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
-      if ($el.hasAttribute('checked')) {
-        if ($el.parentElement?.dataset.value !== 'allCheck') {
-          this.select.push(($el.parentElement as HTMLDivElement).dataset.value!);
-        }
-        this._selectList.push(true);
-      } else {
-        this._selectList.push(false);
-      }
-    });
-    this._close();
-  }
-
   click() {
     this._confirmClickHandler();
     this._clickHandler(new MouseEvent('click'));
@@ -227,10 +173,10 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
         0,
         window.pageYOffset +
           this.parentElement?.getBoundingClientRect()?.top! -
-          this.shadowRoot!.querySelector('.dropdown-list-wrap')?.clientHeight! -
+          this.shadowRoot!.querySelector('.dropdownlist-wrap')?.clientHeight! -
           25
       );
-      this.height = `${this.shadowRoot!.querySelector('.dropdown-list-wrap')!.clientHeight + 120}px`;
+      this.height = `${this.shadowRoot!.querySelector('.dropdownlist-wrap')!.clientHeight + 120}px`;
       $el!.height = this.height;
       this._open();
     }
@@ -244,10 +190,10 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
       }
     });
     this.active = true;
-    this.#EVENT.emit('open', { target: this, type: 'open' });
+    this._EVENT.emit('open', { target: this, type: 'open' });
   }
 
-  private _close() {
+  _close() {
     this._blur();
     if (this.multi && !this._multiCheck) {
       this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
@@ -257,7 +203,7 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
       });
     }
     this.active = false;
-    this.#EVENT.emit('close', { target: this, type: 'close' });
+    this._EVENT.emit('close', { target: this, type: 'close' });
   }
 
   private _domClickHandelr(e: MouseEvent) {
