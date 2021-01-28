@@ -4,6 +4,7 @@ import scss from './cardlist.scss';
 import { property, PropertyValues, html, TemplateResult, internalProperty } from 'lit-element';
 import { Checkbox } from '../checkbox/checkbox.js';
 import { Card } from './card.js';
+import { type } from 'os';
 
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -33,7 +34,18 @@ type CardHeader = {
   useEdit?: boolean;
   useBookmark?: boolean;
   useCheckbox?: boolean;
+  status?: string;
 };
+
+type CardStatusType = 'complete' | 'standby' | 'progress' | 'failure' | 'closing';
+
+enum CardStatus {
+  complete = '완료',
+  standby = '진행전',
+  progress = '진행',
+  failure = '실패',
+  closing = '종결'
+}
 
 type CardlistFields = { [key: string]: CardlistField };
 
@@ -96,6 +108,15 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   })
   private _cardList: Array<TemplateResult> = [];
 
+  @internalProperty()
+  private _totalCount = 0;
+  // 전체 선택 요소
+  @internalProperty()
+  private _allSelectElement?: TemplateResult | null;
+  // 편의 기능 - 전체 개수 요소
+  @internalProperty()
+  private _totalCardCountElement?: TemplateResult | null;
+
   @internalProperty({
     hasChanged(value: unknown, oldValue: unknown): boolean {
       console.log('_testCardList', value, oldValue);
@@ -118,14 +139,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _fields: CardlistFields = {};
   // 카드리스트 필드요소들
   private _fieldList: CardlistField[] = [];
-  @internalProperty()
-  private _totalCount = 0;
-  // 전체 선택 요소
-  @internalProperty()
-  private _allSelectElement?: TemplateResult | null;
-  // 편의 기능 - 전체 개수 요소
-  @internalProperty()
-  private _totalCardCountElement?: TemplateResult | null;
   // 편의 기능 요소
   private _controlSetElement?: TemplateResult | null;
   // 편의 기능 - 컨트롤 요소
@@ -142,6 +155,8 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _elements: any = {};
   private _options: any = {};
   private _datasource?: any;
+  // 카드리스트 체크 카드 개수
+  private _checkCount = 0;
 
   // endregion
 
@@ -258,6 +273,13 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
 
     this._datasource = document.getElementById(this.datasource);
+    if (!this._datasource) {
+      this._datasource = document
+        .querySelector('dews-mobile-app')
+        ?.shadowRoot?.querySelector('main-content')
+        ?.shadowRoot?.querySelector('#contents')
+        ?.children[0].shadowRoot?.querySelector('dews-datasource#' + this.datasource);
+    }
     if (this._datasource) {
       this._datasource.on('requestEnd', () => {
         this._createCardListElement();
@@ -339,6 +361,28 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
         selectCheckboxElement.checked = checked;
       }
+      this._checkCount = checked ? this._totalCount : 0;
+    }
+  }
+
+  private _checkClickHandler(e: any) {
+    console.log('check', e);
+    const checkbox: Checkbox = e.currentTarget;
+    const checked: boolean = checkbox.checked;
+    const allSelectCheckbox: Checkbox | null | undefined = this.shadowRoot?.querySelector(
+      'dews-checkbox.cardlist-all-select-checkbox'
+    );
+
+    if (checked) {
+      this._checkCount++;
+      if (this._checkCount === this._totalCount && allSelectCheckbox) {
+        allSelectCheckbox.checked = true;
+      }
+    } else {
+      this._checkCount--;
+      if (allSelectCheckbox && allSelectCheckbox.checked) {
+        allSelectCheckbox.checked = false;
+      }
     }
   }
 
@@ -366,9 +410,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _createCardElement = (data: any) => {
     let headerElement: TemplateResult | null = null;
     let subTitleElement: TemplateResult | null = null;
+    let cardStatusTagElement: TemplateResult | null = null;
     const liElements: any = [];
     let collapseElement: TemplateResult | null = null;
     const opt = this._options;
+    const status: CardStatusType = opt._headerOptions.status;
 
     if (opt._useCardCollapse) {
       collapseElement = html`<button class="collapse-button" @click="${this._collapseButtonClickHandler}"></button>`;
@@ -388,7 +434,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
         const liCheckboxElement: TemplateResult | null = opt._headerOptions.useCheckbox
           ? html`
               <li>
-                <dews-checkbox class="card-select-checkbox"></dews-checkbox>
+                <dews-checkbox class="card-select-checkbox" @click="${this._checkClickHandler}"></dews-checkbox>
               </li>
             `
           : null;
@@ -420,12 +466,16 @@ export class Cardlist<T extends object> extends DewsFormComponent {
         subTitleElement = html` <div class="sub">${fsSubTitleFieldElement} ${ssSubTitleFieldElement}</div> `;
       }
 
+      if (status) {
+        cardStatusTagElement = html`<span class="state ${status}">${CardStatus[status]}</span>`;
+      }
+
       headerElement = html`
         <div class="card-header">
           ${headerControl}
           <div class="title">
             <h3>${data[opt._headerOptions.headerTitleField]}</h3>
-            ${subTitleElement}
+            ${cardStatusTagElement} ${subTitleElement}
           </div>
         </div>
       `;
