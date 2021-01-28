@@ -110,7 +110,7 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
 
   protected render(): unknown {
     return html`
-      ${this.showHeader ? html`<main-header title="가가가가"></main-header>` : html``}
+      ${this.showHeader ? html`<main-header></main-header>` : html``}
       <main-content page-id="${this.pageId}"></main-content>
       ${this.showBottom ? html`<main-bottom></main-bottom>` : html``}
     `;
