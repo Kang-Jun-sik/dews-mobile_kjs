@@ -555,7 +555,7 @@ export class PickerBase extends DrawerBottomBase {
               (dayMinCheck && count < Number(this.min?.slice(6, 8)))
             ) {
               _dateView.push(
-                html`<div class="day day-disabled" data-value="${count}">
+                html`<div class="day weekend day-disabled" data-value="${count}">
                   <span>${count}</span>
                 </div>`
               );
