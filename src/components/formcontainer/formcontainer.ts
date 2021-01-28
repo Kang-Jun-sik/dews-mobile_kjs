@@ -21,8 +21,7 @@ export class FormContainer extends DewsLayoutComponent {
           ?.querySelector('.dews-container-option-control')
           ?.appendChild(this.children.item(i) as HTMLElement);
       } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
-        // const li = document.createElement('li');
-        this.shadowRoot?.appendChild(this.children.item(i) as HTMLElement);
+        this.shadowRoot?.querySelector('.dews-container-option-control')?.append(this.children.item(i) as HTMLElement);
       }
     }
   }

@@ -6,7 +6,8 @@ export default {
 };
 
 export const Box = () => html`<div style="width: 360px">
-  <dews-box ?collapsed="${true}">
+
+  <dews-box title=""
     <dews-serach-container>
       <dews-button title="button" />
       <dews-textbox title="button" />
