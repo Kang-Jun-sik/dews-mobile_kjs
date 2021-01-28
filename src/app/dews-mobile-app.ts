@@ -35,24 +35,10 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
   async connectedCallback() {
     this.pageId = location.hash.replace('#', '');
 
-    window.addEventListener('hashchange', () => {
-      this.changeMenu(location.hash.replace('#', ''));
-    });
-
     super.connectedCallback();
     await this.updateComplete;
 
     this.historyManager.setContentsElement(this.shadowRoot?.querySelector('main-content')!);
-
-    // TODO 테스트용 코드 제거
-    // setTimeout(() => {
-    //   this.changeMenu('MA1000');
-    // }, 500);
-    //
-    // setTimeout(() => {
-    //   console.log('newPage');
-    //   this.changeMenu('MA1001');
-    // }, 5000);
 
     const mainHeader = this.shadowRoot?.querySelector('main-header') as MainHeader;
     const mainBottom = this.shadowRoot?.querySelector('main-bottom') as MainBottom;
@@ -61,6 +47,8 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
     this.addEventListener('pageLoaded', (e: Event) => {
       const args = e as PageLoadedEventArgs;
 
+      location.hash = args.pageId!;
+
       if (args.openPage! instanceof DewsBizPage) {
         // 헤더와 바텀에 페이지 정보 전달하면서 초기화
         mainHeader.init(args);
@@ -68,8 +56,11 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
         // 스크롤 매니저 초기화
         this.scrollManager.init(args);
       }
-      // 페이지 히스토리 등록
-      this.historyManager.addPage(args);
+
+      // 열려있는 페이지가 아니면 히스토리에 등록
+      if (!args.opened) {
+        this.historyManager.addPage(args);
+      }
     });
 
     // 스크롤 area가 변할 때 발생하는 이벤트 핸들러
@@ -102,8 +93,15 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
     });
   }
 
-  public changeMenu(pageId: string) {
-    this.pageId = pageId;
+  public openMenu(pageId: string) {
+    // 기존에 열려있는 페이지이면 해당 페이지를 맨 위로 이동시키도록
+    const openedPage = this.historyManager.findPage(pageId);
+
+    if (openedPage) {
+      this.historyManager.showPage(openedPage);
+    } else {
+      this.pageId = pageId;
+    }
   }
 
   get appVersion(): string {
