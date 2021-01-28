@@ -7,7 +7,7 @@ export default {
 
 export const CheckBox = () => html` <div style="width: 360px">
     <dews-checkbox-group>
-      <dews-checkbox title="Check Box1" bookmark> </dews-checkbox>
+      <dews-checkbox label="Check Box1" reverse bookmark> </dews-checkbox>
       <dews-checkbox title="Check Box2 reverse" reverse> </dews-checkbox>
       <dews-checkbox title="Check Box3"> </dews-checkbox>
       <dews-checkbox title="Check Box4 "> </dews-checkbox>

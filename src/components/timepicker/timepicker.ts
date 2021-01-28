@@ -3,11 +3,10 @@ import { html, internalProperty, property, PropertyValues, TemplateResult } from
 
 import template from './timepicker.html';
 import scss from './timepicker.scss';
+import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
 
-export class Timepicker extends DewsFormComponent {
+export class Timepicker extends DrawerBottomBase {
   static styles = scss;
-  @internalProperty()
-  private active: boolean | undefined = false;
 
   @property({ type: Boolean })
   disabled: boolean | undefined = false;
@@ -51,9 +50,6 @@ export class Timepicker extends DewsFormComponent {
   private _setHour: number | undefined;
   private _setMinute: number | undefined;
   private _setMeridiem: string | undefined;
-  private count: number | undefined = 0;
-  private _afterItem: number | undefined;
-  private $nextBtn: TemplateResult | undefined;
   private _clearCheck: boolean | undefined = false;
   private _touchStartPoint: number | undefined;
   private _touchStartPosition: number | undefined;
@@ -75,32 +71,7 @@ export class Timepicker extends DewsFormComponent {
     this._open();
   }
 
-  private _afterBtnView(): void {
-    const $el = this.parentElement!.children;
-    for (let i = 0; i <= $el.length; i++) {
-      if ($el.item(i) === this) {
-        this._afterItem = i + 1;
-        if ($el.length == i + 1) {
-          this.$nextBtn = html``;
-        } else {
-          if (
-            $el.item(i + 1)!.hasAttribute('disabled') ||
-            $el.item(i + 1)!.hasAttribute('readonly') ||
-            $el.item(i + 1)!.localName === 'dews-button' ||
-            $el.item(i + 1)!.localName === 'dews-radiobutton-group' ||
-            $el.item(i + 1)!.localName === 'dews-checkbox-group'
-          ) {
-            this.$nextBtn = html``;
-          } else {
-            this.$nextBtn = html`<button class="next-icon-button" @click="${this._nextBtnClickHandler}">
-              <span>다음</span>
-            </button>`;
-          }
-        }
-      }
-    }
-  }
-  private _confirmClickHandler() {
+  _confirmClickHandler = () => {
     this._close();
     if (!this._clearCheck) {
       let hour = this._setHour;
@@ -117,7 +88,7 @@ export class Timepicker extends DewsFormComponent {
       this.value = '';
       this.inputValue = '';
     }
-  }
+  };
 
   private _removeClickHandler() {
     (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
@@ -686,75 +657,6 @@ export class Timepicker extends DewsFormComponent {
       .forEach($el => {
         $el!.classList.remove('select');
       });
-  }
-
-  //  drower layout 처리 *_*
-  private _nextBtnClickHandler(e: TouchEvent | MouseEvent): void {
-    const $el = this.parentElement?.parentElement?.children[this._afterItem!]?.children[0] as HTMLElement;
-    this._confirmClickHandler();
-    $el?.click();
-  }
-
-  private _domClickHandler(e: MouseEvent): void {
-    if (e.isTrusted) {
-      if (
-        e.clientY <
-        window.innerHeight -
-          this.shadowRoot!.querySelector('.drawer-layout')!.shadowRoot!.querySelector('.layer-bottom')!.clientHeight
-      ) {
-        if (this.count! > 0) {
-          this._close();
-        } else {
-          this.count!++;
-        }
-      }
-    }
-  }
-
-  private _clickHandler(e: MouseEvent): void {
-    if (!this.disabled && !this.readonly && this.active === false) {
-      this.shadowRoot!.querySelector('.select-wrap')!.classList.add('focus');
-
-      if (this.value === undefined) {
-        const today = new Date();
-        if (this.min === undefined && this.max === undefined) {
-          this._setHour = today.getHours() / 12 <= 1 ? today.getHours() : today.getHours() % 12;
-          this._setMinute = today.getMinutes();
-          this._setMeridiem = today.getHours() / 12 <= 1 ? 'AM' : 'PM';
-          this._meridiemSelect(this._setMeridiem === 'AM' ? 0 : 1);
-          this._hourSelect(this._setHour - 1);
-          this._minuteSelect(Math.ceil(this._setMinute / this.step!));
-        }
-      }
-      this._open();
-      this._scrollChange();
-    }
-  }
-
-  private _scrollChange(): void {
-    window.scrollTo(
-      0,
-      window.pageYOffset +
-        this.parentElement!.getBoundingClientRect()?.top -
-        this.shadowRoot!.querySelector('.time-picker-wrap')!.clientHeight -
-        25
-    );
-  }
-
-  private domEvent: EventListener = this._domClickHandler.bind(this) as EventListener;
-
-  private _close(): void {
-    this.shadowRoot!.querySelector('.select-wrap')!.classList.remove('focus');
-    this.active = false;
-    this.count = 0;
-    this.dispatchEvent(new Event('close'));
-    document.removeEventListener('click', this.domEvent);
-  }
-
-  private _open(): void {
-    this.active = true;
-    this.dispatchEvent(new Event('open'));
-    document.addEventListener('click', this.domEvent);
   }
 
   protected async firstUpdated(_changedProperties: PropertyValues) {

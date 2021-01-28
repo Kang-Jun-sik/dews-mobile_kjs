@@ -1,8 +1,0 @@
-import { html } from 'lit-element';
-export default function () {
-    return html `<button ?disabled="${this.disabled}" class="button-list-child">
-  <span>${this.text}</span>
-</button>
-`;
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2hpbGRidXR0b24uaHRtbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImNoaWxkYnV0dG9uLmh0bWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLElBQUksRUFBRSxNQUFNLGFBQWEsQ0FBQztBQUNuQyxNQUFNLENBQUMsT0FBTztJQUF3QixPQUFPLElBQUksQ0FBQSxzQkFBc0IsSUFBSSxDQUFDLFFBQVE7VUFDMUUsSUFBSSxDQUFDLElBQUk7O0NBRWxCLENBQUM7QUFBQyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaHRtbCB9IGZyb20gJ2xpdC1lbGVtZW50JztcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uICh0aGlzOiBhbnkpIHsgcmV0dXJuIGh0bWxgPGJ1dHRvbiA/ZGlzYWJsZWQ9XCIke3RoaXMuZGlzYWJsZWR9XCIgY2xhc3M9XCJidXR0b24tbGlzdC1jaGlsZFwiPlxuICA8c3Bhbj4ke3RoaXMudGV4dH08L3NwYW4+XG48L2J1dHRvbj5cbmA7IH0iXX0=

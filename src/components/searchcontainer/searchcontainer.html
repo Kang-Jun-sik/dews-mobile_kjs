@@ -1,17 +1,35 @@
 <div class="dews-container-option-control">
   ${this.title == undefined?null :html`<h3 class="option-sub-title">${this.title}</h3>`}
-  ${(this._iconList.length == 0 ? null : html`
-  <div class="option-convenience-button">
-    <ul>
-      ${this._iconList}
-    </ul>
-  </div>
-  `)}
 </div>
 
 <div class="dews-search-field">
   <ul class="form-field">
-    ${this._contentList}
+
   </ul>
+</div>
+<slot @slotchange="${this._slotChange}"></slot>
+
+<drawer-layout class="drawer-layout" title="data-set" right="true" @close="${this._close}" ?active="${this.active}">
+  <div class="drawer-dataSet">
+    <div class="option-dataset">
+      <div class="control">
+        <div class="total-control">
+            ${this._dataSetHeader}
+        </div>
+
+        <div class="dataset-list">
+          ${this._dataSetList}
+        </div>
+      </div>
+    </div>
+  </div>
+</drawer-layout>
+
+<!-- snackbar -->
+<div class="dews-snackbar dataset">
+  <div class="snackbar-img"></div>
+  <div class="snackbar-text">
+    현재 입력된 내용이 데이터 Set에 저장
+  </div>
 </div>
 

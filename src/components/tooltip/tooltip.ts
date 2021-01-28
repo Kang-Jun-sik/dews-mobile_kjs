@@ -85,7 +85,8 @@ export class Tooltip extends DewsFormComponent {
     super.firstUpdated(_changedProperties);
     const tooltip = this.shadowRoot!.querySelector('.tooltip-wrap') as HTMLElement;
     if (tooltip !== null && this._target !== null) {
-      const tooltipLeft = this._target?.offsetLeft + this._target?.clientWidth / 2 - tooltip.clientWidth / 2;
+      const tooltipLeft =
+        this._target?.getBoundingClientRect().x + this._target?.clientWidth / 2 - tooltip.clientWidth / 2;
       this._tooltipLeft = tooltipLeft + 'px';
       if (tooltipLeft + tooltip.clientWidth > window.innerWidth) {
         this._tooltipLeft = 'calc(100vw - (' + Number(tooltip.clientWidth + 20) + 'px))';
@@ -94,9 +95,9 @@ export class Tooltip extends DewsFormComponent {
       }
 
       if (this._position === 'top') {
-        this._tooltipTop = this._target?.offsetTop - tooltip.offsetHeight - 10 - 53 - 5 + 'px';
+        this._tooltipTop = this._target?.getBoundingClientRect().y - tooltip.offsetHeight - 10 - 5 + 'px';
       } else {
-        this._tooltipTop = this._target?.offsetTop + this._target?.offsetHeight + 10 + 53 + 5 + 'px';
+        this._tooltipTop = this._target?.getBoundingClientRect().y + this._target?.offsetHeight + 10 + 5 + 'px';
       }
 
       this._className += ' active';

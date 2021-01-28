@@ -1,5 +1,3 @@
-<!-- input box 일때 -->
-
 <div class="mask-textbox-wrap">
   <label>${this.title}</label>
   <span  @click="${this._handleClick}" class="view ${this.disabled ? 'disabled' : ''}">
@@ -8,7 +6,7 @@
            value="${this.value}" .placeholder="${this.placeholder}">
   </span>
   <span style="display: none;" class="mask">
-    <input type="text" @focus="${this._focus}" @blur="${this._blur}">
+    <input type="text" @focus="${this._focus}" @blur="${this._blur}" @keydown="${this._keyDown}">
   </span>
   <span class="input-state ${this.stateType}">${this.stateMessage}</span>
 </div>

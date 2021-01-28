@@ -58,7 +58,12 @@ import {
   Monthpicker,
   Progressbar,
   Cardlist,
-  DataSource
+  DataSource,
+  Drawerlayout,
+  DropDownListItem,
+  Containercontent,
+  Containerbutton,
+  Containersummary
 } from './components/exports.js';
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
@@ -82,6 +87,7 @@ window.customElements.define('dews-radiobutton-group', RadiobuttonGroup);
 window.customElements.define('dews-cardlist', Cardlist);
 window.customElements.define('dews-complex', Complex);
 window.customElements.define('dews-togglebutton', Togglebutton);
+window.customElements.define('dropdownlist-item', DropDownListItem);
 
 window.customElements.define('dews-messagebox', Messagebox);
 window.customElements.define('dews-snackbar', Snackbar);
@@ -103,3 +109,7 @@ window.customElements.define('dews-list-container', ListContainer);
 window.customElements.define('dews-custom-container', Customcontainer);
 window.customElements.define('form-section', FormSection);
 window.customElements.define('dews-datasource', DataSource);
+window.customElements.define('drawer-layout', Drawerlayout);
+window.customElements.define('container-content', Containercontent);
+window.customElements.define('container-button', Containerbutton);
+window.customElements.define('container-summary', Containersummary);

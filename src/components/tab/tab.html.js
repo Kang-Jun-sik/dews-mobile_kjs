@@ -1,8 +1,0 @@
-import { html } from 'lit-element';
-export default function () {
-    return html `<div class="content ${this.active ? 'active' : ''}">
-    <slot></slot>
-</div>
-`;
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGFiLmh0bWwuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJ0YWIuaHRtbC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEVBQUUsSUFBSSxFQUFFLE1BQU0sYUFBYSxDQUFDO0FBQ25DLE1BQU0sQ0FBQyxPQUFPO0lBQXdCLE9BQU8sSUFBSSxDQUFBLHVCQUF1QixJQUFJLENBQUMsTUFBTSxDQUFBLENBQUMsQ0FBQSxRQUFRLENBQUEsQ0FBQyxDQUFBLEVBQUU7OztDQUc5RixDQUFDO0FBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGh0bWwgfSBmcm9tICdsaXQtZWxlbWVudCc7XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiAodGhpczogYW55KSB7IHJldHVybiBodG1sYDxkaXYgY2xhc3M9XCJjb250ZW50ICR7dGhpcy5hY3RpdmU/J2FjdGl2ZSc6Jyd9XCI+XG4gICAgPHNsb3Q+PC9zbG90PlxuPC9kaXY+XG5gOyB9Il19

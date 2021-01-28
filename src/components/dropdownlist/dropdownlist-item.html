@@ -1,0 +1,15 @@
+${this.multi
+? html`<li data-value="${this.title}" @click="${this._multiItemSelectHandler}" class="multi">
+  <span class="text">${this.title}</span>
+  <span data-value="${this.title}" class="checkbox">
+              <dews-checkbox class="multi-checkbox" ?checked="${this.checked}"></dews-checkbox>
+  </span>
+</li>`
+: html` <li @click="${this._singleItemSelectHandler}" data-value="${this.title}" class="single">
+  <span>${this.title}</span>
+</li>`}
+
+
+
+
+

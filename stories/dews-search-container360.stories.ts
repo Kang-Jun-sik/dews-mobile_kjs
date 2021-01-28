@@ -7,11 +7,11 @@ export default {
 
 export const SearchContainer360 = () => html` <div style="width: 360px;display: inline-block">
   <dews-box title="box">
-    <dews-search-container title="Search-Container">
+    <dews-search-container id="con2" title="Search-Container">
       <container-button data-set data-reset data-capture> </container-button>
       <container-summary> 요약영역 </container-summary>
       <container-content>
-        <dews-textbox title="TextBox"></dews-textbox>
+        <dews-textbox id="tbx01" title="TextBox"></dews-textbox>
         <dews-datepicker title="DatePicker"></dews-datepicker>
         <dews-dropdownlist title="DropDown"></dews-dropdownlist>
         <dews-codepicker title="CodePicker"></dews-codepicker>
