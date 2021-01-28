@@ -21,7 +21,6 @@ export class DropDownListItem extends DewsFormComponent {
   private multi = false;
 
   private $parent: Dropdownlist | undefined;
-  private once: undefined | boolean;
   connectedCallback() {
     super.connectedCallback();
     if (this.parentElement?.tagName === 'DEWS-DROPDOWNLIST') {
@@ -29,9 +28,6 @@ export class DropDownListItem extends DewsFormComponent {
       console.log(this.$parent);
       if (this.parentElement.hasAttribute('multi')) {
         this.multi = true;
-      }
-      if (this.parentElement.hasAttribute('once')) {
-        this.once = true;
       }
     }
   }
@@ -43,9 +39,7 @@ export class DropDownListItem extends DewsFormComponent {
     this.$parent!.select[0] = $el.dataset.value as string;
     this.$parent!._EVENT.emit('select', { target: this, type: 'select', item: this.$parent!.select[0] });
     this.$parent!._EVENT.emit('change', { target: this, type: 'change' });
-    if (this.once) {
-      this.$parent!._close();
-    }
+    this.$parent!._close();
   }
 
   private _multiItemSelectHandler(e: MouseEvent) {

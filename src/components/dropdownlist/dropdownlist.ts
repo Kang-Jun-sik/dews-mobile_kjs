@@ -35,9 +35,6 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
   @property({ type: Boolean, reflect: true })
   readonly = false;
 
-  @property({ type: Boolean, reflect: true })
-  once = false;
-
   @internalProperty()
   active = false;
 

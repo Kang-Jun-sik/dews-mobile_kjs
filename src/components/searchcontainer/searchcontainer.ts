@@ -343,9 +343,7 @@ export class SearchContainer extends DrawerRightBase {
           ?.querySelector('.dews-container-option-control')
           ?.appendChild(this.children.item(i) as HTMLElement);
       } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
-        const li = document.createElement('li');
-        li.appendChild(this.children.item(i) as HTMLElement);
-        this.shadowRoot?.querySelector('.form-field')?.appendChild(li);
+        this.shadowRoot?.querySelector('.dews-search-field')?.appendChild(this.children.item(i) as HTMLElement);
       }
     }
   }
