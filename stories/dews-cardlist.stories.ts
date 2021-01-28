@@ -46,7 +46,8 @@ export const CardList = () => html`
           secondSubTitleField: 'address',
           useEdit: true,
           useCheckbox: true,
-          useBookmark: true
+          useBookmark: true,
+          status: 'complete'
         })}
         use-total-count
         use-control-set
