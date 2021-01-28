@@ -148,11 +148,11 @@ export class Datepicker extends PickerBase {
         if (month < min && this.yearMinCheck) {
           // min check
           this.monthMinCheck = true;
-          $el.value = $el.value.slice(0, 5) + `${min}` + $el.value.slice(7, 10);
+          $el.value = $el.value.slice(0, 5) + `${this.min?.slice(4, 6)}` + $el.value.slice(7, 10);
         } else if (month > max && this.yearMaxCheck) {
           // maxCheck
           this.monthMaxCheck = true;
-          $el.value = $el.value.slice(0, 5) + `${max}` + $el.value.slice(7, 10);
+          $el.value = $el.value.slice(0, 5) + `${this.max?.slice(4, 6)}` + $el.value.slice(7, 10);
         } else if (month === 0) {
           $el.value = $el.value.slice(0, 5) + '01' + $el.value.slice(7, 10);
         } else if (month > 12) {
@@ -185,7 +185,7 @@ export class Datepicker extends PickerBase {
         if (day > lastDay) {
           // 최대 일 점검
           if (this.monthMaxCheck) {
-            $el.value = $el.value.slice(0, 8) + `${max}`;
+            $el.value = $el.value.slice(0, 8) + `${this.max!.slice(6, 8)}`;
           } else {
             $el.value = $el.value.slice(0, 8) + `${lastDay}`;
           }
@@ -194,10 +194,10 @@ export class Datepicker extends PickerBase {
           $el.value = $el.value.slice(0, 8) + '01';
         } else if (day < min && this.monthMinCheck) {
           // 개발자가 지정한 최소일 확인
-          $el.value = $el.value.slice(0, 8) + `${min}`;
+          $el.value = $el.value.slice(0, 8) + `${this.min!.slice(6, 8)}`;
         } else if (day > max && this.monthMaxCheck) {
           // 개발자가 지정한 최대일 확인
-          $el.value = $el.value.slice(0, 8) + `${max}`;
+          $el.value = $el.value.slice(0, 8) + `${this.max!.slice(6, 8)}`;
         }
         this._mode = 'month';
         this._setDay = Number($el.value.slice(8, 10));
