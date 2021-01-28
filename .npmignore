@@ -7,7 +7,6 @@ test/
 .tmp/
 storybook-static/
 .git*
-.npm*
 .eslintrc.js
 .prettierrc.js
 custom-elements.json
