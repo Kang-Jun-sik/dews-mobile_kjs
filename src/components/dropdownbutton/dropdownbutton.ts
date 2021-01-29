@@ -1,4 +1,4 @@
-import { html, property, query, TemplateResult } from 'lit-element';
+import { html, internalProperty, property, query, TemplateResult } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './dropdownbutton.html';
 import scss from './dropdownbutton.scss';
@@ -23,11 +23,6 @@ export class Dropdownbutton extends DewsFormComponent {
   @query('.button-list')
   private buttonList: HTMLElement | undefined;
 
-  private childButtons: Array<TemplateResult> = [];
-
-  // 드롭다운 버튼 내부 버튼
-  public buttons: Element[] = [];
-
   @property({ type: String })
   text = '';
 
@@ -43,8 +38,12 @@ export class Dropdownbutton extends DewsFormComponent {
   @property({ type: String })
   group = ''; // 버튼그룹 내부
 
-  @property({ type: Boolean, reflect: true })
-  _selected = false;
+  @internalProperty()
+  private _selected = false;
+
+  private childButtons: Array<TemplateResult> = [];
+
+  public buttons: Element[] = []; // 드롭다운 버튼 내부 버튼
 
   connectedCallback() {
     super.connectedCallback();
