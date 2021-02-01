@@ -1,4 +1,4 @@
-import { property, PropertyValues } from 'lit-element';
+import { internalProperty, property, PropertyValues } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './masktextbox.html';
 import scss from './masktextbox.scss';
@@ -67,11 +67,11 @@ export class Masktextbox extends DewsFormComponent {
     return unmask;
   }
 
-  @property({ type: String, reflect: true })
-  stateType = '';
+  @internalProperty()
+  private stateType = '';
 
-  @property({ type: String, reflect: true })
-  stateMessage = '';
+  @internalProperty()
+  private stateMessage = '';
 
   private _old: string | undefined = '';
   private _oldValue: string | undefined = '';

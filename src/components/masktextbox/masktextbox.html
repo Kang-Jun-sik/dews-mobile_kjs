@@ -3,7 +3,7 @@
   <span  @click="${this._handleClick}" class="view ${this.disabled ? 'disabled' : ''}">
     <input type="text" @focus="${this._handleClick}"
            ?disabled="${this.disabled}" ?readonly="${this.readonly}"
-           value="${this.value}" .placeholder="${this.placeholder}">
+           value="${this.value}" placeholder="${this.placeholder}">
   </span>
   <span style="display: none;" class="mask">
     <input type="text" @focus="${this._focus}" @blur="${this._blur}" @keydown="${this._keyDown}">
