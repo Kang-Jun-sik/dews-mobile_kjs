@@ -4,7 +4,7 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { internalProperty, TemplateResult } from 'lit-element';
 import { html } from 'lit-html';
 
-export class Customcontainer extends DewsFormComponent {
+export class CustomContainer extends DewsFormComponent {
   static styles = scss;
 
   @internalProperty()

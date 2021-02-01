@@ -4,7 +4,7 @@ import { html, internalProperty, property, PropertyValues, TemplateResult } from
 import template from './infobox.html';
 import scss from './infobox.scss';
 
-export class Infobox extends DewsLayoutComponent {
+export class InfoboxContainer extends DewsLayoutComponent {
   static styles = scss;
 
   @property({ type: String, attribute: 'info-type' })
