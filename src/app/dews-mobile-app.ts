@@ -11,6 +11,7 @@ import { FocusManager } from './FocusManager.js';
 import { FocusChangedEventArgs } from './FocusChangedEventArgs.js';
 import { PageHistoryManager } from './PageHistoryManager.js';
 import { DewsBizPage } from './base/DewsBizPage.js';
+import { DewsPageBase } from './base/DewsPageBase.js';
 
 @customElement('dews-mobile-app')
 export class DewsMobileApp extends LitElement implements ApplicationMainInterface {
@@ -106,6 +107,10 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
 
   get appVersion(): string {
     return '1.0.0';
+  }
+
+  get currentPage(): DewsPageBase | undefined {
+    return this.historyManager?.currentPage?.page;
   }
 
   protected render(): unknown {
