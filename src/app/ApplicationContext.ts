@@ -48,10 +48,10 @@ class ApplicationContext implements ApplicationContextInterface {
     if (!this.#started) {
       // 인증 프로세스 수행
       const systemEnv = await this.registerConditionalDependencies();
-      if (systemEnv.auth.isAuthenticated) {
-        try {
-          await systemEnv.auth.authenticate();
 
+      try {
+        await systemEnv.auth.authenticate();
+        if (systemEnv.auth.isAuthenticated) {
           const { DewsMobileApp } = await import('./dews-mobile-app.js');
           this.#main = new DewsMobileApp();
 
@@ -60,9 +60,9 @@ class ApplicationContext implements ApplicationContextInterface {
 
           await ((this.#main as unknown) as LitElement).updateComplete;
           // Object.freeze(this.#main);
-        } catch (err) {
-          // 인증 실패
         }
+      } catch (err) {
+        // 인증 실패
       }
 
       this.#started = true;
@@ -70,11 +70,11 @@ class ApplicationContext implements ApplicationContextInterface {
   }
 
   private getCurrentAppType(): SystemType {
-    // if (false) {
-    //   // Mobile-app 호출 : 앱에서 제공하는 전용 function 이 있는지 여부로 판단
-    //   return AppType.MobileApp;
-    // }
-    console.log(location);
+    if (window.DzMobileBridge) {
+      // Mobile-app 호출 : 앱에서 제공하는 전용 function 이 있는지 여부로 판단
+      return SystemType.MobileApp;
+    }
+
     if (location.search) {
       // Front-designer 호출 : querystring 에 token 매개변수가 제공됨
       const params = new URLSearchParams(location.search);

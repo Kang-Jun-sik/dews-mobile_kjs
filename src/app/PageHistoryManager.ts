@@ -15,6 +15,10 @@ export class PageHistoryManager {
     this.contents = contents.shadowRoot!.querySelector('#contents');
   }
 
+  public findPage(pageId: string): PageModule {
+    return this.history.filter(item => item.pageId === pageId)[0];
+  }
+
   // 새로운 페이지가 열리면 맵에 등록
   public addPage(arg: PageLoadedEventArgs) {
     if (!arg.cancelable) {
@@ -39,9 +43,8 @@ export class PageHistoryManager {
   get currentPage(): PageModule | null {
     return this.history.length > 0 ? this.history.slice(-1)[0] : null;
   }
-  // 현재 페이지 기준으로 이전 페이지
 
-  public setPageHistory(arg: PageLoadedEventArgs) {
+  private setPageHistory(arg: PageLoadedEventArgs) {
     if (arg.openPage && arg.pageId && arg.tag) {
       const pageModule = new PageModule(arg.openPage, arg.pageId, arg.tag);
       if (this.history.length > 0) {
@@ -60,10 +63,11 @@ export class PageHistoryManager {
   // 마지막 남은 요소인지도 판별
   public removeLatestPageHistory() {
     const removePageModule = this.history.pop();
+
     if (this.history.length >= 1) {
       const removeChild = this.contents?.querySelector(`${removePageModule?.tag}`);
       this.contents?.removeChild(removeChild!);
-      this.showLastPage();
+      this.showPage();
     } else {
       // 뒤로 갈 페이지가 없을 경우 App 으로 돌아가기 필요
     }
@@ -73,25 +77,32 @@ export class PageHistoryManager {
   private hideOtherPages(pageModule: PageModule) {
     this.history.filter(page => {
       if (page !== pageModule) {
-        const hideTarget = `erp10-${page.pageId.toLowerCase()}`;
-        this.contents?.querySelector(`#${hideTarget}`)?.setAttribute('class', 'page-hide');
-        // const removeChild = this.contents?.querySelector(`${page?.tag}`);
-        // this.contents?.removeChild(removeChild!);
+        const target = `erp10-${page.pageId.toLowerCase()}`;
+        this.contents?.querySelector(`#${target}`)?.setAttribute('class', 'page-hide');
       }
     });
   }
 
-  private showLastPage() {
-    const lastPage = this.history.slice(-1)[0];
-    if (lastPage) {
-      // this.contents?.append(lastPage.page);
-      const showTarget = `erp10-${lastPage.pageId.toLowerCase()}`;
+  public showPage(pageModule?: PageModule) {
+    let openedPage: PageModule = this.history.slice(-1)[0];
+    // 열려있는 페이지를 다시 열 때
+    if (pageModule) {
+      // 히스토리 제일 위로 이동
+      this.history = this.history.filter(item => item !== pageModule);
+      this.history.push(pageModule);
+      openedPage = pageModule;
+      // 나머지 페이지 숨기도록
+      this.hideOtherPages(openedPage);
+    }
+
+    if (openedPage) {
+      const showTarget = `erp10-${openedPage.pageId.toLowerCase()}`;
       this.contents?.querySelector(`#${showTarget}`)?.setAttribute('class', 'page-show');
-      this.dispatchPageLoadedEvent(lastPage);
+      this.dispatchPageLoadedEvent(openedPage, pageModule);
     }
   }
 
-  private dispatchPageLoadedEvent(lastPage: PageModule) {
+  private dispatchPageLoadedEvent(lastPage: PageModule, page?: PageModule) {
     const pageLoadedEvent = new PageLoadedEventArgs(`pageLoaded`, {
       bubbles: true,
       composed: true
@@ -99,6 +110,7 @@ export class PageHistoryManager {
     pageLoadedEvent.openPage = lastPage.page;
     pageLoadedEvent.pageId = lastPage.pageId;
     pageLoadedEvent.tag = lastPage.tag;
+    pageLoadedEvent.opened = !!page;
 
     document.getElementsByTagName('dews-mobile-app')[0]!.dispatchEvent(pageLoadedEvent);
   }

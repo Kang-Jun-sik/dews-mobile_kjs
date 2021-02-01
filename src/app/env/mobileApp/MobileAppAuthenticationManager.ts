@@ -3,14 +3,17 @@ import { AuthenticationManagerInterface } from '../../auth/AuthenticationManager
 
 @singleton()
 export class MobileAppAuthenticationManager implements AuthenticationManagerInterface {
+  private _isAuthenticated = false;
+
   get isAuthenticated(): boolean {
-    return false;
+    return this._isAuthenticated;
   }
   get token(): string | undefined {
     return undefined;
   }
 
   async authenticate(): Promise<void> {
+    this._isAuthenticated = true;
     return Promise.resolve();
   }
 }

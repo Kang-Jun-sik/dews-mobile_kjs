@@ -1,5 +1,6 @@
 import { CSSResult, html, internalProperty, TemplateResult } from 'lit-element';
 import { DewsComponent } from '../../components/base/exports.js';
+import { DataSource } from '../../components/datasource/dews-datasource.js';
 
 /**
  * 업무페이지 구성
@@ -53,6 +54,11 @@ export class DewsPageBase extends DewsComponent {
   // static 필수
   static getStyles() {
     return this.cssTemplate;
+  }
+
+  public getDataSource(id = ''): DataSource | undefined {
+    const dataSource = this.selectElementById(id);
+    return dataSource instanceof DataSource ? dataSource : undefined;
   }
 
   render() {
