@@ -17,7 +17,6 @@ install:
     - /^TR_/
     - dev
     - master
-    - mobile-app-interface
 
 build:
   stage: build
@@ -30,7 +29,6 @@ build:
     - /^TR_/
     - dev
     - master
-    - mobile-app-interface
 
 publish:
   stage: publish
@@ -38,4 +36,3 @@ publish:
     - npm publish
   only:
     - master
-    - mobile-app-interface
