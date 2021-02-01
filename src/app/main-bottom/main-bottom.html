@@ -1,0 +1,21 @@
+<div class="bottom">
+  <div class="button-tab-bar">
+    <ul class="tab-bar">
+      ${this.mainButtonRender('save', '저장')} ${this.mainButtonRender('delete', '삭제')}
+      ${this.mainButtonRender('search', '검색')} ${this.mainButtonRender('add', '추가')}
+
+      <li class="main-button">
+        <button class="more" @click="${this.clickMoreButton}">더보기</button>
+
+        <div class="sub-buttons">
+          <ul>
+            <!-- 임시 내용 -->
+            <li class="sub-button"><button class="info">메뉴정보</button></li>
+            <li class="sub-button"><button class="share">공유하기</button></li>
+            <li class="sub-button"><button class="print">인쇄하기</button></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

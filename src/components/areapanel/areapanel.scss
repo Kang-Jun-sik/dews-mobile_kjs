@@ -4,22 +4,7 @@
 //======================================
 // dews-area-panel
 //======================================
-
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-:host {
-  @include reset();
-  position: relative;
-  width: 100%;
-}
-@include media("(min-width: #{$media-size-tablet-l})") {
-  :host {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-start;
-  }
-}
+@include dews-area-panel();

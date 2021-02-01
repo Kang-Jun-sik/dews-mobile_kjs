@@ -10,20 +10,7 @@
 * {
   @include reset();
 }
-
 .undefined {
   opacity: 0;
 }
-
-.numeric-textbox-wrap {
-  @include numeric-textbox-wrap();
-
-  //button component 들어오면 지울 내용
-  .btn-tmp {
-    width: 36px;
-    height: 36px;
-    border-radius: 4px;
-    border: solid 1px #d5d5d5;
-    background-color: #ffffff;
-  }
-}
+@include dews-numerictextbox();

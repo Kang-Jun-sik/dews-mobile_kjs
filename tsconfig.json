@@ -1,29 +1,21 @@
-{
+  {
   "compilerOptions": {
     "target": "es2018",
     "module": "esnext",
     "moduleResolution": "node",
     "noEmitOnError": true,
-    "lib": ["es6", "es2017", "dom"],
-    //    "strict": true,
-    "allowJs": true,
-    "declaration": true,
-    "declarationDir": "dist/types",
-//    "esModuleInterop": false, // true
+    "lib": ["es2017", "dom"],
+    "strict": true,
+    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "importHelpers": true,
+    "outDir": ".tmp",
+    "inlineSources": true,
+    "inlineSourceMap": true,
     "rootDir": "./",
-    "outDir": "dist/"
+    "skipLibCheck": true
   },
-  "include": [
-    "declarations.d.ts",
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "rollup.config.js",
-    "karma.conf.js"
-  ]
+  "include": ["src/**/*.ts", "test/**/*.ts", "stories/**/*.ts"]
 }

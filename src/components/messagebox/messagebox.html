@@ -1,0 +1,31 @@
+<div class="dews-msgbox" id="${this._id}" @touchmove="${this._onTouchmove}" @wheel="${this._onWheel}" style="height:100vh;">
+  <div class="overlay"></div>
+
+  <div class="msgbox-wrap">
+    <div class="${this._className}">
+      <div class="pre-wrap">
+          <pre style="text-align: ${this._align};">
+            ${this.message}
+          </pre>
+      </div>
+
+
+      <div class="msgbox-nomore" style="display: ${this._showCheckbox !== 'none' ? 'block' : 'none'}">
+        <span class="dews-checkbox-wrap">
+            <span class="checkbox-control">
+                <input type="checkbox" id="noShowCheckBox">
+                <span  class="checkbox-shape"></span>
+            </span>
+            <label for="noShowCheckBox" class="checkbox-label">${this._checkboxMessage}</label>
+        </span>
+      </div>
+    </div>
+
+
+    <div class="msgbox-button">
+      <button class="solid cancel" @click=${this._close} style="display: ${this._cancel === true ? 'block' : 'none'};">취소</button>
+      <button class="solid" @click="${()=>this._btnClick('no')}" style="display: ${this._messageboxType === 'confirm' ? 'block' : 'none'};">아니오</button>
+      <button class="emphasize" @click="${()=>this._btnClick('yes')}">${this._yesBtnMessage}</button>
+    </div>
+  </div>
+</div>

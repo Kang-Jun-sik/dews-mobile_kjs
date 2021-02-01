@@ -1,0 +1,17 @@
+@import '../../../../node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import '../../../../node_modules/@dews/dews-mobile-style/scss/mixins/mixins';
+
+//======================================
+// dews-datepicker
+//======================================
+
+* {
+  @include reset();
+}
+@include dews-datepicker();
+@include dews-drawer-datepicker();
+
+
+
+
+

@@ -1,4 +1,4 @@
-<button ?disabled="${this.disabled}" >
-  <span class="icon"></span>
-  <span class="text">${this.title}</span>
+<button class="dews-button ${this.ui} ${this.type} ${this.size} ${this.icon} ${this.disabled ? 'disabled' : ''} ${this.group ? 'group' : ''}">
+  <span class="button-icon"></span>
+  <span class="button-text">${this.text}</span>
 </button>

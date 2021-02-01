@@ -1,11 +1,11 @@
-import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { html, internalProperty, property } from 'lit-element';
+import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
+import { html, internalProperty, property, TemplateResult } from 'lit-element';
 
-import _html from './formsection.html';
-import _scss from './formsection.scss';
+import template from './formsection.html';
+import scss from './formsection.scss';
 
 export class FormSection extends DewsLayoutComponent {
-  static styles = _scss;
+  static styles = scss;
 
   constructor() {
     super();
@@ -15,10 +15,10 @@ export class FormSection extends DewsLayoutComponent {
   }
 
   @property({ type: String })
-  title: string = '';
+  title = '';
 
   @internalProperty()
-  private _inputList: Array<any> = [];
+  private _inputList: Array<TemplateResult> = [];
 
   connectedCallback() {
     super.connectedCallback();
@@ -28,6 +28,6 @@ export class FormSection extends DewsLayoutComponent {
     super.disconnectedCallback();
   }
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

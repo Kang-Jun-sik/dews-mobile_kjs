@@ -4,16 +4,7 @@
 //======================================
 // dews-search-container
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-.dews-form-field {
-  @include form-field();
-}
-.dews-form-section-title {
-  @include container-title-bar($base-color-bar); //디자인 수정 이슈 , 색상 코드 정의 필요
-}
-
+@include dews-form-section();

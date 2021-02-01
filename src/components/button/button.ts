@@ -1,39 +1,71 @@
 import { property } from 'lit-element';
-import { DewsFormComponent } from '../../core/baseclass/DewsFormComponent.js';
+import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
-import _html from './button.html';
-import _scss from './button.scss';
+import template from './button.html';
+import scss from './button.scss';
 
 export enum TYPE_LIST {
-  'default' = 'default',
   'text' = 'text',
   'icon' = 'icon',
+  'icon-text' = 'iconText'
 }
 
 export enum SIZE_LIST {
-  'default' = 'default',
   'small' = 'small',
-  'large' = 'large',
+  'medium' = 'medium',
+  'large' = 'large'
 }
 
 export enum ICON_LIST {
-  'reset' = 'reset',
+  'default' = '',
+  'ico-set' = 'ico-set',
+  'ico-search' = 'ico-search',
+  'ico-add' = 'ico-add',
+  'ico-delete' = 'ico-delete',
+  'ico-save' = 'ico-save',
+  'ico-qr' = 'ico-qr',
+  'ico-barcode' = 'ico-barcode',
+  'ico-scan' = 'ico-scan',
+  'ico-download' = 'ico-download',
+  'ico-upload' = 'ico-upload',
+  'ico-up' = 'ico-up',
+  'ico-down' = 'ico-down',
+  'ico-left' = 'ico-left',
+  'ico-right' = 'ico-right',
+  'ico-excel' = 'ico-excel',
+  'ico-edit' = 'ico-edit',
+  'ico-file' = 'ico-file',
+  'ico-reset' = 'ico-reset',
+  'ico-language' = 'ico-language',
+  'ico-information' = 'ico-information',
+  'ico-subtraction' = 'ico-subtraction'
 }
 
+export enum UI_LIST {
+  'solid' = 'solid',
+  'emphasize' = 'emphasize'
+}
+
+type EVENT_TYPE = 'click';
+
 export class Button extends DewsFormComponent {
-  static styles = _scss;
+  static styles = scss;
 
   @property({ type: String })
-  title: string = 'title';
+  text = '';
 
   @property({ type: String })
-  type: TYPE_LIST = TYPE_LIST.default;
+  ui = UI_LIST.solid;
 
   @property({ type: String })
-  size: SIZE_LIST = SIZE_LIST.default;
+  type: TYPE_LIST = TYPE_LIST.text;
 
   @property({ type: String })
-  icon: ICON_LIST | undefined;
+  size: SIZE_LIST = SIZE_LIST.medium;
+
+  @property({ type: String })
+  icon: ICON_LIST = ICON_LIST.default;
 
   @property({ type: String })
   link: string | undefined;
@@ -41,19 +73,41 @@ export class Button extends DewsFormComponent {
   @property({ type: Boolean })
   disabled = false;
 
+  @property({ type: Boolean, reflect: true })
+  group = false; //버튼 그룹 내부
+
+  #EVENT: EventEmitter = new EventEmitter();
+
+  constructor() {
+    super();
+  }
+
   connectedCallback() {
     super.connectedCallback();
-    // this.addEventListener('focus', this._focusChanging);
+    this.addEventListener('click', this.#event_emit);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    // this.removeEventListener('focus', this._focusChanging);
+    this.removeEventListener('click', this.#event_emit);
   }
 
-  private _clickHandler() {}
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
+  }
+  #event_emit = (e: Event) => {
+    switch (e.type) {
+      case 'click':
+        this.#EVENT.emit('click', { target: this, type: 'click' });
+        break;
+    }
+  };
 
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

@@ -1,23 +1,23 @@
-import { DewsFormComponent } from '../../core/baseclass/DewsFormComponent.js';
+import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { property } from 'lit-element';
 
-import _html from './radiobutton.html';
-import _scss from './radiobutton.scss';
+import template from './radiobutton.html';
+import scss from './radiobutton.scss';
 
 export class Radiobutton extends DewsFormComponent {
-  static styles = _scss;
+  static styles = scss;
 
   @property({ type: String, reflect: true })
-  title: string | undefined;
+  label = '';
 
   @property({ type: Boolean })
-  readonly: boolean = false;
+  readonly = false;
 
   @property({ type: Boolean, attribute: 'disabled' })
-  disabled: boolean = false;
+  disabled = false;
 
   @property({ type: Boolean, reflect: true })
-  checked: boolean = false;
+  checked = false;
 
   /*
    * Event
@@ -34,6 +34,6 @@ export class Radiobutton extends DewsFormComponent {
   }
 
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

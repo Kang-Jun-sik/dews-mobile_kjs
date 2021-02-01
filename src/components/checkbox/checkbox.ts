@@ -1,65 +1,86 @@
-import { DewsFormComponent } from '../../core/baseclass/DewsFormComponent.js';
-import { property, PropertyValues } from 'lit-element';
+import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { property } from 'lit-element';
 
-import _html from './checkbox.html';
-import _scss from './checkbox.scss';
+import template from './checkbox.html';
+import scss from './checkbox.scss';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
+type EVENT_TYPE = 'change' | 'checked';
+
+// noinspection JSUnusedLocalSymbols
 export class Checkbox extends DewsFormComponent {
-  static styles = _scss;
+  constructor() {
+    super();
+  }
+  static styles = scss;
 
   @property({ type: String })
-  title: string | undefined;
+  label: string | undefined;
 
   @property({ type: Boolean })
   disabled = false;
 
   @property({ type: Boolean, reflect: true })
-  checked: boolean = false;
+  checked = false;
 
   @property({ type: Boolean })
-  bookmark: boolean = false;
+  bookmark = false;
 
-  private _className: string = 'dews-checkbox-wrap';
+  @property({ type: Boolean })
+  reverse = false;
+
+  private _className = 'dews-checkbox-wrap';
 
   connectedCallback() {
     super.connectedCallback();
 
-    if (this.parentElement.localName == 'dews-dropdownlist') {
+    if (this.reverse) {
+      this._className = this._className + ' reverse';
+    }
+    if (this.parentElement?.localName == 'dews-dropdownlist') {
       this._className = this._className + ' dropdown';
     }
-    if (this.bookmark && this.parentElement.localName != 'dews-dropdownlist') {
+    if (this.bookmark && this.parentElement?.localName != 'dews-dropdownlist') {
       this._className = this._className + ' bookmark';
-      this.title = undefined;
+      this.title = '';
     }
   }
 
   /*
    * 이벤트 생성
    * */
-  private changeEvent = new CustomEvent('change');
-  private checkEvent = new CustomEvent('check');
+  #EVENT = new EventEmitter();
 
   /*
    * 포커스 설정
    * */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   focus(): void {}
 
   private _clickHandler() {
     if (this.disabled) {
       return;
     }
-    this._checkedChange();
+    this.#checkedChange();
     if (this.checked) {
-      this.dispatchEvent(this.checkEvent);
+      this.#EVENT.emit('checked', { target: this, type: 'checked' });
     }
   }
 
-  private _checkedChange() {
-    this.dispatchEvent(this.changeEvent);
+  #checkedChange = () => {
     this.checked = !this.checked;
+    this.#EVENT.emit('change', { target: this, type: 'change' });
+  };
+
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
   }
 
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

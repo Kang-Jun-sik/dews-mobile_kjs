@@ -1,29 +1,29 @@
-import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { html, internalProperty, property } from 'lit-element';
+import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
+import { html, internalProperty, property, TemplateResult } from 'lit-element';
 
-import _html from './listcontainer.html';
-import _scss from './listcontainer.scss';
+import template from './listcontainer.html';
+import scss from './listcontainer.scss';
 
 export class ListContainer extends DewsLayoutComponent {
-  static styles = _scss;
+  static styles = scss;
 
   @property({ type: String })
-  title: string | undefined;
+  title = '';
 
   @internalProperty()
-  private _buttonList: Array<any> = [];
+  private _buttonList: Array<TemplateResult> = [];
 
-  private _contentList: Array<any> = [];
+  private _contentList: Array<TemplateResult> = [];
 
-  private _summaryList: Array<any> = [];
+  private _summaryList: Array<TemplateResult> = [];
 
   private _contentView() {
     const contentChildLength = this.querySelector('container-content')?.childElementCount;
     const contentChildItem = this.querySelector('container-content')?.children;
-    if (contentChildLength <= 0 || contentChildItem == undefined) {
+    if (contentChildLength! <= 0 || contentChildItem == undefined) {
       return;
     }
-    for (let i = 0; i < contentChildLength; i++) {
+    for (let i = 0; i < contentChildLength!; i++) {
       this._contentList.push(html`${contentChildItem.item(i)}`);
     }
     // this.querySelector('container-content').remove();
@@ -32,12 +32,12 @@ export class ListContainer extends DewsLayoutComponent {
   private _customButtonView() {
     const buttonChildLength = this.querySelector('container-button')?.childElementCount;
     const buttonChildItem = this.querySelector('container-button')?.children;
-    if (buttonChildLength <= 0 || buttonChildItem == undefined) {
+    if (buttonChildLength! <= 0 || buttonChildItem == undefined) {
       return;
     }
 
-    const _customButtonList: Array<any> = [];
-    for (let i = 0; i < buttonChildLength; i++) {
+    const _customButtonList: Array<TemplateResult> = [];
+    for (let i = 0; i < buttonChildLength!; i++) {
       _customButtonList.push(html`<li>${buttonChildItem.item(i)}</li>`);
     }
     this._buttonList.push(
@@ -47,21 +47,21 @@ export class ListContainer extends DewsLayoutComponent {
             ${_customButtonList}
           </ul>
         </div>
-      `,
+      `
     );
     // this.querySelector('container-button').remove();
   }
 
   private _summaryView() {
-    const summaryChildLength = this.querySelector('container-summary')?.childElementCount;
-    const summaryChildItem = this.querySelector('container-summary')?.children;
-    const _summaryItem: Array<any> = [];
+    const summaryChildLength = this.querySelector('containersummary')?.childElementCount;
+    const summaryChildItem = this.querySelector('containersummary')?.children;
+    const _summaryItem: Array<TemplateResult> = [];
 
-    if (summaryChildLength <= 0 || summaryChildItem == undefined) {
+    if (summaryChildLength! <= 0 || summaryChildItem == undefined) {
       return;
     }
 
-    for (let i = 0; i < summaryChildLength; i++) {
+    for (let i = 0; i < summaryChildLength!; i++) {
       _summaryItem.push(html`${summaryChildItem.item(i)}`);
     }
     this._summaryList.push(html`
@@ -70,7 +70,7 @@ export class ListContainer extends DewsLayoutComponent {
       </div>
     `);
 
-    // this.querySelector('container-summary').remove();
+    // this.querySelector('containersummary').remove();
   }
 
   connectedCallback() {
@@ -84,9 +84,23 @@ export class ListContainer extends DewsLayoutComponent {
     super.disconnectedCallback();
   }
 
-  private _slotChange(e) {}
+  private _slotChange(e: Event) {
+    for (let i = 0; i < this.children.length; i++) {
+      if (
+        this.children.item(i)?.tagName === 'CONTAINER-BUTTON' ||
+        this.children.item(i)?.tagName === 'CONTAINER-SUMMARY'
+      ) {
+        this.shadowRoot
+          ?.querySelector('.dews-container-option-control')
+          ?.appendChild(this.children.item(i) as HTMLElement);
+      } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
+        // const li = document.createElement('li');
+        this.shadowRoot?.querySelector('.list-field')?.appendChild(this.children.item(i) as HTMLElement);
+      }
+    }
+  }
 
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

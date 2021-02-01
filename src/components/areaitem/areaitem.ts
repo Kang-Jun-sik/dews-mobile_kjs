@@ -1,22 +1,22 @@
-import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
+import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
 import { property } from 'lit-element';
 
-import _html from './areaitem.html';
-import _scss from './areaitem.scss';
+import template from './areaitem.html';
+import scss from './areaitem.scss';
 
 export class AreaItem extends DewsLayoutComponent {
-  static styles = _scss;
+  static styles = scss;
 
   @property({ type: Number })
-  col: number = 12;
+  col = 12;
 
   @property({ type: Boolean, reflect: true })
-  hide: boolean = false;
+  hide = false;
 
   render() {
-    // if (this.parentElement.localName !== 'dews-area-panel') {
-    //   return;
-    // }
-    return this.hide ? null : _html.bind(this)();
+    if (this.parentElement?.localName !== 'dews-area-panel') {
+      return;
+    }
+    return this.hide ? null : template.call(this);
   }
 }

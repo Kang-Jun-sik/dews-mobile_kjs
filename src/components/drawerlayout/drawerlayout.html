@@ -1,0 +1,41 @@
+
+  <!--  <div class="layer-drawer">-->
+  ${this.right?
+  html`
+  <div class="layer-drawer right">
+<!--    <div class="overlay" style="display: ${this._display}"></div>-->
+    <div class="overlay" ></div>
+<!--    <div class="layer layer-right ${this.size}" style="right: ${this._right}">-->
+    <div class="layer layer-right ${this.size}">
+      <div class="layer-header">
+        <div class="titlebar">
+          <div class="title">${this.title}</div>
+        </div>
+        <button class="close-button" @click="${this._close}"></button>
+      </div>
+      <div class="layer-content">
+        <slot></slot>
+      </div>
+    </div>
+  </div>
+  `
+  :html`
+  <div class="layer-drawer" @touchmove="${this._touchMove}" @touchend="${this._touchEnd}">
+  <div class="overlay" ></div>
+  <div class="layer layer-bottom" style="height: ${this._height};">
+    <div class="layer-moving-button">
+      ${this.scrollEnabled ? html`<span class="moving-button" @touchstart="${this._touchStart}"></span>`:html`<span class="fixed-button" @touchstart="${this._touchStart}"></span>`}
+    </div>
+    <div class="layer-content">
+      <slot></slot>
+    </div>
+  </div>
+</div>
+  ` }
+
+
+
+
+
+
+

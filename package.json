@@ -1,76 +1,65 @@
 {
   "name": "@dews/dews-mobile",
-  "version": "0.0.1",
-  "description": "Dews Mobile FrameWork",
-  "author": "",
-  "license": "UNLICENSED",
-  "main": "dist/js/dews-mobile.js",
-  "module": "dist/js/dews-mobile.js",
-  "types": "dist/types/src/index.d.ts",
+  "version": "1.0.015",
+  "description": "Webcomponent dews-mobile following open-wc recommendations",
+  "author": "dews-mobile",
+  "license": "MIT",
+  "types": "./dist/mobile/types/dews-mobile.d.ts",
   "scripts": {
-    "start": "concurrently --kill-others --names tsc,es-dev-server \"npm run tsc:watch\" \"es-dev-server --app-index dist/index.html --node-resolve --open --watch\"",
-    "tsc:watch": "tsc --watch",
-    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
-    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
-    "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
-    "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "format": "npm run format:eslint && npm run format:prettier",
-    "test": "rollup -c && karma start --coverage",
-    "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\"",
-    "storybook": "npm run wca && concurrently --kill-others --names tsc,storybook \"start-storybook --node-resolve --watch --open\"",
+    "test": "web-test-runner",
+    "test:coverage": "web-test-runner --coverage",
+    "test:watch": "web-test-runner --watch",
     "storybook:build": "build-storybook",
-    "build": "rimraf dist && rollup -c rollup.config.js",
-    "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
+    "dev:build": "rimraf .tmp && gulp build && tsc && rollup -c rollup.config.js --dev true",
+    "dev:watch": "npm run dev:build && concurrently \"gulp watch\" \"tsc --watch\" \"rollup -c rollup.config.js --dev true --watch\"",
+    "dev:storybook": "npm run dev:build && concurrently \"gulp watch\" \"tsc --watch\" \"start-storybook --node-resolve --watch --open\"",
+    "dev:demo": "npm run dev:build && web-dev-server --root-dir .tmp/dist --app-index mobile/index.html --open --compatibility none --watch",
+    "release:build": "rimraf dist && gulp build && tsc && rollup -c rollup.config.js --dev false && tsc -p tsconfig.declaration.json",
+    "release:demo": "npm run release:build && web-dev-server --root-dir dist --app-index mobile/index.html --open --compatibility none",
     "wca": "web-component-analyzer analyze src --outFile custom-elements.json"
   },
   "dependencies": {
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "lit-element": "^2.2.1",
-    "lit-html": "^1.1.2"
+    "lit-element": "^2.0.1",
+    "lit-html": "^1.0.0"
   },
   "devDependencies": {
+    "@dews/dews-mobile-core": "^0.1.3",
+    "@dews/dews-mobile-style": "^1.0.5",
     "@open-wc/building-rollup": "^1.0.0",
     "@open-wc/demoing-storybook": "^2.0.0",
-    "@open-wc/eslint-config": "^2.0.0",
-    "@open-wc/scoped-elements": "^1.2.2",
+    "@open-wc/eslint-config": "^4.2.0",
     "@open-wc/testing": "^2.0.0",
-    "@open-wc/testing-karma": "^3.0.0",
-    "@rollup/plugin-typescript": "^6.0.0",
-    "@rollup/pluginutils": "^4.0.0",
+    "@open-wc/testing-karma": "^4.0.9",
+    "@rollup/plugin-replace": "^2.3.4",
     "@types/node": "13.11.1",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
+    "@web/dev-server": "^0.0.12",
+    "@web/test-runner": "^0.7.41",
     "concurrently": "^5.1.0",
-    "deepmerge": "^3.2.0",
-    "es-dev-server": "^1.23.0",
+    "deepmerge": "^4.2.2",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.11.0",
+    "esm": "^3.2.25",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "husky": "^1.0.0",
-    "lint-staged": "^10.0.0",
-    "prettier": "^2.0.4",
+    "lint-staged": "^10.5.3",
+    "node-sass": "^5.0.0",
+    "prettier": "^2.2.1",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^2.6.3",
-    "rollup": "^2.3.4",
-    "sass": "^1.26.11",
+    "rollup": "^2.38.0",
+    "sinon": "^9.2.4",
+    "through2": "^4.0.2",
     "tslib": "^1.11.0",
-    "typescript": "~3.9.0",
+    "tsyringe": "^4.4.0",
+    "typescript": "^4.1.3",
     "web-component-analyzer": "^1.1.6"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@open-wc/eslint-config",
-      "eslint-config-prettier"
-    ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "arrowParens": "avoid",
-    "htmlWhitespaceSensitivity": "css",
-    "semi": true,
-    "printWidth": 120,
-    "tabWidth": 2,
-    "useTabs": false,
-    "trailingComma": "all"
   },
   "husky": {
     "hooks": {
@@ -83,5 +72,12 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.comet.duzon.net/front-end/dews-mobile.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.comet.duzon.com/repository/npm-private/"
   }
 }

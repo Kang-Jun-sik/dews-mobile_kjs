@@ -2,17 +2,10 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-dropdown-list
+// dews-dropdownlist
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-.dropdown-list-wrap {
-  @include dropdown-list-wrap();
-}
-.drawer-dropdown {
-  @include drawer-dropdown-wrap();
-}
+@include dews-dropdownlist();
+@include dews-drawer-dropdownlist();

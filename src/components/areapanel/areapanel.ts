@@ -1,18 +1,12 @@
-import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { property, LitElement } from 'lit-element';
+import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
 
-import _html from './areapanel.html';
-import _scss from './areapanel.scss';
+import template from './areapanel.html';
+import scss from './areapanel.scss';
 
 export class AreaPanel extends DewsLayoutComponent {
-  static styles = _scss;
+  static styles = scss;
 
   render() {
-    // if (this.parentElement?.localName === 'area-item') {
-    //   if (this.parentElement.attributes.getNamedItem('col').value !== '8') {
-    //     return;
-    //   }
-    // }
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

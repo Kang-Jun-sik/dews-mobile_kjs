@@ -4,19 +4,7 @@
 //======================================
 // dews-list-container
 //======================================
-//--------------------------------------
-// 레이아웃 영역
-//--------------------------------------
 * {
   @include reset();
 }
-.dews-list-field{
-  @include form-field();
-
-}
-//--------------------------------------
-// dews-container-option-bar
-//--------------------------------------
-.dews-container-option-control {
-  @include option-control();
-}
+@include dews-container-list();

@@ -1,75 +1,50 @@
-import { readFileSync } from 'fs';
-import typescript from '@rollup/plugin-typescript';
-import nodeResolve from '@rollup/plugin-node-resolve';
-import { createFilter } from '@rollup/pluginutils';
-import sass from 'sass';
+import merge from 'deepmerge';
+import { createSpaConfig } from '@open-wc/building-rollup';
+import replace from '@rollup/plugin-replace';
+import pkg from './package.json';
 
-const dewsSamplePlugin = () => {
-  const htmlDoc = readFileSync('src/index.html').toString();
-  return {
-    name: 'dewsSamplePlugin',
-    generateBundle() {
-      // index.html 생성
-      this.emitFile({ type: 'asset', fileName: 'index.html', source: htmlDoc });
-    },
-  };
-};
-export function html({ include = ['**/*.html'], exclude } = {}) {
-  const filter = createFilter(include, exclude);
-  const importDeclaration = "import { html } from 'lit-html';";
+export default argv => {
+  const devMode = argv.dev === 'true';
+  delete argv.dev;
 
-  return {
-    name: 'lit-html',
-    transform(html, id) {
-      // html 파일 여부 판단 아닐경우 리턴
-      if (id.slice(-5) !== '.html') return null;
-      if (!filter(id)) return null;
+  const baseConfig = createSpaConfig({
+    developmentMode: devMode,
+    injectServiceWorker: false,
+    workbox: false,
+    polyfillsLoader: false,
+    outputDir: devMode ? './.tmp/dist/mobile' : './dist/mobile',
+    nodeResolve: true,
+    html: {
+      flatten: false,
+      inject: true,
+      publicPath: '/mobile',
+      minify: !devMode
+    }
+  });
 
-      // 출력 을 원하는 형태로 변경
-      const output = `html\`${html}\`;`;
-      const code = `${importDeclaration}\n export default function(){ \n return ${output}}; `;
-      const map = { mappings: '' };
-      return { code, map };
-    },
-  };
-}
-
-export function scss({ include = ['**/*.scss'], exclude } = {}) {
-  const filter = createFilter(include, exclude);
-  const importDeclaration = "import { css } from 'lit-element';";
-  return {
-    name: 'lit-scss',
-    transform(scss, id) {
-      // scss 파일 여부 판단 아닐경우 리턴
-      if (id.slice(-5) !== '.scss') return null;
-      if (!filter(id)) return null;
-
-      // 출력 을 원하는 형태로 변경
-
-      const result = sass.renderSync({ data: scss });
-      const output = `css\`${result.css.toString()}\`;`;
-      const code = `${importDeclaration}\n export default ${output}; `;
-      const map = { mappings: '' };
-      return { code, map };
-    },
-  };
-}
-
-export default [
-  {
-    // main 번들링
-    input: 'src/index.ts',
-    plugins: [
-      dewsSamplePlugin(),
-      typescript({ include: '**/*.ts', tsconfig: 'tsconfig.json' }),
-      scss({ output: false, include: ['**/*.scss'] }),
-      html(),
-      nodeResolve(),
-    ],
+  return merge(baseConfig, {
+    // 프로젝트 내부 테스트용 index.html
+    // input: './index.html',
+    input: '/.tmp/src/dews-mobile.js',
+    preserveEntrySignatures: true,
+    treeshake: true,
     output: {
-      dir: 'dist',
+      sourcemap: devMode,
       entryFileNames: 'js/dews-mobile.js',
-      format: 'es',
+      chunkFileNames: devMode ? 'js/dews-mobile.chunk.[name].js' : 'js/dews-mobile.chunk.[hash].js',
+      assetFileNames: devMode
+        ? 'assets/dews-mobile.assets.[name][extname]'
+        : 'assets/dews-mobile.asset.[hash][extname]',
+      banner: `/*! ****************************************************************************
+ DEWS/UI Mobile Framework v${pkg.version}
+ Copyright (c) Douzone Bizon Co.,ltd. All rights reserved.
+***************************************************************************** */
+`
     },
-  },
-];
+    plugins: [
+      replace({
+        __VERSION__: pkg.version
+      })
+    ]
+  });
+};

@@ -1,31 +1,28 @@
-/* eslint-disable */
-// import/no-extraneous-dependencies,@typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires,no-undef */
 const { createDefaultConfig } = require('@open-wc/testing-karma');
-
 const merge = require('deepmerge');
 
 module.exports = config => {
+  const defaultConfig = createDefaultConfig(config);
   config.set(
-    merge(createDefaultConfig(config), {
+    merge(defaultConfig, {
       files: [
-        // dist/**/**/test 폴더에 .test로 끝나는 모든 파일을 실행합니다.
+        // runs all files ending with .test in the test folder,
+        // can be overwritten by passing a --grep flag. examples:
+        //
+        // npm run test -- --grep test/foo/bar.test.js
+        // npm run test -- --grep test/bar/*
         {
-          pattern: config.grep ? config.grep : 'dist/**/test/**/*.test.js',
-          type: 'module',
-        },
+          pattern: config.grep ? config.grep : '.tmp/**/test/**/*.test.js',
+          type: 'module'
+        }
       ],
-      frameworks: ['mocha'],
+
       esm: {
-        nodeResolve: true,
-        preserveSymlinks: true,
-      },
-      // https://github.com/karma-runner/karma-mocha 참고
-      client: {
-        mocha: {
-          ui: 'tdd',
-        },
-      },
-    }),
+        nodeResolve: true
+      }
+      // you can overwrite/extend the config further
+    })
   );
   return config;
 };

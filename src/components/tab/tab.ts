@@ -1,22 +1,20 @@
-import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
+import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
 import { property } from 'lit-element';
 
-import _html from './tab.html';
-import _scss from './tab.scss';
+import template from './tab.html';
+import scss from './tab.scss';
 
 export class Tab extends DewsLayoutComponent {
-  static styles = _scss;
+  static styles = scss;
 
   @property({ type: String })
-  title: string;
+  title = '';
 
   @property({ type: Boolean })
-  hide: boolean = false;
+  hide = false;
 
   async connectedCallback() {
     super.connectedCallback();
-    await this.updateComplete;
-    console.log('Tab UpdateComplete');
   }
 
   disconnectedCallback() {
@@ -24,6 +22,6 @@ export class Tab extends DewsLayoutComponent {
   }
 
   render() {
-    return this.hide ? null : _html.bind(this)();
+    return this.hide ? null : template.call(this);
   }
 }

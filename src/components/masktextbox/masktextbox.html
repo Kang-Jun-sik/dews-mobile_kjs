@@ -1,21 +1,12 @@
-<!-- input box 일때 -->
-
-<div class="mask-textbox-wrap" style="padding: 0 20px;">
+<div class="mask-textbox-wrap">
   <label>${this.title}</label>
-  <span  @click="${this._spanClick}" class="password view ${this.disabled ? 'disabled' : ''}">
-    <input ?disabled="${this._disabled}" ?readonly="${this.readonly}" type="password">
+  <span  @click="${this._handleClick}" class="view ${this.disabled ? 'disabled' : ''}">
+    <input type="text" @focus="${this._handleClick}"
+           ?disabled="${this.disabled}" ?readonly="${this.readonly}"
+           value="${this.value}" placeholder="${this.placeholder}">
   </span>
-  <span  style="display: none " class="password mask">
-    <input @input="${this._inputChange}" @blur="${this._blur}" type="${this.type}">
+  <span style="display: none;" class="mask">
+    <input type="text" @focus="${this._focus}" @blur="${this._blur}" @keydown="${this._keyDown}">
   </span>
+  <span class="input-state ${this.stateType}">${this.stateMessage}</span>
 </div>
-
-
-  <p style="padding:16px;"></p>
-
-<!--<div class="mask-textbox-wrap" style="padding: 0 20px 20px;">-->
-<!--    <label for="mask-textbox">${this.title}</label>-->
-<!--  <span class="text">-->
-<!--    <input type="text">-->
-<!--  </span>-->
-<!--</div>-->

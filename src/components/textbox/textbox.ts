@@ -1,41 +1,41 @@
-import { property } from 'lit-element';
-import { DewsFormComponent } from '../../core/baseclass/DewsFormComponent.js';
-import _html from './textbox.html';
-import _scss from './textbox.scss';
+import { property, PropertyValues } from 'lit-element';
+import { DewsFormComponent } from '../base/DewsFormComponent.js';
+
+import template from './textbox.html';
+import scss from './textbox.scss';
 
 export class Textbox extends DewsFormComponent {
-  static styles = _scss;
+  static styles = scss;
 
   @property({ type: String })
-  title: string = '';
+  title = '';
 
-  @property({ type: String, reflect: true })
-  placeholder: string = '';
+  @property({ type: String })
+  type = 'text';
 
-  @property({ type: Boolean, reflect: true })
-  multi: boolean = false;
-
-  @property({ type: Boolean, reflect: true })
-  disabled: boolean = false;
+  @property({ type: String })
+  placeholder: string | undefined = '';
 
   @property({ type: Boolean, reflect: true })
-  readonly: boolean = false;
+  multi = false;
 
   @property({ type: Boolean, reflect: true })
-  required: boolean = false;
+  disabled = false;
+
+  @property({ type: Boolean, reflect: true })
+  readonly = false;
+
+  @property({ type: Boolean, reflect: true })
+  required = false;
 
   @property({ type: Number, attribute: 'multi-height' })
-  multiHeight: number = 50; // default 높이값...
+  multiHeight = 50; // default 높이값...
 
-  @property({ type: String })
-  value: string = '';
-
-  private onFocus = new CustomEvent('focus', { detail: { target: '' } });
-  private onChange = new CustomEvent('change', { detail: { target: '' } });
+  @property({ type: String, reflect: true })
+  value = '';
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('focus', this._onFocus);
     // disabled 와 readonly 중 disabled 를 우선 처리한다.
     if (this.disabled && this.readonly) {
       this.readonly = false;
@@ -49,30 +49,28 @@ export class Textbox extends DewsFormComponent {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('focus', this._onFocus);
   }
 
-  private _onFocus(e) {
-    this.onFocus.initEvent(e);
-    this.dispatchEvent(this.onFocus);
-  }
-  private _onChange(e) {
-    this.value = e.target.value;
-    this.onChange.initCustomEvent('change', false, false, e);
-    this.dispatchEvent(this.onChange);
+  private _onFocus(e: FocusEvent) {
+    this.dispatchEvent(new CustomEvent('focusin', { detail: { target: e.target as EventTarget } }));
   }
 
-  private _show(message, type) {
+  private _onChange(e: InputEvent) {
+    this.value = (e.target as HTMLInputElement)!.value;
+    this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
+  }
+
+  private _show(message: string, type: string) {
     // 경고 표시 등을 나타나게 한다.
-    // if(type==='error'){
-    //
-    // }else if(type==='warning'){
-    //
-    // }
+    if (type === 'error') {
+      alert(message);
+    } else if (type === 'warning') {
+      alert(message);
+    }
   }
 
   click() {
-    this.shadowRoot.querySelector('input').focus();
+    this.shadowRoot!.querySelector('input')?.focus();
   }
 
   error: Function = (message: string) => {
@@ -82,7 +80,15 @@ export class Textbox extends DewsFormComponent {
     this._show(message, 'warning');
   };
 
+  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
+    if (_changedProperties.get('value') !== undefined && !this.multi) {
+      (this.shadowRoot!.querySelector('.dews-input') as HTMLInputElement)!.value = this.value;
+    } else if (_changedProperties.get('value') !== undefined && this.multi) {
+      (this.shadowRoot!.querySelector('.dews-multi-input') as HTMLInputElement)!.value = this.value;
+    }
+    return super.shouldUpdate(_changedProperties);
+  }
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }

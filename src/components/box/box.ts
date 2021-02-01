@@ -1,37 +1,33 @@
-import { DewsLayoutComponent } from '../../core/baseclass/DewsLayoutComponent.js';
-import { internalProperty, property } from 'lit-element';
+import { DewsAreaComponent } from '../base/exports.js';
+import { internalProperty, LitElement, property } from 'lit-element';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
-import _html from './box.html';
-import _scss from './box.scss';
-import { MainButton, MainButtonSet } from '../../main/MainButton.js';
+import template from './box.html';
+import scss from './box.scss';
 
-export class Box extends DewsLayoutComponent {
-  static styles = _scss;
+type EVENT = 'click' | 'focus' | 'blur';
+
+// noinspection JSUnusedLocalSymbols
+export class Box extends DewsAreaComponent {
+  static styles = scss;
 
   @property({ type: String, reflect: true })
-  title: string = '';
+  title = '';
 
   @property({ type: Boolean })
-  collapsed: boolean = false;
+  collapsed = false;
 
   @property({ type: Boolean })
-  hide: boolean = false;
+  hide = false;
 
   @internalProperty()
-  height: string = 'auto';
+  height = 'auto';
 
-  private slotHeight: string;
-
-  // 하단 버튼
-  @property({ type: String, attribute: 'button-set' })
-  buttonSet: string = '';
-
-  public _mainButtonSet: MainButtonSet;
+  private slotHeight: string | undefined;
 
   async connectedCallback() {
-    super.connectedCallback();
+    await super.connectedCallback();
     await this.updateComplete;
-    await this.setMainButtonSet();
     this.addEventListener('click', this._clickEvent);
   }
 
@@ -39,75 +35,64 @@ export class Box extends DewsLayoutComponent {
     super.disconnectedCallback();
     this.removeEventListener('click', this._clickEvent);
   }
-  private setMainButtonSet(): Promise<void> {
-    if (this.buttonSet !== '') {
-      const mainButtonSet = new MainButtonSet();
-      this.buttonSet.split(',').forEach(item => {
-        const mainButton = mainButtonSet[item] as MainButton;
-        if (mainButton) {
-          mainButton.show();
-          mainButton.onclick = () => {
-            alert(`click: ${item}`);
-          };
-        } else {
-          console.error(`Main Button Set Error: ${this.title} ${item}`);
-        }
-      });
-      this._mainButtonSet = mainButtonSet;
-    }
-    return;
+
+  public _blurEvent() {
+    this.#EVENT.emit('blur', { target: this, type: 'blur' });
+    //블러이벤트
   }
 
-  public _blurEvent() {}
+  public _focusEvent() {
+    this.#EVENT.emit('focus', { target: this, type: 'focus' });
+    //블러이벤트
+  }
+
+  //이벤트 객체 생성
+  #EVENT = new EventEmitter();
+  // 이벤트 등록
+  public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
+  }
 
   private _clickEvent(e: Event) {
-    // 직접 일으킨 이벤트만 처리하기 위해 isTrusted 사용
-    if (e.isTrusted) {
-      this._focusChanging(e);
-    }
+    this._focusChanging(e);
   }
 
-  private _onToggleClick(e) {
-    this._toggleOpened(e);
-  }
-
-  private _toggleOpened(e) {
+  private _onToggleClick = (e: Event) => {
+    // 이벤트 실행
     if (!this.collapsed) {
       this.collapsed = true;
       this.height = '0px';
-      const close = new CustomEvent('close');
-      this.dispatchEvent(close);
     } else {
-      // this.open();
-      const open = new CustomEvent('open');
-      this.dispatchEvent(open);
       this.collapsed = false;
-      this.height = this.slotHeight;
+      this.height = this.slotHeight as string;
     }
-  }
-
+    this.#EVENT.emit('click', { target: this, type: 'click', preventDefault: e.preventDefault });
+  };
   protected enable: Function = (value: boolean) => {
     return (this.collapsed = value);
   };
 
-  private async slotChange(e) {
+  private async slotChange() {
     if (this.collapsed) {
       this.height = '0px';
     }
-    const children = this.shadowRoot.querySelectorAll('*');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
+    const children: NodeListOf<LitElement> = this.shadowRoot!.querySelectorAll('*');
+
     await Promise.all(Array.from(children).map(c => c.updateComplete));
-    this.slotHeight = `${this.shadowRoot.querySelector('.dews-box-content-wrap')?.clientHeight}px`;
+    this.slotHeight = `${this.shadowRoot!.querySelector('.dews-box-content-wrap')?.clientHeight}px`;
     if (!this.collapsed) {
       this.height = this.slotHeight;
     } else {
-      this.slotHeight = `${this.shadowRoot.querySelector('.dews-box-content')?.clientHeight}px`;
+      this.slotHeight = `${this.shadowRoot!.querySelector('.dews-box-content')?.clientHeight}px`;
     }
   }
 
   render() {
-    console.log('render');
-    return this.hide ? null : _html.bind(this)();
+    return this.hide ? null : template.call(this);
   }
 }

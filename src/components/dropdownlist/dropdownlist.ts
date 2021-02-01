@@ -1,98 +1,127 @@
-import { DewsFormComponent } from '../../core/baseclass/DewsFormComponent.js';
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
-import { Drowerlayout } from '../drowerlayout/drowerlayout.js';
+import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 
-import _html from './dropdownlist.html';
-import _scss from './dropdownlist.scss';
+import template from './dropdownlist.html';
+import scss from './dropdownlist.scss';
+import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { DewsComponent } from '../base/DewsComponent.js';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+import { DropDownListItem } from './dropdownlist-item.js';
 
-export class Dropdownlist extends DewsFormComponent {
-  static styles = _scss;
+type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
+
+// noinspection JSUnusedLocalSymbols
+// @ts-expect-error
+export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
+  static styles = scss;
+
+  static get scopedElements() {
+    return {
+      'drawer-layout': Drawerlayout,
+      ...DewsComponent.getRegisteredComponents()
+    };
+  }
 
   @property({ type: String })
-  title: string = '';
+  title = '';
 
   @property({ type: Boolean, reflect: true })
-  multi: boolean = false;
+  multi = false;
 
   @property({ type: Boolean, reflect: true })
-  disabled: boolean = false;
+  disabled = false;
 
   @property({ type: Boolean, reflect: true })
-  readonly: boolean = false;
+  readonly = false;
 
   @internalProperty()
-  private active: boolean = false;
+  active = false;
 
-  private _startPoint;
-  private _count = 0;
-  private _multiCheck: boolean = false;
+  @internalProperty()
+  private height: string | undefined;
+
+  @internalProperty()
   private $itemList: Array<TemplateResult> = [];
 
-  @internalProperty()
-  private height;
+  private _startPoint: number | undefined;
+  private _count = 0;
+  private _multiCheck = false;
 
   select: Array<string> = [];
   private _selectList: Array<boolean> = [];
-  private $nextBtn: TemplateResult;
-  private _nextItem: number;
-  private _allCheckState: boolean = false;
+  private $nextBtn: TemplateResult | undefined;
+  private _nextItem: number | undefined;
+
+  @internalProperty()
+  _allCheckState: boolean | undefined = false;
 
   constructor() {
     super();
-    this._nextBtnView();
+    this.#nextBtnView();
+  }
+
+  //이벤트 객체 생성
+  _EVENT = new EventEmitter();
+  // 이벤트 등록
+
+  public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this._EVENT.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this._EVENT.off(key, handler);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this._itemview();
     if (this.disabled && this.readonly) {
       this.readonly = false;
     }
   }
 
-  private _itemview() {
-    this.$itemList = [];
-    for (let i = 0; i <= this.children.length; i++) {
-      if (this.children.item(i)?.localName === 'dropdownlist-item') {
-        const title = this.children.item(i).getAttribute('title');
-        if (this.multi) {
-          this.$itemList.push(
-            html`
-              <li data-value="${title}" @click="${this._multiItemSelect}">
-                <span class="text">${title}</span>
-                <span data-value="${title}" class="checkbox">
-                  <dews-checkbox></dews-checkbox>
-                </span>
-              </li>
-            `,
-          );
-        } else {
-          this.$itemList.push(
-            html`
-              <li @click="${this._singleItemSelect}" data-value="${title}">
-                <span>${title}</span>
-              </li>
-            `,
-          );
-        }
+  private _allChecked(e: MouseEvent) {
+    const $el: HTMLElement = e.currentTarget as HTMLElement;
+    this._allCheckState = !this._allCheckState;
+    this.querySelectorAll('dropdownlist-item').forEach($el => {
+      if (this._allCheckState) {
+        ($el as DropDownListItem).checked = true;
+      } else {
+        ($el as DropDownListItem).checked = false;
       }
-    }
+    });
   }
 
-  private _nextBtnView() {
-    const $el = this.parentElement.children;
+  private _confirmClickHandler() {
+    this._multiCheck = true;
+    this.select = [];
+    this._selectList = [];
+    this.querySelectorAll('dropdownlist-item').forEach($el => {
+      if ($el.hasAttribute('checked')) {
+        this.select.push(($el as DropDownListItem).title);
+        this._selectList.push(true);
+      } else {
+        this._selectList.push(false);
+      }
+    });
+    this._close();
+  }
+
+  #nextBtnView = () => {
+    const $el: HTMLCollection = this.parentElement?.children as HTMLCollection;
     for (let i = 0; i <= $el.length; i++) {
-      if ($el.item(i) === this) {
+      if ($el!.item(i) === this) {
         this._nextItem = i + 1;
-        if ($el.length == i + 1) {
+        if ($el!.length == i + 1) {
           this.$nextBtn = html``;
         } else {
           if (
-            $el.item(i + 1).hasAttribute('disabled') ||
-            $el.item(i + 1).hasAttribute('readonly') ||
-            $el.item(i + 1).localName === 'dews-button' ||
-            $el.item(i + 1).localName === 'dews-radiobutton-group' ||
-            $el.item(i + 1).localName === 'dews-checkbox-group'
+            $el!.item(i + 1)?.hasAttribute('disabled') ||
+            $el!.item(i + 1)?.hasAttribute('readonly') ||
+            $el!.item(i + 1)?.localName === 'dews-button' ||
+            $el!.item(i + 1)?.localName === 'dews-radiobutton-group' ||
+            $el!.item(i + 1)?.localName === 'dews-checkbox-group'
           ) {
             this.$nextBtn = html``;
           } else {
@@ -103,67 +132,12 @@ export class Dropdownlist extends DewsFormComponent {
         }
       }
     }
-  }
+  };
 
-  private _nextBtnClickHandler(e) {
-    const $el = this.parentElement?.parentElement?.children[this._nextItem]?.children[0] as HTMLElement;
+  private _nextBtnClickHandler(e: MouseEvent) {
+    const $el = this.parentElement?.parentElement?.children[this._nextItem!]?.children[0] as HTMLElement;
     this._confirmClickHandler();
     $el?.click();
-  }
-
-  private _allChecked(e) {
-    this._allCheckState = !e.currentTarget.querySelector('dews-checkbox').hasAttribute('checked');
-    if (e.target.localName === 'dews-checkbox') {
-      this._allCheckState = e.target.hasAttribute('checked');
-    }
-    this.shadowRoot.querySelectorAll('dews-checkbox').forEach($el => {
-      if (this._allCheckState) {
-        $el.setAttribute('checked', 'true');
-      } else {
-        $el.removeAttribute('checked');
-      }
-    });
-  }
-
-  private _singleItemSelect(e) {
-    const $el: HTMLElement = e.currentTarget;
-    this.shadowRoot.querySelector('.check')?.classList?.remove('check');
-    $el.classList.add('check');
-    this.select[0] = e.currentTarget.dataset.value;
-    this._close();
-  }
-
-  private _multiItemSelect(e) {
-    const $el: HTMLElement = e.currentTarget.querySelector('dews-checkbox');
-    if (this._allCheckState) {
-      this.shadowRoot.querySelector('dews-checkbox').removeAttribute('checked');
-    }
-    if ($el.hasAttribute('checked')) {
-      if (e.target.localName !== 'dews-checkbox') {
-        $el.removeAttribute('checked');
-      }
-    } else {
-      if (e.target.localName !== 'dews-checkbox') {
-        $el.setAttribute('checked', 'true');
-      }
-    }
-  }
-
-  private _confirmClickHandler() {
-    this._multiCheck = true;
-    this.select = [];
-    this._selectList = [];
-    this.shadowRoot.querySelectorAll('dews-checkbox').forEach($el => {
-      if ($el.hasAttribute('checked')) {
-        if ($el.parentElement.dataset.value !== 'allCheck') {
-          this.select.push($el.parentElement.dataset.value);
-        }
-        this._selectList.push(true);
-      } else {
-        this._selectList.push(false);
-      }
-    });
-    this._close();
   }
 
   click() {
@@ -171,69 +145,70 @@ export class Dropdownlist extends DewsFormComponent {
     this._clickHandler(new MouseEvent('click'));
   }
 
-  private _touchMove(e) {
+  private _touchMove(e: any) {
     e.passive = true;
     e.capture = true;
-    e.currentTarget.scrollTo(0, this._startPoint - e.changedTouches[0].screenY);
+    e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
   }
 
-  private _touchStart(e) {
+  private _touchStart(e: any) {
     this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
   }
 
   private _focus() {
-    this.shadowRoot.querySelector('.select-wrap').classList.add('focus');
+    this.shadowRoot!.querySelector('.select-wrap')?.classList.add('focus');
   }
 
   private _blur() {
-    this.shadowRoot.querySelector('.select-wrap').classList.remove('focus');
+    this.shadowRoot!.querySelector('.select-wrap')?.classList.remove('focus');
   }
 
-  private _clickHandler(e) {
+  private _clickHandler(e: MouseEvent) {
     if (!this.disabled && !this.readonly) {
-      const $el: Drowerlayout = this.shadowRoot.querySelector('drower-layout');
+      const $el: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout');
       window.scrollTo(
         0,
         window.pageYOffset +
-          this.parentElement?.getBoundingClientRect()?.top -
-          this.shadowRoot.querySelector('.dropdown-list-wrap').clientHeight -
-          25,
+          this.parentElement?.getBoundingClientRect()?.top! -
+          this.shadowRoot!.querySelector('.dropdownlist-wrap')?.clientHeight! -
+          25
       );
-      // this.height = `${this.shadowRoot.querySelector('.dropdown-list-wrap').clientHeight + 120}px`
-      $el.height = this.height;
+      this.height = `${this.shadowRoot!.querySelector('.dropdownlist-wrap')!.clientHeight + 120}px`;
+      $el!.height = this.height;
       this._open();
     }
   }
 
   private _open() {
     this._focus();
-    this.shadowRoot.querySelectorAll('dews-checkbox').forEach(($el, index) => {
+    this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach(($el, index) => {
       if (this._selectList[index]) {
         $el.setAttribute('checked', 'true');
       }
     });
-
     this.active = true;
+    this._EVENT.emit('open', { target: this, type: 'open' });
   }
 
-  private _close() {
+  _close() {
     this._blur();
     if (this.multi && !this._multiCheck) {
-      this.shadowRoot.querySelectorAll('dews-checkbox').forEach($el => {
+      this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
         if ($el.hasAttribute('checked')) {
           $el.removeAttribute('checked');
         }
       });
     }
     this.active = false;
+    this._EVENT.emit('close', { target: this, type: 'close' });
   }
 
-  private _domClickHandelr(e) {
+  private _domClickHandelr(e: MouseEvent) {
     if (e.isTrusted) {
       if (
         e.clientY <
         window.innerHeight -
-          this.shadowRoot.querySelector('drower-layout').shadowRoot.querySelector('.layer-bottom').clientHeight
+          this.shadowRoot!.querySelector('.drawer-layout')?.shadowRoot!.querySelector('.layer-bottom')?.clientHeight!
       ) {
         if (!this.active) {
           return;
@@ -249,12 +224,12 @@ export class Dropdownlist extends DewsFormComponent {
   private _addEvent = this._domClickHandelr.bind(this);
 
   protected firstUpdated(_changedProperties: PropertyValues) {
-    this.shadowRoot.querySelector('drower-layout').addEventListener('blur', this._close);
+    this.shadowRoot!.querySelector('.drawer-layout')?.addEventListener('blur', this._close);
     if (this.disabled) {
-      this.shadowRoot.querySelector('.select-wrap').classList.add('disabled');
+      this.shadowRoot!.querySelector('.select-wrap')?.classList.add('disabled');
     }
     if (this.readonly) {
-      this.shadowRoot.querySelector('.select-wrap').classList.add('readonly');
+      this.shadowRoot!.querySelector('.select-wrap')?.classList.add('readonly');
     }
     super.firstUpdated(_changedProperties);
   }
@@ -270,6 +245,6 @@ export class Dropdownlist extends DewsFormComponent {
   }
 
   render() {
-    return _html.bind(this)();
+    return template.call(this);
   }
 }
