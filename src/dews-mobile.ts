@@ -73,8 +73,13 @@ import {
   DropDownListItem,
   Containercontent,
   Containerbutton,
-  Containersummary
+  Containersummary,
+  Columnsetbutton,
+  Columnitem
 } from './components/exports.js';
+
+window.customElements.define('columnset-button', Columnsetbutton);
+window.customElements.define('column-item', Columnitem);
 
 window.customElements.define('dews-dropdownlist', Dropdownlist);
 window.customElements.define('dews-datepicker', Datepicker);

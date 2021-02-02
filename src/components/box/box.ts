@@ -1,5 +1,5 @@
 import { DewsAreaComponent } from '../base/exports.js';
-import { internalProperty, LitElement, property } from 'lit-element';
+import { internalProperty, LitElement, property, PropertyValues } from 'lit-element';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
 import template from './box.html';
@@ -28,12 +28,14 @@ export class Box extends DewsAreaComponent {
   async connectedCallback() {
     await super.connectedCallback();
     await this.updateComplete;
+    this.shadowRoot?.querySelector('.dews-box-content-wrap')?.addEventListener('transitionend', this.#heightChange);
     this.addEventListener('click', this._clickEvent);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('click', this._clickEvent);
+    this.shadowRoot?.querySelector('.dews-box-content-wrap')?.removeEventListener('transitionend', this.#heightChange);
   }
 
   public _blurEvent() {
@@ -45,6 +47,12 @@ export class Box extends DewsAreaComponent {
     this.#EVENT.emit('focus', { target: this, type: 'focus' });
     //블러이벤트
   }
+
+  #heightChange = () => {
+    if (this.height !== '0px') {
+      this.height = 'auto';
+    }
+  };
 
   //이벤트 객체 생성
   #EVENT = new EventEmitter();

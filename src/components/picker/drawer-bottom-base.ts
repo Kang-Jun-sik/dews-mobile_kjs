@@ -1,6 +1,9 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { html, internalProperty, property, TemplateResult } from 'lit-element';
 import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT_TYPE = 'open' | 'close';
 
 export class DrawerBottomBase extends DewsFormComponent {
   @property({ type: Boolean })
@@ -17,6 +20,27 @@ export class DrawerBottomBase extends DewsFormComponent {
   protected _afterItem: number | undefined;
   protected $nextBtn: TemplateResult | undefined;
   protected count: number | undefined = 0;
+
+  protected _EVENT = new EventEmitter();
+
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this._EVENT.on(key, handler);
+  }
+
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this._EVENT.off(key, handler);
+  }
+
+  #event_emit = (e: EVENT_TYPE) => {
+    switch (e) {
+      case 'open':
+        this._EVENT.emit('open', { target: this, type: 'open' });
+        break;
+      case 'close':
+        this._EVENT.emit('close', { target: this, type: 'close' });
+        break;
+    }
+  };
 
   //  drower layout 처리 *_*
   protected _nextBtnClickHandler(e: TouchEvent | MouseEvent): void {
@@ -106,9 +130,9 @@ export class DrawerBottomBase extends DewsFormComponent {
   protected domEvent: EventListener = this._domClickHandler.bind(this) as EventListener;
 
   protected _close(): void {
-    this.shadowRoot!.querySelector('.select-wrap')!.classList.remove('focus');
+    this.shadowRoot!.querySelector('.select-wrap')?.classList.remove('focus');
     this.count = 0;
-
+    this.#event_emit('close');
     this.active = false;
     this._blur();
     this.dispatchEvent(new Event('close'));
@@ -117,6 +141,7 @@ export class DrawerBottomBase extends DewsFormComponent {
   protected _open(): void {
     this._focus();
     this.active = true;
+    this.#event_emit('open');
     this.dispatchEvent(new Event('open'));
     document.addEventListener('click', this.domEvent);
   }
