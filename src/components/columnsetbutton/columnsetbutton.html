@@ -1,0 +1,24 @@
+<button class="column-set" id="drawer" @click="${this._clickHandler}"><span>Column Set</span></button>
+
+
+<drawer-layout class="drawer-layout"  scrollEnabled @close="${this._close}" ?active="${this.active}">
+
+
+  <div class="column-set-list">
+    <div class="titlebar">
+      <div class="title">컬럼 Set</div>
+      <button class="confirm-button" @click="${this._confirmHandler}">적용</button>
+    </div>
+
+    <div class="control">
+      <div class="column-list-wrap">
+        <table class="column-list">
+          <tbody id="table">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</drawer-layout>
+
+<slot @slotchange="${this._slotChange}"></slot>
