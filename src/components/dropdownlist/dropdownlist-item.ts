@@ -4,7 +4,7 @@ import { Dropdownlist } from './dropdownlist.js';
 import template from './dropdownlist-item.html';
 import scss from './dropdownlist-item.scss';
 
-export class DropDownListItem extends DewsFormComponent {
+export class DropdownlistItem extends DewsFormComponent {
   static styles = scss;
 
   constructor() {

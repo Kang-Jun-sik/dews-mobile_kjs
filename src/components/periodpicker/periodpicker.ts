@@ -1,10 +1,10 @@
 import template from './periodpicker.html';
 import scss from './periodpicker.scss';
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
-import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
-import { PeriodPickerBase } from '../base/PeriodPickerBase.js';
+import { internalProperty, property, PropertyValues } from 'lit-element';
+import { PickerBase } from '../picker/picker-base.js';
+import { DateUtill } from '../base/DateUtill.js';
 
-export class Periodpicker extends PeriodPickerBase {
+export class Periodpicker extends PickerBase {
   static styles = scss;
 
   @property({ type: Boolean })
@@ -41,48 +41,16 @@ export class Periodpicker extends PeriodPickerBase {
   private height: string | undefined;
 
   @internalProperty()
-  private inputValue: string | undefined;
-
-  @internalProperty()
-  private _beforeView: TemplateResult = html``;
-
-  @internalProperty()
-  private _afterView: TemplateResult = html``;
-
-  @internalProperty()
-  private _nowView: TemplateResult = html``;
-
-  @internalProperty()
   private mode: 'day' | 'month' | 'year' | 'option' = 'day';
-
-  private _modeView: string | undefined = '';
-
-  private toYear = new Date().getFullYear();
-  private toMonth = new Date().getMonth();
-  private toDay = new Date().getDate();
-  private lastDay: Array<number> = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  private _touchStartPoint = 0;
-  private _touchStartPosition = -33.33333;
-
-  private _viewYear: number | undefined;
-  private _viewMonth: number | undefined;
 
   private _startYear: number | undefined;
   private _startMonth: number | undefined;
   private _startDay: number | undefined;
-
   private _endYear: number | undefined;
   private _endMonth: number | undefined;
   private _endDay: number | undefined;
 
-  private moveCheck = false;
-  private speed = 20;
-
-  private _touchMoveX = 0;
-  private _count = 1;
   private _beforeValue: string | undefined;
-
-  private width: number | undefined;
 
   connectedCallback() {
     super.connectedCallback();
@@ -150,10 +118,11 @@ export class Periodpicker extends PeriodPickerBase {
       (e.target as HTMLInputElement).setSelectionRange(cursor! - 1, cursor! - 1);
       return;
     }
+
     if (e.data !== null) {
       let checkValue = 0;
       let beforValue = 0;
-      new Date(minYear, 1, 1);
+      const date = new DateUtill();
       switch (cursor) {
         case 4:
           if (minYear > Number(value.slice(0, 4))) {
@@ -199,10 +168,10 @@ export class Periodpicker extends PeriodPickerBase {
           cursor++;
           break;
         case 10:
-          if (Number(value.slice(8, 10)) > this.lastDay[Number(value.slice(5, 7)) - 1]) {
+          if (Number(value.slice(8, 10)) > date.getLastDay(Number(value.slice(0, 4)), Number(value.slice(5, 7)))) {
             (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value =
               value.slice(0, cursor - 2) +
-              this.lastDay[Number(value.slice(5, 7)) - 1] +
+              date.getLastDay(Number(value.slice(0, 4)), Number(value.slice(5, 7))) +
               '-' +
               value.slice(cursor + 1, value.length);
             value = (e.target as HTMLInputElement).value;
@@ -373,120 +342,32 @@ export class Periodpicker extends PeriodPickerBase {
       $period.classList.remove('select-period');
     });
     let toYear = this.toYear;
-    let toMonth = this.toMonth;
+    let toMonth = this.toMonth + 1;
     if (y !== undefined && m !== undefined) {
       toYear = y;
       toMonth = m;
     }
     this._viewYear = toYear;
-    this._viewMonth = toMonth + 1;
+    this._viewMonth = toMonth;
     this._modeView = `${this._viewYear}-${this._viewMonth! > 9 ? this._viewMonth : '0' + this._viewMonth}`;
     if (toMonth >= 11) {
       this._beforeView = this._dayPickerView(toYear, toMonth - 1);
+      this._nowView = this._dayPickerView(toYear, toMonth);
       this._afterView = this._dayPickerView(toYear + 1, 1);
     } else if (this.toMonth < 1) {
       this._beforeView = this._dayPickerView(toYear - 1, 11);
+      this._nowView = this._dayPickerView(toYear, toMonth);
       this._afterView = this._dayPickerView(toYear, toMonth + 1);
     } else {
       this._beforeView = this._dayPickerView(toYear, toMonth - 1);
+      this._nowView = this._dayPickerView(toYear, toMonth);
       this._afterView = this._dayPickerView(toYear, toMonth + 1);
     }
-    this._nowView = this._dayPickerView(toYear, toMonth);
-  }
-
-  private _dayPickerView(y?: number, m?: number): TemplateResult {
-    const _dateView: Array<TemplateResult> = [];
-    let todayYear = this.toYear;
-    let todayMonth = this.toMonth;
-    if (y !== undefined && m !== undefined) {
-      todayYear = y;
-      todayMonth = m;
-    }
-    _dateView.push(html`
-      <span class="day-name">일</span>
-      <span class="day-name">월</span>
-      <span class="day-name">화</span>
-      <span class="day-name">수</span>
-      <span class="day-name">목</span>
-      <span class="day-name">금</span>
-      <span class="day-name">토</span>
-    `);
-    if (todayYear % 400 == 0 || (todayYear % 4 == 0 && todayYear % 100 != 0)) {
-      this.lastDay[1] = 29;
-    } else {
-      this.lastDay[1] = 28;
-    }
-    const theDate: Date = new Date(todayYear, todayMonth, 1);
-    const firstDay = theDate.getDay();
-    const lastDate = this.lastDay[todayMonth];
-    const length = Math.ceil((firstDay + lastDate) / 7) + 1;
-    let count = 1;
-    for (let i = 1; i < length; i++) {
-      for (let j = 1; j <= 7; j++) {
-        if ((i == 1 && j <= firstDay) || count > lastDate) {
-          _dateView.push(
-            html`<div class="day-disabled">
-              <span></span>
-            </div>`
-          );
-        } else {
-          if (j === 1 || j === 7) {
-            if (this.hdDisabled && this.visible) {
-              _dateView.push(
-                html`<div class="day" data-value="${count}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else if (this.hdDisabled) {
-              _dateView.push(
-                html`<div class="day weekend" data-value="${count}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else if (this.visible) {
-              _dateView.push(
-                html`<div class="day weekend" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else {
-              _dateView.push(
-                html`<div class="day weekend" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            }
-          } else {
-            _dateView.push(
-              html`<div class="day" @click="${this._dayClickHandler}" data-value="${count}">
-                <span>${count}</span>
-              </div>`
-            );
-          }
-          count++;
-        }
-      }
-    }
-    return html`<div class="calendar-date">${_dateView}</div>`;
-  }
-
-  private _monthPickerView(y?: number): TemplateResult {
-    const _mountView: Array<TemplateResult> = [];
-    let todayYear: number = this.toYear;
-    if (y !== undefined) {
-      todayYear = y;
-    }
-    for (let i = 1; i <= 12; i++) {
-      _mountView.push(
-        html`<div class="month" data-value="${i}" @click="${this._monthClickHandler}"><span>${i}</span></div>`
-      );
-    }
-    return html`<div class="calendar-month">${_mountView}</div>`;
   }
 
   private _nowClickHandler() {
     this.mode = 'day';
-    this._dayViewChange(this.toYear, this.toMonth);
+    this._dayViewChange(this.toYear, this.toMonth + 1);
     this.shadowRoot!.querySelector('.selected')?.classList.remove('selected');
   }
 
@@ -516,6 +397,7 @@ export class Periodpicker extends PeriodPickerBase {
       const lastDate = new Date();
       let first = firstDate.getDate() - firstDate.getDay();
       let last = lastDate.getDate() + (6 - lastDate.getDay());
+      const date = new DateUtill();
       switch ($el.dataset.index) {
         case '0':
           firstDate.setDate(first);
@@ -548,7 +430,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = lastDate.getMonth() + 1;
-          this._endDay = this.lastDay[lastDate.getMonth()];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 당월
           break;
         case '3':
@@ -564,7 +446,7 @@ export class Periodpicker extends PeriodPickerBase {
             this._endMonth = 12;
             this._endDay = 31;
           } else {
-            this._endDay = this.lastDay[lastDate.getMonth() - 1];
+            this._endDay = date.getLastDay(this._endYear, this._endMonth);
           }
           // 전월
           break;
@@ -574,7 +456,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = 3;
-          this._endDay = this.lastDay[2];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 1/4분기
           break;
         case '5':
@@ -583,7 +465,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = 6;
-          this._endDay = this.lastDay[5];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 2/4분기
           break;
         case '6':
@@ -592,7 +474,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = 9;
-          this._endDay = this.lastDay[8];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 3/4분기
           break;
         case '7':
@@ -601,7 +483,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = 12;
-          this._endDay = this.lastDay[11];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 4/4분기
           break;
         case '8':
@@ -610,7 +492,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = 6;
-          this._endDay = this.lastDay[5];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 상반기
           break;
         case '9':
@@ -619,7 +501,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = 12;
-          this._endDay = this.lastDay[11];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 하반기
           break;
         case '10':
@@ -628,7 +510,7 @@ export class Periodpicker extends PeriodPickerBase {
           this._startDay = 1;
           this._endYear = lastDate.getFullYear();
           this._endMonth = 12;
-          this._endDay = this.lastDay[11];
+          this._endDay = date.getLastDay(this._endYear, this._endMonth);
           // 올해
           break;
       }
@@ -647,88 +529,7 @@ export class Periodpicker extends PeriodPickerBase {
       `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
   }
 
-  private _touchMoveHandler(e: TouchEvent) {
-    e.preventDefault();
-    let $el: HTMLElement = e.currentTarget as HTMLElement;
-    $el = $el.children[0] as HTMLElement;
-    const move = -this.width! + (e.changedTouches[0].pageX - this._touchStartPoint!);
-    this.moveCheck = true;
-    $el.parentElement!.style.transform = `translate3d(${move}px, 0px, 0px)`;
-  }
-
-  private _beforeAnimation(): void {
-    const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-    if (this._touchMoveX === 0) {
-      this._touchMoveX = -($el.clientWidth / 3);
-    }
-    $el.style.transform = `translate3d(${this._touchMoveX! + this._count!}px, 0px, 0px)`;
-    if (this._count! <= Math.abs(this._touchMoveX!)) {
-      window.requestAnimationFrame(this._beforeAnimation.bind(this));
-    } else {
-      this._count = 0;
-      $el.style.transform = `translate3d(-${this.width}px, 0px, 0px)`;
-      if (this.mode === 'day') {
-        if (this._viewMonth === 1) {
-          this._dayViewChange(this._viewYear! - 1, 11);
-        } else {
-          this._dayViewChange(this._viewYear, this._viewMonth! - 2);
-        }
-      } else if (this.mode === 'month') {
-        this._monthViewChange(this._viewYear! - 1);
-      } else {
-        this._yearViewChange(this._beforeViewYear! - 10);
-      }
-    }
-    this._count = this._count! + this.speed!;
-  }
-
-  private _afterAnimation() {
-    const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-    if (this._touchMoveX === 0) {
-      this._touchMoveX = -($el.clientWidth / 3);
-    }
-    $el.style.transform = `translate3d(${this._touchMoveX! + this._count!}px, 0px, 0px)`;
-    if (Math.abs(this._count! + this._touchMoveX!) <= ($el.clientWidth / 3) * 2) {
-      window.requestAnimationFrame(this._afterAnimation.bind(this));
-    } else {
-      this._count = 0;
-      $el.style.transform = `translate3d(-${this.width}px, 0px, 0px)`;
-      if (this.mode === 'day') {
-        if (this._viewMonth === 12) {
-          this._dayViewChange(this._viewYear! + 1, 0);
-        } else {
-          this._dayViewChange(this._viewYear, this._viewMonth!);
-        }
-      } else if (this.mode === 'month') {
-        this._monthViewChange(this._viewYear! + 1);
-      } else {
-        this._yearViewChange(this._beforeViewYear! + 10);
-      }
-    }
-    this._count = this._count! - this.speed!;
-  }
-
-  private _touchStartHandler(e: TouchEvent) {
-    this._touchStartPoint = e.changedTouches[0].pageX;
-  }
-
-  private _touchEndHandler(e: TouchEvent) {
-    const $el = e.currentTarget as HTMLElement;
-    if (this.moveCheck) {
-      if (Math.abs(this._touchStartPoint! - e.changedTouches[0].pageX) > 100) {
-        if (this._touchStartPoint! > e.changedTouches[0].pageX) {
-          this._afterAnimation();
-        } else {
-          this._beforeAnimation();
-        }
-        this.moveCheck = false;
-      } else {
-        $el.style.transform = `translate3d(-${33.333}%,0px,0px)`;
-      }
-    }
-  }
-
-  private _dayClickHandler(e: Event) {
+  _dayClickHandler = (e: Event) => {
     const $el = (e.currentTarget as HTMLElement)!;
     if (this._startDay === undefined) {
       this._startYear = this._viewYear!;
@@ -773,68 +574,17 @@ export class Periodpicker extends PeriodPickerBase {
       `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
       '-' +
       `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
-  }
-
-  private _beforeClickHandler() {
-    const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-    $el.style.transform = `translate3d(-${$el.clientWidth / 3}px,0px,0px)`;
-    this._beforeAnimation();
-  }
-
-  private _afterClickHandler() {
-    const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-    $el.style.transform = `translate3d(-${$el.clientWidth / 3}px,0px,0px)`;
-    this._afterAnimation();
-  }
-
-  /**
-   *  년도 HTMLTemplate 을 반환합니다.
-   * @param y 년도를 입력 받습니다.
-   * @return {TemplateResult} 년도 HTMLTemplate 을 반환합니다.
-   * */
-  private _yearPickerView(y?: number): TemplateResult {
-    let toYear: number = this.toYear;
-    const _yearView: Array<TemplateResult> = [];
-    if (y !== undefined) {
-      toYear = y;
-    }
-    const todayYearStart = (toYear / 10) * 10 - 1 - (toYear % 10);
-    const todayYearEnd = (toYear / 10) * 10 + 10 - (toYear % 10);
-    for (let i = 0; todayYearStart + i <= todayYearEnd; i++) {
-      if (todayYearStart + i === todayYearStart || todayYearStart + i === todayYearEnd) {
-        _yearView.push(
-          html`<div class="year year-disabled" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
-            <span>${todayYearStart + i}</span>
-          </div>`
-        );
-      } else {
-        if (todayYearStart + i > Number(this.max?.slice(0, 4)) || todayYearStart + i < Number(this.min?.slice(0, 4))) {
-          _yearView.push(
-            html`<div class="year year-disabled" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
-              <span>${todayYearStart + i}</span>
-            </div>`
-          );
-        } else {
-          _yearView.push(
-            html`<div class="year" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
-              <span>${todayYearStart + i}</span>
-            </div>`
-          );
-        }
-      }
-    }
-    return html`<div class="calendar-year">${_yearView}</div>`;
-  }
+  };
 
   /**
    * 년도를 클릭시 UI 를 변경합니다.
    * */
-  private _yearClickHandler(e: Event) {
+  _yearClickHandler = (e: Event) => {
     const $el = e.currentTarget as HTMLElement;
     this._viewYear = Number($el.dataset.value);
     this.mode = 'month';
     this._monthViewChange(Number($el.dataset.value));
-  }
+  };
 
   /**
    * 현재 보여지는 상태를 변경 합니다.
@@ -850,12 +600,13 @@ export class Periodpicker extends PeriodPickerBase {
   }
 
   private _beforeMode: 'year' | 'day' | 'month' | 'option' | undefined;
+
   private _optionClickHandler(e: Event) {
     (e.currentTarget as HTMLElement).classList?.remove('selected');
     if (this.mode === 'option') {
       this.mode = this._beforeMode!;
       if (this.mode === 'day') {
-        this._dayViewChange(this._viewYear, this._viewMonth! - 1);
+        this._dayViewChange(this._viewYear, this._viewMonth!);
       } else if (this.mode === 'year') {
         this._yearViewChange(this._viewYear);
       } else if (this.mode === 'month') {
@@ -903,6 +654,8 @@ export class Periodpicker extends PeriodPickerBase {
   private _optionMonthClickHandler(e: Event): void {
     const $el = e.currentTarget as HTMLElement;
     const date = new Date();
+    const dateUtile = new DateUtill();
+
     if (this.shadowRoot!.querySelector('.period-month.period .select') === null) {
       this.shadowRoot!.querySelectorAll('.calendar-content .select').forEach($select => {
         $select.classList.remove('select');
@@ -918,7 +671,7 @@ export class Periodpicker extends PeriodPickerBase {
       if (this._startMonth! < Number($el.dataset.value) && this._endMonth === undefined) {
         this._endYear = date.getFullYear();
         this._endMonth = Number($el.dataset.value);
-        this._endDay = this.lastDay[this._endMonth - 1];
+        this._endDay = dateUtile.getLastDay(this._endYear, this._endMonth);
         this.shadowRoot!.querySelector('.period-month.period .select')?.classList.add('select-start');
         $el.classList.add('select-end');
         $el.classList.add('select');
@@ -958,13 +711,25 @@ export class Periodpicker extends PeriodPickerBase {
       `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
   }
 
-  private _monthClickHandler(e: Event): void {
+  _monthClickHandler = (e: Event): void => {
     const $el = e.currentTarget as HTMLElement;
     this._viewMonth = Number($el.dataset.value);
-    this._dayViewChange(this._viewYear!, this._viewMonth - 1);
+    this._dayViewChange(this._viewYear!, this._viewMonth);
     this.mode = 'day';
     this._beforeViewYear = undefined;
-  }
+  };
+
+  _modeViewChange = (): void => {
+    if (this._mode === 'day') {
+      this._modeView = `${this._viewYear}-${this._viewMonth! >= 10 ? this._viewMonth : '0' + this._viewMonth}`;
+    } else if (this._mode === 'month') {
+      this._modeView = `${this._viewYear}`;
+    } else {
+      this._modeView = `${(this._viewYear! / 10) * 10 - (this._viewYear! % 10)}-${
+        (this._viewYear! / 10) * 10 + 9 - (this._viewYear! % 10)
+      }`;
+    }
+  };
 
   private _beforeViewYear: number | undefined;
 
@@ -1051,14 +816,6 @@ export class Periodpicker extends PeriodPickerBase {
     } else if (this.mode === 'year') {
       this._yearSelect();
     }
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues) {
-    super.firstUpdated(_changedProperties);
-    this.updateComplete.then(() => {
-      const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-      this.width = $el.clientWidth / 3;
-    });
   }
 
   render() {

@@ -7,7 +7,7 @@ import scss from './dropdownlist.scss';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { DewsComponent } from '../base/DewsComponent.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
-import { DropDownListItem } from './dropdownlist-item.js';
+import { DropdownlistItem } from './dropdownlist-item.js';
 
 type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
 
@@ -92,9 +92,9 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
     this._allCheckState = !this._allCheckState;
     this.querySelectorAll('dropdownlist-item').forEach($el => {
       if (this._allCheckState) {
-        ($el as DropDownListItem).checked = true;
+        ($el as DropdownlistItem).checked = true;
       } else {
-        ($el as DropDownListItem).checked = false;
+        ($el as DropdownlistItem).checked = false;
       }
     });
   }
@@ -105,7 +105,7 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
     this._selectList = [];
     this.querySelectorAll('dropdownlist-item').forEach($el => {
       if ($el.hasAttribute('checked')) {
-        this.select.push(($el as DropDownListItem).title);
+        this.select.push(($el as DropdownlistItem).title);
         this._selectList.push(true);
       } else {
         this._selectList.push(false);

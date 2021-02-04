@@ -202,6 +202,8 @@ export class Yearpicker extends PickerBase {
         .children[0] as HTMLElement).style.transform = `translateY(-${
         (this._setYear! - Number(this.min?.slice(0, 4))) * 35
       }px)`;
+    } else {
+      this._selectChange();
     }
   }
 

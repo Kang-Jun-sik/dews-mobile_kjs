@@ -42,10 +42,10 @@
           </div>
           `: html`
           <div class="header">
-            <button class="prev calendar-button" @click="${this._beforeAnimation}"><span>이전</span></button>
+            <button class="prev calendar-button" @click="${this._beforeClickHandler}"><span>이전</span></button>
             <button class="fast calendar-button" @click="${this._modeClickHandler}"><span>${this._modeView}</span>
             </button>
-            <button class="next calendar-button" @click="${this._afterAnimation}"><span>다음</span></button>
+            <button class="next calendar-button" @click="${this._afterClickHandler}"><span>다음</span></button>
           </div>
           `}
 
