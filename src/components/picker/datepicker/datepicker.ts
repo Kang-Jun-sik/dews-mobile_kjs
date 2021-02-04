@@ -3,6 +3,7 @@ import { html, internalProperty, property, PropertyValues, TemplateResult } from
 
 import template from './datepicker.html';
 import scss from './datepicker.scss';
+import { DateUtill } from '../../base/DateUtill.js';
 
 export class Datepicker extends PickerBase {
   static styles = scss;
@@ -56,7 +57,7 @@ export class Datepicker extends PickerBase {
         this._value = this.inputValue;
       } else {
         this._beforeView = this._dayPickerView(today.getFullYear(), today.getMonth());
-        this._nowView = this._dayPickerView();
+        this._nowView = this._dayPickerView(today.getFullYear(), today.getMonth() + 1);
         this._afterView = this._dayPickerView(today.getFullYear(), today.getMonth() + 2);
         this._viewYear = today.getFullYear();
         this._viewMonth = today.getMonth() + 1;
@@ -174,13 +175,11 @@ export class Datepicker extends PickerBase {
         const day: number | undefined = Number($el.value.slice(8, 10));
         const min = Number(this.min!.slice(6, 8));
         const max = Number(this.max!.slice(6, 8));
-
-        if (year! % 400 == 0 || (year! % 4 == 0 && year! % 100 != 0)) {
-          this.lastDay[1] = 29;
-        } else {
-          this.lastDay[1] = 28;
-        }
-        const lastDay: number | undefined = this.lastDay[Number($el.value.slice(5, 7)) - 1];
+        const date = new DateUtill();
+        const lastDay: number | undefined = date.getLastDay(
+          Number($el.value.slice(0, 4)),
+          Number($el.value.slice(5, 7))
+        );
 
         if (day > lastDay) {
           // 최대 일 점검
@@ -249,19 +248,30 @@ export class Datepicker extends PickerBase {
   };
 
   // 일 클릭 핸들러(오버라이드)
-  _dayClickHandler = (e: MouseEvent): void => {
-    // if (!this.hdDisabled && ) {
-    //
-    // }
-    const $el: HTMLElement = e.currentTarget as HTMLElement;
-    this._selectRemove();
-    $el.classList.add('select');
+  _dayClickHandler = (e: MouseEvent) => {
+    // this._selectRemove();
+    // const $el: HTMLElement = e.currentTarget as HTMLElement;
+    // $el.classList.add('select');
     this._setYear = this._viewYear;
     this._setMonth = this._viewMonth;
     this._setDay = Number((e.currentTarget as HTMLElement).dataset.value);
     this._viewDay = this._setDay;
     this._inputChange();
   };
+
+  // _dayClickHandler = (e: MouseEvent): void => {
+  //   // if (!this.hdDisabled && ) {
+  //   //
+  //   // }
+  //   this._selectRemove();
+  //   const $el: HTMLElement = e.currentTarget as HTMLElement;
+  //   $el.classList.add('select');
+  //   this._setYear = this._viewYear;
+  //   this._setMonth = this._viewMonth;
+  //   this._setDay = Number((e.currentTarget as HTMLElement).dataset.value);
+  //   this._viewDay = this._setDay;
+  //   this._inputChange();
+  // };
 
   // 년도 클릭 핸들러(오버라이드)
   _yearClickHandler = (e: Event) => {
@@ -466,6 +476,10 @@ export class Datepicker extends PickerBase {
     }
 
     if (this.spinner) {
+      const year: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
+        '.moving-list.year'
+      )! as HTMLElement;
+
       const month: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
         '.moving-list.month'
       )! as HTMLElement;
@@ -474,10 +488,24 @@ export class Datepicker extends PickerBase {
         '.moving-list.day'
       )! as HTMLElement;
 
+      const date = new DateUtill();
+
       (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.year')!
         .children[0] as HTMLElement).style.transform = `translateY(-${
         (this._setYear! - Number(this.min?.slice(0, 4))) * 35
       }px)`;
+
+      if (year.children.length !== 12) {
+        for (let i = 0; i < month.children.length; i++) {
+          if (Number((year.children.item(i) as HTMLElement).dataset.value) === this._setYear) {
+            (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.year')!
+              .children[0] as HTMLElement).style.transform = `translateY(-${i * 35}px)`;
+          }
+        }
+      } else {
+        (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.year')!
+          .children[0] as HTMLElement).style.transform = `translateY(-${(this._setYear! - 1) * 35}px)`;
+      }
 
       if (month.children.length !== 12) {
         for (let i = 0; i < month.children.length; i++) {
@@ -490,7 +518,7 @@ export class Datepicker extends PickerBase {
         (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.month')!
           .children[0] as HTMLElement).style.transform = `translateY(-${(this._setMonth! - 1) * 35}px)`;
       }
-      if (day.children.length !== this.lastDay[this._setMonth! - 1]) {
+      if (day.children.length !== date.getLastDay(this._setYear!, this._setMonth!)) {
         for (let i = 0; i < day.children.length; i++) {
           if (Number((day.children.item(i) as HTMLElement).dataset.value) === this._setDay) {
             (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.day')!
@@ -510,6 +538,8 @@ export class Datepicker extends PickerBase {
             .children[0] as HTMLElement).style.transform = `translateY(-${(this._setDay! - 1) * 35}px)`;
         }
       }
+    } else {
+      this._selectChange();
     }
   }
 

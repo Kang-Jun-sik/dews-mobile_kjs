@@ -315,6 +315,8 @@ export class Monthpicker extends PickerBase {
         (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.month')!
           .children[0] as HTMLElement).style.transform = `translateY(-${(this._setMonth! - 1) * 35}px)`;
       }
+    } else {
+      this._selectChange();
     }
   }
 

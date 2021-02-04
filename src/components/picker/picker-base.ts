@@ -1,5 +1,6 @@
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { DrawerBottomBase } from './drawer-bottom-base.js';
+import { DateUtill } from '../base/DateUtill.js';
 
 export class PickerBase extends DrawerBottomBase {
   @property({ type: String })
@@ -12,7 +13,7 @@ export class PickerBase extends DrawerBottomBase {
   inputValue: string | undefined;
 
   @property({ type: String })
-  min: string | undefined = '19900101';
+  min: string | undefined = '19000101';
 
   @property({ type: String })
   max: string | undefined = '21000101';
@@ -60,24 +61,9 @@ export class PickerBase extends DrawerBottomBase {
   protected _setYear: number | undefined;
   protected _setMonth: number | undefined;
   protected _setDay: number | undefined;
-  protected lastDay: Array<number> = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   click() {
     this._open();
-  }
-
-  //  select 클래스를 제거
-  protected _selectRemove(): void {
-    this.shadowRoot!.querySelectorAll('.calendar-date')!.forEach($calendar => {
-      $calendar.querySelectorAll('.select').forEach($el => {
-        $el.classList.remove('select');
-      });
-    });
-    this.shadowRoot!.querySelectorAll('.calendar-month')!.forEach($calendar => {
-      $calendar.querySelectorAll('.select').forEach($el => {
-        $el.classList.remove('select');
-      });
-    });
   }
 
   //  다음버튼 HTML 템플릿 설정
@@ -102,10 +88,10 @@ export class PickerBase extends DrawerBottomBase {
         this._viewMonth!++;
       }
     } else if (this._mode === 'month') {
-      this._beforeView = this._monthPickerView(this._viewYear);
-      this._nowView = this._monthPickerView(this._viewYear! + 1);
-      this._afterView = this._monthPickerView(this._viewYear! + 2);
       this._viewYear!++;
+      this._beforeView = this._monthPickerView(this._viewYear! - 1);
+      this._nowView = this._monthPickerView(this._viewYear!);
+      this._afterView = this._monthPickerView(this._viewYear! + 1);
     } else {
       this._beforeView = this._yearPickerView(this._viewYear);
       this._nowView = this._yearPickerView(this._viewYear! + 10);
@@ -137,10 +123,10 @@ export class PickerBase extends DrawerBottomBase {
       }
       this._selectRemove();
     } else if (this._mode === 'month') {
-      this._beforeView = this._monthPickerView(this._viewYear! - 2);
-      this._nowView = this._monthPickerView(this._viewYear! - 1);
-      this._afterView = this._monthPickerView(this._viewYear);
       this._viewYear!--;
+      this._beforeView = this._monthPickerView(this._viewYear! - 1);
+      this._nowView = this._monthPickerView(this._viewYear!);
+      this._afterView = this._monthPickerView(this._viewYear! + 1);
     } else {
       this._beforeView = this._yearPickerView(this._viewYear! - 20);
       this._nowView = this._yearPickerView(this._viewYear! - 10);
@@ -153,6 +139,9 @@ export class PickerBase extends DrawerBottomBase {
     //  오버라이드
   }
 
+  /*
+   * 이전버튼 UI 처리 및 animation 처리
+   * */
   /*
    * 이전버튼 UI 처리 및 animation 처리
    * */
@@ -264,13 +253,6 @@ export class PickerBase extends DrawerBottomBase {
           ) as HTMLDivElement).style.transform = `translate3d(-${33.333}%,0px,0px)`;
         }
       }
-
-      // if (e.changedTouches[0].pageX > this._touchStartPoint! + 5) {
-      //   this._beforeAnimation();
-      // } else if (e.changedTouches[0].pageX < this._touchStartPoint! - 5) {
-      //   this._afterAnimation();
-      // }
-      //
     } else {
       this._touchMoveY = Math.abs(
         Number((e.currentTarget as HTMLElement).parentElement!.style.transform.split('(')[1].split('px')[0])
@@ -373,6 +355,9 @@ export class PickerBase extends DrawerBottomBase {
     ($el.querySelector('.year')!.children[0] as HTMLElement).style.transform = `translateY(-${
       (this._setYear! - Number(this.min?.slice(0, 4))) * 35
     }px)`;
+    // $el
+    // .querySelector('.moving-list.year')
+    // ?.children[this._setYear! - Number(this.min?.slice(0, 4))].classList.add('select');
   }
 
   protected _spinnerDayPositionChange(num?: number): void {
@@ -411,10 +396,18 @@ export class PickerBase extends DrawerBottomBase {
         if (yearMax !== year || (yearMax === year && j <= Number(this.max?.slice(4, 6)))) {
           if (j === this.toMonth + 1) {
             $spinnerMonth.push(
-              html` <li class="today" data-value="${j}" data-index="${j}"><button>${j}</button></li> `
+              html`
+                <li class="today" data-value="${j}" data-index="${j}">
+                  <button>${j}</button>
+                </li>
+              `
             );
           } else {
-            $spinnerMonth.push(html` <li data-value="${j}" data-index="${j}"><button>${j}</button></li> `);
+            $spinnerMonth.push(html`
+              <li data-value="${j}" data-index="${j}">
+                <button>${j}</button>
+              </li>
+            `);
           }
         }
       }
@@ -431,12 +424,14 @@ export class PickerBase extends DrawerBottomBase {
       // 년도 생성
       if (yearMin + i === this.toYear) {
         $spinnerYear.push(
-          html`<li class="today" data-value="${yearMin + i}" data-index="${i}">
+          html` <li class="today" data-value="${yearMin + i}" data-index="${i}">
             <button>${yearMin + i}</button>
           </li>`
         );
       } else {
-        $spinnerYear.push(html`<li data-value="${yearMin + i}" data-index="${i}"><button>${yearMin + i}</button></li>`);
+        $spinnerYear.push(html` <li data-value="${yearMin + i}" data-index="${i}">
+          <button>${yearMin + i}</button>
+        </li>`);
       }
     }
     return html`${$spinnerYear}`;
@@ -445,7 +440,8 @@ export class PickerBase extends DrawerBottomBase {
   // 스피너 UI 생성
   protected _daySpinnerPickerView(y?: number, m?: number): TemplateResult {
     let year: number = this.toYear;
-    let month: number = this.toMonth;
+    let month: number = this.toMonth + 1;
+    const date = new DateUtill();
     const $spinnerDay: Array<TemplateResult> = [];
     if (y !== undefined) {
       year = y;
@@ -455,12 +451,9 @@ export class PickerBase extends DrawerBottomBase {
     }
     const yearMin = Number(this.min!.slice(0, 4));
     const yearMax = Number(this.max!.slice(0, 4));
-    if (year! % 400 == 0 || (year! % 4 == 0 && year % 100 != 0)) {
-      this.lastDay[1] = 29;
-    } else {
-      this.lastDay[1] = 28;
-    }
-    const lastDate: number = this.lastDay[month!];
+
+    const lastDate: number = date.getLastDay(year, month);
+
     for (let k = 1; k <= lastDate; k++) {
       // 일 생성
       if (
@@ -472,9 +465,13 @@ export class PickerBase extends DrawerBottomBase {
           (yearMax === year && month + 1 <= Number(this.max?.slice(4, 6)) && k <= Number(this.max?.slice(6, 8)))
         ) {
           if (k === this.toDay) {
-            $spinnerDay.push(html` <li class="today" data-value="${k}" data-index="${k}"><button>${k}</button></li>`);
+            $spinnerDay.push(html` <li class="today" data-value="${k}" data-index="${k}">
+              <button>${k}</button>
+            </li>`);
           } else {
-            $spinnerDay.push(html` <li data-value="${k}" data-index="${k}"><button>${k}</button></li>`);
+            $spinnerDay.push(html` <li data-value="${k}" data-index="${k}">
+              <button>${k}</button>
+            </li>`);
           }
         }
       }
@@ -488,10 +485,10 @@ export class PickerBase extends DrawerBottomBase {
    * @param m 월
    * */
   protected _dayPickerView(y?: number, m?: number): TemplateResult {
-    const _dateView: Array<TemplateResult> = [];
+    const returnValue: Array<TemplateResult> = [];
     let todayYear = this.toYear;
     let todayMonth = this.toMonth;
-    _dateView.push(html` <span class="day-name">일</span>
+    returnValue.push(html` <span class="day-name">일</span>
       <span class="day-name">월</span>
       <span class="day-name">화</span>
       <span class="day-name">수</span>
@@ -500,156 +497,63 @@ export class PickerBase extends DrawerBottomBase {
       <span class="day-name">토</span>`);
     if (y !== undefined && m !== undefined) {
       todayYear = y;
-      todayMonth = m - 1;
+      todayMonth = m;
     }
-    const theDate: Date = new Date(todayYear, todayMonth, 1);
-    const firstDay = theDate.getDay();
-    let yearDisabled = false;
-    let monthDisabled = false;
-    let dayMaxCheck = false;
-    let dayMinCheck = false;
-    if (todayYear >= Number(this.max?.slice(0, 4))) {
-      if (todayYear > Number(this.max?.slice(0, 4))) {
-        yearDisabled = true;
-      } else if (todayMonth + 1 >= Number(this.max?.slice(4, 6))) {
-        if (todayMonth + 1 > Number(this.max?.slice(4, 6))) {
-          monthDisabled = true;
+
+    const date = new DateUtill();
+    const lastDate = date.getLastDay(todayYear, todayMonth);
+    const firstDate = date.getDay(todayYear, todayMonth);
+    const max = date.getTime(
+      Number(this.max?.slice(0, 4)),
+      Number(this.max?.slice(4, 6)),
+      Number(this.max?.slice(6, 8))
+    );
+    const min = date.getTime(
+      Number(this.min?.slice(0, 4)),
+      Number(this.min?.slice(4, 6)),
+      Number(this.min?.slice(6, 8))
+    );
+    let count = 0;
+
+    for (let i = 0; i < 6; i++) {
+      for (let j = 1; j < 8; j++) {
+        if ((i === 0 && j <= firstDate) || lastDate <= count) {
+          // 시작일 끝일 제거
+          returnValue.push(html` <div class="day day-disabled">
+            <span></span>
+          </div>`);
         } else {
-          dayMaxCheck = true;
-        }
-      }
-    } else if (todayYear <= Number(this.min?.slice(0, 4))) {
-      if (todayYear < Number(this.min?.slice(0, 4))) {
-        yearDisabled = true;
-      } else if (todayMonth + 1 <= Number(this.min?.slice(4, 6))) {
-        if (todayMonth + 1 < Number(this.min?.slice(4, 6))) {
-          monthDisabled = true;
-        } else {
-          dayMinCheck = true;
+          count++;
+          if (j === 1 || j === 7) {
+            // 주말
+            if (max < date.getTime(todayYear, todayMonth, count) || min > date.getTime(todayYear, todayMonth, count)) {
+              returnValue.push(html` <div data-value="${count}" class="day weekend day-disabled">
+                <span>${count}</span>
+              </div>`);
+            } else {
+              returnValue.push(html` <div data-value="${count}" @click="${this._dayClickHandler}" class="day weekend">
+                <span>${count}</span>
+              </div>`);
+            }
+          } else if (
+            max < date.getTime(todayYear, todayMonth, count) ||
+            min > date.getTime(todayYear, todayMonth, count)
+          ) {
+            // 최대값 최소값 처리
+            returnValue.push(html` <div data-value="${count}" class="day day-disabled">
+              <span>${count}</span>
+            </div>`);
+          } else {
+            // 평일
+            returnValue.push(html` <div data-value="${count}" @click="${this._dayClickHandler}" class="day">
+              <span>${count}</span>
+            </div>`);
+          }
         }
       }
     }
 
-    if (todayYear % 400 == 0 || (todayYear % 4 == 0 && todayYear % 100 != 0)) {
-      this.lastDay[1] = 29;
-    } else {
-      this.lastDay[1] = 28;
-    }
-    const lastDate = this.lastDay[todayMonth];
-    let count = 1;
-    const length = Math.ceil((firstDay + lastDate) / 7) + 1;
-    for (let i = 1; i < length; i++) {
-      for (let j = 1; j <= 7; j++) {
-        if ((i == 1 && j <= firstDay) || count > lastDate) {
-          _dateView.push(
-            html`<div class="day day-disabled">
-              <span></span>
-            </div>`
-          );
-        } else {
-          if (j === 1 || j === 7) {
-            if (
-              yearDisabled ||
-              monthDisabled ||
-              (dayMaxCheck && count > Number(this.max?.slice(6, 8))) ||
-              (dayMinCheck && count < Number(this.min?.slice(6, 8)))
-            ) {
-              _dateView.push(
-                html`<div class="day weekend day-disabled" data-value="${count}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else if (
-              this._setMonth === todayMonth + 1 &&
-              this._setYear == todayYear &&
-              count === this._setDay &&
-              !this.hdDisabled
-            ) {
-              if (this.visible) {
-                _dateView.push(
-                  html`<div
-                    class="day select"
-                    data-value="${count}"
-                    @click="${this.hdDisabled ? null : this._dayClickHandler}"
-                  >
-                    <span>${count}</span>
-                  </div>`
-                );
-              } else {
-                _dateView.push(
-                  html`<div class="day weekend select" data-value="${count}" @click="${this._dayClickHandler}">
-                    <span>${count}</span>
-                  </div>`
-                );
-              }
-            } else {
-              if (this.visible) {
-                _dateView.push(
-                  html`<div
-                    class="day"
-                    data-value="${count}"
-                    @click="${this.hdDisabled ? null : this._dayClickHandler}"
-                  >
-                    <span>${count}</span>
-                  </div>`
-                );
-              } else {
-                _dateView.push(
-                  html`<div
-                    class="day weekend"
-                    data-value="${count}"
-                    @click="${this.hdDisabled ? null : this._dayClickHandler}"
-                  >
-                    <span>${count}</span>
-                  </div>`
-                );
-              }
-            }
-          } else if (count === this.toDay && this.toMonth === todayMonth && this.toYear === todayYear) {
-            if (this._setMonth === todayMonth + 1 && this._setYear == todayYear && count === this._setDay) {
-              _dateView.push(
-                html`<div class="day today select" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else {
-              _dateView.push(
-                html`<div class="day today" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            }
-          } else {
-            if (
-              yearDisabled ||
-              monthDisabled ||
-              (dayMaxCheck && count > Number(this.max?.slice(6, 8))) ||
-              (dayMinCheck && count < Number(this.min?.slice(6, 8)))
-            ) {
-              _dateView.push(
-                html`<div class="day day-disabled" data-value="${count}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else if (this._setMonth === todayMonth + 1 && this._setYear == todayYear && count === this._setDay) {
-              _dateView.push(
-                html`<div class="day select" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            } else {
-              _dateView.push(
-                html`<div class="day" data-value="${count}" @click="${this._dayClickHandler}">
-                  <span>${count}</span>
-                </div>`
-              );
-            }
-          }
-          count++;
-        }
-      }
-    }
-    return html`<div class="calendar-date">${_dateView}</div>`;
+    return html` <div class="calendar-date">${returnValue}</div>`;
   }
 
   /**
@@ -666,40 +570,23 @@ export class PickerBase extends DrawerBottomBase {
    * */
   protected _monthPickerView(y?: number): TemplateResult {
     const _mountView: Array<TemplateResult> = [];
-    let todayYear: number = this.toYear;
-    if (y !== undefined) {
-      todayYear = y;
-    }
+    const date = new DateUtill();
+    const max = date.getTime(Number(this.max?.slice(0, 4)), Number(this.max?.slice(4, 6)), 1);
+    const min = date.getTime(Number(this.min?.slice(0, 4)), Number(this.min?.slice(4, 6)), 1);
     for (let i = 1; i <= 12; i++) {
-      if (todayYear === this._setYear && i === this._setMonth) {
+      if (date.getTime(this._viewYear!, i, 1) > max || date.getTime(this._viewYear!, i, 1) < min) {
         _mountView.push(
-          html`<div class="month select" data-value="${i}" @click="${this._monthClickHandler}"><span>${i}</span></div>`
-        );
-      } else if (
-        todayYear > Number(this.max?.slice(0, 4)) ||
-        (todayYear === Number(this.max?.slice(0, 4)) && i > Number(this.max?.slice(4, 6)))
-      ) {
-        _mountView.push(
-          html`<div class="month month-disabled" data-value="${i}" @click="${this._monthClickHandler}">
-            <span>${i}</span>
-          </div>`
-        );
-      } else if (
-        todayYear < Number(this.min?.slice(0, 4)) ||
-        (todayYear === Number(this.min?.slice(0, 4)) && i < Number(this.min?.slice(4, 6)))
-      ) {
-        _mountView.push(
-          html`<div class="month month-disabled" data-value="${i}" @click="${this._monthClickHandler}">
+          html` <div class="month month-disabled" data-value="${i}" @click="${this._monthClickHandler}">
             <span>${i}</span>
           </div>`
         );
       } else {
         _mountView.push(
-          html`<div class="month" data-value="${i}" @click="${this._monthClickHandler}"><span>${i}</span></div>`
+          html` <div class="month" data-value="${i}" @click="${this._monthClickHandler}"><span>${i}</span></div>`
         );
       }
     }
-    return html`<div class="calendar-month">${_mountView}</div>`;
+    return html` <div class="calendar-month">${_mountView}</div>`;
   }
 
   /**
@@ -725,14 +612,14 @@ export class PickerBase extends DrawerBottomBase {
     for (let i = 0; todayYearStart + i <= todayYearEnd; i++) {
       if (todayYearStart + i === todayYearStart || todayYearStart + i === todayYearEnd) {
         _yearView.push(
-          html`<div class="year year-disabled" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
+          html` <div class="year year-disabled" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
             <span>${todayYearStart + i}</span>
           </div>`
         );
       } else {
         if (todayYearStart + i === this._setYear) {
           _yearView.push(
-            html`<div class="year select" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
+            html` <div class="year select" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
               <span>${todayYearStart + i}</span>
             </div>`
           );
@@ -741,20 +628,20 @@ export class PickerBase extends DrawerBottomBase {
           todayYearStart + i < Number(this.min?.slice(0, 4))
         ) {
           _yearView.push(
-            html`<div class="year year-disabled" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
+            html` <div class="year year-disabled" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
               <span>${todayYearStart + i}</span>
             </div>`
           );
         } else {
           _yearView.push(
-            html`<div class="year" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
+            html` <div class="year" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
               <span>${todayYearStart + i}</span>
             </div>`
           );
         }
       }
     }
-    return html`<div class="calendar-year">${_yearView}</div>`;
+    return html` <div class="calendar-year">${_yearView}</div>`;
   }
 
   /**
@@ -766,6 +653,59 @@ export class PickerBase extends DrawerBottomBase {
   }
 
   private width: number | undefined;
+
+  private _beforeClickHandler() {
+    this._selectRemove();
+    this._beforeAnimation();
+  }
+  private _afterClickHandler() {
+    this._selectRemove();
+    this._afterAnimation();
+  }
+
+  protected _selectRemove() {
+    this.shadowRoot?.querySelectorAll('.select').forEach($el => {
+      $el.classList.remove('select');
+    });
+    this.shadowRoot?.querySelectorAll('.today').forEach($el => {
+      $el.classList.remove('today');
+    });
+  }
+  protected _selectChange() {
+    this._selectRemove();
+    const date = new DateUtill();
+    const viewYearTime = date.getTime(this._viewYear!, 1, 1);
+    const checkYearTime = date.getTime(this._setYear!, 1, 1);
+    const viewMonthTime = date.getTime(this._viewYear!, this._viewMonth!, 1);
+    const checkMonthTime = date.getTime(this._setYear!, this._setMonth!, 1);
+    const nowTime = date.getTime(this.toYear, this.toMonth + 1, this.toDay);
+    switch (this._mode) {
+      case 'day':
+        this.shadowRoot?.querySelectorAll('.day').forEach($el => {
+          if (nowTime === date.getTime(this._viewYear!, this._viewMonth!, Number(($el as HTMLElement).dataset.value))) {
+            $el.classList.add('today');
+          }
+          if (Number(($el as HTMLElement).dataset.value) === this._setDay && viewMonthTime === checkMonthTime) {
+            $el.classList.add('select');
+          }
+        });
+        break;
+      case 'month':
+        this.shadowRoot?.querySelectorAll('.month').forEach($el => {
+          if (Number(($el as HTMLElement).dataset.value) === this._setMonth && viewYearTime === checkYearTime) {
+            $el.classList.add('select');
+          }
+        });
+        break;
+      case 'year':
+        this.shadowRoot?.querySelectorAll('.year').forEach($el => {
+          if (Number(($el as HTMLElement).dataset.value) === this._setYear) {
+            $el.classList.add('select');
+          }
+        });
+        break;
+    }
+  }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
