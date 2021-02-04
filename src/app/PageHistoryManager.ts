@@ -1,6 +1,7 @@
 import { PageLoadedEventArgs } from './PageLoadedEventArgs.js';
 import { DewsPageBase } from './base/exports.js';
 import { singleton } from 'tsyringe';
+import { SystemType } from './SystemTypeEnum.js';
 
 export class PageModule {
   constructor(public page: DewsPageBase, public pageId: string, public tag: string, public url?: string) {}
@@ -70,6 +71,11 @@ export class PageHistoryManager {
       this.showPage();
     } else {
       // 뒤로 갈 페이지가 없을 경우 App 으로 돌아가기 필요
+      if (dews.app.systemType === SystemType.MobileApp) {
+        window.DzMobileBridge.func_goHome!();
+      } else {
+        alert('앱 밖에서의 메뉴 호출');
+      }
     }
   }
 

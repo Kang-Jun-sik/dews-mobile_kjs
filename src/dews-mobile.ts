@@ -14,20 +14,12 @@ declare global {
   }
 
   const dews: DewsMobileInterface;
-  const DzMobileBridge: MobileAppBridgeInterface;
 }
 
 import { app } from './app/ApplicationContext.js';
 
 window.dews = {
   app
-};
-
-window.DzMobileBridge = {
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  func_goHome: () => {
-    console.log('goHome');
-  }
 };
 
 import {

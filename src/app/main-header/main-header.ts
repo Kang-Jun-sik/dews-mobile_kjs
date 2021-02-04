@@ -1,10 +1,11 @@
 import { customElement, html, internalProperty, LitElement, property, TemplateResult } from 'lit-element';
-import { DewsBizPage, AreaType } from '../base/exports.js';
+import { AreaType, DewsBizPage } from '../base/exports.js';
 import { classMap } from 'lit-html/directives/class-map';
 import { PageLoadedEventArgs } from '../PageLoadedEventArgs.js';
 
 import scss from './main-header.scss';
 import template from './main-header.html';
+import { SystemType } from '../SystemTypeEnum.js';
 
 @customElement('main-header')
 export class MainHeader extends LitElement {
@@ -85,7 +86,12 @@ export class MainHeader extends LitElement {
   }
 
   private clickMenu() {
-    alert('clicked Menu');
+    if (dews.app.systemType === SystemType.MobileApp) {
+      window.DzMobileBridge.func_showSlideMenu!();
+    } else {
+      alert('앱 밖에서의 메뉴 호출');
+    }
+
     // todo: app menu 호출
   }
 
