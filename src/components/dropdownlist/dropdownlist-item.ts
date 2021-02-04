@@ -21,6 +21,7 @@ export class DropDownListItem extends DewsFormComponent {
   private multi = false;
 
   private $parent: Dropdownlist | undefined;
+
   connectedCallback() {
     super.connectedCallback();
     if (this.parentElement?.tagName === 'DEWS-DROPDOWNLIST') {
@@ -43,7 +44,20 @@ export class DropDownListItem extends DewsFormComponent {
   }
 
   private _multiItemSelectHandler(e: MouseEvent) {
+    const $el: HTMLElement = (e.currentTarget as HTMLElement).querySelector('.multi-checkbox') as HTMLElement;
     this.checked = !this.checked;
+
+    if ($el.hasAttribute('checked')) {
+      if ((e.target as HTMLElement).localName !== 'dews-checkbox') {
+        $el.removeAttribute('checked');
+      }
+    } else {
+      if ((e.target as HTMLElement).localName !== 'dews-checkbox') {
+        this.$parent?._EVENT.emit('checked', { target: this, type: 'checked' });
+        $el.setAttribute('checked', 'true');
+      }
+    }
+    this.$parent?._EVENT.emit('change', { target: this, type: 'change' });
   }
 
   render() {
