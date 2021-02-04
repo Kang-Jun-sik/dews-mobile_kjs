@@ -6,7 +6,8 @@ import {
   EventEmitter,
   ObservableArray,
   ObservableArrayChangeEventArgs,
-  ObservableObject
+  ObservableObject,
+  ObservableObjectProxyInterface
 } from '@dews/dews-mobile-core';
 import { HttpRequestConfig } from '@dews/dews-mobile-core/dist/types/utils/comm/HttpClient';
 import { Sort, SortType } from './Sort.js';
@@ -20,6 +21,8 @@ type DirectionType = 'asc' | 'desc';
 
 type DataSourceEventType = 'change' | 'requestStart' | 'requestEnd';
 
+export type ObservableArrayItem<T extends object> = T & Partial<ObservableObjectProxyInterface<T>>;
+
 type GroupType<T> = {
   field: keyof T;
   dir?: DirectionType;
@@ -28,9 +31,13 @@ type GroupType<T> = {
 type PageType = 'scroll' | 'background' | 'button' | 'virtualScroll';
 
 export class DataSource<T extends object = object> extends DewsDataComponent {
-  private _data?: ObservableArray<T>;
+  #_data?: ObservableArray<T>;
   private _sort: Sort<T> = new Sort<T>();
   private _events: EventEmitter = new EventEmitter();
+
+  get __data__(): ObservableArray<T> {
+    return this.#_data!;
+  }
 
   @property({ type: String })
   id = '';
@@ -93,7 +100,7 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
 
   private _bindDataEvent(): void {
     // ObserveArray 인스턴스화 할 경우 새로 등록 필요
-    this._data?.onChange(e => {
+    this.#_data?.onChange(e => {
       this._triggerChange(e);
     });
   }
@@ -148,14 +155,14 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   async read(): Promise<void> {
     this._trigger('requestStart', { type: 'read' });
     if (this.localData) {
-      this._data = ObservableArray.create(this.localData, this.schema?.model?.idFields);
+      this.#_data = ObservableArray.create(this.localData, this.schema?.model?.idFields);
     } else if (this.transport?.read) {
       const readElement = this.transport.read;
       let response: T[];
       if (readElement.type === 'get') {
         try {
           response = await api.get(readElement.url);
-          this._data = ObservableArray.create(response, this.schema?.model?.idFields);
+          this.#_data = ObservableArray.create(response, this.schema?.model?.idFields);
         } catch (error) {
           console.log('err', error);
           throw error;
@@ -163,7 +170,7 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
       } else {
         try {
           response = await api.post(readElement.url);
-          this._data = ObservableArray.create(response, this.schema?.model?.idFields);
+          this.#_data = ObservableArray.create(response, this.schema?.model?.idFields);
         } catch (error) {
           console.log('err', error);
           throw error;
@@ -176,12 +183,12 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   }
 
   async batchSave(config?: HttpRequestConfig) {
-    const saveData = this._data?.getDirtyData();
+    const saveData = this.#_data?.getDirtyData();
     return this._batchSave(saveData, config);
   }
 
   async saveAll(config?: HttpRequestConfig) {
-    const saveData = this._data;
+    const saveData = this.#_data;
     return this._batchSave(saveData, config);
   }
 
@@ -203,43 +210,40 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   }
 
   add(item: T): number | undefined {
-    return this._data?.push(item);
+    return this.#_data?.push(item);
   }
 
   insert(index: number, item: T) {
-    this._data?.splice(index, 0, item);
+    this.#_data?.splice(index, 0, item);
   }
 
   delete(index: number): ObservableObject<T> | undefined {
-    return this._data?.splice(index, 1)[0];
+    return this.#_data?.splice(index, 1)[0];
   }
 
   hasDirty() {
-    return this._data?.__state__.isDirty;
+    return this.#_data?.__state__.isDirty;
   }
 
   getDirtyData() {
-    return this._data?.getDirtyData();
+    return this.#_data?.getDirtyData();
   }
 
-  data(data?: T[]): ObservableObject<T>[] | undefined {
-    let resultData;
+  data(data?: T[]): ObservableArrayItem<T>[] | undefined {
     if (data) {
-      this._data = ObservableArray.create(data, this.schema?.model?.idFields);
+      this.#_data = ObservableArray.create(data, this.schema?.model?.idFields);
     }
-    // eslint-disable-next-line prefer-const
-    resultData = this._data ? [...this._data] : undefined;
-    return resultData;
+    return this.#_data ? [...this.#_data] : undefined;
   }
 
   sort(sortOptions?: SortType<T> | SortType<T>[]) {
     let result;
     if (sortOptions) {
       sortOptions = Array.isArray(sortOptions) ? sortOptions : [sortOptions];
-      if (sortOptions && this._data) {
+      if (sortOptions && this.#_data) {
         for (const sortOption of sortOptions) {
           sortOption.compare = sortOption.compare || this._sort.comparerCreate(sortOption);
-          result = result || [...this._data];
+          result = result || [...this.#_data];
           result?.sort(sortOption.compare);
         }
       }
@@ -252,15 +256,15 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   }
 
   at(index: number) {
-    return this._data![index];
+    return this.#_data![index];
   }
 
   reset() {
-    this._data?.reset();
+    this.#_data?.reset();
   } // cancelChanges
 
   commit(): void {
-    this._data?.commit();
+    this.#_data?.commit();
   }
 
   on(type: string, handler: any) {
