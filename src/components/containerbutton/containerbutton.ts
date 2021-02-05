@@ -3,6 +3,7 @@ import { html, internalProperty, property, TemplateResult } from 'lit-element';
 
 import template from './containerbutton.html';
 import scss from './containerbutton.scss';
+import { SearchContainer } from '../searchcontainer/searchcontainer.js';
 
 export class Containerbutton extends DewsLayoutComponent {
   static styles = scss;
@@ -22,24 +23,34 @@ export class Containerbutton extends DewsLayoutComponent {
   @internalProperty()
   _buttonList: Array<TemplateResult> = [];
 
+  private $parent: SearchContainer | undefined;
+
   connectedCallback() {
     super.connectedCallback();
+
+    if (this.parentElement?.tagName === 'DEWS-SEARCH-CONTAINER') {
+      this.$parent = this.parentElement as SearchContainer;
+    }
     if (this.setButton) {
       this._iconList.push(html` <li class="data-set">
-        <button class="set"><span>Data Set</span></button>
+        <button class="set" @click="${this.$parent!._setClick.bind(this.$parent)}"><span>Data Set</span></button>
       </li>`);
     }
     if (this.captureButton) {
       this._iconList.push(
-        html`<li class="data-capture">
-          <button class="capture"><span>Data Capture</span></button>
+        html` <li class="data-capture">
+          <button class="capture" @click="${this.$parent!._captureClick.bind(this.$parent)}">
+            <span>Data Capture</span>
+          </button>
         </li>`
       );
     }
     if (this.resetButton) {
       this._iconList.push(
-        html`<li class="data-reset">
-          <button class="reset"><span>Data Reset</span></button>
+        html` <li class="data-reset">
+          <button class="reset" @click="${this.$parent!._resetClick.bind(this.$parent)}">
+            <span>Data Reset</span>
+          </button>
         </li>`
       );
     }
