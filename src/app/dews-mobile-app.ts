@@ -36,6 +36,11 @@ export class DewsMobileApp extends LitElement implements ApplicationMainInterfac
   async connectedCallback() {
     this.pageId = location.hash.replace('#', '');
 
+    window.addEventListener('hashchange', () => {
+      console.log('location.hash', location.hash);
+      this.openMenu(location.hash.replace('#', ''));
+    });
+
     super.connectedCallback();
     await this.updateComplete;
 

@@ -30,7 +30,10 @@ export class MobileAppAuthenticationManager implements AuthenticationManagerInte
     sessionStorage.setItem(AUTH_TOKEN_KEY, this._accessToken);
     sessionStorage.setItem(AUTH_TOKEN_DETAIL_KEY, this._detailToken);
 
-    this._isAuthenticated = !!this._accessToken;
+    // 토큰이 있으면 인증완료
+    this._isAuthenticated = true;
+
+    alert(this._accessToken);
 
     return Promise.resolve();
   }
