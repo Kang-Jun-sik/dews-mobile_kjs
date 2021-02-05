@@ -16,7 +16,10 @@ export class Yearpicker extends PickerBase {
   @internalProperty()
   private _value: string | undefined = '____';
 
-  _mode: 'year' = 'year';
+  @property({ type: String, reflect: true })
+  value: string | undefined;
+
+  public _mode: 'year' = 'year';
 
   @internalProperty()
   private $spinnerYear: TemplateResult | undefined;
@@ -152,6 +155,7 @@ export class Yearpicker extends PickerBase {
   _confirmClickHandler = (): void => {
     if (this._value?.indexOf('_')! < 0) {
       this.inputValue = this._value;
+      this.value = `${this.inputValue}`;
       this._close();
     }
   };
@@ -205,6 +209,19 @@ export class Yearpicker extends PickerBase {
     } else {
       this._selectChange();
     }
+  }
+
+  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
+    if (_changedProperties.has('value')) {
+      if (this.value !== undefined) {
+        this.inputValue = '';
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____';
+      } else {
+        this.inputValue = this.value!.slice(0, 4);
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
+      }
+    }
+    return super.shouldUpdate(_changedProperties);
   }
 
   render() {

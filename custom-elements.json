@@ -2,137 +2,46 @@
   "version": "experimental",
   "tags": [
     {
-      "name": "dews-mobile",
-      "path": "./src/DewsMobile.ts",
-      "attributes": [
-        {
-          "name": "page",
-          "type": "string",
-          "default": "\"main\""
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "default": "\"\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "page",
-          "attribute": "page",
-          "type": "string",
-          "default": "\"main\""
-        },
-        {
-          "name": "title",
-          "attribute": "title",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "styles",
-          "type": "CSSResult",
-          "default": "\"styles\""
-        }
-      ]
-    },
-    {
       "name": "dews-mobile-app",
       "path": "./src/app/dews-mobile-app.ts",
       "properties": [
         {
-          "name": "dependency",
-          "type": "MyDependency"
-        },
-        {
           "name": "appVersion",
           "type": "string"
+        },
+        {
+          "name": "currentPage",
+          "type": "DewsPageBase | undefined"
         }
       ]
     },
     {
-      "name": "main-page",
-      "path": "./src/app/main/main.ts",
-      "attributes": [
-        {
-          "name": "id",
-          "type": "string",
-          "default": "\"main\""
-        }
-      ],
+      "name": "main-bottom",
+      "path": "./src/app/main-bottom/main-bottom.ts",
       "properties": [
-        {
-          "name": "id",
-          "attribute": "id",
-          "type": "string",
-          "default": "\"main\""
-        },
-        {
-          "name": "onMainLoadComplete",
-          "type": "() => void"
-        },
-        {
-          "name": "onPageUpdateComplete",
-          "type": "() => void"
-        },
-        {
-          "name": "onPageLoaded",
-          "type": "(e: PageLoadedEventArgs) => void"
-        },
-        {
-          "name": "onPageLoading",
-          "type": "(e: PageLoadingEventArgs) => void"
-        },
-        {
-          "name": "onHistoryBack",
-          "type": "(e: HistoryBackEventArgs) => void"
-        },
-        {
-          "name": "onFocusChanging",
-          "type": "(e: FocusChangingEventArgs) => void"
-        },
-        {
-          "name": "onFocusChanged",
-          "type": "(e: FocusChangedEventArgs) => void"
-        },
-        {
-          "name": "onAreaChanged",
-          "type": "(e: AreaChangedEventArgs) => void"
-        },
         {
           "name": "styles",
           "type": "CSSResult",
-          "default": "\"css`\\n    .page-hide {\\n      display: none;\\n    }\\n    .page-show {\\n      display: block;\\n    }\\n    * {\\n      margin: 0;\\n      padding: 0;\\n      box-sizing: border-box;\\n    }\\n    #contents {\\n      position: relative;\\n      overflow: hidden;\\n      width: 100%;\\n      // min-height: calc(100vh - 53px - 56px);\\n      // margin: 53px 0 0;\\n      padding: 53px 0 0;\\n      // padding-top: 53px;\\n      background-color: #efeff4;\\n    }\\n    .footer {\\n      position: relative;\\n      height: calc(100vh - 53px);\\n      background-color: #efeff4;\\n    }\\n    .footer img {\\n      display: block;\\n      margin: 0 auto;\\n      padding-top: 48px;\\n    }\\n    @media screen and (min-width: 1024px) {\\n      .footer {\\n        height: 56px;\\n      }\\n      .footer img {\\n        display: none;\\n      }\\n    }\\n  `\""
+          "default": "\"scss\""
+        },
+        {
+          "name": "subButtons",
+          "type": "HTMLElement | undefined"
+        },
+        {
+          "name": "mainButtons",
+          "description": "main/ButtonTabBar 에서 setAttribute 로 show 할 버튼 리스트 제공",
+          "type": "MainButtonSet | undefined"
         }
       ]
     },
     {
-      "name": "drawer-layout",
-      "path": "./src/components/drowerlayout/drowerlayout.ts",
+      "name": "main-content",
+      "path": "./src/app/main-content/main-content.ts",
       "attributes": [
         {
-          "name": "title",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "active",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "height",
+          "name": "page-id",
           "type": "string | undefined"
-        },
-        {
-          "name": "scrollEnabled",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "drower",
-          "type": "\"bottom\" | \"right\"",
-          "default": "\"bottom\""
         }
       ],
       "properties": [
@@ -142,38 +51,497 @@
           "default": "\"scss\""
         },
         {
+          "name": "pageId",
+          "attribute": "page-id",
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "main-header",
+      "path": "./src/app/main-header/main-header.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "anchor",
+          "description": "Anchor / Title 전환에 필요한 Flag",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
           "name": "title",
           "attribute": "title",
           "type": "string",
           "default": "\"\""
         },
         {
-          "name": "active",
-          "attribute": "active",
+          "name": "activeAnchorFlag",
+          "attribute": "anchor",
+          "description": "Anchor / Title 전환에 필요한 Flag",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "height",
-          "attribute": "height",
+          "name": "areaList",
+          "description": "현재 업무 페이지가 가지고 있는 Area List",
+          "type": "AreaType[]",
+          "default": "[]"
+        },
+        {
+          "name": "focusedArea",
+          "description": "Anchor 에서 클릭 한 Area",
+          "type": "AreaType"
+        },
+        {
+          "name": "anchorTemplate",
+          "description": "Anchor Template",
+          "type": "TemplateResult"
+        },
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        }
+      ],
+      "events": [
+        {
+          "name": "historyBack"
+        }
+      ]
+    },
+    {
+      "name": "cl-card",
+      "path": "./src/components/cardlist/card.ts",
+      "attributes": [
+        {
+          "name": "card-options",
+          "default": "{}"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "cardOptions",
+          "attribute": "card-options",
+          "default": "{}"
+        },
+        {
+          "name": "data",
+          "type": "null"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "ds-schema-model-field",
+      "path": "./src/components/datasource/schema.ts",
+      "attributes": [
+        {
+          "name": "field",
+          "type": "keyof T"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "default": "\"string\""
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "format",
+          "type": "string | undefined",
+          "default": "\"undefined\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "field",
+          "attribute": "field",
+          "type": "keyof T"
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "string",
+          "default": "\"string\""
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "format",
+          "attribute": "format",
+          "type": "string | undefined",
+          "default": "\"undefined\""
+        }
+      ]
+    },
+    {
+      "name": "ds-schema-model",
+      "path": "./src/components/datasource/schema.ts",
+      "attributes": [
+        {
+          "name": "id-fields",
+          "type": "never[]",
+          "default": "[]"
+        }
+      ],
+      "properties": [
+        {
+          "name": "idFields",
+          "attribute": "id-fields",
+          "type": "never[]",
+          "default": "[]"
+        },
+        {
+          "name": "fields",
+          "type": "SchemaModelField<T>[]",
+          "default": "[]"
+        }
+      ]
+    },
+    {
+      "name": "ds-schema",
+      "path": "./src/components/datasource/schema.ts",
+      "properties": [
+        {
+          "name": "model",
+          "type": "SchemaModel<T> | undefined"
+        }
+      ]
+    },
+    {
+      "name": "ds-transport-read",
+      "path": "./src/components/datasource/transport.ts",
+      "attributes": [
+        {
+          "name": "url",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "type",
+          "type": "\"get\" | \"post\"",
+          "default": "\"get\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "\"get\" | \"post\"",
+          "default": "\"get\""
+        }
+      ]
+    },
+    {
+      "name": "ds-transport-save",
+      "path": "./src/components/datasource/transport.ts",
+      "attributes": [
+        {
+          "name": "url",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string",
+          "default": "\"\""
+        }
+      ]
+    },
+    {
+      "name": "ds-transport",
+      "path": "./src/components/datasource/transport.ts",
+      "properties": [
+        {
+          "name": "read",
+          "type": "TransportRead | undefined"
+        },
+        {
+          "name": "save",
+          "type": "TransportSave | undefined"
+        }
+      ]
+    },
+    {
+      "name": "columnset-button",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "onComplete",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onOpen",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onClose",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onChange",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "datasource",
           "type": "string | undefined"
         },
         {
-          "name": "scrollEnabled",
-          "attribute": "scrollEnabled",
+          "name": "field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "label-field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "checked-field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled-field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "auto-bind",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "drower",
-          "attribute": "drower",
-          "type": "\"bottom\" | \"right\"",
-          "default": "\"bottom\""
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "onComplete",
+          "attribute": "onComplete",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onOpen",
+          "attribute": "onOpen",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onClose",
+          "attribute": "onClose",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onChange",
+          "attribute": "onChange",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "datasource",
+          "attribute": "datasource",
+          "type": "string | undefined"
+        },
+        {
+          "name": "field",
+          "attribute": "field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "labelField",
+          "attribute": "label-field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "checkedField",
+          "attribute": "checked-field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabledField",
+          "attribute": "disabled-field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "autoBind",
+          "attribute": "auto-bind",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "on",
+          "type": "(key: EVENT_TYPE, handler: (e: EventArgs<unknown>, ...args: unknown[]) => void) => void",
+          "default": "\"(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) => {\\n    return this._EVENT.on(key, handler);\\n  }\""
+        },
+        {
+          "name": "off",
+          "type": "(key: EVENT_TYPE, handler: (e: EventArgs<unknown>, ...args: unknown[]) => void) => void",
+          "default": "\"(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) => {\\n    const ab = this.getItemList();\\n\\n    return this._EVENT.off(key, handler);\\n  }\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
         }
       ],
       "events": [
         {
           "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "column-item",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "label",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "field",
+          "attribute": "field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "label",
+          "attribute": "label",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "checked",
+          "attribute": "checked",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "$pel",
+          "type": "Columnsetbutton | undefined"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -198,6 +566,16 @@
         },
         {
           "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "once",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "columnSet",
           "type": "boolean",
           "default": "false"
         }
@@ -233,14 +611,902 @@
           "default": "false"
         },
         {
+          "name": "once",
+          "attribute": "once",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "columnSet",
+          "attribute": "columnSet",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "select",
           "type": "string[]",
           "default": "[]"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
         }
       ],
       "events": [
         {
           "name": "click"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-datepicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "inputValue",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "attribute": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "visible",
+          "attribute": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "hdDisabled",
+          "attribute": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "change"
+        },
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-periodpicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "endValue",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "startValue",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "endValue",
+          "attribute": "endValue",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "startValue",
+          "attribute": "startValue",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "inputValue",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "attribute": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "visible",
+          "attribute": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "hdDisabled",
+          "attribute": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-timepicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "type": "string | undefined"
+        },
+        {
+          "name": "max",
+          "type": "string | undefined"
+        },
+        {
+          "name": "minute-interval",
+          "type": "number | undefined",
+          "default": "1"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "height",
+          "type": "string | undefined"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined"
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined"
+        },
+        {
+          "name": "step",
+          "attribute": "minute-interval",
+          "type": "number | undefined",
+          "default": "1"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-yearpicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "default": "\"`${new Date().getFullYear() - 100}`\""
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "default": "\"`${new Date().getFullYear() + 100}`\""
+        },
+        {
+          "name": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "inputValue",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined",
+          "default": "\"`${new Date().getFullYear() - 100}`\""
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined",
+          "default": "\"`${new Date().getFullYear() + 100}`\""
+        },
+        {
+          "name": "spinner",
+          "attribute": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "visible",
+          "attribute": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "hdDisabled",
+          "attribute": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "change"
+        },
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-monthpicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "inputValue",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "attribute": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "visible",
+          "attribute": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "hdDisabled",
+          "attribute": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-monthperiodpicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "end",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "start",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "end",
+          "attribute": "end",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "start",
+          "attribute": "start",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "inputValue",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "attribute": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "visible",
+          "attribute": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "hdDisabled",
+          "attribute": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -261,7 +1527,12 @@
         {
           "name": "format",
           "type": "string",
-          "default": "\"password\""
+          "default": "\"\""
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "default": "\"text\""
         },
         {
           "name": "disabled",
@@ -279,19 +1550,27 @@
           "default": "false"
         },
         {
-          "name": "data-mask",
-          "type": "string",
-          "default": "\"000-000\""
+          "name": "mask",
+          "type": "string | undefined"
         },
         {
-          "name": "data-prompt",
+          "name": "prompt",
           "type": "string",
           "default": "\"_\""
+        },
+        {
+          "name": "unmask-on-post",
+          "type": "boolean",
+          "default": "true"
         },
         {
           "name": "value",
           "type": "string",
           "default": "\"\""
+        },
+        {
+          "name": "raw",
+          "type": "string"
         }
       ],
       "properties": [
@@ -299,6 +1578,18 @@
           "name": "styles",
           "type": "CSSResult",
           "default": "\"scss\""
+        },
+        {
+          "name": "viewSpan",
+          "type": "HTMLSpanElement"
+        },
+        {
+          "name": "maskSpan",
+          "type": "HTMLSpanElement"
+        },
+        {
+          "name": "inputState",
+          "type": "HTMLSpanElement"
         },
         {
           "name": "title",
@@ -316,7 +1607,13 @@
           "name": "format",
           "attribute": "format",
           "type": "string",
-          "default": "\"password\""
+          "default": "\"\""
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "string",
+          "default": "\"text\""
         },
         {
           "name": "disabled",
@@ -338,15 +1635,20 @@
         },
         {
           "name": "mask",
-          "attribute": "data-mask",
-          "type": "string",
-          "default": "\"000-000\""
+          "attribute": "mask",
+          "type": "string | undefined"
         },
         {
           "name": "prompt",
-          "attribute": "data-prompt",
+          "attribute": "prompt",
           "type": "string",
           "default": "\"_\""
+        },
+        {
+          "name": "unmaskOnPost",
+          "attribute": "unmask-on-post",
+          "type": "boolean",
+          "default": "true"
         },
         {
           "name": "value",
@@ -355,25 +1657,29 @@
           "default": "\"\""
         },
         {
+          "name": "raw",
+          "attribute": "raw",
+          "type": "string"
+        },
+        {
           "name": "error",
           "type": "Function",
-          "default": "\"(message: string) => {\\n    this._show(message, 'error');\\n  }\""
+          "default": "\"(message: string) => {\\n    this._showMsg(message, 'error');\\n  }\""
         },
         {
           "name": "warning",
           "type": "Function",
-          "default": "\"(message: string) => {\\n    this._show(message, 'warning');\\n  }\""
+          "default": "\"(message: string) => {\\n    this._showMsg(message, 'warning');\\n  }\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
         }
       ],
       "events": [
         {
-          "name": "focus"
-        },
-        {
-          "name": "change"
-        },
-        {
-          "name": "input"
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -426,14 +1732,16 @@
           "default": "\"#,##0.00\""
         },
         {
+          "name": "decimals",
+          "type": "number | null"
+        },
+        {
           "name": "max",
-          "type": "number",
-          "default": "999999999999"
+          "type": "number | null"
         },
         {
           "name": "min",
-          "type": "number",
-          "default": "-999999999999"
+          "type": "number | null"
         },
         {
           "name": "restrict-decimals",
@@ -442,8 +1750,7 @@
         },
         {
           "name": "max-length",
-          "type": "number",
-          "default": "12"
+          "type": "string | null"
         },
         {
           "name": "round",
@@ -511,16 +1818,19 @@
           "default": "\"#,##0.00\""
         },
         {
+          "name": "decimals",
+          "attribute": "decimals",
+          "type": "number | null"
+        },
+        {
           "name": "max",
           "attribute": "max",
-          "type": "number",
-          "default": "999999999999"
+          "type": "number | null"
         },
         {
           "name": "min",
           "attribute": "min",
-          "type": "number",
-          "default": "-999999999999"
+          "type": "number | null"
         },
         {
           "name": "restrict",
@@ -531,14 +1841,18 @@
         {
           "name": "maxLength",
           "attribute": "max-length",
-          "type": "number",
-          "default": "12"
+          "type": "string | null"
         },
         {
           "name": "round",
           "attribute": "round",
           "type": "\"round\" | \"ceil\" | \"floor\"",
           "default": "\"round\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
         }
       ],
       "events": [
@@ -547,6 +1861,9 @@
         },
         {
           "name": "change"
+        },
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -560,8 +1877,13 @@
           "default": "\"\""
         },
         {
-          "name": "placeholder",
+          "name": "type",
           "type": "string",
+          "default": "\"text\""
+        },
+        {
+          "name": "placeholder",
+          "type": "string | undefined",
           "default": "\"\""
         },
         {
@@ -608,9 +1930,15 @@
           "default": "\"\""
         },
         {
+          "name": "type",
+          "attribute": "type",
+          "type": "string",
+          "default": "\"text\""
+        },
+        {
           "name": "placeholder",
           "attribute": "placeholder",
-          "type": "string",
+          "type": "string | undefined",
           "default": "\"\""
         },
         {
@@ -658,14 +1986,22 @@
           "name": "warning",
           "type": "Function",
           "default": "\"(message: string) => {\\n    this._show(message, 'warning');\\n  }\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
         }
       ],
       "events": [
         {
-          "name": "focus"
+          "name": "focusin"
         },
         {
           "name": "change"
+        },
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -674,27 +2010,201 @@
       "path": "./src/dews-mobile.ts",
       "attributes": [
         {
-          "name": "title",
+          "name": "text",
           "type": "string",
-          "default": "\"title\""
+          "default": "\"\""
+        },
+        {
+          "name": "ui",
+          "type": "UI_LIST",
+          "default": "\"solid\""
         },
         {
           "name": "type",
           "type": "TYPE_LIST",
-          "default": "\"default\""
+          "default": "\"text\""
         },
         {
           "name": "size",
           "type": "SIZE_LIST",
-          "default": "\"default\""
+          "default": "\"medium\""
         },
         {
           "name": "icon",
-          "type": "ICON_LIST | undefined"
+          "type": "ICON_LIST",
+          "default": "\"\""
         },
         {
           "name": "link",
           "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "group",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "ui",
+          "attribute": "ui",
+          "type": "UI_LIST",
+          "default": "\"solid\""
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "TYPE_LIST",
+          "default": "\"text\""
+        },
+        {
+          "name": "size",
+          "attribute": "size",
+          "type": "SIZE_LIST",
+          "default": "\"medium\""
+        },
+        {
+          "name": "icon",
+          "attribute": "icon",
+          "type": "ICON_LIST",
+          "default": "\"\""
+        },
+        {
+          "name": "link",
+          "attribute": "link",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "group",
+          "attribute": "group",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-dropdownbutton",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "ui",
+          "type": "UI_LIST",
+          "default": "\"solid\""
+        },
+        {
+          "name": "size",
+          "type": "SIZE_LIST",
+          "default": "\"medium\""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "ui",
+          "attribute": "ui",
+          "type": "UI_LIST",
+          "default": "\"solid\""
+        },
+        {
+          "name": "size",
+          "attribute": "size",
+          "type": "SIZE_LIST",
+          "default": "\"medium\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "group",
+          "attribute": "group",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "buttons",
+          "type": "Element[]",
+          "default": "[]"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-childbutton",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "disabled",
@@ -709,38 +2219,47 @@
           "default": "\"scss\""
         },
         {
-          "name": "title",
-          "attribute": "title",
+          "name": "text",
+          "attribute": "text",
           "type": "string",
-          "default": "\"title\""
-        },
-        {
-          "name": "type",
-          "attribute": "type",
-          "type": "TYPE_LIST",
-          "default": "\"default\""
-        },
-        {
-          "name": "size",
-          "attribute": "size",
-          "type": "SIZE_LIST",
-          "default": "\"default\""
-        },
-        {
-          "name": "icon",
-          "attribute": "icon",
-          "type": "ICON_LIST | undefined"
-        },
-        {
-          "name": "link",
-          "attribute": "link",
-          "type": "string | undefined"
+          "default": "\"\""
         },
         {
           "name": "disabled",
           "attribute": "disabled",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-button-group",
+      "path": "./src/dews-mobile.ts",
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -776,6 +2295,16 @@
           "attribute": "align",
           "type": "\"horizontal\" | \"vertical\"",
           "default": "\"horizontal\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -784,9 +2313,8 @@
       "path": "./src/dews-mobile.ts",
       "attributes": [
         {
-          "name": "title",
-          "type": "string",
-          "default": "\"\""
+          "name": "label",
+          "type": "string | undefined"
         },
         {
           "name": "disabled",
@@ -802,6 +2330,11 @@
           "name": "bookmark",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "reverse",
+          "type": "boolean",
+          "default": "false"
         }
       ],
       "properties": [
@@ -811,10 +2344,9 @@
           "default": "\"scss\""
         },
         {
-          "name": "title",
-          "attribute": "title",
-          "type": "string",
-          "default": "\"\""
+          "name": "label",
+          "attribute": "label",
+          "type": "string | undefined"
         },
         {
           "name": "disabled",
@@ -833,14 +2365,22 @@
           "attribute": "bookmark",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "reverse",
+          "attribute": "reverse",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
         }
       ],
       "events": [
         {
-          "name": "change"
-        },
-        {
-          "name": "check"
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -849,7 +2389,7 @@
       "path": "./src/dews-mobile.ts",
       "attributes": [
         {
-          "name": "title",
+          "name": "label",
           "type": "string",
           "default": "\"\""
         },
@@ -876,8 +2416,8 @@
           "default": "\"scss\""
         },
         {
-          "name": "title",
-          "attribute": "title",
+          "name": "label",
+          "attribute": "label",
           "type": "string",
           "default": "\"\""
         },
@@ -898,11 +2438,19 @@
           "attribute": "checked",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
         }
       ],
       "events": [
         {
           "name": "check"
+        },
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -949,6 +2497,635 @@
           "attribute": "align",
           "type": "\"horizontal\" | \"vertical\"",
           "default": "\"horizontal\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-cardlist",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "auto-bind",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "datasource",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "use-card-header",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "header-options",
+          "type": "null"
+        },
+        {
+          "name": "use-paging",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "use-control-set",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "control-options",
+          "type": "{ useSortSet: boolean; useColumnSet: boolean; }",
+          "default": "{\"useSortSet\":true,\"useColumnSet\":true}"
+        },
+        {
+          "name": "use-card-collapse",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "card-fixed-field-count",
+          "type": "number",
+          "default": "1"
+        },
+        {
+          "name": "use-all-select",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "use-total-count",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "default": "\"250px\""
+        },
+        {
+          "name": "column-type",
+          "type": "string",
+          "default": "\"1\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "autoBind",
+          "attribute": "auto-bind",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "datasource",
+          "attribute": "datasource",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "useHeader",
+          "attribute": "use-card-header",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "headerOptions",
+          "attribute": "header-options",
+          "type": "null"
+        },
+        {
+          "name": "link",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "usePaging",
+          "attribute": "use-paging",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "pageCount",
+          "type": "number",
+          "default": "20"
+        },
+        {
+          "name": "useControl",
+          "attribute": "use-control-set",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "controlOptions",
+          "attribute": "control-options",
+          "type": "{ useSortSet: boolean; useColumnSet: boolean; }",
+          "default": "{\"useSortSet\":true,\"useColumnSet\":true}"
+        },
+        {
+          "name": "useCardCollapse",
+          "attribute": "use-card-collapse",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "cardFixedFieldCount",
+          "attribute": "card-fixed-field-count",
+          "type": "number",
+          "default": "1"
+        },
+        {
+          "name": "useAllSelect",
+          "attribute": "use-all-select",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useTotalCount",
+          "attribute": "use-total-count",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "height",
+          "attribute": "height",
+          "type": "string",
+          "default": "\"250px\""
+        },
+        {
+          "name": "columnType",
+          "attribute": "column-type",
+          "type": "string",
+          "default": "\"1\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-complex",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-togglebutton",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "title",
+          "type": "undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "text",
+          "type": "undefined",
+          "default": "\"undefined\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "checked",
+          "attribute": "checked",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "toggleTitle",
+          "attribute": "title",
+          "type": "undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "text",
+          "attribute": "text",
+          "type": "undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dropdownlist-item",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "checked",
+          "attribute": "checked",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-messagebox",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "message",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "options",
+          "type": "MSGBOX_OPTIONS",
+          "default": "{\"align\":\"center\",\"icon\":\"success\",\"cancel\":false,\"showCheckbox\":\"none\",\"id\":\"\"}"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "message",
+          "attribute": "message",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "options",
+          "attribute": "options",
+          "type": "MSGBOX_OPTIONS",
+          "default": "{\"align\":\"center\",\"icon\":\"success\",\"cancel\":false,\"showCheckbox\":\"none\",\"id\":\"\"}"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "closed"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-snackbar",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "message",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "icon",
+          "type": "ICON_LIST",
+          "default": "\"success\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "message",
+          "attribute": "message",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "icon",
+          "attribute": "icon",
+          "type": "ICON_LIST",
+          "default": "\"success\""
+        },
+        {
+          "name": "options",
+          "type": "SNACKBAR_OPTIONS",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-loading",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "message",
+          "type": "string",
+          "default": "\"Loading...\""
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "default": "\"page\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "message",
+          "attribute": "message",
+          "type": "string",
+          "default": "\"Loading...\""
+        },
+        {
+          "name": "target",
+          "attribute": "target",
+          "type": "string",
+          "default": "\"page\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-slider",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "min",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "10"
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "default": "1"
+        },
+        {
+          "name": "slider-type",
+          "type": "SLIDER_TYPE",
+          "default": "\"range\""
+        },
+        {
+          "name": "hideText",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "number",
+          "default": "10"
+        },
+        {
+          "name": "step",
+          "attribute": "step",
+          "type": "number",
+          "default": "1"
+        },
+        {
+          "name": "sliderType",
+          "attribute": "slider-type",
+          "type": "SLIDER_TYPE",
+          "default": "\"range\""
+        },
+        {
+          "name": "hideText",
+          "attribute": "hideText",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-tooltip",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "options",
+          "type": "TOOLTIP_OPTIONS",
+          "default": "{\"type\":\"normal\",\"text\":\"\",\"position\":\"bottom\",\"durationTime\":0,\"fadeOutTime\":2000,\"closeButton\":true,\"title\":\"undefined\"}"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "options",
+          "attribute": "options",
+          "type": "TOOLTIP_OPTIONS",
+          "default": "{\"type\":\"normal\",\"text\":\"\",\"position\":\"bottom\",\"durationTime\":0,\"fadeOutTime\":2000,\"closeButton\":true,\"title\":\"undefined\"}"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-progressbar",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "progressId",
+          "type": "string | undefined",
+          "default": "\"\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "progressId",
+          "attribute": "progressId",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "textTemplate",
+          "type": "TemplateResult | undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "options",
+          "type": "PROGRESSBAR_OPTIONS | undefined",
+          "default": "{\"total\":-1}"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -960,6 +3137,11 @@
           "name": "styles",
           "type": "CSSResult",
           "default": "\"scss\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -996,6 +3178,11 @@
           "type": "boolean",
           "default": "false"
         }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
       ]
     },
     {
@@ -1018,9 +3205,29 @@
           "default": "false"
         },
         {
-          "name": "button-set",
-          "type": "string",
-          "default": "\"\""
+          "name": "btn-all",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-save",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-add",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-search",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-delete",
+          "type": "boolean",
+          "default": "false"
         }
       ],
       "properties": [
@@ -1053,18 +3260,43 @@
           "default": "\"auto\""
         },
         {
-          "name": "buttonSet",
-          "attribute": "button-set",
-          "type": "string",
-          "default": "\"\""
+          "name": "useAllButton",
+          "attribute": "btn-all",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useSaveButton",
+          "attribute": "btn-save",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useAddButton",
+          "attribute": "btn-add",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useSearchButton",
+          "attribute": "btn-search",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useDeleteButton",
+          "attribute": "btn-delete",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "mainButtons",
+          "type": "MainButtonSet"
         }
       ],
       "events": [
         {
-          "name": "close"
-        },
-        {
-          "name": "open"
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -1086,6 +3318,31 @@
           "name": "title",
           "type": "string",
           "default": "\"\""
+        },
+        {
+          "name": "btn-all",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-save",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-add",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-search",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-delete",
+          "type": "boolean",
+          "default": "false"
         }
       ],
       "properties": [
@@ -1116,17 +3373,45 @@
           "name": "select",
           "type": "Function",
           "default": "\"(select: number) => {\\n    this._select(select);\\n  }\""
+        },
+        {
+          "name": "useAllButton",
+          "attribute": "btn-all",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useSaveButton",
+          "attribute": "btn-save",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useAddButton",
+          "attribute": "btn-add",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useSearchButton",
+          "attribute": "btn-search",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useDeleteButton",
+          "attribute": "btn-delete",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "mainButtons",
+          "type": "MainButtonSet"
         }
       ],
       "events": [
         {
-          "name": "focusIn"
-        },
-        {
-          "name": "focusBlur"
-        },
-        {
-          "name": "tabChange"
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -1141,6 +3426,31 @@
         },
         {
           "name": "hide",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-all",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-save",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-add",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-search",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "btn-delete",
           "type": "boolean",
           "default": "false"
         }
@@ -1162,6 +3472,78 @@
           "attribute": "hide",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "useAllButton",
+          "attribute": "btn-all",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useSaveButton",
+          "attribute": "btn-save",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useAddButton",
+          "attribute": "btn-add",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useSearchButton",
+          "attribute": "btn-search",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "useDeleteButton",
+          "attribute": "btn-delete",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "mainButtons",
+          "type": "MainButtonSet"
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-infobox-container",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "info-type",
+          "type": "\"warning\" | \"care\" | \"basic\"",
+          "default": "\"basic\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "type",
+          "attribute": "info-type",
+          "type": "\"warning\" | \"care\" | \"basic\"",
+          "default": "\"basic\""
+        },
+        {
+          "name": "$value",
+          "type": "TemplateResult | undefined"
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -1169,6 +3551,11 @@
       "name": "dews-search-container",
       "path": "./src/dews-mobile.ts",
       "attributes": [
+        {
+          "name": "id",
+          "type": "string",
+          "default": "\"\""
+        },
         {
           "name": "title",
           "type": "string",
@@ -1187,6 +3574,12 @@
           "default": "\"scss\""
         },
         {
+          "name": "id",
+          "attribute": "id",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
           "name": "title",
           "attribute": "title",
           "type": "string",
@@ -1197,6 +3590,20 @@
           "attribute": "col",
           "type": "number",
           "default": "1"
+        },
+        {
+          "name": "snackbar",
+          "type": "HTMLElement | undefined"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     },
@@ -1222,6 +3629,11 @@
           "type": "string",
           "default": "\"\""
         }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
       ]
     },
     {
@@ -1246,6 +3658,32 @@
           "type": "string",
           "default": "\"\""
         }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-custom-container",
+      "path": "./src/dews-mobile.ts",
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
       ]
     },
     {
@@ -1269,6 +3707,284 @@
           "attribute": "title",
           "type": "string",
           "default": "\"\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-datasource",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "pageType",
+          "type": "\"scroll\" | \"background\" | \"button\" | \"virtualScroll\" | undefined"
+        },
+        {
+          "name": "pageSize",
+          "type": "number | undefined"
+        },
+        {
+          "name": "onchange",
+          "type": "((args: Partial<DataSourceChangeEventArgs<T>>) => void) | undefined"
+        },
+        {
+          "name": "onrequeststart",
+          "type": "((args: DataSourceRequestStartEventArgs<T>) => void) | undefined"
+        },
+        {
+          "name": "onrequestend",
+          "type": "((args: DataSourceRequestStartEventArgs<T>) => void) | undefined"
+        }
+      ],
+      "properties": [
+        {
+          "name": "id",
+          "attribute": "id",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "pageType",
+          "attribute": "pageType",
+          "type": "\"scroll\" | \"background\" | \"button\" | \"virtualScroll\" | undefined"
+        },
+        {
+          "name": "pageSize",
+          "attribute": "pageSize",
+          "type": "number | undefined"
+        },
+        {
+          "name": "onChange",
+          "attribute": "onchange",
+          "type": "((args: Partial<DataSourceChangeEventArgs<T>>) => void) | undefined"
+        },
+        {
+          "name": "onRequestStart",
+          "attribute": "onrequeststart",
+          "type": "((args: DataSourceRequestStartEventArgs<T>) => void) | undefined"
+        },
+        {
+          "name": "onRequestEnd",
+          "attribute": "onrequestend",
+          "type": "((args: DataSourceRequestStartEventArgs<T>) => void) | undefined"
+        },
+        {
+          "name": "transport",
+          "type": "Transport | undefined"
+        },
+        {
+          "name": "schema",
+          "type": "Schema<T> | undefined"
+        },
+        {
+          "name": "localData",
+          "type": "T[] | undefined"
+        },
+        {
+          "name": "error",
+          "type": "(() => {}) | undefined"
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "drawer-layout",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "right",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "size",
+          "type": "\"large\" | \"full\"",
+          "default": "\"large\""
+        },
+        {
+          "name": "height",
+          "type": "string | undefined",
+          "default": "\"200px\""
+        },
+        {
+          "name": "scrollEnabled",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "right",
+          "attribute": "right",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "size",
+          "attribute": "size",
+          "type": "\"large\" | \"full\"",
+          "default": "\"large\""
+        },
+        {
+          "name": "height",
+          "attribute": "height",
+          "type": "string | undefined",
+          "default": "\"200px\""
+        },
+        {
+          "name": "scrollEnabled",
+          "attribute": "scrollEnabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "container-content",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "col",
+          "type": "number | undefined",
+          "default": "1"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "col",
+          "attribute": "col",
+          "type": "number | undefined",
+          "default": "1"
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "container-button",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "data-set",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "data-capture",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "data-reset",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "setButton",
+          "attribute": "data-set",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "captureButton",
+          "attribute": "data-capture",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "resetButton",
+          "attribute": "data-reset",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "container-summary",
+      "path": "./src/dews-mobile.ts",
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
         }
       ]
     }

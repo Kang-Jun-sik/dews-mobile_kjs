@@ -34,7 +34,7 @@ export class PickerBase extends DrawerBottomBase {
   protected _modeView: string | undefined;
 
   @internalProperty()
-  protected _mode: 'day' | 'month' | 'year' = 'day';
+  protected _mode: 'day' | 'month' | 'year' | 'week' = 'day';
   @internalProperty()
   protected _nowView: TemplateResult | undefined;
 
@@ -92,6 +92,9 @@ export class PickerBase extends DrawerBottomBase {
       this._beforeView = this._monthPickerView(this._viewYear! - 1);
       this._nowView = this._monthPickerView(this._viewYear!);
       this._afterView = this._monthPickerView(this._viewYear! + 1);
+    } else if (this._mode === 'week') {
+      this._viewYear!++;
+      this._setYear = this._viewYear;
     } else {
       this._beforeView = this._yearPickerView(this._viewYear);
       this._nowView = this._yearPickerView(this._viewYear! + 10);
@@ -127,6 +130,10 @@ export class PickerBase extends DrawerBottomBase {
       this._beforeView = this._monthPickerView(this._viewYear! - 1);
       this._nowView = this._monthPickerView(this._viewYear!);
       this._afterView = this._monthPickerView(this._viewYear! + 1);
+    } else if (this._mode === 'week') {
+      this._viewYear!--;
+      this._setYear = this._viewYear;
+      //
     } else {
       this._beforeView = this._yearPickerView(this._viewYear! - 20);
       this._nowView = this._yearPickerView(this._viewYear! - 10);
@@ -654,22 +661,26 @@ export class PickerBase extends DrawerBottomBase {
 
   private width: number | undefined;
 
-  private _beforeClickHandler() {
+  protected _beforeClickHandler() {
     this._selectRemove();
     this._beforeAnimation();
   }
-  private _afterClickHandler() {
+  protected _afterClickHandler() {
     this._selectRemove();
     this._afterAnimation();
   }
 
   protected _selectRemove() {
-    this.shadowRoot?.querySelectorAll('.select').forEach($el => {
-      $el.classList.remove('select');
+    const $el = this.shadowRoot?.querySelector('.calendar-content')?.firstElementChild?.children.item(1) as HTMLElement;
+    $el.querySelectorAll('.select').forEach($select => {
+      $select.classList.remove('select');
     });
-    this.shadowRoot?.querySelectorAll('.today').forEach($el => {
-      $el.classList.remove('today');
+    $el.querySelectorAll('.select-period').forEach($select => {
+      $select.classList.remove('select-period');
     });
+    $el.querySelector('.select-start')?.classList.remove('select-start');
+    $el.querySelector('.select-end')?.classList.remove('select-end');
+    $el.querySelector('.today')?.classList.remove('today');
   }
   protected _selectChange() {
     this._selectRemove();
@@ -679,9 +690,10 @@ export class PickerBase extends DrawerBottomBase {
     const viewMonthTime = date.getTime(this._viewYear!, this._viewMonth!, 1);
     const checkMonthTime = date.getTime(this._setYear!, this._setMonth!, 1);
     const nowTime = date.getTime(this.toYear, this.toMonth + 1, this.toDay);
+    const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap')?.children[1] as HTMLElement;
     switch (this._mode) {
       case 'day':
-        this.shadowRoot?.querySelectorAll('.day').forEach($el => {
+        $el.querySelectorAll('.day').forEach($el => {
           if (nowTime === date.getTime(this._viewYear!, this._viewMonth!, Number(($el as HTMLElement).dataset.value))) {
             $el.classList.add('today');
           }
@@ -691,14 +703,14 @@ export class PickerBase extends DrawerBottomBase {
         });
         break;
       case 'month':
-        this.shadowRoot?.querySelectorAll('.month').forEach($el => {
+        $el.querySelectorAll('.month').forEach($el => {
           if (Number(($el as HTMLElement).dataset.value) === this._setMonth && viewYearTime === checkYearTime) {
             $el.classList.add('select');
           }
         });
         break;
       case 'year':
-        this.shadowRoot?.querySelectorAll('.year').forEach($el => {
+        $el.querySelectorAll('.year').forEach($el => {
           if (Number(($el as HTMLElement).dataset.value) === this._setYear) {
             $el.classList.add('select');
           }
