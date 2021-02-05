@@ -9,7 +9,7 @@ export const SearchContainer1280 = () => html` <div style="width: 1280px">
   <dews-box title="box">
     <dews-search-container id="con01" title="Search-Container">
       <container-button data-set data-reset data-capture>
-        <dews-button></dews-button>
+        <dews-button title="Btn" text="확정"></dews-button>
       </container-button>
       <container-summary> 요약영역 </container-summary>
       <container-content>
