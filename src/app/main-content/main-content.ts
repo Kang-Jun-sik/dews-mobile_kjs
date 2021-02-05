@@ -26,7 +26,7 @@ export class MainContent extends LitElement {
   async loadPage() {
     if (this.pageId) {
       const pageClass = await import(`/view/MOB/${this.pageId}`);
-      // let pageClass = await import(`../../sample/MA1000/MA1000.js`);
+      // const pageClass = await import(`../../sample/MA1000/MA1000.js`);
       // if (this.pageId === 'MA1001') {
       //   pageClass = await import(`../../sample/MA1001/MA1001.js`);
       // }
