@@ -40,9 +40,6 @@ export class SearchContainer extends DrawerRightBase {
   @query('.dews-snackbar.dataset')
   snackbar: HTMLElement | undefined;
 
-  private _iconList: Array<TemplateResult> = [];
-  private _contentList: Array<TemplateResult> = [];
-
   @internalProperty()
   private _dataSetHeader: Array<TemplateResult> = [];
 
@@ -52,7 +49,7 @@ export class SearchContainer extends DrawerRightBase {
   /**
    * set 버튼 클릭시 처리
    */
-  private _setClick(e?: MouseEvent) {
+  public _setClick() {
     this._renderDataList();
     this._open();
   }
@@ -105,11 +102,12 @@ export class SearchContainer extends DrawerRightBase {
                     </button>
                   </div>
                   <div class="field">
-                    ${data.map(
-                      (item: SearchData) =>
-                        html`<button @click="${(e: any) => this._showToolTip(e.target, item.title)}">
-                          ${item.value}
-                        </button>`
+                    ${data.map((item: SearchData) =>
+                      item.value
+                        ? html`<button @click="${(e: any) => this._showToolTip(e.target, item.title)}">
+                            ${item.value}
+                          </button>`
+                        : html``
                     )}
                   </div>
                 </div>
@@ -146,8 +144,12 @@ export class SearchContainer extends DrawerRightBase {
    * @private
    */
   private _setData(data: SearchData[]) {
-    for (let i = 0; i < this._contentList.length; i++) {
-      const control: any = this._contentList[i].values[0];
+    const fieldList = this.shadowRoot!.querySelector('container-content')?.shadowRoot!.querySelectorAll(
+      '.form-field li'
+    ) as NodeList;
+
+    for (let i = 0; i < fieldList.length; i++) {
+      const control: any = fieldList[i].childNodes[0];
 
       for (let j = 0; j < data.length; j++) {
         if (control.id && control.id === data[j].id) {
@@ -206,9 +208,13 @@ export class SearchContainer extends DrawerRightBase {
    * reset 버튼 클릭시 처리
    *
    */
-  private _resetClick() {
-    for (let i = 0; i < this._contentList.length; i++) {
-      const control: any = this._contentList[i].values[0];
+  public _resetClick() {
+    const fieldList = this.shadowRoot!.querySelector('container-content')?.shadowRoot!.querySelectorAll(
+      '.form-field li'
+    ) as NodeList;
+
+    for (let i = 0; i < fieldList.length; i++) {
+      const control: any = fieldList[i].childNodes[0];
       control.value = '';
     }
   }
@@ -226,8 +232,12 @@ export class SearchContainer extends DrawerRightBase {
    * capture 버튼 클릭시 처리
    * @private
    */
-  private _captureClick() {
+  public _captureClick() {
     const searchData: SearchData[] = [];
+    const fieldList = this.shadowRoot!.querySelector('container-content')?.shadowRoot!.querySelectorAll(
+      '.form-field li'
+    ) as NodeList;
+
     const defalut = {
       userId: userId,
       menuId: menuId,
@@ -252,20 +262,20 @@ export class SearchContainer extends DrawerRightBase {
       dataSetList.push(dataSet);
     }
 
-    for (let i = 0; i < this._contentList.length; i++) {
-      const control: any = this._contentList[i].values[0];
+    for (let i = 0; i < fieldList.length; i++) {
+      const control: any = fieldList[i].childNodes[0];
       const id = control.id || '';
       const value = control.value || '';
       const title = control.title || '';
-      if (id && value) {
-        searchData.push({
-          id: id,
-          title: title,
-          value: value,
-          dateTime: date.format(date.parse(new Date()), 'yyyy-MM-dd HH:mm:ss')
-        });
-        save = true;
-      }
+      // if (id && value) {
+      searchData.push({
+        id: id,
+        title: title,
+        value: value,
+        dateTime: date.format(date.parse(new Date()), 'yyyy-MM-dd HH:mm:ss')
+      });
+      save = true;
+      // }
     }
 
     const count = dataSet.data.unshift(searchData);
@@ -284,56 +294,6 @@ export class SearchContainer extends DrawerRightBase {
         this.snackbar?.classList.add('fadeout');
       }, 2000);
     }
-  }
-
-  /*
-   * capture 버튼 클릭시 처리
-   * */
-
-  private _contentView() {
-    const contentChildLength = this.querySelector('container-content')?.childElementCount;
-    const contentChildItem = this.querySelector('container-content')?.children;
-    if (contentChildLength! <= 0 || contentChildItem == undefined) {
-      return;
-    }
-    for (let i = 0; i < contentChildLength!; i++) {
-      this._contentList.push(html`<li>${contentChildItem.item(i)}</li>`);
-    }
-    // this.querySelector('container-content').remove();
-  }
-
-  private _buttonView() {
-    const setState: boolean | undefined = this.querySelector('container-button')?.hasAttribute('data-set');
-    const captureState: boolean | undefined = this.querySelector('container-button')?.hasAttribute('data-capture');
-    const resetState: boolean | undefined = this.querySelector('container-button')?.hasAttribute('data-reset');
-
-    if (setState) {
-      this._iconList.push(
-        html`<li class="data-set">
-          <button id="drawer" class="set" @click="${this._setClick}">
-            <span>Data Set</span>
-          </button>
-        </li>`
-      );
-    }
-    if (captureState) {
-      this._iconList.push(
-        html`<li class="data-capture">
-          <button class="capture" @click="${this._captureClick}"><span>Data Capture</span></button>
-        </li>`
-      );
-    }
-    if (resetState) {
-      this._iconList.push(
-        html`<li class="data-reset">
-          <button class="reset" @click="${this._resetClick}"><span>Data Reset</span></button>
-        </li>`
-      );
-    }
-  }
-
-  constructor() {
-    super();
   }
 
   private _slotChange(e: Event) {
