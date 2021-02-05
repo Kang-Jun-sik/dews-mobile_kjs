@@ -1,5 +1,5 @@
-@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
-@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+@import '../../../../node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import '../../../../node_modules/@dews/dews-mobile-style/scss/mixins/mixins';
 
 //======================================
 // dews-textbox
@@ -10,5 +10,6 @@
 * {
   @include reset();
 }
+
 @include dews-periodpicker();
 @include dews-drawer-periodpicker();

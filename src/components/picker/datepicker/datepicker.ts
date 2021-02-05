@@ -1,5 +1,5 @@
 import { PickerBase } from '../picker-base.js';
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
+import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './datepicker.html';
 import scss from './datepicker.scss';
@@ -12,6 +12,9 @@ export class Datepicker extends PickerBase {
   _value: string | undefined = '____-__-__';
 
   _mode: 'day' | 'month' | 'year' = 'day';
+
+  @property({ type: String, reflect: true })
+  value: string | undefined;
 
   @internalProperty()
   private $spinnerYear: TemplateResult | undefined;
@@ -28,11 +31,6 @@ export class Datepicker extends PickerBase {
   private monthMaxCheck: boolean | undefined = false;
 
   private changeEvent: Event = new Event('change');
-
-  constructor() {
-    super();
-    this._afterBtnView();
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -300,6 +298,7 @@ export class Datepicker extends PickerBase {
     }
     if (this._value?.indexOf('_')! < 0) {
       this.inputValue = this._value;
+      this.value = `${this.inputValue?.slice(0, 4)}${this.inputValue?.slice(5, 7)}${this.inputValue?.slice(8, 10)}`;
       this._close();
     } else {
       this._close();
@@ -541,6 +540,19 @@ export class Datepicker extends PickerBase {
     } else {
       this._selectChange();
     }
+  }
+
+  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
+    if (_changedProperties.has('value')) {
+      if (this.value !== undefined) {
+        this.inputValue = '';
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__-__';
+      } else {
+        this.inputValue = this.value!.slice(0, 4) + '-' + this.value!.slice(4, 6) + '-' + this.value!.slice(6, 8);
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
+      }
+    }
+    return super.shouldUpdate(_changedProperties);
   }
 
   render() {

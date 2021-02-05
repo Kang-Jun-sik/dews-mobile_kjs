@@ -6,6 +6,11 @@ import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 type EVENT_TYPE = 'open' | 'close';
 
 export class DrawerBottomBase extends DewsFormComponent {
+  constructor() {
+    super();
+    this._afterBtnView();
+  }
+
   @property({ type: Boolean })
   disabled: boolean | undefined = false;
 

@@ -9,7 +9,10 @@ export class Monthpicker extends PickerBase {
   @internalProperty()
   private _value: string | undefined = '____-__';
 
-  _mode: 'month' | 'year' = 'month';
+  @property({ type: String, reflect: true })
+  value: string | undefined;
+
+  public _mode: 'month' | 'year' = 'month';
 
   @internalProperty()
   private $spinnerYear: TemplateResult | undefined;
@@ -238,6 +241,7 @@ export class Monthpicker extends PickerBase {
   _confirmClickHandler = (): void => {
     if (this._value?.indexOf('_')! < 0) {
       this.inputValue = this._value;
+      this.value = `${this.inputValue?.slice(0, 4)}${this.inputValue?.slice(5, 7)}`;
       this._close();
     }
   };
@@ -318,6 +322,19 @@ export class Monthpicker extends PickerBase {
     } else {
       this._selectChange();
     }
+  }
+
+  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
+    if (_changedProperties.has('value')) {
+      if (this.value !== undefined) {
+        this.inputValue = '';
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__';
+      } else {
+        this.inputValue = this.value!.slice(0, 4) + '-' + this.value!.slice(4, 6);
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
+      }
+    }
+    return super.shouldUpdate(_changedProperties);
   }
 
   render() {

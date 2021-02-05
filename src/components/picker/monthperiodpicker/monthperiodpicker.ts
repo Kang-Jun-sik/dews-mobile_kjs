@@ -1,8 +1,8 @@
 import template from './monthperiodpicker.html';
 import scss from './monthperiodpicker.scss';
 import { internalProperty, property, PropertyValues } from 'lit-element';
-import { PickerBase } from '../picker/picker-base.js';
-import { DateUtill } from '../base/DateUtill.js';
+import { PickerBase } from '../picker-base.js';
+import { DateUtill } from '../../base/DateUtill.js';
 
 export class Monthperiodpicker extends PickerBase {
   static styles = scss;
