@@ -736,8 +736,9 @@
   ${this._controlSetElement}
   ${this._allSelectElement}
   <div class="cardlist-wrap">
-    <div class="cardlist" style="height: ${this.height}">
+    <div class="cardlist${this._columnTypeClass}${this._cardCollapseClass}" style="height: ${this.height}">
       ${this._cardListElement}
+      ${this._moreButtonElement}
     </div>
   </div>
 </div>

@@ -11,6 +11,7 @@ import { DataSource, ObservableArrayItem } from '../datasource/dews-datasource.j
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+// 카드리스트 필드 타입
 export type CardlistField = {
   name?: string;
   field?: string;
@@ -28,15 +29,23 @@ export type CardlistField = {
   _displayIndex: number;
 };
 
+// 카드리스트 옵션 타입
 type CardListOptionsType = {
   _columnType: '1' | '2';
   _useCardCollapse: boolean;
   _cardFixedFieldCount: number;
   _useHeader: boolean;
   _headerOptions: CardHeaderType;
-  _controlOptions: any;
+  _controlOptions: CardControlType;
 };
 
+// 카드 컨트롤 타입
+type CardControlType = {
+  useSortSet: boolean;
+  useColumnSet: boolean;
+};
+
+// 카드 헤더 타입
 type CardHeaderType = {
   headerTitleField: string;
   firstSubTitleField?: string;
@@ -45,8 +54,10 @@ type CardHeaderType = {
   useBookmark?: boolean;
   useCheckbox?: boolean;
   status?: CardStatusType;
+  statusField?: string;
 };
 
+// 카드 태그 상태 타입
 type CardStatusType = 'complete' | 'standby' | 'progress' | 'failure' | 'closing';
 
 enum CardStatus {
@@ -57,6 +68,7 @@ enum CardStatus {
   closing = '종결'
 }
 
+// 카드리스트 필드들 타입
 type CardlistFields = { [key: string]: CardlistField };
 
 export class Cardlist<T extends object> extends DewsFormComponent {
@@ -76,10 +88,12 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   headerOptions = null;
 
   link = false;
+  // 페이징 사용 여부
   @property({ type: Boolean, attribute: 'use-paging' })
   usePaging = false;
-  pageCount = 20;
-
+  // 페이지 개수
+  @property({ type: Number, attribute: 'paging-count' })
+  pagingCount = 20;
   // 편의 기능 사용 여부
   @property({ type: Boolean, attribute: 'use-control-set' })
   useControl = false;
@@ -127,9 +141,17 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 편의 기능 요소
   @internalProperty()
   private _controlSetElement?: TemplateResult | null;
+  @internalProperty()
+  private _moreButtonElement?: TemplateResult | null;
   // 카드리스트 데이터
   @internalProperty()
   private _cardData: ObservableArrayItem<T>[] = [];
+  // 컬럼 타입 클래스
+  @internalProperty()
+  private _columnTypeClass: string = ''.toString();
+  // 카드 접기/펴기 클래스
+  @internalProperty()
+  private _cardCollapseClass: string = ''.toString();
 
   constructor() {
     super();
@@ -153,6 +175,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _allSelectCheckboxElement?: TemplateResult | null;
   // 데이터 없을 경우 출력 요소
   private _noDataElement?: TemplateResult | null;
+  // 내부 옵션
   private _options: CardListOptionsType = {
     _columnType: '1',
     _useCardCollapse: false,
@@ -161,14 +184,21 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     _headerOptions: {
       headerTitleField: ''
     },
-    _controlOptions: {}
+    _controlOptions: {
+      useColumnSet: true,
+      useSortSet: true
+    }
   };
+  // 데이터소스 객체
   private _datasource?: DataSource<T>;
   // 카드리스트 체크 카드 개수
   private _checkCount = 0;
+  // 페이징 옵션
+  private _paging: any;
 
   // endregion
 
+  // 초기화 함수
   private _initOptions() {
     const cardlistElement = this.querySelector('.cardlist');
 
@@ -259,12 +289,14 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
     if (this._options._columnType === '2') {
       cardlistElement?.classList.add('col2');
+      this._columnTypeClass = ' col2';
     }
 
     if (this.useCardCollapse) {
       this._options._useCardCollapse = true;
       this._options._cardFixedFieldCount = this.cardFixedFieldCount | 1;
       cardlistElement?.classList.add('card-collapse');
+      this._cardCollapseClass = ' card-collapse';
     }
 
     if (this.useHeader) {
@@ -281,6 +313,10 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       this._options._headerOptions = headerOpt;
     }
 
+    this._initDatasource();
+  }
+
+  private _initDatasource() {
     if (dews.app.main) {
       this._datasource = dews.app.main.currentPage?.getDataSource(this.datasource) as DataSource<T> | undefined;
     } else {
@@ -288,14 +324,60 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
 
     if (this._datasource) {
-      this._datasource.on('requestEnd', () => {
-        this._cardData = this._datasource!.data() || [];
+      if (this.usePaging) {
+        this._paging = {
+          _use: true,
+          _pagingStart: 0,
+          _pagingCount: this.pagingCount,
+          _current: 0,
+          _total: undefined
+        };
+        this._datasource.paging = true;
+        this._datasource.pagingStart = this._paging._pagingStart;
+        this._datasource.pagingCount = this.pagingCount;
+      }
+
+      this._datasource.on('requestEnd', (e: any) => {
+        console.log('requestEnd', e);
+        if (this.usePaging) {
+          if (e.response.total) {
+            this._paging._total = e.response.total;
+          }
+          if (this._paging._total - 1 <= e.response.current) {
+            this._moreButtonElement = null;
+            this._paging = {
+              _use: false,
+              _pagingStart: 0,
+              _pagingCount: this.pagingCount,
+              _current: 0,
+              _total: undefined
+            };
+          } else {
+            this._paging._current = e.response.current;
+            this._datasource!.pagingStart = this._paging._pagingStart = e.response.current + 1;
+            this._createMoreButtonElement();
+          }
+        }
+        if (this.useControl && this.controlOptions.useSortSet) {
+          this._datasource!.sort({ field: this._fieldList[0].field as keyof T });
+          this._cardData = this._datasource!.sortData() || [];
+        } else {
+          this._cardData = this._datasource!.data() || [];
+        }
         this._createCardListElement();
       });
+
       this._datasource.on('change', (e: DataSourceChangeEventArgs<T>) => {
         console.log('datasource change', e);
         if (e.type === 'add' || e.type === 'update' || e.type === 'delete') {
+          if (this.useControl && this.controlOptions.useSortSet) {
+            this._cardData = this._datasource!.sortData() || [];
+          } else {
+            this._cardData = this._datasource!.data() || [];
+          }
           this._cardListElement = this._cardListRepeat(this._cardData);
+        } else if (e.type === 'load') {
+          // aa
         }
       });
     } else {
@@ -336,6 +418,24 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
 
     if (this._options._columnType === '2') this.shadowRoot?.querySelector('.cardlist')?.classList.add('col2');
+  };
+
+  private _moreButtonClickHandler = (e: any) => {
+    this._datasource?.read();
+  };
+
+  private _createMoreButtonElement = () => {
+    const nowCount = this._paging?._pagingStart;
+    const totalCount = this._paging?._total;
+
+    this._moreButtonElement = html`
+      <div class="more-button-wrap">
+        <button class="more-button" @click="${this._moreButtonClickHandler}">
+          <span class="text">더보기</span>
+          <span class="count"> (<span class="now">${nowCount}</span>/<span class="total">${totalCount}</span>) </span>
+        </button>
+      </div>
+    `;
   };
 
   private _sortingSetTouchEvent = () => {
@@ -451,7 +551,8 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     const liElements: any = [];
     let collapseElement: TemplateResult | null = null;
     const opt: CardListOptionsType = this._options;
-    const status: CardStatusType | undefined = opt._headerOptions?.status;
+    const status: CardStatusType | undefined =
+      data[opt._headerOptions.statusField as keyof T] || opt._headerOptions?.status;
 
     if (opt._useCardCollapse) {
       collapseElement = html`<button class="collapse-button" @click="${this._collapseButtonClickHandler}"></button>`;
@@ -537,7 +638,12 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       }
     }
 
-    return html`<div class="card card-${index}" .cardIndex="${index}" @click="${this._cardClickHandler}">
+    return html`<div
+      class="card card-${index}"
+      .cardIndex="${index}"
+      .data="${data}"
+      @click="${this._cardClickHandler}"
+    >
       ${headerElement}
       <ul class="list-field">
         ${liElements}
@@ -560,7 +666,10 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   };
 
   private _createControlElement = () => {
-    this._controlElement = html` <div class="option-control">${this._sortElement} ${this._columnSetElement}</div> `;
+    this._controlElement =
+      this._options._controlOptions.useSortSet || this._options._controlOptions.useColumnSet
+        ? html` <div class="option-control">${this._sortElement} ${this._columnSetElement}</div> `
+        : null;
   };
 
   private _createTotalCardCountElement = () => {
@@ -580,11 +689,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   };
 
   private _createSortElement = () => {
-    this._sortElement = this.controlOptions.useSortSet ? this._sortElement : null;
+    this._sortElement = this._options._controlOptions.useSortSet ? this._sortElement : null;
   };
 
   private _createColumnSetElement = () => {
-    this._columnSetElement = this.controlOptions.useColumnSet ? this._columnSetElement : null;
+    this._columnSetElement = this._options._controlOptions.useColumnSet ? this._columnSetElement : null;
   };
 
   private _createAllSelectCheckboxElement = () => {
@@ -676,6 +785,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
     if (_changedProperties.get('datasource')) {
       // 데이터소스 변경
+      this._initDatasource();
     }
     if (typeof _changedProperties.get('useHeader') === 'boolean') {
       // 카드 헤더 사용 여부
@@ -708,18 +818,23 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
     if (_changedProperties.get('cardFixedFieldCount')) {
       // 접기/펴기 사용 할 경우 접었을 경우 고정 되는 필드 개수
+      if (this.useCardCollapse) {
+        this._createCardListElement();
+      }
     }
     if (_changedProperties.get('useAllSelect')) {
       // 전체 선택 사용 여부
+      this._createAllSelectCheckboxElement();
+      this._createAllSelectElement();
     }
     if (_changedProperties.get('useTotalCount')) {
       // 전체 카드 개수 사용 여부
-    }
-    if (_changedProperties.get('height')) {
-      // 높이
+      this._createTotalCardCountElement();
+      this._createAllSelectElement();
     }
     if (_changedProperties.get('columnType')) {
       // 카드리스트 타입
+      this._createCardListElement();
     }
   }
 
@@ -769,9 +884,20 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
     return this._activeCardElement;
   };
+  private _getCard = (itemIndex: number): Element | undefined | null => {
+    return this.shadowRoot?.querySelector(`.cardlist-wrap > .cardlist > .card-${itemIndex}}`);
+  };
+  private _getDataIndex = (itemIndex: number): number | undefined => {
+    const data: ObservableArrayItem<T> = this._cardData[itemIndex];
+    let dataIndex: number | undefined = undefined;
+    if (data) {
+      dataIndex = this._datasource?._data?.getIndexByUid(data.uid!);
+    }
+    return dataIndex;
+  };
   // 카드 요소
   getCard = (itemIndex: number): Element | undefined | null => {
-    return this.shadowRoot?.querySelector(`.cardlist-wrap > .cardlist > .card-${itemIndex}}`);
+    return this._getCard(itemIndex);
   };
   // 카드 추가
   addCard = (data: T) => {
@@ -779,11 +905,15 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   };
   // 카드 제거
   removeCard = (itemIndex: number) => {
+    if (this.useControl && this.controlOptions.useSortSet) {
+      const dataIndex = this._getDataIndex(itemIndex);
+      if (dataIndex) this._datasource?.delete(dataIndex);
+    }
     this._datasource?.delete(itemIndex);
   };
   // 특정 값 반환
   getValue = (itemIndex: number, field: keyof T) => {
-    return this._datasource?.__data__[itemIndex][field];
+    // return this._datasource?.__data__[itemIndex][field];
   };
   // 특정 값 설정
   setValue = (itemIndex: number, field: keyof T, value: unknown) => {
