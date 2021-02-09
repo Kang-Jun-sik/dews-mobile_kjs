@@ -7,7 +7,7 @@ export default {
 
 export const SearchContainer720 = () => html`<div style="width: 720px">
   <dews-box title="box">
-    <dews-search-container title="Search-Container">
+    <dews-search-container id="search2" title="Search-Container">
       <container-button data-set data-reset data-capture>
         <dews-button title="Btn" text="확정"></dews-button>
       </container-button>
