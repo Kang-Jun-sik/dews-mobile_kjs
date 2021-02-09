@@ -31,7 +31,7 @@ export const CardList = () => html`
     </ds-schema>
   </dews-datasource>
 
-  <div style="width: 360px; height: 3000px;">
+  <div style="width: 360px; height: 500px;">
     <dews-box title="box">
       <dews-cardlist
         height="500px"
