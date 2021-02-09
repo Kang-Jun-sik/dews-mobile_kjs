@@ -68,7 +68,7 @@ import {
   Containersummary,
   Columnsetbutton,
   Columnitem,
-  Monthperiodpicker
+  Monthperiodpicker,
   Codepicker
 } from './components/exports.js';
 

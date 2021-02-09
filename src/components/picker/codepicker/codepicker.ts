@@ -1,15 +1,14 @@
-import { html, internalProperty, property, PropertyValues, query, TemplateResult, LitElement } from 'lit-element';
+import { internalProperty, property, PropertyValues, query } from 'lit-element';
 import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
 
 import template from './codepicker.html';
 import scss from './codepicker.scss';
-import { DewsFormComponent } from '../../base/DewsFormComponent.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
-import { DrawerBottomBase } from '../drawer-bottom-base.js';
+import { PickerBase } from '../picker-base.js';
 
-// noinspection JSUnusedLocalSymbols
+type EVENT = 'setData' | 'change';
 
-export class Codepicker extends DrawerBottomBase {
+export class Codepicker extends PickerBase {
   static styles = scss;
 
   @query('drawer-layout')
@@ -57,9 +56,6 @@ export class Codepicker extends DrawerBottomBase {
   @property({ type: String, attribute: 'data-control-type' })
   dataControlType = 'card';
 
-  // @internalProperty()
-  // private active = false;
-
   @internalProperty()
   private useFilter = true;
 
@@ -102,7 +98,7 @@ export class Codepicker extends DrawerBottomBase {
   @internalProperty()
   private _allCheckState = false;
 
-  private Event = new EventEmitter();
+  _Event: EventEmitter = new EventEmitter();
 
   constructor() {
     super();
@@ -136,16 +132,6 @@ export class Codepicker extends DrawerBottomBase {
     } else {
       data = { code: 'code1', text: 'Single Data' };
     }
-
-    // text = ($selectItem
-    //   ?.item(0)
-    //   ?.parentElement?.querySelector('li > p.item[data-value="' + this.textField + '"]') as HTMLParagraphElement)
-    //   ?.innerHTML;
-    //
-    // code = ($selectItem
-    //   ?.item(0)
-    //   ?.parentElement?.querySelector('li > p.item[data-value="' + this.codeField + '"]') as HTMLParagraphElement)
-    //   ?.innerHTML;
 
     // 카드리스트에서 받아온 데이터로 수정하기
     if (this.multi && this.selectTotal > 1) {
@@ -192,14 +178,6 @@ export class Codepicker extends DrawerBottomBase {
     });
   }
 
-  private _focus() {
-    this.shadowRoot!.querySelector('.select-wrap')?.classList.add('focus');
-  }
-
-  private _blur() {
-    this.shadowRoot!.querySelector('.select-wrap')?.classList.remove('focus');
-  }
-
   private _createSearchContainer() {
     // 일단 이렇게 받아온다 가정
     const htmlString =
@@ -212,11 +190,12 @@ export class Codepicker extends DrawerBottomBase {
       '              </li>\n' +
       '              <li>\n' +
       '                <label for="">거래처명</label>\n' +
-      '                <dews-textbox id="tb"></dews-textbox>\n' +
+      '                <dews-numerictextbox id="ntb"></dews-numerictextbox>\n' +
       '              </li>' +
       '              <li>\n' +
       '                <label for="">등록</label>\n' +
-      '                <dews-datepicker id="dp"></dews-datepicker>\n' +
+      '                  <dews-masktextbox id="masktbx3" type="text" placeholder="hint" title="LL-00" mask="LL-00">' +
+      '                   </dews-masktextbox>\n' +
       '              </li>';
 
     const parser = new DOMParser(),
@@ -239,7 +218,7 @@ export class Codepicker extends DrawerBottomBase {
   }
 
   private _searchKeywordEnter(e: KeyboardEvent) {
-    const $searchButton = this._drawerLayout!.querySelector('.search-button') as HTMLElement;
+    const $searchButton = this._drawerLayout?.querySelector('.search-button') as HTMLElement;
 
     // if (e.key === 'Enter') {
     //   $searchButton?.click();
@@ -263,16 +242,19 @@ export class Codepicker extends DrawerBottomBase {
   // 내부 컴포넌트의 change가 발생하면 서치폼의 change가 발생하면서 컴포넌트들의 validate를 체크
   // 듀스 컨트롤 찾아서 거기서 validate가 하나라도 true 이면 state를 on 으로 변경
   private _searchFormState() {
-    const searchFormField = this._drawerLayout!.querySelector('.code-filter-field ul');
+    const searchFormField = this._drawerLayout?.querySelector('.code-filter-field ul');
 
     // console.log(searchFormField!.querySelectorAll('[tagName^="dews-"]')); // 방법 찾기 (tag 명으로 하위 컴포넌트들 찾기)
     // console.log(searchFormField!.querySelectorAll('*[id]')); // 방법 찾기 (tag 명으로 하위 컴포넌트들 찾기)
+    // const formControls = searchFormField?.querySelectorAll('dews-dropdownlist,dews-numerictextbox,dews-datepicker');
     const formControls = searchFormField?.querySelectorAll('dews-dropdownlist, dews-numerictextbox');
 
     formControls?.forEach(item => {
-      item.addEventListener('change', () => {
-        const instance = item as any;
+      const instance = item as any;
+
+      instance.on('change', () => {
         this.formState = !!instance.value;
+        console.log('state: ', this.formState);
       });
     });
   }
@@ -287,15 +269,15 @@ export class Codepicker extends DrawerBottomBase {
     console.log('triggerCodeDialog');
   }
 
-  // 이벤트 등록
-  public on(key: 'setData', handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.Event.on(key, handler);
-  }
-
-  // 이벤트 삭제
-  public off(key: 'setData', handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.Event.off(key, handler);
-  }
+  // // 이벤트 등록
+  // public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+  //   this._Event.on(key, handler);
+  // }
+  //
+  // // 이벤트 삭제
+  // public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
+  //   this._Event.off(key, handler);
+  // }
 
   /**
    * 코드피커에 코드와 텍스트를 설정합니다.
@@ -346,7 +328,7 @@ export class Codepicker extends DrawerBottomBase {
     }
 
     if (selected) {
-      this.Event.emit('setData', { type: 'setData', target: this, data: selected });
+      this._Event.emit('setData', { type: 'setData', target: this, data: selected });
     }
   }
 
@@ -391,6 +373,18 @@ export class Codepicker extends DrawerBottomBase {
     console.log('firstUpdated');
     this._drawerLayout?.addEventListener('blur', this._close);
 
+    const cardList = this.querySelector('dews-cardlist') as HTMLElement;
+
+    cardList?.setAttribute('use-total-count', 'true');
+    cardList?.setAttribute('auto-bind', 'true');
+
+    if (this.multi) {
+      cardList?.setAttribute('use-all-select', 'true');
+    }
+
+    this._drawerLayout?.querySelector('.cardlist-wrap')?.append(cardList);
+    // cardList.shadowRoot!.querySelector('.cardlist')?.classList.add('dews-cardlist codepicker');
+
     if (this.useFilter) {
       this._searchFormState();
     }
@@ -400,6 +394,7 @@ export class Codepicker extends DrawerBottomBase {
 
   protected updated(_changedProperties: PropertyValues) {
     console.log('updated');
+
     super.updated(_changedProperties);
 
     // _changedProperties.forEach((oldValue, propName) => {
