@@ -1,10 +1,9 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './cardlist.html';
 import scss from './cardlist.scss';
-import { property, PropertyValues, html, TemplateResult, internalProperty } from 'lit-element';
+import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { Checkbox } from '../checkbox/checkbox.js';
 import { Card } from './card.js';
-import { type } from 'os';
 
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -414,7 +413,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     const liElements: any = [];
     let collapseElement: TemplateResult | null = null;
     const opt = this._options;
-    const status: CardStatusType = opt._headerOptions.status;
+    const status: CardStatusType = 'complete';
+
+    opt._useHeader = true;
+    opt._headerOptions = {};
+    opt._headerOptions.useCheckbox = true;
 
     if (opt._useCardCollapse) {
       collapseElement = html`<button class="collapse-button" @click="${this._collapseButtonClickHandler}"></button>`;
