@@ -9,9 +9,6 @@ export class FormSection extends DewsLayoutComponent {
 
   constructor() {
     super();
-    for (let i = 0; i < this.childElementCount; i++) {
-      this._inputList.push(html`<li>${this.children.item(i)}</li>`);
-    }
   }
 
   @property({ type: String })
@@ -29,5 +26,13 @@ export class FormSection extends DewsLayoutComponent {
   }
   render() {
     return template.call(this);
+  }
+
+  private _slotChange(e: Event) {
+    Array.from(this.children).forEach($el => {
+      const li = document.createElement('li');
+      li.appendChild($el as HTMLElement);
+      this.shadowRoot?.querySelector('.form-field')?.appendChild(li);
+    });
   }
 }
