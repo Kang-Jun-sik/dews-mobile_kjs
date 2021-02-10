@@ -17,8 +17,8 @@ export const CardList = () => html`
     }}"
   >
     <ds-transport>
-      <ds-transport-read url="http://10.106.5.36:3030/api/baseData1" type="post"></ds-transport-read>
-      <ds-transport-save url="http://10.106.5.36:3030/api/batchSave"></ds-transport-save>
+      <ds-transport-read url="http://10.106.4.144:3000/api/baseData" type="post"></ds-transport-read>
+      <ds-transport-save url="http://10.106.4.144:3000/api/batchSave"></ds-transport-save>
     </ds-transport>
     <ds-schema>
       <ds-schema-model id-fields="emp_id, name">
@@ -58,21 +58,21 @@ export const CardList = () => html`
         <cardlist-field name="address" field="address" title="주소"></cardlist-field>
         <cardlist-field name="emp_id" field="emp_id" title="사번"></cardlist-field>
         <cardlist-field name="birth" field="birth" title="생일"></cardlist-field>
-        <cardlist-field name="gender" field="gender" title="성별"></cardlist-field>
-        <cardlist-field name="hobby" field="hobby" title="취미"></cardlist-field>
-        <cardlist-field name="job" field="job" title="직업"></cardlist-field>
-        <cardlist-field name="height" field="height" title="신장"></cardlist-field>
-        <cardlist-field name="dept" field="dept" title="부서"></cardlist-field>
-        <cardlist-field name="team" field="team" title="팀"></cardlist-field>
-        <cardlist-field name="position" field="position" title="직급"></cardlist-field>
-        <cardlist-field name="id" field="id" title="아이디"></cardlist-field>
-        <cardlist-field name="telephone" field="telephone" title="전화번호"></cardlist-field>
-        <cardlist-field name="company" field="company" title="회사명"></cardlist-field>
-        <cardlist-field name="vacation" field="vacation" title="휴가일수"></cardlist-field>
-        <cardlist-field name="test" field="test" title="test"></cardlist-field>
-        <cardlist-field name="test2" field="test2" title="test2"></cardlist-field>
-        <cardlist-field name="test3" field="test3" title="test3"></cardlist-field>
-        <cardlist-field name="test4" field="test4" title="test4"></cardlist-field>
+        <!--        <cardlist-field name="gender" field="gender" title="성별"></cardlist-field>-->
+        <!--        <cardlist-field name="hobby" field="hobby" title="취미"></cardlist-field>-->
+        <!--        <cardlist-field name="job" field="job" title="직업"></cardlist-field>-->
+        <!--        <cardlist-field name="height" field="height" title="신장"></cardlist-field>-->
+        <!--        <cardlist-field name="dept" field="dept" title="부서"></cardlist-field>-->
+        <!--        <cardlist-field name="team" field="team" title="팀"></cardlist-field>-->
+        <!--        <cardlist-field name="position" field="position" title="직급"></cardlist-field>-->
+        <!--        <cardlist-field name="id" field="id" title="아이디"></cardlist-field>-->
+        <!--        <cardlist-field name="telephone" field="telephone" title="전화번호"></cardlist-field>-->
+        <!--        <cardlist-field name="company" field="company" title="회사명"></cardlist-field>-->
+        <!--        <cardlist-field name="vacation" field="vacation" title="휴가일수"></cardlist-field>-->
+        <!--        <cardlist-field name="test" field="test" title="test"></cardlist-field>-->
+        <!--        <cardlist-field name="test2" field="test2" title="test2"></cardlist-field>-->
+        <!--        <cardlist-field name="test3" field="test3" title="test3"></cardlist-field>-->
+        <!--        <cardlist-field name="test4" field="test4" title="test4"></cardlist-field>-->
       </dews-cardlist>
     </dews-box>
   </div>

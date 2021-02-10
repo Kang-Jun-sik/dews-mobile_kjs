@@ -17,8 +17,8 @@ export const Datasource = () => html`
     }}"
   >
     <ds-transport>
-      <ds-transport-read url="http://0.0.0.0:3030/api/baseData" type="post"></ds-transport-read>
-      <ds-transport-save url="http://0.0.0.0:3030/api/batchSave"></ds-transport-save>
+      <ds-transport-read url="http://0.0.0.0:3000/api/baseData" type="post"></ds-transport-read>
+      <ds-transport-save url="http://0.0.0.0:3000/api/batchSave"></ds-transport-save>
     </ds-transport>
     <ds-schema>
       <ds-schema-model id-fields="emp_id, name">

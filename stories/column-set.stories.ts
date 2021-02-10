@@ -13,8 +13,8 @@ export const ColumnSet = () => html`<div style="width: 360px">
     }}"
   >
     <ds-transport>
-      <ds-transport-read url="http://localhost:3030/api/baseData" type="post"></ds-transport-read>
-      <ds-transport-save url="http://localhost:3030/api/batchSave"></ds-transport-save>
+      <ds-transport-read url="http://localhost:3000/api/baseData" type="post"></ds-transport-read>
+      <ds-transport-save url="http://localhost:3000/api/batchSave"></ds-transport-save>
     </ds-transport>
     <ds-schema>
       <ds-schema-model id-fields="emp_id, name">
