@@ -6,6 +6,7 @@ import { Checkbox } from '../checkbox/checkbox.js';
 import { repeat } from 'lit-html/directives/repeat';
 import { DataSourceChangeEventArgs } from '../datasource/Event.js';
 import { DataSource, ObservableArrayItem } from '../datasource/dews-datasource.js';
+import { SortType } from '../datasource/Sort.js';
 
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -195,6 +196,14 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _checkCount = 0;
   // 페이징 옵션
   private _paging: any;
+  // 카드리스트 정렬 touch 위치 값
+  private _startPoint: number | undefined;
+  // 카드리스트 정렬 layer 활성화 여부
+  private _sortActive = false;
+  // 카드리스트 정렬 기능 테스트용
+  private _sortObj: SortType<any> = {
+    field: ''
+  };
 
   // endregion
 
@@ -215,72 +224,36 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
     this._columnSetElement = html` <button class="column-set"><span>Column Set</span></button> `;
 
+    if (this._fieldList?.length > 0 && this._fieldList[0].field !== undefined) {
+      this._sortObj.field = this._fieldList[0].field;
+      this._sortObj.dir = 'desc';
+    }
+
+    // 카드리스트 정렬 기능 drawer-layout 영역
     this._sortElement = html`
       <span id="sorting-set" class="sorting-wrap" @click="${this._sortingSetTouchEvent}">
         <span class="sorting-order"></span>
         <span class="sorting-input"></span>
         <span class="sorting-icon"></span>
       </span>
-      <drawer-layout class="sort-drawer-layout" height="500px">
+      <drawer-layout class="sort-drawer-layout" height="500px" scrollEnabled>
         <div class="sorting-list">
           <div class="titlebar">
             <div class="title">항목명</div>
-            <button class="confirm-button">적용</button>
+            <button class="confirm-button" @click="${this._sortingConfirmTouchEvent}">적용</button>
           </div>
-          <div class="control">
+          <div class="control" @touchstart="${this._touchStart}" @touchmove="${this._touchMove}">
             <ul class="list">
-              <li class="sorting ascending">
-                <span class="text">DATA 01</span>
-              </li>
-              <li>
-                <span class="text"
-                  >데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.
-                  데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.</span
-                >
-              </li>
-              <li>
-                <span class="text">DATA 02</span>
-              </li>
-              <li>
-                <span class="text">DATA 03</span>
-              </li>
-              <li>
-                <span class="text">DATA 04</span>
-              </li>
-              <li>
-                <span class="text">DATA 05</span>
-              </li>
-              <li>
-                <span class="text">DATA 06</span>
-              </li>
-              <li>
-                <span class="text">DATA 07</span>
-              </li>
-              <li>
-                <span class="text">DATA 08</span>
-              </li>
-              <li>
-                <span class="text">DATA 09</span>
-              </li>
-              <li>
-                <span class="text">DATA 10</span>
-              </li>
-              <li>
-                <span class="text">DATA 11</span>
-              </li>
-              <li>
-                <span class="text">DATA 12</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
+              ${this._fieldList.map(
+                (field, index) =>
+                  html`<li class="${index === 0 ? 'sorting' : ''}" @click="${
+                    this._clickSortingItem
+                  }"><span class="text">${field.field}</span></span></li>`
+              )}
             </ul>
           </div>
         </div>
       </drawer-layout>
-      <!--      <dews-dropdownlist class="sort-drawer-layout" title="정렬">-->
-      <!--        <dropdownlist-item title="TEST"></dropdownlist-item>-->
-      <!--      </dews-dropdownlist>-->
     `;
 
     this._noDataElement = html` <div class="card-nodata"><span>조회된 내역이 없습니다.</span></div> `;
@@ -438,21 +411,91 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     `;
   };
 
-  private _sortingSetTouchEvent = () => {
+  // 정렬 버튼 클릭 시 drawer-layout 활성화
+  private _sortingSetTouchEvent = (e: TouchEvent) => {
     const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
-    const active = !sortDrawerLayout?.getAttribute('active');
-
-    // sortDrawerLayout.$itemList.push((html `
-    //   <dropdownlist-item title="TEST"></dropdownlist-item>
-    // `));
-    //
-    // sortDrawerLayout.render();
-    //
-    // sortDrawerLayout.active = true;
-
-    // sortDrawerLayout.active = active;
-    sortDrawerLayout?.setAttribute('active', String(active));
+    if (!this._sortActive) {
+      e.stopPropagation(); // 처음 열었을 때 drawer-layout 이 닫히지 않게 하기 위해 추가
+      this._sortActive = true;
+      sortDrawerLayout?.setAttribute('active', String(this._sortActive));
+      document.addEventListener('click', this._addEvent);
+    } else {
+      sortDrawerLayout?.setAttribute('active', String(!this._sortActive));
+      this._close();
+    }
   };
+
+  // 정렬 drawer-layout 에서 적용 버튼 클릭 시
+  private _sortingConfirmTouchEvent = () => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+
+    const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
+
+    this._sortObj.field = sortingItem.innerText;
+    this._sortObj.dir = sortingItem.classList.contains('ascending') ? 'asc' : 'desc';
+    this._close();
+
+    this._datasource!.sort(this._sortObj);
+    this._cardData = this._datasource!.sortData() || [];
+
+    this._cardListElement = this._cardListRepeat(this._cardData);
+  };
+
+  // 정렬 drawer-layout 에서 필드 값 클릭 시
+  private _clickSortingItem = (e: Event) => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+    let target: HTMLElement = e.target as HTMLElement;
+    if (target?.tagName === 'SPAN') {
+      target = target.parentElement as HTMLElement;
+    }
+    if (target.classList.contains('sorting')) {
+      target.classList.contains('ascending') ? target.classList.remove('ascending') : target.classList.add('ascending');
+    } else {
+      const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
+      sortingItem !== null ? sortingItem.classList.remove('sorting') : '';
+      sortingItem?.classList.contains('ascending') ? sortingItem?.classList.remove('ascending') : '';
+      target.classList.add('sorting');
+    }
+  };
+
+  // 정렬 drawer-layout 이 활성화되어있을 때 다른 영역 클릭 시 닫힐 수 있게
+  private _domClickHandler(e: MouseEvent) {
+    if (e.isTrusted) {
+      if (
+        e.clientY <
+        window.innerHeight -
+          this.shadowRoot!.querySelector('.sort-drawer-layout')?.shadowRoot!.querySelector('.layer-bottom')
+            ?.clientHeight!
+      ) {
+        if (!this._sortActive) {
+          return;
+        } else {
+          this._close();
+        }
+      }
+    }
+  }
+
+  private _addEvent = this._domClickHandler.bind(this);
+
+  // 정렬 drawer-layout 닫기
+  private _close = () => {
+    this._sortActive = false;
+    document.removeEventListener('click', this._addEvent);
+    this.shadowRoot?.querySelector('.sort-drawer-layout')?.removeAttribute('active');
+  };
+
+  // 정렬 drawer-layout 스크롤링
+  private _touchMove(e: any) {
+    // e.passive = true;
+    // e.capture = true;
+    e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
+  }
+
+  // 정렬 drawer-layout 스크롤링
+  private _touchStart(e: any) {
+    this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
+  }
 
   private _cardClickHandler(e: any) {
     let cardElement;
