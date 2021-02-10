@@ -211,7 +211,19 @@ export class Containerbutton extends DrawerRightBase {
 
       for (let j = 0; j < data.length; j++) {
         if (control.id && control.id === data[j].id) {
-          control.value = data[j].value;
+          switch (control.tagName) {
+            case 'DEWS-PERIODPICKER':
+            case 'DEWS-WEEKPERIODPICKER':
+            case 'DEWS-MONTHPERIODPICKER':
+              {
+                const strArr = data[j].value.split('~');
+                control.startDate = strArr[0];
+                control.endDate = strArr[1];
+              }
+              break;
+            default:
+              control.value = data[j].value;
+          }
         }
       }
     }
@@ -269,7 +281,18 @@ export class Containerbutton extends DrawerRightBase {
   public _resetClick() {
     for (let i = 0; i < this.contentList.length; i++) {
       const control: any = this.contentList[i];
-      control.value = '';
+      switch (control.tagName) {
+        case 'DEWS-PERIODPICKER':
+        case 'DEWS-WEEKPERIODPICKER':
+        case 'DEWS-MONTHPERIODPICKER':
+          {
+            // control.startDate = '';
+            // control.endDate = '';
+          }
+          break;
+        default:
+          control.value = '';
+      }
     }
   }
 
@@ -316,8 +339,20 @@ export class Containerbutton extends DrawerRightBase {
     for (let i = 0; i < this.contentList.length; i++) {
       const control: any = this.contentList[i];
       const id = control.id || '';
-      const value = control.value || '';
       const title = control.title || '';
+      let value = '';
+      switch (control.tagName) {
+        case 'DEWS-PERIODPICKER':
+        case 'DEWS-WEEKPERIODPICKER':
+        case 'DEWS-MONTHPERIODPICKER':
+          if (control.startDate && control.endDate) {
+            value = control.startDate + '~' + control.endDate;
+          }
+          break;
+        default:
+          value = control.value || '';
+      }
+
       // if (id && value) {
       searchData.push({
         id: id,
