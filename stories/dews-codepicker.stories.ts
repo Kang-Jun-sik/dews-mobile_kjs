@@ -36,18 +36,31 @@ export const Codepicker = () => html`<div style="width: 360px">
     text-field="name"
   >
     <!--auto-bind use-total-count use-all-select column-type="1"-->
-    <dews-cardlist datasource="datasource1" height="430px">
+    <dews-cardlist datasource="datasource1">
       <cardlist-field name="name" field="name" title="이름"></cardlist-field>
       <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
       <cardlist-field name="address" field="address" title="주소"></cardlist-field>
     </dews-cardlist>
   </dews-codepicker>
 
-  <dews-codepicker multi title="멀티" help-title="사원 코드 도움창" code-field="code" text-field="text">
-    <dews-cardlist datasource="datasource1" height="430px">
+  <dews-codepicker
+    multi
+    title="멀티"
+    help-title="사원 코드 도움창"
+    code-field="code"
+    text-field="text"
+    use-card-header
+    header-options=${JSON.stringify({
+      headerTitleField: 'age',
+      firstSubTitleField: 'name',
+      useCheckbox: true,
+      status: 'complete'
+    })}
+  >
+    <dews-cardlist datasource="datasource1">
       <cardlist-field name="name" field="name" title="이름"></cardlist-field>
-      <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
       <cardlist-field name="address" field="address" title="주소"></cardlist-field>
+      <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
     </dews-cardlist>
   </dews-codepicker>
 </div>`;

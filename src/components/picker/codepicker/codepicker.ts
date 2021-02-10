@@ -5,6 +5,7 @@ import template from './codepicker.html';
 import scss from './codepicker.scss';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 import { PickerBase } from '../picker-base.js';
+import { Cardlist } from '../../cardlist/dews-cardlist.js';
 
 type EVENT = 'setData' | 'change';
 
@@ -373,17 +374,19 @@ export class Codepicker extends PickerBase {
     console.log('firstUpdated');
     this._drawerLayout?.addEventListener('blur', this._close);
 
-    const cardList = this.querySelector('dews-cardlist') as HTMLElement;
+    if (this.dataControlType == 'card') {
+      const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
+      cardList!.autoBind = true;
+      cardList!.useTotalCount = true;
+      cardList!.height = '430px';
+      cardList!.setAttribute('codepicker', ''); // 코드피커 내에서 사용하는 카드리스트의 경우 codepicker 추가함
 
-    cardList?.setAttribute('use-total-count', 'true');
-    cardList?.setAttribute('auto-bind', 'true');
+      if (this.multi) {
+        cardList!.useAllSelect = true;
+      }
 
-    if (this.multi) {
-      cardList?.setAttribute('use-all-select', 'true');
+      this._drawerLayout?.querySelector('.cardlist-wrap')?.append(cardList);
     }
-
-    this._drawerLayout?.querySelector('.cardlist-wrap')?.append(cardList);
-    // cardList.shadowRoot!.querySelector('.cardlist')?.classList.add('dews-cardlist codepicker');
 
     if (this.useFilter) {
       this._searchFormState();
@@ -397,6 +400,12 @@ export class Codepicker extends PickerBase {
 
     super.updated(_changedProperties);
 
+    this.updateComplete.then(() => {
+      const cardList = this.shadowRoot!.querySelector('dews-cardlist') as HTMLElement;
+
+      cardList.shadowRoot!.querySelector('li');
+    });
+
     // _changedProperties.forEach((oldValue, propName) => {
     //   if (propName === 'searchFormList') {
     //     this.updateComplete.then(() => {
@@ -408,6 +417,8 @@ export class Codepicker extends PickerBase {
     //   }
     // });
   }
+
+  // protected updateComplete;
 
   render() {
     console.log('render');
