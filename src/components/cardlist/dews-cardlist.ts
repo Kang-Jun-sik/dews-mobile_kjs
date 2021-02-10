@@ -6,6 +6,7 @@ import { Checkbox } from '../checkbox/checkbox.js';
 import { repeat } from 'lit-html/directives/repeat';
 import { DataSourceChangeEventArgs } from '../datasource/Event.js';
 import { DataSource, ObservableArrayItem } from '../datasource/dews-datasource.js';
+import { SortType } from '../datasource/Sort.js';
 
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -195,6 +196,13 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _checkCount = 0;
   // 페이징 옵션
   private _paging: any;
+  // 카드리스트 정렬 touch 위치 값
+  private _startPoint: number | undefined;
+  // 카드리스트 정렬 기능 테스트용
+
+  private _sortObj: SortType<any> = {
+    field: ''
+  };
 
   // endregion
 
@@ -215,24 +223,36 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
     this._columnSetElement = html` <button class="column-set"><span>Column Set</span></button> `;
 
+    if (this._fieldList?.length > 0 && this._fieldList[0].field !== undefined) {
+      this._sortObj.field = this._fieldList[0].field;
+      this._sortObj.dir = 'desc';
+    }
+
+    // 카드리스트 정렬 기능 drawer-layout 영역
     this._sortElement = html`
       <span id="sorting-set" class="sorting-wrap" @click="${this._sortingSetTouchEvent}">
         <span class="sorting-order"></span>
         <span class="sorting-input"></span>
         <span class="sorting-icon"></span>
       </span>
-      <drawer-layout class="sort-drawer-layout" height="500px">
+      <drawer-layout class="sort-drawer-layout" height="500px" scrollEnabled>
         <div class="sorting-list">
           <div class="titlebar">
             <div class="title">항목명</div>
-            <button class="confirm-button">적용</button>
+            <button class="confirm-button" @click="${this._sortingConfirmTouchEvent}">적용</button>
           </div>
-          <div class="control">
+          <div class="control" @touchstart="${this._touchStart}" @touchmove="${this._touchMove}">
             <ul class="list">
-              <li class="sorting ascending">
-                <span class="text">DATA 01</span>
-              </li>
+              <!--${this._fieldList.map(
+                (field, index) =>
+                  html`<li class="${index === 0 ? 'sorting' : ''}" @click="${
+                    this._clickSortingItem
+                  }"><span class="text">${field.field}</span></span></li>`
+              )}-->
               <li>
+                <span class="text">ㅁㅁ</span>
+              </li>
+              <li class="sorting ascending">
                 <span class="text"
                   >데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.
                   데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.</span
@@ -274,13 +294,40 @@ export class Cardlist<T extends object> extends DewsFormComponent {
               <li>
                 <span class="text">DATA 13</span>
               </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
+              <li>
+                <span class="text">DATA 13</span>
+              </li>
             </ul>
           </div>
         </div>
       </drawer-layout>
-      <!--      <dews-dropdownlist class="sort-drawer-layout" title="정렬">-->
-      <!--        <dropdownlist-item title="TEST"></dropdownlist-item>-->
-      <!--      </dews-dropdownlist>-->
     `;
 
     this._noDataElement = html` <div class="card-nodata"><span>조회된 내역이 없습니다.</span></div> `;
@@ -368,7 +415,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       });
 
       this._datasource.on('change', (e: DataSourceChangeEventArgs<T>) => {
-        console.log('datasource change', e);
+        // console.log('datasource change', e);
         if (e.type === 'add' || e.type === 'update' || e.type === 'delete') {
           if (this.useControl && this.controlOptions.useSortSet) {
             this._cardData = this._datasource!.sortData() || [];
@@ -391,14 +438,14 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   private _cardListRepeat = (items: any) => {
     const keyFn = (item: any) => {
-      console.log('keyFn', item);
+      // console.log('keyFn', item);
       return item.uid;
     };
     const itemTemplate = (item: any, index: number) => {
-      console.log('itemTemplate', item, index);
+      // console.log('itemTemplate', item, index);
       return this._createCardElement(item, index);
     };
-    console.log('cardListFn');
+    // console.log('cardListFn');
     return html`${repeat(items, keyFn, itemTemplate)}`;
   };
 
@@ -438,21 +485,56 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     `;
   };
 
+  // 정렬 버튼 클릭 시 drawer-layout 활성화
   private _sortingSetTouchEvent = () => {
     const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
     const active = !sortDrawerLayout?.getAttribute('active');
 
-    // sortDrawerLayout.$itemList.push((html `
-    //   <dropdownlist-item title="TEST"></dropdownlist-item>
-    // `));
-    //
-    // sortDrawerLayout.render();
-    //
-    // sortDrawerLayout.active = true;
-
-    // sortDrawerLayout.active = active;
-    sortDrawerLayout?.setAttribute('active', String(active));
+    active ? sortDrawerLayout?.setAttribute('active', String(active)) : this._close();
   };
+
+  // 정렬 drawer-layout 에서 적용 버튼 클릭 시
+  private _sortingConfirmTouchEvent = () => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+
+    const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
+
+    this._sortObj.field = sortingItem.innerText;
+    this._sortObj.dir = sortingItem.classList.contains('ascending') ? 'asc' : 'desc';
+    this._close();
+  };
+
+  // 정렬 drawer-layout 에서 필드 값 클릭 시
+  private _clickSortingItem = (e: Event) => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+    let target: HTMLElement = e.target as HTMLElement;
+    if (target?.tagName === 'SPAN') {
+      target = target.parentElement as HTMLElement;
+    }
+    if (target.classList.contains('sorting')) {
+      target.classList.contains('ascending') ? target.classList.remove('ascending') : target.classList.add('ascending');
+    } else {
+      const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
+      sortingItem !== null ? sortingItem.classList.remove('sorting') : '';
+      sortingItem?.classList.contains('ascending') ? sortingItem?.classList.remove('ascending') : '';
+      target.classList.add('sorting');
+    }
+    // e.isTrusted && (e.target as HTMLElement).tagName !== 'DEWS-MESSAGEBOX'
+  };
+
+  private _close = () => {
+    this.shadowRoot?.querySelector('.sort-drawer-layout')?.removeAttribute('active');
+  };
+
+  private _touchMove(e: any) {
+    // e.passive = true;
+    // e.capture = true;
+    e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
+  }
+
+  private _touchStart(e: any) {
+    this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
+  }
 
   private _cardClickHandler(e: any) {
     let cardElement;
@@ -497,7 +579,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   }
 
   private _checkClickHandler(e: any) {
-    console.log('check', e);
+    // console.log('check', e);
     const checkbox: Checkbox = e.currentTarget;
     const checked: boolean = checkbox.checked;
     this._checkChange(checkbox, checked);
@@ -747,7 +829,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   async connectedCallback() {
     super.connectedCallback();
-    console.log('connectedCallback');
+    // console.log('connectedCallback');
     this._getFields();
     this._initOptions();
     this._createElements();
@@ -757,28 +839,28 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   // region LifeCycle
   disconnectedCallback() {
-    console.log('disconnectedCallback');
+    // console.log('disconnectedCallback');
     super.disconnectedCallback();
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    console.log('shouldUpdate', this);
+    // console.log('shouldUpdate', this);
     return super.shouldUpdate(_changedProperties);
   }
 
   protected update(changedProperties: PropertyValues) {
     super.update(changedProperties);
-    console.log('update', this);
+    // console.log('update', this);
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    console.log('firstUpdated', this);
+    // console.log('firstUpdated', this);
   }
 
   protected updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
-    console.log('updated', this);
+    // console.log('updated', this);
     if (typeof _changedProperties.get('_totalCount') === 'number' && this._totalCount > 0) {
       this._createTotalCardCountElement();
       this._createAllSelectElement();
@@ -840,7 +922,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
     super.attributeChangedCallback(name, old, value);
-    console.log('attributeChanged');
+    // console.log('attributeChanged');
     if (name === 'header-options' || name === 'control-options') {
       return JSON.parse(value!);
     }
@@ -849,7 +931,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // endregion
 
   render() {
-    console.log('render');
+    // console.log('render');
     return template.call(this);
   }
 
