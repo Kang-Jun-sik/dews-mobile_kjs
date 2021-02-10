@@ -198,8 +198,9 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _paging: any;
   // 카드리스트 정렬 touch 위치 값
   private _startPoint: number | undefined;
+  // 카드리스트 정렬 layer 활성화 여부
+  private _sortActive = false;
   // 카드리스트 정렬 기능 테스트용
-
   private _sortObj: SortType<any> = {
     field: ''
   };
@@ -243,87 +244,12 @@ export class Cardlist<T extends object> extends DewsFormComponent {
           </div>
           <div class="control" @touchstart="${this._touchStart}" @touchmove="${this._touchMove}">
             <ul class="list">
-              <!--${this._fieldList.map(
+              ${this._fieldList.map(
                 (field, index) =>
                   html`<li class="${index === 0 ? 'sorting' : ''}" @click="${
                     this._clickSortingItem
                   }"><span class="text">${field.field}</span></span></li>`
-              )}-->
-              <li>
-                <span class="text">ㅁㅁ</span>
-              </li>
-              <li class="sorting ascending">
-                <span class="text"
-                  >데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.
-                  데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다. 데이터 이름이 길 경우에는 줄바꿈 처리가 됩니다.</span
-                >
-              </li>
-              <li>
-                <span class="text">DATA 02</span>
-              </li>
-              <li>
-                <span class="text">DATA 03</span>
-              </li>
-              <li>
-                <span class="text">DATA 04</span>
-              </li>
-              <li>
-                <span class="text">DATA 05</span>
-              </li>
-              <li>
-                <span class="text">DATA 06</span>
-              </li>
-              <li>
-                <span class="text">DATA 07</span>
-              </li>
-              <li>
-                <span class="text">DATA 08</span>
-              </li>
-              <li>
-                <span class="text">DATA 09</span>
-              </li>
-              <li>
-                <span class="text">DATA 10</span>
-              </li>
-              <li>
-                <span class="text">DATA 11</span>
-              </li>
-              <li>
-                <span class="text">DATA 12</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
-              <li>
-                <span class="text">DATA 13</span>
-              </li>
+              )}
             </ul>
           </div>
         </div>
@@ -415,7 +341,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       });
 
       this._datasource.on('change', (e: DataSourceChangeEventArgs<T>) => {
-        // console.log('datasource change', e);
+        console.log('datasource change', e);
         if (e.type === 'add' || e.type === 'update' || e.type === 'delete') {
           if (this.useControl && this.controlOptions.useSortSet) {
             this._cardData = this._datasource!.sortData() || [];
@@ -438,14 +364,14 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   private _cardListRepeat = (items: any) => {
     const keyFn = (item: any) => {
-      // console.log('keyFn', item);
+      console.log('keyFn', item);
       return item.uid;
     };
     const itemTemplate = (item: any, index: number) => {
-      // console.log('itemTemplate', item, index);
+      console.log('itemTemplate', item, index);
       return this._createCardElement(item, index);
     };
-    // console.log('cardListFn');
+    console.log('cardListFn');
     return html`${repeat(items, keyFn, itemTemplate)}`;
   };
 
@@ -486,11 +412,17 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   };
 
   // 정렬 버튼 클릭 시 drawer-layout 활성화
-  private _sortingSetTouchEvent = () => {
+  private _sortingSetTouchEvent = (e: TouchEvent) => {
     const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
-    const active = !sortDrawerLayout?.getAttribute('active');
-
-    active ? sortDrawerLayout?.setAttribute('active', String(active)) : this._close();
+    if (!this._sortActive) {
+      e.stopPropagation(); // 처음 열었을 때 drawer-layout 이 닫히지 않게 하기 위해 추가
+      this._sortActive = true;
+      sortDrawerLayout?.setAttribute('active', String(this._sortActive));
+      document.addEventListener('click', this._addEvent);
+    } else {
+      sortDrawerLayout?.setAttribute('active', String(!this._sortActive));
+      this._close();
+    }
   };
 
   // 정렬 drawer-layout 에서 적용 버튼 클릭 시
@@ -502,6 +434,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     this._sortObj.field = sortingItem.innerText;
     this._sortObj.dir = sortingItem.classList.contains('ascending') ? 'asc' : 'desc';
     this._close();
+
+    this._datasource!.sort(this._sortObj);
+    this._cardData = this._datasource!.sortData() || [];
+
+    this._cardListElement = this._cardListRepeat(this._cardData);
   };
 
   // 정렬 drawer-layout 에서 필드 값 클릭 시
@@ -519,19 +456,43 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       sortingItem?.classList.contains('ascending') ? sortingItem?.classList.remove('ascending') : '';
       target.classList.add('sorting');
     }
-    // e.isTrusted && (e.target as HTMLElement).tagName !== 'DEWS-MESSAGEBOX'
   };
 
+  // 정렬 drawer-layout 이 활성화되어있을 때 다른 영역 클릭 시 닫힐 수 있게
+  private _domClickHandler(e: MouseEvent) {
+    if (e.isTrusted) {
+      if (
+        e.clientY <
+        window.innerHeight -
+          this.shadowRoot!.querySelector('.sort-drawer-layout')?.shadowRoot!.querySelector('.layer-bottom')
+            ?.clientHeight!
+      ) {
+        if (!this._sortActive) {
+          return;
+        } else {
+          this._close();
+        }
+      }
+    }
+  }
+
+  private _addEvent = this._domClickHandler.bind(this);
+
+  // 정렬 drawer-layout 닫기
   private _close = () => {
+    this._sortActive = false;
+    document.removeEventListener('click', this._addEvent);
     this.shadowRoot?.querySelector('.sort-drawer-layout')?.removeAttribute('active');
   };
 
+  // 정렬 drawer-layout 스크롤링
   private _touchMove(e: any) {
     // e.passive = true;
     // e.capture = true;
     e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
   }
 
+  // 정렬 drawer-layout 스크롤링
   private _touchStart(e: any) {
     this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
   }
@@ -579,7 +540,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   }
 
   private _checkClickHandler(e: any) {
-    // console.log('check', e);
+    console.log('check', e);
     const checkbox: Checkbox = e.currentTarget;
     const checked: boolean = checkbox.checked;
     this._checkChange(checkbox, checked);
@@ -829,7 +790,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   async connectedCallback() {
     super.connectedCallback();
-    // console.log('connectedCallback');
+    console.log('connectedCallback');
     this._getFields();
     this._initOptions();
     this._createElements();
@@ -839,28 +800,28 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   // region LifeCycle
   disconnectedCallback() {
-    // console.log('disconnectedCallback');
+    console.log('disconnectedCallback');
     super.disconnectedCallback();
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    // console.log('shouldUpdate', this);
+    console.log('shouldUpdate', this);
     return super.shouldUpdate(_changedProperties);
   }
 
   protected update(changedProperties: PropertyValues) {
     super.update(changedProperties);
-    // console.log('update', this);
+    console.log('update', this);
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    // console.log('firstUpdated', this);
+    console.log('firstUpdated', this);
   }
 
   protected updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
-    // console.log('updated', this);
+    console.log('updated', this);
     if (typeof _changedProperties.get('_totalCount') === 'number' && this._totalCount > 0) {
       this._createTotalCardCountElement();
       this._createAllSelectElement();
@@ -922,7 +883,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
     super.attributeChangedCallback(name, old, value);
-    // console.log('attributeChanged');
+    console.log('attributeChanged');
     if (name === 'header-options' || name === 'control-options') {
       return JSON.parse(value!);
     }
@@ -931,7 +892,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // endregion
 
   render() {
-    // console.log('render');
+    console.log('render');
     return template.call(this);
   }
 
