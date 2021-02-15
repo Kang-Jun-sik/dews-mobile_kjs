@@ -4,6 +4,8 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './numerictextbox.html';
 import scss from './numerictextbox.scss';
 
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
 export class Numerictextbox extends DewsFormComponent {
   static styles = scss;
 
@@ -65,8 +67,8 @@ export class Numerictextbox extends DewsFormComponent {
   private _intLength: number | undefined = 0;
   private _decimalLength: number | undefined = 0;
 
-  private onFocus = new CustomEvent('focus', { detail: { target: '' } });
-  private onChange = new CustomEvent('change', { detail: { target: '' } });
+  //이벤트 객체 생성
+  private Event = new EventEmitter();
 
   connectedCallback() {
     super.connectedCallback();
@@ -149,13 +151,11 @@ export class Numerictextbox extends DewsFormComponent {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    // this.removeEventListener('focus', this._onFocus);
   }
 
   private _beforeInput(e: InputEvent) {
     const $el: HTMLInputElement = e.target as HTMLInputElement;
 
-    this._oldValue = (e.target as HTMLInputElement).value;
     this._cursor = $el.selectionStart;
 
     // 숫자 및 - . 입력처리
@@ -164,6 +164,8 @@ export class Numerictextbox extends DewsFormComponent {
       // 전체 선택되어 있을 경우에는 값 입력 가능 하도록
       e.returnValue = false;
       // }
+    } else {
+      this._oldValue = (e.target as HTMLInputElement).value;
     }
   }
 
@@ -239,7 +241,10 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) + this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    this.dispatchEvent(this.onChange);
+    // this.dispatchEvent(this.onChange);
+
+    // 이벤트실행
+    this.Event.emit('_change', { target: this, type: 'change' });
   }
 
   private _stepperDecrement() {
@@ -255,7 +260,10 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) - this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    this.dispatchEvent(this.onChange);
+    // this.dispatchEvent(this.onChange);
+
+    // 이벤트실행
+    this.Event.emit('_change', { target: this, type: 'change' });
   }
 
   private _keydown(e: KeyboardEvent) {
@@ -270,6 +278,9 @@ export class Numerictextbox extends DewsFormComponent {
     if (this.disabled || this.readonly) {
       return;
     }
+
+    this._oldValue = this.value.toString();
+
     const $spanView = this.shadowRoot!.querySelector<HTMLElement>('span.view');
     const $spanMask = this.shadowRoot!.querySelector<HTMLElement>('span.mask');
     $spanView!.style.display = 'none';
@@ -288,13 +299,16 @@ export class Numerictextbox extends DewsFormComponent {
       this._rawValue = this._adjust(Number(this._rawValue));
     }
 
+    this.value = this._rawValue;
+
     $spanView!.style.display = 'block';
     $input[0].value = this.addCommas(this._rawValue.toString());
     $input[1].value = this._rawValue.toString();
     $spanMask!.style.display = 'none';
 
-    if (this._oldValue != $input[0].value) {
-      this.dispatchEvent(this.onChange);
+    if (Number(this._oldValue) != this._rawValue) {
+      // 이벤트실행
+      this.Event.emit('_change', { target: this, type: 'change' });
     }
   }
 
@@ -348,6 +362,16 @@ export class Numerictextbox extends DewsFormComponent {
     const $input = this.shadowRoot!.querySelectorAll('input');
 
     return $input[0].value;
+  }
+
+  // 이벤트 등록
+  public on(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.on('_change', handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.off('_change', handler);
   }
 
   render() {

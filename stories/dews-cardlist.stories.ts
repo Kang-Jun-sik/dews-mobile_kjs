@@ -17,8 +17,8 @@ export const CardList = () => html`
     }}"
   >
     <ds-transport>
-      <ds-transport-read url="http://10.106.4.144:3000/api/baseData" type="post"></ds-transport-read>
-      <ds-transport-save url="http://10.106.4.144:3000/api/batchSave"></ds-transport-save>
+      <ds-transport-read url="http://10.106.4.176:3000/api/baseData" type="post"></ds-transport-read>
+      <ds-transport-save url="http://10.106.4.176:3000/api/batchSave"></ds-transport-save>
     </ds-transport>
     <ds-schema>
       <ds-schema-model id-fields="emp_id, name">

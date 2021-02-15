@@ -724,7 +724,7 @@ export class PickerBase extends DrawerBottomBase {
     this.updateComplete.then(() => {
       if (!this.spinner) {
         const $el = this.shadowRoot!.querySelector('.calendar-flip-wrap') as HTMLElement;
-        this.width = $el.clientWidth / 3;
+        this.width = $el?.clientWidth / 3;
       }
     });
   }
