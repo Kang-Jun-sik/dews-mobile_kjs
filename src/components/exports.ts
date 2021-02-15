@@ -48,3 +48,4 @@ export { Containersummary } from './containersummary/containersummary.js';
 export { Columnsetbutton } from './columnsetbutton/columnsetbutton.js';
 export { Columnitem } from './columnsetbutton/columnitem.js';
 export { Monthperiodpicker } from './picker/monthperiodpicker/monthperiodpicker.js';
+export { Codepicker } from './picker/codepicker/codepicker.js';
