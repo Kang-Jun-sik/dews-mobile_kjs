@@ -14,7 +14,7 @@ export class Box extends DewsAreaComponent {
   @property({ type: String, reflect: true })
   title = '';
 
-  @property({ type: Boolean })
+  @property({ type: Boolean, reflect: true })
   collapsed = false;
 
   @property({ type: Boolean })
@@ -28,14 +28,18 @@ export class Box extends DewsAreaComponent {
   async connectedCallback() {
     await super.connectedCallback();
     await this.updateComplete;
-    this.shadowRoot?.querySelector('.dews-box-content-wrap')?.addEventListener('transitionend', this.#heightChange);
+    this.shadowRoot?.querySelector('.dews-box-content-wrap')?.addEventListener('transitionend', this.#animationEnd);
+    this.shadowRoot?.querySelector('.dews-box-content-wrap')?.addEventListener('transitionstart', this.#animationStart);
     this.addEventListener('click', this._clickEvent);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('click', this._clickEvent);
-    this.shadowRoot?.querySelector('.dews-box-content-wrap')?.removeEventListener('transitionend', this.#heightChange);
+    this.shadowRoot?.querySelector('.dews-box-content-wrap')?.removeEventListener('transitionend', this.#animationEnd);
+    this.shadowRoot
+      ?.querySelector('.dews-box-content-wrap')
+      ?.removeEventListener('transitionstart', this.#animationStart);
   }
 
   public _blurEvent() {
@@ -48,8 +52,14 @@ export class Box extends DewsAreaComponent {
     //블러이벤트
   }
 
-  #heightChange = () => {
-    if (this.height !== '0px') {
+  #animationStart = () => {
+    if (!this.collapsed) {
+      this.height = `${this.shadowRoot!.querySelector('.dews-box-content')?.clientHeight}px`;
+    }
+  };
+
+  #animationEnd = () => {
+    if (!this.collapsed) {
       this.height = 'auto';
     }
   };
@@ -70,34 +80,38 @@ export class Box extends DewsAreaComponent {
     this._focusChanging(e);
   }
 
-  private _onToggleClick = (e: Event) => {
+  private _onToggleClick(e: Event) {
     // 이벤트 실행
     if (!this.collapsed) {
+      this.height = `${this.shadowRoot!.querySelector('.dews-box-content')?.clientHeight}px`;
       this.collapsed = true;
-      this.height = '0px';
     } else {
       this.collapsed = false;
-      this.height = this.slotHeight as string;
     }
     this.#EVENT.emit('click', { target: this, type: 'click', preventDefault: e.preventDefault });
-  };
+  }
   protected enable: Function = (value: boolean) => {
     return (this.collapsed = value);
   };
-
-  private async slotChange() {
-    if (this.collapsed) {
+  private _check = false;
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+    if (_changedProperties.get('collapsed') !== undefined && this.collapsed) {
+      this._check = true;
+      this.height = `${this.shadowRoot!.querySelector('.dews-box-content')?.clientHeight}px`;
+    }
+    if (_changedProperties.get('collapsed') !== undefined && !this.collapsed) {
+      this.height = `${this.shadowRoot!.querySelector('.dews-box-content')?.clientHeight}px`;
+    }
+    if (_changedProperties.get('collapsed') !== undefined && this._check) {
+      this._check = false;
       this.height = '0px';
     }
-    const children: NodeListOf<LitElement> = this.shadowRoot!.querySelectorAll('*');
+  }
 
+  private async slotChange() {
+    const children: NodeListOf<LitElement> = this.shadowRoot!.querySelectorAll('*');
     await Promise.all(Array.from(children).map(c => c.updateComplete));
-    this.slotHeight = `${this.shadowRoot!.querySelector('.dews-box-content-wrap')?.clientHeight}px`;
-    if (!this.collapsed) {
-      this.height = this.slotHeight;
-    } else {
-      this.slotHeight = `${this.shadowRoot!.querySelector('.dews-box-content')?.clientHeight}px`;
-    }
   }
 
   render() {

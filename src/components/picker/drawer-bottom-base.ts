@@ -64,6 +64,9 @@ export class DrawerBottomBase extends DewsFormComponent {
    *  다음 요소 선택 처리
    * */
   protected _afterBtnView(): void {
+    if (this.parentElement === null) {
+      return;
+    }
     const $el = this.parentElement!.children;
     for (let i = 0; i <= $el.length; i++) {
       if ($el.item(i) === this) {

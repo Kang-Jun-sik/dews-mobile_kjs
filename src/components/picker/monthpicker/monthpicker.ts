@@ -326,7 +326,7 @@ export class Monthpicker extends PickerBase {
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.has('value')) {
-      if (this.value !== undefined) {
+      if (this.value === undefined) {
         this.inputValue = '';
         (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__';
       } else {

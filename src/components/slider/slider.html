@@ -1,5 +1,5 @@
 ${this.sliderType === 'range'?html`
-<div class="dews-slider">
+<div class="dews-slider ${this.disabled?'disabled':''}">
   <div class="slider-wrap">
     <div class="slider-track">
       <div
@@ -7,6 +7,7 @@ ${this.sliderType === 'range'?html`
         style="left: ${this._startBtnLocation + '%'}; width:${(this._endBtnLocation-this._startBtnLocation) + '%'};"
       ></div>
       <button
+        ?disabled="${this.disabled}"
         class="slider-handle start"
         style="left: calc(${this._startBtnLocation + '%'} - 7px)"
         @touchmove="${(e:TouchEvent)=>this._touchHandler(e, 'start')}"
@@ -14,6 +15,7 @@ ${this.sliderType === 'range'?html`
         <span class="title">slider handle</span>
       </button>
       <button
+        ?disabled="${this.disabled}"
         class="slider-handle end"
         @touchmove="${(e:TouchEvent)=>this._touchHandler(e, 'end')}"
         style="left: calc(${this._endBtnLocation + '%'} - 7px)"
@@ -28,11 +30,12 @@ ${this.sliderType === 'range'?html`
   </div>
 </div>
 ` :html`
-<div class="dews-slider stepper">
+<div class="dews-slider stepper ${this.disabled?'disabled':''}">
   <div class="slider-wrap">
     <div class="slider-track">
       <div class="slider-selection" style="width: ${this._tickBtnLocation + '%'}"></div>
       <button
+        ?disabled="${this.disabled}"
         class="${this._tickButtonClassName}"
         title="drag"
         role="slider"
@@ -43,17 +46,16 @@ ${this.sliderType === 'range'?html`
       >
         <span class="title">slider handle</span>
       </button>
-      <div class="slider-tooltip" style="left: calc(${this._tickBtnLocation + '%'} - ${this._tooltipLocation + 'px'})">
+      <div class="slider-tooltip ${this.disabled?'disabled':''}" style="left: calc(${this._tickBtnLocation + '%'} - ${this._tooltipLocation + 'px'})">
         <span>${ this._tickValue === undefined ? this.min : this._tickValue }</span>
         <span class="tip"></span>
       </div>
     </div>
   </div>
-  <button class="slider-stepper minus" @click="${this._minusBtnClick}"><span></span></button>
-  <button class="slider-stepper plus" @click="${this._plusBtnClick}"><span></span></button>
+  <button class="slider-stepper minus"  ?disabled="${this.disabled}" @click="${this._minusBtnClick}"><span>-</span></button>
+  <button class="slider-stepper plus" ?disabled="${this.disabled}" @click="${this._plusBtnClick}"><span>+</span></button>
 
   <div class="slider-quantity">
-    <span class="quantity-min">${ this.min }</span>
-    <span class="quantity-max">${ this.max }</span>
+    <span class="quantity">${ this.min }</span>
   </div>
 </div>` }

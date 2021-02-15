@@ -1,9 +1,9 @@
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { DewsFormComponent } from '../../base/DewsFormComponent.js';
 
 import template from './weekperiodpicker.html';
 import scss from './weekperiodpicker.scss';
 import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
-import { PickerBase } from '../picker/picker-base.js';
+import { PickerBase } from '../picker-base.js';
 import { html } from 'lit-html';
 
 export class Weekperiodpicker extends PickerBase {

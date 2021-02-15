@@ -14,6 +14,15 @@ export class DropdownlistItem extends DewsFormComponent {
   @property({ type: String })
   title = '';
 
+  @property({ type: String })
+  field: string | undefined;
+
+  @property({ type: String })
+  label: string | undefined;
+
+  @property({ type: Boolean })
+  disabled = false;
+
   @property({ type: Boolean, reflect: true })
   checked = false;
 
@@ -26,17 +35,28 @@ export class DropdownlistItem extends DewsFormComponent {
     super.connectedCallback();
     if (this.parentElement?.tagName === 'DEWS-DROPDOWNLIST') {
       this.$parent = this.parentElement as Dropdownlist;
-      console.log(this.$parent);
       if (this.parentElement.hasAttribute('multi')) {
         this.multi = true;
+      }
+    }
+
+    if (this.title === '') {
+      if (this.label !== undefined) {
+        this.title = this.label;
+      } else {
+        this.title = `${this.field}`;
       }
     }
   }
 
   private _singleItemSelectHandler(e: MouseEvent) {
     const $el: HTMLElement = e.currentTarget as HTMLElement;
-    this.shadowRoot!.querySelector('.check')?.classList?.remove('check');
-    $el.classList.add('check');
+    Array.from(this.$parent?.children!).forEach($el => {
+      if ($el.hasAttribute('checked')) {
+        $el.removeAttribute('checked');
+      }
+    });
+    this.checked = true;
     this.$parent!.select[0] = $el.dataset.value as string;
     this.$parent!._EVENT.emit('select', { target: this, type: 'select', item: this.$parent!.select[0] });
     this.$parent!._EVENT.emit('change', { target: this, type: 'change' });

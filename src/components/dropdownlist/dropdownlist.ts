@@ -1,30 +1,37 @@
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
-import { DewsComponent } from '../base/DewsComponent.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 import { DropdownlistItem } from './dropdownlist-item.js';
+import { DataSource } from '../datasource/dews-datasource.js';
 
 type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
 
-// noinspection JSUnusedLocalSymbols
-// @ts-expect-error
-export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
+export class Dropdownlist extends DewsFormComponent {
   static styles = scss;
-
-  static get scopedElements() {
-    return {
-      'drawer-layout': Drawerlayout,
-      ...DewsComponent.getRegisteredComponents()
-    };
-  }
 
   @property({ type: String })
   title = '';
+
+  @property({ type: String })
+  datasource: string | undefined;
+
+  @property({ type: String })
+  field: string | undefined;
+
+  @property({ type: String, attribute: 'label-field' })
+  labelField: string | undefined;
+
+  @property({ type: String, attribute: 'checked-field' })
+  checkedField: string | undefined;
+
+  @property({ type: String, attribute: 'disabled-field' })
+  disabledField: string | undefined;
+
+  @property({ type: Boolean, attribute: 'auto-bind' })
+  autoBind = false;
 
   @property({ type: Boolean, reflect: true })
   multi = false;
@@ -37,9 +44,6 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
 
   @property({ type: Boolean, reflect: true })
   once = false;
-
-  @property({ type: Boolean, reflect: true })
-  columnSet = false;
 
   @internalProperty()
   active = false;
@@ -80,11 +84,50 @@ export class Dropdownlist extends ScopedElementsMixin(DewsFormComponent) {
     this._EVENT.off(key, handler);
   }
 
+  private _datasource?: DataSource;
+
   connectedCallback() {
     super.connectedCallback();
     if (this.disabled && this.readonly) {
       this.readonly = false;
     }
+    if (this.datasource !== undefined) {
+      this._datasource = dews.app.main?.currentPage?.getDataSource(this.datasource);
+      if (this._datasource === undefined) {
+        this._datasource = document.getElementById(`${this.datasource}`) as DataSource;
+      }
+      if (this._datasource) {
+        this._datasource.on('requestEnd', (e: EventArgs) => {
+          this.createItemList();
+        });
+      }
+      if (this.autoBind) {
+        this._datasource?.read();
+      }
+    }
+  }
+
+  private createItemList() {
+    const data = this._datasource?.data();
+    let item: DropdownlistItem;
+    data?.forEach(_data => {
+      if (this.field !== undefined) {
+        item = document.createElement('dropdownlist-item') as DropdownlistItem;
+        item.field = (_data as any)[this.field];
+        if (this.labelField !== undefined) {
+          item.label = (_data as any)[this.labelField];
+        }
+        if (this.disabledField) {
+          item.disabled = Boolean((_data as any)[this.disabledField]);
+        }
+        if (this.multi && this.checkedField) {
+          item.checked = Boolean((_data as any)[this.checkedField]);
+        }
+        this.appendChild(item);
+      } else {
+        // console.log('필드가 없습니다.');
+      }
+    });
   }
 
   private _allChecked(e: MouseEvent) {

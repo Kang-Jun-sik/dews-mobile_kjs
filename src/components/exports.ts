@@ -36,7 +36,7 @@ export { Tooltip } from './tooltip/tooltip.js';
 export { Yearpicker } from './picker/yearpicker/yearpicker.js';
 export { Togglebutton } from './togglebutton/togglebutton.js';
 export { Progressbar } from './progressbar/progressbar.js';
-export { Weekperiodpicker } from './weekperiodpicker/weekperiodpicker.js';
+export { Weekperiodpicker } from './picker/weekperiodpicker/weekperiodpicker.js';
 export { Card } from './cardlist/card.js';
 export { Cardlist } from './cardlist/dews-cardlist.js';
 export { DataSource } from './datasource/dews-datasource.js';
