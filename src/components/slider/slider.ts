@@ -16,6 +16,9 @@ export class Slider extends DewsFormComponent {
   @property({ type: Number, attribute: 'value' })
   _value: undefined | number;
 
+  @property({ type: Boolean })
+  disabled = false;
+
   @property({ type: Number })
   min = 0;
 
@@ -64,6 +67,8 @@ export class Slider extends DewsFormComponent {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
+    this._startValue = this.min;
+    this._endValue = this.max;
     this.sliderWidth = this.getBoundingClientRect().width;
     this.pixelWidth = this.sliderWidth / ((this.max - this.min) / this.step); // 전체에서 step 하나당 실제 거리
     const tooltip = this.shadowRoot!.querySelector<HTMLElement>('.slider-tooltip');
@@ -83,14 +88,19 @@ export class Slider extends DewsFormComponent {
   }
 
   private _touchHandler(e: TouchEvent, buttonType: string) {
+    if (this.disabled) {
+      return;
+    }
+    this.sliderWidth = this.getBoundingClientRect().width;
+    this.pixelWidth = this.sliderWidth / ((this.max - this.min) / this.step); // 전체에서 step 하나당 실제 거리
     const value = Math.round(e.changedTouches[0].clientX / this.pixelWidth) * this.step; // 실제 화면에 출력될 value 값
     if (value > -1 && value <= this.max) {
-      if (buttonType === 'start' && this._startValue !== value) {
-        // 이전 값과 다를 때에만 style 값이 변경되도록
+      if (buttonType === 'start' && this._startValue !== value && value < this._endValue!) {
+        // 이전 값과 다르고 end 값보다 작을때 style 값이 변경되도록
         this._startValue = value;
         this._startBtnLocation = this._calculateLocation(value);
-      } else if (buttonType === 'end' && this._endValue !== value) {
-        // 이전 값과 다를 때에만 style 값이 변경되도록
+      } else if (buttonType === 'end' && this._endValue !== value && value > this._startValue!) {
+        // 이전 값과 다르고 start 값보다 클때 style 값이 변경되도록
         this._endValue = value;
         this._endBtnLocation = this._calculateLocation(value);
       } else if (buttonType === 'tick' && this._tickValue !== value) {
@@ -118,6 +128,9 @@ export class Slider extends DewsFormComponent {
   }
 
   private _minusBtnClick() {
+    if (this.disabled) {
+      return;
+    }
     this._tickButtonClassName = 'slider-handle active';
     setTimeout(() => {
       this._tickButtonClassName = 'slider-handle';
@@ -129,6 +142,9 @@ export class Slider extends DewsFormComponent {
   }
 
   private _plusBtnClick() {
+    if (this.disabled) {
+      return;
+    }
     this._tickButtonClassName = 'slider-handle active';
     setTimeout(() => {
       this._tickButtonClassName = 'slider-handle';

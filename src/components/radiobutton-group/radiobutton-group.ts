@@ -7,9 +7,6 @@ import scss from './radiobutton-group.scss';
 export class RadiobuttonGroup extends DewsFormComponent {
   static styles = scss;
 
-  @property({ type: String })
-  title = 'title';
-
   @property({ type: Boolean })
   disabled = false;
 

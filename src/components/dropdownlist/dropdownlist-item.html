@@ -5,7 +5,7 @@ ${this.multi
               <dews-checkbox class="multi-checkbox" ?checked="${this.checked}"></dews-checkbox>
   </span>
 </li>`
-: html` <li @click="${this._singleItemSelectHandler}" data-value="${this.title}" class="single">
+: html` <li @click="${this._singleItemSelectHandler}" data-value="${this.title}" class="single ${this.checked?'check':''}">
   <span>${this.title}</span>
 </li>`}
 
