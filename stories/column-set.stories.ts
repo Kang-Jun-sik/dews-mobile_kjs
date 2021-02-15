@@ -28,11 +28,29 @@ export const ColumnSet = () => html`<div style="width: 360px">
   </dews-datasource>
 
   <columnset-button
-    datasource="datasource1"
-    field="name"
+    key-field="key"
+    label-field="label"
+    auto-bind
+    onOpen="${(e: any) => {
+      e.target.addItems([
+        { key: '1234', label: '리스트 추가1' },
+        { key: '1235', label: '리스트 추가2' },
+        { key: '1236', label: '리스트 추가3' }
+      ]);
+      console.log('onOpen', e);
+    }}"
+    onComplete="${(e: any) => {
+      console.log('onComplete', e);
+    }}"
+  >
+  </columnset-button>
+
+  <columnset-button
+    key-field="key"
     label-field="name"
     auto-bind
     onOpen="${(e: any) => {
+      e.target.addItem({ key: '1234', name: '추가되는것' });
       console.log('onOpen', e);
     }}"
     onComplete="${(e: any) => {

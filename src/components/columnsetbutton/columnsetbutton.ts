@@ -26,17 +26,17 @@ export class Columnsetbutton extends DrawerBottomBase {
   @property({ type: String })
   datasource: string | undefined;
 
-  @property({ type: String })
-  field: string | undefined;
+  @property({ type: String, attribute: 'key-field' })
+  field = 'key';
 
   @property({ type: String, attribute: 'label-field' })
-  labelField: string | undefined;
+  labelField = 'label';
 
   @property({ type: String, attribute: 'checked-field' })
-  checkedField: string | undefined;
+  checkedField = 'checked';
 
   @property({ type: String, attribute: 'disabled-field' })
-  disabledField: string | undefined;
+  disabledField = 'disabled';
 
   @property({ type: Boolean, attribute: 'auto-bind' })
   autoBind = false;
@@ -127,43 +127,83 @@ export class Columnsetbutton extends DrawerBottomBase {
 
   /**
    * Columns-item 을 추가합니다.
-   * @param {String} field 아이템의 라벨을 설정합니다.
-   * @param {Object} options 아이템의 옵션을 설정합니다.
-   * @param {Boolean} options.label 아이템의 라벨을 설정합니다.
-   * @param {Boolean} options.checked 아이템의 초기 체크유무를 설정합니다.
-   * @param {Boolean} options.disabled 아이템의 선택 가능여부를 설정합니다.
+   * @param {Object} data 아이템의 옵션을 설정합니다.
+   * @param {Boolean} data.field 아이템의 필드를 설정합니다.(필수값);
+   * @param {Boolean} data.label 아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.checked 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.disabled 아이템의 선택 가능여부를 설정합니다.
    * */
-  addItem(field: string, options?: { label?: string; checked?: boolean; disabled?: boolean }) {
+  addItem(data: object) {
+    const DATA = new Map(Object.entries(data));
     const item = document.createElement('column-item');
-    item.setAttribute('field', field);
-    if (options === undefined) {
-      if (options!.checked !== undefined && options!.checked) {
-        item.setAttribute('checked', '');
-      }
-      if (options!.disabled !== undefined && options!.disabled) {
-        item.setAttribute('disabled', '');
+    for (const i in data) {
+      switch (i) {
+        case this.checkedField:
+          if (DATA.get(`${this.checkedField}`)) {
+            item.setAttribute('checked', '');
+          }
+          break;
+        case `${this.disabledField}`:
+          if (DATA.get(`${this.disabledField}`)) {
+            item.setAttribute('disabled', '');
+          }
+          break;
+        case `${this.labelField}`:
+          item.setAttribute('label', DATA.get(`${this.labelField}`) as string);
+          break;
+        case `${this.field}`:
+          item.setAttribute('label', DATA.get(`${this.field}`) as string);
+          break;
       }
     }
-    this.shadowRoot?.appendChild(item);
+    this.appendChild(item);
   }
 
-  /**
-   * 아이템을 지웁니다
-   * @param {Number} i 아이템의 index
-   * @param {String} i 필드
-   * */
-  removeItem(i: number | string) {
-    const item = this.shadowRoot?.querySelectorAll('column-item');
-    if (typeof i === 'number') {
-      item?.item(i).remove();
-    } else {
-      item?.forEach($el => {
-        if (($el as Columnitem).field === i) {
-          $el.remove();
+  addItems(data: Array<object>) {
+    data.forEach(Data => {
+      const DATA = new Map(Object.entries(Data));
+      const item = document.createElement('column-item');
+      for (const i in Data) {
+        switch (i) {
+          case this.checkedField:
+            if (DATA.get(`${this.checkedField}`)) {
+              item.setAttribute('checked', '');
+            }
+            break;
+          case `${this.disabledField}`:
+            if (DATA.get(`${this.disabledField}`)) {
+              item.setAttribute('disabled', '');
+            }
+            break;
+          case `${this.labelField}`:
+            item.setAttribute('label', DATA.get(`${this.labelField}`) as string);
+            break;
+          case `${this.field}`:
+            item.setAttribute('label', DATA.get(`${this.field}`) as string);
+            break;
         }
-      });
-    }
+      }
+      this.appendChild(item);
+    });
   }
+  //
+  // /**
+  //  * 아이템을 지웁니다
+  //  * @param {Number} i 아이템의 index
+  //  * @param {String} i 필드
+  //  * */
+  // removeItem(i: number | string) {
+  //   const item = this.shadowRoot?.querySelectorAll('column-item');
+  //   if (typeof i === 'number') {
+  //     item?.item(i).remove();
+  //   } else {
+  //     item?.forEach($el => {
+  //       if (($el as Columnitem).field === i) {
+  //         $el.remove();
+  //       }
+  //     });
+  //   }
+  // }
 
   /**
    * item Check 상태로 변경 합니다.
@@ -217,6 +257,7 @@ export class Columnsetbutton extends DrawerBottomBase {
 
     return this._EVENT.off(key, handler);
   };
+
   _emit(event: string, args: any) {
     return this._EVENT.emit(event, args);
   }
@@ -235,7 +276,6 @@ export class Columnsetbutton extends DrawerBottomBase {
     super.attributeChangedCallback(name, old, value);
     switch (name) {
       case 'oncomplete':
-        console.log('컴플리트 함수셋팅');
         this._EVENT.on('complete', new Function('return ' + value)());
         break;
       case 'onopen':
@@ -252,22 +292,16 @@ export class Columnsetbutton extends DrawerBottomBase {
 
   private async _slotChange() {
     let tr = document.createElement('tr');
+    const $table = this.shadowRoot?.querySelector('#table');
     this.querySelectorAll('column-item').forEach(($child, index) => {
       const td = document.createElement('td');
       td.appendChild($child as HTMLElement);
-      if (index % 2 === 0) {
+      if (this.shadowRoot?.querySelectorAll('column-item')?.length! % 2 === 0) {
         tr = document.createElement('tr');
         tr.appendChild(td);
-        if (this.children.length === 0) {
-          if ((this.shadowRoot?.querySelector('#table')?.lastChild as HTMLElement).children.length === 1) {
-            (this.shadowRoot?.querySelector('#table')?.lastChild as HTMLElement).appendChild(td);
-          } else {
-            this.shadowRoot?.querySelector('#table')?.appendChild(tr);
-          }
-        }
+        $table?.appendChild(tr);
       } else {
-        tr.appendChild(td);
-        this.shadowRoot?.querySelector('#table')?.appendChild(tr);
+        $table?.lastChild?.appendChild(td);
       }
     });
   }

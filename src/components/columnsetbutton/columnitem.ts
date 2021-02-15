@@ -44,7 +44,7 @@ export class Columnitem extends DewsFormComponent {
 
   private _clickHandler(e: Event) {
     this.checked = !this.checked;
-    (this.$pel as Columnsetbutton)._emit('change', { target: this, type: 'change' });
+    (this.$pel as Columnsetbutton)?._emit('change', { target: this, type: 'change' });
   }
 
   render() {
