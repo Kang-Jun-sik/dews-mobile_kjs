@@ -99,6 +99,9 @@ export class Codepicker extends PickerBase {
   @internalProperty()
   private _allCheckState = false;
 
+  @internalProperty()
+  private _cardList: Cardlist<object> | undefined;
+
   _Event: EventEmitter = new EventEmitter();
 
   constructor() {
@@ -376,6 +379,8 @@ export class Codepicker extends PickerBase {
 
     if (this.dataControlType == 'card') {
       const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
+      this._cardList = cardList;
+
       cardList!.autoBind = true;
       cardList!.useTotalCount = true;
       cardList!.height = '430px';
@@ -401,9 +406,20 @@ export class Codepicker extends PickerBase {
     super.updated(_changedProperties);
 
     this.updateComplete.then(() => {
-      const cardList = this.shadowRoot!.querySelector('dews-cardlist') as HTMLElement;
+      const cardList = this.shadowRoot!.querySelector('dews-cardlist') as Cardlist<object>;
 
-      cardList.shadowRoot!.querySelector('li');
+      // 추후 변경 예정
+      // let cardListHeight: number =
+      //   this._drawerLayout?.querySelector('.control')?.clientHeight! -
+      //   (cardList.shadowRoot?.querySelector('.dews-container-option-control')?.clientHeight! -
+      //     cardList.shadowRoot?.querySelector('.cardlist-all-select')?.clientHeight!) -
+      //   42 -
+      //   10;
+      //
+      // if (cardListHeight < 250) {
+      //   cardListHeight = 250;
+      // }
+      // cardList.height = cardListHeight.toString() + 'px';
     });
 
     // _changedProperties.forEach((oldValue, propName) => {
