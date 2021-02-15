@@ -68,6 +68,7 @@ import {
   Containersummary,
   Columnsetbutton,
   Columnitem,
+  Codepicker,
   Monthperiodpicker,
   Weekperiodpicker
 } from './components/exports.js';
@@ -83,6 +84,7 @@ window.customElements.define('dews-yearpicker', Yearpicker);
 window.customElements.define('dews-monthpicker', Monthpicker);
 window.customElements.define('dews-weekperiodpicker', Weekperiodpicker);
 window.customElements.define('dews-monthperiodpicker', Monthperiodpicker);
+window.customElements.define('dews-codepicker', Codepicker);
 
 window.customElements.define('dews-masktextbox', Masktextbox);
 window.customElements.define('dews-numerictextbox', Numerictextbox);

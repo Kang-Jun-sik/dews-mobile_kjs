@@ -1,19 +1,44 @@
 <slot @slotchange="${this._slotChange}"></slot>
 
-  <div class ="option-custom-button">
-   <ul id="custom">
-    </ul>
-  </div>
+<div class ="option-custom-button">
+ <ul id="custom">
+  </ul>
+</div>
 
-  ${(this._iconList.length == 0 ? null : html`
-      <div class="option-convenience-button">
-        <ul>
-          ${this._iconList}
-        </ul>
+${(this._iconList.length == 0 ? null : html`
+    <div class="option-convenience-button">
+      <ul>
+        ${this._iconList}
+      </ul>
+    </div>
+`)}
+
+<drawer-layout class="drawer-layout" title="data-set" right="true" @close="${this._close}" ?active="${this.active}">
+  <div class="drawer-dataSet">
+    <div class="option-dataset">
+      <div class="control">
+        <div class="total-control">
+          ${this._dataSetHeader}
+        </div>
+
+        <div class="dataset-list">
+          ${this._dataSetList}
+        </div>
+        <div class="dataset-nodata" style="display: none">
+          <span>저장된 데이터 Set 내역이 없습니다.</span>
+        </div>
       </div>
-  `)}
+    </div>
+  </div>
+</drawer-layout>
 
-
+<!-- snackbar -->
+<div class="dews-snackbar dataset">
+  <div class="snackbar-img"></div>
+  <div class="snackbar-text">
+    현재 입력된 내용이 데이터 Set에 저장
+  </div>
+</div>
 
 
 
