@@ -7,6 +7,9 @@ import { repeat } from 'lit-html/directives/repeat';
 import { DataSourceChangeEventArgs } from '../datasource/Event.js';
 import { DataSource, ObservableArrayItem } from '../datasource/dews-datasource.js';
 import { SortType } from '../datasource/Sort.js';
+import { Columnsetbutton } from '../columnsetbutton/columnsetbutton.js';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+import { CardListCheckedEventArgs } from './Event.js';
 
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -122,6 +125,9 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 카드리스트 타입
   @property({ type: String, attribute: 'column-type' })
   columnType = '1';
+  // 체크 이벤트
+  @property({ type: Function, attribute: 'onchecked' })
+  onChecked?: (args: CardListCheckedEventArgs<T>) => void;
 
   // 카드리스트
   @internalProperty()
@@ -204,6 +210,8 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _sortObj: SortType<any> = {
     field: ''
   };
+  // 이벤트
+  private _events: EventEmitter = new EventEmitter();
 
   // endregion
 
@@ -222,7 +230,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       </div>
     `;
 
-    this._columnSetElement = html` <button class="column-set"><span>Column Set</span></button> `;
+    this._columnSetElement = html`<columnset-button
+      key-field="name"
+      label-field="title"
+      checked-field="visible"
+    ></columnset-button>`;
 
     if (this._fieldList?.length > 0 && this._fieldList[0].field !== undefined) {
       this._sortObj.field = this._fieldList[0].field;
@@ -288,6 +300,19 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
     this._initDatasource();
   }
+
+  private _columnSetOpenHandler = (e: EventArgs) => {
+    console.log('open', e);
+    const columnSet = e.target as Columnsetbutton;
+    columnSet.addItems(this._fieldList);
+  };
+
+  private _columnSetCompleteHandler = (e: EventArgs) => {
+    console.log('complete', e);
+    const columnSet = e.target as Columnsetbutton;
+    const itemList = columnSet.getItemList();
+    console.log(itemList);
+  };
 
   private _initDatasource() {
     if (dews.app.main) {
@@ -550,6 +575,8 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     const allSelectCheckbox: Checkbox | null | undefined = this.shadowRoot?.querySelector(
       'dews-checkbox.cardlist-all-select-checkbox'
     );
+    const card: any = checkbox.closest('.card');
+    const checkedArgs = { event: 'checked', checked: checked, checkbox: checkbox, itemIndex: card!.cardIndex };
     if (checked) {
       this._checkCount++;
       if (this._checkCount === this._totalCount && allSelectCheckbox) {
@@ -563,6 +590,8 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       }
       checkbox.classList.remove('checked');
     }
+
+    this._trigger('checked', checkedArgs);
   };
 
   private _collapseButtonClickHandler(e: any) {
@@ -668,7 +697,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       let collapse: string | null = null;
 
       if (opt._useCardCollapse) {
-        collapse = i >= opt._cardFixedFieldCount ? ' collapse' : '';
+        collapse = i >= opt._cardFixedFieldCount ? ' collapse' : ' open';
       }
 
       if (data[field.field!]) {
@@ -760,6 +789,14 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     this._createControlSetElement();
   };
 
+  private _trigger(type: string, args?: any) {
+    const eventArgs = Object.assign({}, args, { target: this });
+    Object.freeze(args);
+    if (type === 'checked') {
+      this._events.emit<CardListCheckedEventArgs<T>>(type, eventArgs);
+    }
+  }
+
   private _getFields(): void {
     const fieldElements = this.querySelectorAll('cardlist-field');
     const fieldCount = fieldElements.length;
@@ -796,6 +833,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     this._createElements();
 
     await this.updateComplete;
+    console.log('updateComplete');
+    // 컬럼 셋 이벤트 헨들러 등록
+    const columnSetElement = this.shadowRoot?.querySelector('columnset-button') as Columnsetbutton;
+    columnSetElement.on('open', this._columnSetOpenHandler);
+    columnSetElement.on('complete', this._columnSetCompleteHandler);
   }
 
   // region LifeCycle
@@ -887,6 +929,10 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     if (name === 'header-options' || name === 'control-options') {
       return JSON.parse(value!);
     }
+    if (name === 'onchecked') {
+      const ch = new Function('return ' + value)();
+      this._events.on<CardListCheckedEventArgs<T>>('checked', ch);
+    }
   }
 
   // endregion
@@ -914,6 +960,30 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
 
     return cardChecked;
+  };
+  // 체크 카드 인덱스 호출
+  getCheckCardIndex = (): Array<number> => {
+    return this._getCheckCard('cardIndex');
+  };
+  // 체크 카드 데이터 호출
+  getCheckCardData = (): Array<ObservableArrayItem<T>> => {
+    return this._getCheckCard('data');
+  };
+  // 체크 카드 호출
+  private _getCheckCard(type: 'data' | 'cardIndex') {
+    const checkCards = this.shadowRoot?.querySelectorAll('dews-checkbox.card-select-checkbox.checked');
+    const result = [];
+    if (checkCards && checkCards.length > 0) {
+      for (let i = 0; i < checkCards.length; i++) {
+        const card: any = checkCards[i].closest('.card');
+        result.push(card[type]);
+      }
+    }
+    return result;
+  }
+  // 카드 데이터
+  cardItems = () => {
+    return this._cardData;
   };
   // 선택 카드
   select = (itemIndex?: number): Element | undefined => {
@@ -964,4 +1034,12 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     // @ts-ignore
     this._datasource?.__data__[itemIndex][field] = value;
   };
+  // 이벤트 등록
+  on(type: string, handler: any) {
+    this._events.on(type, handler);
+  }
+  // 이벤트 해제
+  off(type: string, handler: any) {
+    this._events.off(type, handler);
+  }
 }

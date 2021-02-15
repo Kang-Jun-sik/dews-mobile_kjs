@@ -33,12 +33,12 @@ export class Sort<T extends object> {
       if (firstValue.localeCompare) {
         return firstValue.localeCompare(secondValue);
       }
-      return a > b ? 1 : a < b ? -1 : 0;
+      return firstValue > secondValue ? 1 : firstValue < secondValue ? -1 : 0;
     };
   }
 
   comparerCreate(sort: SortType<T>): (a: T, b: T) => number {
-    const compare = sort.compare || this.compare(sort.field);
+    const compare = this.compare(sort.field);
     if (sort.dir === 'desc') {
       return function (a: T, b: T) {
         return compare(b, a);
