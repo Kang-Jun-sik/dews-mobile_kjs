@@ -1,9 +1,9 @@
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
+import { DewsFormComponent } from '../../base/DewsFormComponent.js';
 import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './timepicker.html';
 import scss from './timepicker.scss';
-import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
+import { DrawerBottomBase } from '../drawer-bottom-base.js';
 
 export class Timepicker extends DrawerBottomBase {
   static styles = scss;

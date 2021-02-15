@@ -22,14 +22,14 @@ export class Containercontent extends DewsLayoutComponent {
   }
 
   private _slotChange(e: Event) {
-    for (let i = 0; i < this.children.length; i++) {
+    Array.from(this.children).forEach($el => {
       if (this.parentElement?.className === 'dews-search-field') {
         const li = document.createElement('li');
-        li.appendChild(this.children.item(i) as HTMLElement);
+        li.appendChild($el as HTMLElement);
         this.shadowRoot?.querySelector('.form-field')?.appendChild(li);
       } else {
-        this.shadowRoot?.appendChild(this.children.item(i) as HTMLElement);
+        this.shadowRoot?.appendChild($el as HTMLElement);
       }
-    }
+    });
   }
 }

@@ -2,11 +2,10 @@
 @import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
 
 //======================================
-// dews-search-container
+// dews-weekperiod
 //======================================
 * {
   @include reset();
 }
-@include dews-container-search();
-@include dews-drawer-dataset();
-@include dews-snackbar();
+@include dews-periodpicker();
+@include dews-drawer-periodpicker();

@@ -1,4 +1,5 @@
 import { ObservableObject } from '@dews/dews-mobile-core';
+import { ObservableArrayItem } from './dews-datasource.js';
 
 type DirectionType = 'asc' | 'desc';
 
@@ -12,7 +13,7 @@ export type SortType<T> = {
 
 export class Sort<T extends object> {
   sort?: SortType<T>[];
-  sortingData?: ObservableObject<T>[];
+  sortingData?: ObservableArrayItem<T>[];
   comparer?: (a: T, b: T) => number;
 
   compare(field: keyof T): (a: T, b: T) => number {

@@ -1,8 +1,8 @@
 import template from './periodpicker.html';
 import scss from './periodpicker.scss';
 import { internalProperty, property, PropertyValues } from 'lit-element';
-import { PickerBase } from '../picker/picker-base.js';
-import { DateUtill } from '../base/DateUtill.js';
+import { PickerBase } from '../picker-base.js';
+import { DateUtill } from '../../base/DateUtill.js';
 
 export class Periodpicker extends PickerBase {
   static styles = scss;
@@ -28,11 +28,11 @@ export class Periodpicker extends PickerBase {
   @property({ type: String })
   max: string | undefined = '21000101';
 
-  @property({ type: String })
-  endValue: string | undefined = '';
+  @property({ type: String, reflect: true })
+  endDate: string | undefined;
 
-  @property({ type: String })
-  startValue: string | undefined = '';
+  @property({ type: String, reflect: true })
+  startDate: string | undefined;
 
   @internalProperty()
   private _value: string | undefined = '____-__-__ ~ ____-__-__';
@@ -70,32 +70,21 @@ export class Periodpicker extends PickerBase {
   _confirmClickHandler = () => {
     super._confirmClickHandler();
     if (this._startYear !== undefined) {
-      this.startValue = `${this._startYear}${this._startMonth! < 10 ? '0' + this._startMonth! : this._startMonth}${
+      this.startDate = `${this._startYear}${this._startMonth! < 10 ? '0' + this._startMonth! : this._startMonth}${
         this._startDay! < 10 ? '0' + this._startDay! : this._startDay!
       }`;
     } else {
-      this.startValue = '';
+      this.startDate = '';
     }
     if (this._endYear !== undefined) {
-      this.endValue = `${this._endYear}${this._endMonth! < 10 ? '0' + this._endMonth! : this._endMonth}${
+      this.endDate = `${this._endYear}${this._endMonth! < 10 ? '0' + this._endMonth! : this._endMonth}${
         this._endDay! < 10 ? '0' + this._endDay! : this._endDay!
       }`;
     } else {
-      this.endValue = '';
+      this.endDate = '';
     }
-
-    this.inputValue =
-      `${this._startYear === undefined ? '____' : this._startYear}` +
-      '-' +
-      `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
-      '-' +
-      `${this._startDay === undefined ? '__' : this._startDay < 10 ? '0' + this._startDay : this._startDay}` +
-      ' ~ ' +
-      `${this._endYear === undefined ? '____' : this._endYear}` +
-      '-' +
-      `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
-      '-' +
-      `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
+    this._valueChange();
+    this.inputValue = (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value;
   };
 
   /**
@@ -197,7 +186,7 @@ export class Periodpicker extends PickerBase {
           this._endMonth = undefined;
           this._endDay = undefined;
           if (this.mode === 'day') {
-            this._dayViewChange(this._startYear, this._startMonth - 1);
+            this._dayViewChange(this._startYear, this._startMonth);
             this._daySelect();
           }
           cursor += 3;
@@ -281,7 +270,7 @@ export class Periodpicker extends PickerBase {
           this._startYear = Number((e.target as HTMLInputElement).value.slice(0, 4));
           this._startMonth = Number((e.target as HTMLInputElement).value.slice(5, 7));
           this._startDay = Number((e.target as HTMLInputElement).value.slice(8, 10));
-          this._dayViewChange(this._endYear, this._endMonth - 1);
+          this._dayViewChange(this._endYear, this._endMonth);
           this._daySelect();
           break;
         case 24:
@@ -317,7 +306,7 @@ export class Periodpicker extends PickerBase {
   }
 
   private _removeClickHandler() {
-    this._value = '____-__-__ ~ ____-__-__';
+    (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__-__ ~ ____-__-__';
     this._startYear = undefined;
     this._startMonth = undefined;
     this._startDay = undefined;
@@ -515,7 +504,10 @@ export class Periodpicker extends PickerBase {
           break;
       }
     }
-    this._value =
+  }
+
+  private _valueChange() {
+    (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value =
       `${this._startYear === undefined ? '____' : this._startYear}` +
       '-' +
       `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
@@ -561,19 +553,7 @@ export class Periodpicker extends PickerBase {
       this._startDay = Number($el.dataset.value);
     }
     this._daySelect();
-
-    this._value =
-      `${this._startYear === undefined ? '____' : this._startYear}` +
-      '-' +
-      `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
-      '-' +
-      `${this._startDay === undefined ? '__' : this._startDay < 10 ? '0' + this._startDay : this._startDay}` +
-      ' ~ ' +
-      `${this._endYear === undefined ? '____' : this._endYear}` +
-      '-' +
-      `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
-      '-' +
-      `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
+    this._valueChange();
   };
 
   /**
@@ -697,18 +677,7 @@ export class Periodpicker extends PickerBase {
         this._endDay = undefined;
       }
     }
-    this._value =
-      `${this._startYear === undefined ? '____' : this._startYear}` +
-      '-' +
-      `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
-      '-' +
-      `${this._startDay === undefined ? '__' : this._startDay < 10 ? '0' + this._startDay : this._startDay}` +
-      ' ~ ' +
-      `${this._endYear === undefined ? '____' : this._endYear}` +
-      '-' +
-      `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}` +
-      '-' +
-      `${this._endDay === undefined ? '__' : this._endDay < 10 ? '0' + this._endDay : this._endDay}`;
+    this._valueChange();
   }
 
   _monthClickHandler = (e: Event): void => {
@@ -808,6 +777,28 @@ export class Periodpicker extends PickerBase {
   }
 
   protected updated(_changedProperties: PropertyValues) {
+    if (_changedProperties.has('startDate')) {
+      if (this.startDate !== undefined) {
+        const year = this.startDate!.slice(0, 4);
+        const month = this.startDate!.slice(4, 6);
+        const day = this.startDate!.slice(6, 8);
+        this._startYear = Number(year);
+        this._startMonth = Number(month);
+        this._startDay = Number(day);
+        this._valueChange();
+        this.inputValue = (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value;
+      }
+    }
+    if (_changedProperties.has('startDate')) {
+      if (this.endDate !== undefined) {
+        this._endYear = Number(this.endDate!.slice(0, 4));
+        this._endMonth = Number(this.endDate!.slice(4, 6));
+        this._endDay = Number(this.endDate!.slice(6, 8));
+        this._valueChange();
+        this.inputValue = (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value;
+      }
+    }
+
     super.updated(_changedProperties);
     if (this.mode === 'day') {
       this._daySelect();
