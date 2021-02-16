@@ -1,4 +1,4 @@
-import { property, html, TemplateResult, PropertyValues } from 'lit-element';
+import { property, html, TemplateResult, PropertyValues, internalProperty } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './numerictextbox.html';
@@ -28,9 +28,6 @@ export class Numerictextbox extends DewsFormComponent {
   value: number | '' = '';
 
   @property({ type: String })
-  text = '';
-
-  @property({ type: String })
   prefix = '';
 
   @property({ type: String })
@@ -56,6 +53,9 @@ export class Numerictextbox extends DewsFormComponent {
 
   @property({ type: String })
   round: 'round' | 'ceil' | 'floor' = 'round';
+
+  @internalProperty()
+  private text = '';
 
   private _oldValue = '';
   private _rawValue: number | '' = '';
