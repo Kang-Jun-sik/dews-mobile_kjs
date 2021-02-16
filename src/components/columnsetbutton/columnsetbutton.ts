@@ -92,15 +92,25 @@ export class Columnsetbutton extends DrawerBottomBase {
    * @param i 아이템의 인덱스 혹은 필드를 입력받아 요소를 반환합니다.
    * @return 아이템을 반환합니다.
    * */
-  getItem(i: number | string): Columnitem | undefined {
+  getItem(i: number | string): object | undefined {
     const item = this.shadowRoot?.querySelectorAll('column-item');
-    let returnValue: Columnitem | undefined;
+    let returnValue: object = {};
     if (typeof i === 'number') {
-      returnValue = item?.item(i) as Columnitem;
+      returnValue = {
+        [this.field]: (item?.item(i) as Columnitem).field,
+        [this.labelField]: (item?.item(i) as Columnitem).label,
+        [this.checkedField]: (item?.item(i) as Columnitem).checked,
+        [this.disabledField]: (item?.item(i) as Columnitem).disabled
+      };
     } else {
       item?.forEach($el => {
         if (($el as Columnitem).field === i) {
-          returnValue = $el as Columnitem;
+          returnValue = {
+            [this.field]: ($el as Columnitem).field,
+            [this.labelField]: ($el as Columnitem).label,
+            [this.checkedField]: ($el as Columnitem).checked,
+            [this.disabledField]: ($el as Columnitem).disabled
+          };
         }
       });
     }
@@ -109,31 +119,41 @@ export class Columnsetbutton extends DrawerBottomBase {
 
   /**
    * 아이템의 리스트를 반환 합니다.
-   * @return {Map<string,boolean>>}
+   * @return Array<object>
    * key 데이터소스의 필드 값 입니다.
-   * value 현재 체크 상태를 가지고 있습니다.
+   * value 현재 상태를 가지고 있습니다.
    * */
-  getItemList(): Map<string, boolean> {
-    const list = new Map();
+  getItems(): Array<object> {
+    const returnValue: Array<object> = [];
     this.shadowRoot?.querySelectorAll('column-item').forEach($el => {
-      if ($el.hasAttribute('checked')) {
-        list.set(($el as Columnitem).field, true);
-      } else {
-        list.set(($el as Columnitem).field, false);
-      }
+      let obj: object = {};
+      obj = {
+        [this.field]: ($el as Columnitem).field,
+        [this.labelField]: ($el as Columnitem).label,
+        [this.checkedField]: ($el as Columnitem).checked,
+        [this.disabledField]: ($el as Columnitem).disabled
+      };
+      returnValue.push(obj);
     });
-    return list;
+    return returnValue;
+  }
+
+  removeItems() {
+    this.shadowRoot?.querySelector('#table')?.remove();
+    const tbody = document.createElement('tbody');
+    tbody.id = 'table';
+    this.shadowRoot?.querySelector('.column-list')?.appendChild(tbody);
   }
 
   /**
    * Columns-item 을 추가합니다.
    * @param {Object} data 아이템의 옵션을 설정합니다.
-   * @param {Boolean} data.field 아이템의 필드를 설정합니다.(필수값);
-   * @param {Boolean} data.label 아이템의 라벨을 설정합니다.
-   * @param {Boolean} data.checked 아이템의 초기 체크유무를 설정합니다.
-   * @param {Boolean} data.disabled 아이템의 선택 가능여부를 설정합니다.
+   * @param {String} data.(key)  아이템의 필드를 설정합니다.(필 수값);
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
    * */
-  addItem(data: object) {
+  setItem(data: object) {
     const DATA = new Map(Object.entries(data));
     const item = document.createElement('column-item');
     for (const i in data) {
@@ -152,81 +172,102 @@ export class Columnsetbutton extends DrawerBottomBase {
           item.setAttribute('label', DATA.get(`${this.labelField}`) as string);
           break;
         case `${this.field}`:
-          item.setAttribute('label', DATA.get(`${this.field}`) as string);
+          item.setAttribute('field', DATA.get(`${this.field}`) as string);
           break;
       }
     }
     this.appendChild(item);
   }
 
-  addItems(data: Array<object>) {
+  /**
+   * Columns-items 을 추가합니다.
+   * @param {Array<Object>} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(key)  아이템의 필드를 설정합니다.(필 수값);
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
+  setItems(data: Array<object>) {
     data.forEach(Data => {
-      const DATA = new Map(Object.entries(Data));
-      const item = document.createElement('column-item');
-      for (const i in Data) {
-        switch (i) {
-          case this.checkedField:
-            if (DATA.get(`${this.checkedField}`)) {
-              item.setAttribute('checked', '');
-            }
-            break;
-          case `${this.disabledField}`:
-            if (DATA.get(`${this.disabledField}`)) {
-              item.setAttribute('disabled', '');
-            }
-            break;
-          case `${this.labelField}`:
-            item.setAttribute('label', DATA.get(`${this.labelField}`) as string);
-            break;
-          case `${this.field}`:
-            item.setAttribute('label', DATA.get(`${this.field}`) as string);
-            break;
-        }
-      }
-      this.appendChild(item);
+      this.setItem(Data);
     });
   }
-  //
-  // /**
-  //  * 아이템을 지웁니다
-  //  * @param {Number} i 아이템의 index
-  //  * @param {String} i 필드
-  //  * */
-  // removeItem(i: number | string) {
-  //   const item = this.shadowRoot?.querySelectorAll('column-item');
-  //   if (typeof i === 'number') {
-  //     item?.item(i).remove();
-  //   } else {
-  //     item?.forEach($el => {
-  //       if (($el as Columnitem).field === i) {
-  //         $el.remove();
-  //       }
-  //     });
-  //   }
-  // }
 
   /**
    * item Check 상태로 변경 합니다.
-   * @param {Number} i 아이템의 index
+   * @param {Number} key 아이템의 key
    * */
-  checkItem(i: number | string) {
+  checkItem(key: string) {
     const item = this.shadowRoot?.querySelectorAll('column-item');
-    if (typeof i === 'number') {
-      item?.item(i).setAttribute('checked', '');
-    } else {
-      item?.forEach($el => {
-        if (($el as Columnitem).field === i) {
-          ($el as Columnitem).checked = true;
+    item?.forEach($el => {
+      if (($el as Columnitem).field === key) {
+        ($el as Columnitem).checked = true;
+      }
+    });
+  }
+
+  /**
+   * item 을 지웁니다.
+   * @param {Number} key 아이템의 key
+   * */
+  async removeItem(key: string) {
+    const items: Array<object> = this.getItems();
+    const returnValue: Array<object> = [];
+    await items?.forEach(item => {
+      const data = new Map(Object.entries(item));
+      if (data.get(`${this.field}`) !== key) {
+        let obj: object = {};
+        obj = {
+          [this.field]: data.get(`${this.field}`),
+          [this.labelField]: data.get(`${this.labelField}`),
+          [this.checkedField]: data.get(`${this.checkedField}`),
+          [this.disabledField]: data.get(`${this.disabledField}`)
+        };
+        returnValue.push(obj);
+      }
+    });
+    await this.removeItems();
+    await this.setItems(returnValue);
+  }
+
+  /**
+   * item 의 내용을 변경 합니다.
+   * @param {Object} obj 아이템의 속성
+   * @param {String} obj.(label-field) 를 수정할수 있습니다.
+   * @param {String} obj.(checked-field) 를 수정할수 있습니다.
+   * @param {String} obj.(disabled-field) 를 수정할수 있습니다.
+   * */
+  updateItem(obj: object) {
+    const item = this.shadowRoot?.querySelectorAll('column-item');
+    const data = new Map(Object.entries(obj));
+    item?.forEach($el => {
+      if (($el as Columnitem).field === data.get(`${this.field}`)) {
+        for (const dataKey in data) {
+          switch (dataKey) {
+            case this.labelField:
+              ($el as Columnitem).label = data.get(`${this.labelField}`);
+              break;
+            case this.checkedField:
+              if (data.get(`${this.checkedField}`) == true) {
+                ($el as Columnitem).checked = Boolean(data.get(`${this.checkedField}`));
+              }
+              break;
+            case this.disabledField:
+              if (data.get(`${this.disabledField}`) == true) {
+                ($el as Columnitem).disabled = Boolean(data.get(`${this.disabledField}`));
+              }
+              break;
+          }
         }
-      });
-    }
+      }
+    });
   }
 
   /**
    * 아이템의 라벨리스트를 반환 합니다.
    * @return {Array} 아이템의 라벨리스트를 가져옵니다.
    * */
-  getItemLabelList() {
+  private _getItemLabelList() {
     const list = new Map();
     this.shadowRoot?.querySelectorAll('COLUMN-ITEM').forEach(($el, index) => {
       list.set(index, ($el as Columnitem).label);
@@ -238,7 +279,7 @@ export class Columnsetbutton extends DrawerBottomBase {
    * 체크되어진 아이템의 index 를 배열로 반환합니다.
    * @return [] 체크표시된 아이템의 index 를 반환함니다.
    * */
-  getCheckIndexList() {
+  private _getCheckIndexList() {
     const list: number[] = [];
     this.shadowRoot?.querySelectorAll('COLUMN-ITEM').forEach(($el, index) => {
       if ($el.hasAttribute('checked')) {
@@ -253,8 +294,6 @@ export class Columnsetbutton extends DrawerBottomBase {
   };
 
   off = (key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) => {
-    const ab = this.getItemList();
-
     return this._EVENT.off(key, handler);
   };
 
@@ -293,7 +332,7 @@ export class Columnsetbutton extends DrawerBottomBase {
   private async _slotChange() {
     let tr = document.createElement('tr');
     const $table = this.shadowRoot?.querySelector('#table');
-    this.querySelectorAll('column-item').forEach(($child, index) => {
+    this.querySelectorAll('column-item').forEach($child => {
       const td = document.createElement('td');
       td.appendChild($child as HTMLElement);
       if (this.shadowRoot?.querySelectorAll('column-item')?.length! % 2 === 0) {

@@ -32,7 +32,7 @@ export const ColumnSet = () => html`<div style="width: 360px">
     label-field="label"
     auto-bind
     onOpen="${(e: any) => {
-      e.target.addItems([
+      e.target.setItems([
         { key: '1234', label: '리스트 추가1' },
         { key: '1235', label: '리스트 추가2' },
         { key: '1236', label: '리스트 추가3' }
@@ -41,6 +41,10 @@ export const ColumnSet = () => html`<div style="width: 360px">
     }}"
     onComplete="${(e: any) => {
       console.log('onComplete', e);
+    }}"
+    onClose="${(e: any) => {
+      console.log(e.target.getItems(), '닫힘');
+      e.target.removeItem('1234');
     }}"
   >
   </columnset-button>
