@@ -1,4 +1,4 @@
-import { property, html, TemplateResult } from 'lit-element';
+import { property, html, TemplateResult, PropertyValues } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './numerictextbox.html';
@@ -26,6 +26,9 @@ export class Numerictextbox extends DewsFormComponent {
 
   @property({ type: String })
   value: number | '' = '';
+
+  @property({ type: String })
+  text = '';
 
   @property({ type: String })
   prefix = '';
@@ -306,6 +309,8 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = this._rawValue.toString();
     $spanMask!.style.display = 'none';
 
+    this.text = this.shadowRoot!.querySelectorAll('input')[0]?.value;
+
     if (Number(this._oldValue) != this._rawValue) {
       // 이벤트실행
       this.Event.emit('_change', { target: this, type: 'change' });
@@ -358,12 +363,6 @@ export class Numerictextbox extends DewsFormComponent {
     this._focusIn();
   }
 
-  public text(): string {
-    const $input = this.shadowRoot!.querySelectorAll('input');
-
-    return $input[0].value;
-  }
-
   // 이벤트 등록
   public on(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
     this.Event.on('_change', handler);
@@ -372,6 +371,31 @@ export class Numerictextbox extends DewsFormComponent {
   // 이벤트 삭제
   public off(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
     this.Event.off('_change', handler);
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+
+    _changedProperties.forEach((oldValue, propName) => {
+      let value = this.value;
+      const $input = this.shadowRoot!.querySelectorAll('input');
+
+      if (propName === 'value') {
+        const isValid = this._numericRegex().test(value.toString());
+
+        if (!isValid) {
+          value = Number(value.toString().replace(/[^0-9.-]/g, ''));
+        }
+
+        this._rawValue = value;
+        this.updateComplete.then(() => {
+          $input[0].value = this.addCommas(this._rawValue.toString());
+          $input[1].value = this._rawValue.toString();
+
+          this.text = $input[0].value;
+        });
+      }
+    });
   }
 
   render() {
