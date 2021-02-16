@@ -2,7 +2,6 @@ import { internalProperty, property, PropertyValues } from 'lit-element';
 import { Transport } from './transport.js';
 import { Schema } from './schema.js';
 import {
-  ajax,
   api,
   EventEmitter,
   ObservableArray,
@@ -259,7 +258,7 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
       sortOptions = Array.isArray(sortOptions) ? sortOptions : [sortOptions];
       if (sortOptions && this._data) {
         for (const sortOption of sortOptions) {
-          sortOption.compare = sortOption.compare || this._sort.comparerCreate(sortOption);
+          sortOption.compare = this._sort.comparerCreate(sortOption);
           result = result || [...this._data];
           result?.sort(sortOption.compare);
         }
