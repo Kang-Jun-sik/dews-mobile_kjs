@@ -16,11 +16,14 @@ export class Monthperiodpicker extends PickerBase {
   @property({ type: String })
   value: string | undefined = '';
 
-  @property({ type: String })
-  end: string | undefined = '';
+  @property({ type: String, reflect: true })
+  text = '';
 
-  @property({ type: String })
-  start: string | undefined = '';
+  @property({ type: String, reflect: true })
+  endDate: string | undefined;
+
+  @property({ type: String, reflect: true })
+  startDate: string | undefined;
 
   @internalProperty()
   private _value: string | undefined = '____-__ ~ ____-__';
@@ -64,14 +67,23 @@ export class Monthperiodpicker extends PickerBase {
 
   _confirmClickHandler = () => {
     this._close();
-    this.inputValue =
-      `${this._startYear === undefined ? '____' : this._startYear}` +
-      '-' +
-      `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
-      ' ~ ' +
-      `${this._endYear === undefined ? '____' : this._endYear}` +
-      '-' +
-      `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}`;
+    if (this._startYear !== undefined && this._endYear !== undefined) {
+      this.startDate = `${this._startYear}${this._startMonth! < 10 ? '0' + this._startMonth! : this._startMonth}`;
+      this.endDate = `${this._endYear}${this._endMonth! < 10 ? '0' + this._endMonth! : this._endMonth}`;
+      this.inputValue =
+        `${this._startYear}` +
+        '-' +
+        `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
+        ' ~ ' +
+        `${this._endYear}` +
+        '-' +
+        `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}`;
+    } else {
+      this.inputValue = '';
+      this.startDate = '';
+      this.endDate = '';
+    }
+    this.text = this.inputValue;
   };
 
   private _inputHandler(e: InputEvent) {
@@ -247,7 +259,11 @@ export class Monthperiodpicker extends PickerBase {
         break;
     }
 
-    this._value =
+    this._valueChange();
+  }
+
+  private _valueChange() {
+    (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value =
       `${this._startYear === undefined ? '____' : this._startYear}` +
       '-' +
       `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
@@ -368,14 +384,7 @@ export class Monthperiodpicker extends PickerBase {
       }
     }
 
-    this._value =
-      `${this._startYear === undefined ? '____' : this._startYear}` +
-      '-' +
-      `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
-      ' ~ ' +
-      `${this._endYear === undefined ? '____' : this._endYear}` +
-      '-' +
-      `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}`;
+    this._valueChange();
     // this._startDay = date.getDate();
     // this._endYear = date.getFullYear();
   }
@@ -433,15 +442,7 @@ export class Monthperiodpicker extends PickerBase {
         $month.classList.add('select-end');
       }
     });
-
-    this._value =
-      `${this._startYear === undefined ? '____' : this._startYear}` +
-      '-' +
-      `${this._startMonth === undefined ? '__' : this._startMonth < 10 ? '0' + this._startMonth : this._startMonth}` +
-      ' ~ ' +
-      `${this._endYear === undefined ? '____' : this._endYear}` +
-      '-' +
-      `${this._endMonth === undefined ? '__' : this._endMonth < 10 ? '0' + this._endMonth : this._endMonth}`;
+    this._valueChange();
   }
 
   private _yearSelect() {
@@ -459,6 +460,34 @@ export class Monthperiodpicker extends PickerBase {
   }
 
   protected updated(_changedProperties: PropertyValues) {
+    if (_changedProperties.has('startDate')) {
+      if (this.startDate !== '') {
+        const year = this.startDate?.slice(0, 4);
+        const month = this.startDate?.slice(4, 6);
+        this._startYear = Number(year);
+        this._startMonth = Number(month);
+        this._valueChange();
+        this.inputValue = (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value;
+      } else {
+        this._startYear = undefined;
+        this._startMonth = undefined;
+        this.inputValue = '';
+      }
+      this.text = this.inputValue;
+    }
+    if (_changedProperties.has('endDate')) {
+      if (this.endDate !== '') {
+        this._endYear = Number(this.endDate?.slice(0, 4));
+        this._endMonth = Number(this.endDate?.slice(4, 6));
+        this._valueChange();
+        this.inputValue = (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value;
+      } else {
+        this._endYear = undefined;
+        this._endMonth = undefined;
+        this.inputValue = '';
+      }
+      this.text = this.inputValue;
+    }
     super.updated(_changedProperties);
     if (this.mode === 'month') {
       this._monthSelect();

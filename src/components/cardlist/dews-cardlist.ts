@@ -304,14 +304,14 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _columnSetOpenHandler = (e: EventArgs) => {
     console.log('open', e);
     const columnSet = e.target as Columnsetbutton;
-    columnSet.addItems(this._fieldList);
+    // columnSet.addItems(this._fieldList);
   };
 
   private _columnSetCompleteHandler = (e: EventArgs) => {
     console.log('complete', e);
     const columnSet = e.target as Columnsetbutton;
-    const itemList = columnSet.getItemList();
-    console.log(itemList);
+    // const itemList = columnSet.getItemList();
+    // console.log(itemList);
   };
 
   private _initDatasource() {

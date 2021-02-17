@@ -240,8 +240,8 @@ export class Monthpicker extends PickerBase {
   // 적용버튼 핸들러
   _confirmClickHandler = (): void => {
     if (this._value?.indexOf('_')! < 0) {
-      this.inputValue = this._value;
-      this.value = `${this.inputValue?.slice(0, 4)}${this.inputValue?.slice(5, 7)}`;
+      this.inputValue = `${this.inputValue?.slice(0, 4)}${this.inputValue?.slice(5, 7)}`;
+      this.value = this.inputValue;
       this._close();
     }
   };
@@ -298,6 +298,27 @@ export class Monthpicker extends PickerBase {
       });
     }
 
+    if (_changedProperties.has('value')) {
+      if (this.value === '') {
+        this.inputValue = '';
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__';
+        if (this.spinner) {
+          this._spinnerRemove();
+        }
+      } else {
+        this._setYear = Number(this.value!.slice(0, 4));
+        this._setMonth = Number(this.value!.slice(4, 6));
+        this._setDay = Number(this.value!.slice(6, 8));
+        this.inputValue = this.value!.slice(0, 4) + '-' + this.value!.slice(4, 6);
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
+        if (this.spinner) {
+          this._spinnerRemove();
+          this._spinnerYearSelect();
+          this._spinnerMonthSelect();
+        }
+      }
+    }
+
     if (this.spinner) {
       const month: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
         '.moving-list.month'
@@ -322,19 +343,6 @@ export class Monthpicker extends PickerBase {
     } else {
       this._selectChange();
     }
-  }
-
-  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    if (_changedProperties.has('value')) {
-      if (this.value === undefined) {
-        this.inputValue = '';
-        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__';
-      } else {
-        this.inputValue = this.value!.slice(0, 4) + '-' + this.value!.slice(4, 6);
-        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
-      }
-    }
-    return super.shouldUpdate(_changedProperties);
   }
 
   render() {

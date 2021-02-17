@@ -317,7 +317,7 @@ export class PickerBase extends DrawerBottomBase {
 
   protected _spinnerYearSelect(): void {
     const $drawer: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')! as HTMLElement;
-    ($drawer.querySelector('.moving-list.year')!.children[
+    ($drawer.querySelector('.moving-list.year')?.children[
       this._setYear! - Number(this.min?.slice(0, 4))
     ] as HTMLElement).classList.add('select');
   }
@@ -672,10 +672,10 @@ export class PickerBase extends DrawerBottomBase {
 
   protected _selectRemove() {
     const $el = this.shadowRoot?.querySelector('.calendar-content')?.firstElementChild?.children.item(1) as HTMLElement;
-    $el.querySelectorAll('.select').forEach($select => {
+    $el.querySelectorAll('.select')?.forEach($select => {
       $select.classList.remove('select');
     });
-    $el.querySelectorAll('.select-period').forEach($select => {
+    $el.querySelectorAll('.select-period')?.forEach($select => {
       $select.classList.remove('select-period');
     });
     $el.querySelector('.select-start')?.classList.remove('select-start');

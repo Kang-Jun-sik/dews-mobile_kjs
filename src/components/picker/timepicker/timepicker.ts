@@ -17,8 +17,11 @@ export class Timepicker extends DrawerBottomBase {
   @internalProperty()
   height: string | undefined;
 
-  @property({ type: String })
-  value: string | undefined;
+  @property({ type: String, reflect: true })
+  value = '';
+
+  @property({ type: String, reflect: true })
+  text = '';
 
   @property({ type: String })
   min: string | undefined;
@@ -82,8 +85,13 @@ export class Timepicker extends DrawerBottomBase {
       if (this._setMinute! < 10) {
         min = '0' + this._setMinute;
       }
-      this.value = hour!.toString() + min;
+      if (hour! < 10) {
+        this.value = `0${hour}${min}`;
+      } else {
+        this.value = `${hour}${min}`;
+      }
       this.inputValue = this._value;
+      this.text = this.inputValue!;
     } else {
       this.value = '';
       this.inputValue = '';
@@ -171,11 +179,11 @@ export class Timepicker extends DrawerBottomBase {
     $el!.querySelector!('.select')?.classList.remove('select');
     if (num !== undefined) {
       $el!.children.item(num)?.classList.add('select');
-      this._setHour = Number(($el!.children.item(num)! as HTMLElement).dataset.value);
+      this._setHour = Number(($el!.children.item(num)! as HTMLElement)?.dataset?.value);
       this._inputChange();
     } else {
       $el!.children.item((this.toHour % 12) - 1)?.classList.add('select');
-      this._setHour = Number(($el!.children.item((this.toHour % 12) - 1)! as HTMLElement).dataset.value);
+      this._setHour = Number(($el!.children.item((this.toHour % 12) - 1)! as HTMLElement)?.dataset?.value);
     }
     this._minuteView();
   }
@@ -427,7 +435,7 @@ export class Timepicker extends DrawerBottomBase {
     this._value = `${this._setMeridiem} ${this._setHour! < 10 ? '0' + this._setHour : this._setHour}:${
       this._setMinute! < 10 ? '0' + this._setMinute : this._setMinute
     }`;
-    (this.shadowRoot!.querySelector('.drawer-layout')!.querySelector('.input') as HTMLInputElement).value = this._value;
+    (this.shadowRoot!.querySelector('.input') as HTMLInputElement).value = this._value;
   }
 
   private _selectRemove() {
@@ -489,6 +497,32 @@ export class Timepicker extends DrawerBottomBase {
 
   protected updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
+    if (_changedProperties.has('value')) {
+      if (this.value !== '') {
+        if (Number(this.value?.slice(0, 2)) > 12) {
+          this._setHour = Number(this.value?.slice(0, 2)) - 12;
+          this._setMeridiem = 'PM';
+        } else {
+          this._setHour = Number(this.value?.slice(0, 2));
+          this._setMeridiem = 'AM';
+        }
+        this._setMinute = Number(this.value?.slice(2, 4));
+        this._inputChange();
+        this.inputValue = this._value;
+        this.text = this.inputValue!;
+        const $el = this.shadowRoot?.querySelector('.allday .moving-list');
+        for (let i = 0; i < $el!.children!.length; i++) {
+          if (($el?.children.item(i) as HTMLElement).dataset.value === this._setMeridiem) {
+            this._meridiemSelect(Number(($el?.children.item(i) as HTMLElement).dataset.index));
+          }
+        }
+      } else {
+        this._setHour = undefined;
+        this._setMinute = undefined;
+        this.inputValue = '';
+      }
+    }
+
     this._hourPositionChange();
     this._minutePositionChange();
     this._meridiemPositionChange();
