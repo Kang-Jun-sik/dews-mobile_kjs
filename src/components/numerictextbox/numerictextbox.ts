@@ -6,6 +6,8 @@ import scss from './numerictextbox.scss';
 
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
+type EVENT_TYPE = 'change';
+
 export class Numerictextbox extends DewsFormComponent {
   static styles = scss;
 
@@ -244,10 +246,8 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) + this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    // this.dispatchEvent(this.onChange);
-
     // 이벤트실행
-    this.Event.emit('_change', { target: this, type: 'change' });
+    this.Event.emit('change', { target: this, type: 'change' });
   }
 
   private _stepperDecrement() {
@@ -263,18 +263,8 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) - this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    // this.dispatchEvent(this.onChange);
-
     // 이벤트실행
-    this.Event.emit('_change', { target: this, type: 'change' });
-  }
-
-  private _keydown(e: KeyboardEvent) {
-    const key: string = e.key;
-
-    if (key == 'Enter') {
-      this._focusBlur();
-    }
+    this.Event.emit('change', { target: this, type: 'change' });
   }
 
   private _focusIn() {
@@ -313,7 +303,8 @@ export class Numerictextbox extends DewsFormComponent {
 
     if (Number(this._oldValue) != this._rawValue) {
       // 이벤트실행
-      this.Event.emit('_change', { target: this, type: 'change' });
+      console.log('change 이벤트 발생');
+      this.Event.emit('change', { target: this, type: 'change' });
     }
   }
 
@@ -364,13 +355,13 @@ export class Numerictextbox extends DewsFormComponent {
   }
 
   // 이벤트 등록
-  public on(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.Event.on('_change', handler);
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.on(key, handler);
   }
 
   // 이벤트 삭제
-  public off(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.Event.off('_change', handler);
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.off(key, handler);
   }
 
   protected updated(_changedProperties: PropertyValues) {
