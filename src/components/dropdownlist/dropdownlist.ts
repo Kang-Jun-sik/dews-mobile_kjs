@@ -18,6 +18,9 @@ export class Dropdownlist extends DrawerBottomBase {
   @property({ type: String })
   datasource: string | undefined;
 
+  @property({ type: String, reflect: true })
+  text = '';
+
   @property({ type: String, attribute: 'key-field' })
   field = 'key';
 
@@ -177,7 +180,9 @@ export class Dropdownlist extends DrawerBottomBase {
     const map = new Map(Object.entries(data));
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       if (($item as DropdownlistItem).field === map.get(`${this.field}`)) {
-        //  에러
+        ($item as DropdownlistItem).label = map.get(`${this.labelField}`);
+        ($item as DropdownlistItem).checked = Boolean(map.get(`${this.checkedField}`));
+        ($item as DropdownlistItem).disabled = Boolean(map.get(`${this.disabled}`));
       }
     });
   }
@@ -278,6 +283,16 @@ export class Dropdownlist extends DrawerBottomBase {
         this._selectList.push(false);
       }
     });
+    if (this.select[0] !== undefined) {
+      if (this.multi) {
+        this.text = `${this.select[0]} ${this.select.length > 1 ? '외' + `${this.select.length - 1}건` : ''}`;
+      } else {
+        this.text = `${this.select[0]}`;
+      }
+    } else {
+      this.text = '';
+    }
+    console.log('여기임니다');
     this._close();
   };
 
