@@ -1,6 +1,6 @@
 <div class="date-picker-wrap focus" id="drawer" @click="${this._clickHandler}">
   <label for="">${this.title}</label>
-  <span class="select-wrap">
+  <span class="select-wrap" tabindex="1">
       <span class="select-shape">
           <span class="select-input">
               ${this.inputValue}
@@ -11,8 +11,8 @@
 </div>
 
 
-<drawer-layout class="drawer-layout"  @close="${this._close}" ?active="${this.active}">
-  <div class="drawer-date-picker">
+<drawer-layout class="drawer-layout"  @close="${this._close}" ?active="${this.active}" tabindex="-1">
+  <div class="drawer-datepicker">
     <div class="titlebar">
       <div class="title">${this.title}</div>
       <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
