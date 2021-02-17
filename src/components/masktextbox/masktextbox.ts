@@ -68,6 +68,9 @@ export class Masktextbox extends DewsFormComponent {
   }
 
   @internalProperty()
+  private _active = false;
+
+  @internalProperty()
   private stateType = '';
 
   @internalProperty()
@@ -208,6 +211,7 @@ export class Masktextbox extends DewsFormComponent {
 
     this.viewSpan.style.display = 'none';
     this.maskSpan.style.display = 'block';
+    this._active = true;
 
     this._maskElement.focus();
   }
@@ -311,7 +315,7 @@ export class Masktextbox extends DewsFormComponent {
     }
 
     element.value = this._old = arrCurrent.join('');
-    if (document.activeElement === this) {
+    if (this._active) {
       if (idx === undefined) {
         idx = this.maskLen;
       }
@@ -447,6 +451,7 @@ export class Masktextbox extends DewsFormComponent {
     const value = (this._viewElement.value = this._maskElement.value);
     this.viewSpan.style.display = 'block';
     this.maskSpan.style.display = 'none';
+    this._active = false;
 
     for (let i = 0; i < this.tokens.length; i++) {
       const token = this.tokens[i];
