@@ -14,13 +14,13 @@ export class DropdownlistItem extends DewsFormComponent {
   @property({ type: String })
   title = '';
 
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   field: string | undefined;
 
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   label: string | undefined;
 
-  @property({ type: Boolean })
+  @property({ type: Boolean, reflect: true })
   disabled = false;
 
   @property({ type: Boolean, reflect: true })
@@ -41,7 +41,7 @@ export class DropdownlistItem extends DewsFormComponent {
     }
 
     if (this.title === '') {
-      if (this.label !== undefined) {
+      if (this.label !== undefined && this.label !== '') {
         this.title = this.label;
       } else {
         this.title = `${this.field}`;
@@ -60,7 +60,7 @@ export class DropdownlistItem extends DewsFormComponent {
     this.$parent!.select[0] = $el.dataset.value as string;
     this.$parent!._EVENT.emit('select', { target: this, type: 'select', item: this.$parent!.select[0] });
     this.$parent!._EVENT.emit('change', { target: this, type: 'change' });
-    this.$parent!._close();
+    this.$parent!.close();
   }
 
   private _multiItemSelectHandler(e: MouseEvent) {

@@ -1,5 +1,5 @@
 import { DewsLayoutComponent } from '../base/DewsLayoutComponent.js';
-import { html, property, TemplateResult } from 'lit-element';
+import { property } from 'lit-element';
 
 import template from './formcontainer.html';
 import scss from './formcontainer.scss';
