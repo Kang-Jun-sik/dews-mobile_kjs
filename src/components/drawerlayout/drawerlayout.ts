@@ -3,6 +3,9 @@ import { internalProperty, property, PropertyValues } from 'lit-element';
 
 import template from './drawerlayout.html';
 import scss from './drawerlayout.scss';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT_TYPE = 'scrollChange';
 
 export class Drawerlayout extends DewsFormComponent {
   static styles = scss;
@@ -47,6 +50,19 @@ export class Drawerlayout extends DewsFormComponent {
     super.disconnectedCallback();
   }
 
+  /*
+   * 이벤트 생성
+   * */
+  #EVENT = new EventEmitter();
+
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.#EVENT.off(key, handler);
+  }
+
   private _blur(): void {
     console.log('blur');
   }
@@ -54,6 +70,11 @@ export class Drawerlayout extends DewsFormComponent {
   private _mouseMove(e: MouseEvent): void {
     if (this._moveState) {
       this._height = `${this._defaultHeight! + (this._moveStart! - e.screenY)}px`;
+      this.#EVENT.emit('scrollChange', {
+        target: this,
+        type: 'scrollChange',
+        height: this._defaultHeight! + (this._moveStart! - e.screenY)
+      });
     }
   }
 
