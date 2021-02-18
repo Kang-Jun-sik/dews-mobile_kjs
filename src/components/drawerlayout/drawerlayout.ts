@@ -42,7 +42,6 @@ export class Drawerlayout extends DewsFormComponent {
 
   connectedCallback() {
     super.connectedCallback();
-
     this._height = `calc(100% - ${this.height})`;
   }
 
@@ -106,6 +105,11 @@ export class Drawerlayout extends DewsFormComponent {
         ) {
           this._moveCheck = true;
           this._height = `${this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY)}px`;
+          this.#EVENT.emit('heightChange', {
+            target: this,
+            type: 'heightChange',
+            height: this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY)
+          });
         }
       }
     }
