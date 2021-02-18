@@ -1,16 +1,16 @@
-<div class="time-picker-wrap" id="drawer" @click="${this._clickHandler}">
+<div class="timepicker-wrap" id="drawer" @click="${this._clickHandler}">
   <label for="">${this.title}</label>
   <span class="select-wrap">
       <span class="select-shape">
           <span class="select-input">${this.inputValue}</span>
       </span>
-      <span class="select-icon time-picker-icon"></span>
+      <span class="select-icon timepicker-icon"></span>
   </span>
 </div>
 
 
   <drawer-layout class="drawer-layout" ?dimming="${this.dimming}" @close="${this._close}"  ?active="${this.active}">
-    <div class="drawer-time-picker">
+    <div class="drawer-timepicker">
       <div class="titlebar">
         <div class="title">${this.title}</div>
         <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
@@ -19,7 +19,7 @@
       </div>
 
       <div class="control">
-        <div class="layer-time-picker-input-wrap">
+        <div class="layer-timepicker-input-wrap">
           <span class="layer-picker-input">
             <span class="picker-input">
                <input class="input" type="text" inputmode="numeric" pattern="[0-9]*" @click="${this._inputClickHandler}"
