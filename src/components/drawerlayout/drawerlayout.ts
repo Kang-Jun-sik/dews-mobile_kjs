@@ -5,7 +5,7 @@ import template from './drawerlayout.html';
 import scss from './drawerlayout.scss';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
-type EVENT_TYPE = 'scrollChange';
+type EVENT_TYPE = 'heightChange';
 
 export class Drawerlayout extends DewsFormComponent {
   static styles = scss;
@@ -70,9 +70,9 @@ export class Drawerlayout extends DewsFormComponent {
   private _mouseMove(e: MouseEvent): void {
     if (this._moveState) {
       this._height = `${this._defaultHeight! + (this._moveStart! - e.screenY)}px`;
-      this.#EVENT.emit('scrollChange', {
+      this.#EVENT.emit('heightChange', {
         target: this,
-        type: 'scrollChange',
+        type: 'heightChange',
         height: this._defaultHeight! + (this._moveStart! - e.screenY)
       });
     }
