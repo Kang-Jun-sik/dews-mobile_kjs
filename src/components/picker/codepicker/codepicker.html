@@ -29,7 +29,7 @@ ${this.multi?html`
 </div>
 `}
 
-<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}">
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" dimming>
   <div class="drawer-codepicker">
     <div class="titlebar">
       <div class="title">${this.helpTitle}</div>
@@ -43,21 +43,21 @@ ${this.multi?html`
 
         <!-- 전체 선택 -->
         <!-- codepicker 시 codepicer-control 추가, select 시 선택목록 노출 -->
-<!--        <div class="cardlist-all-select codepicker-control ">-->
-<!--          <div class="card-total">-->
-<!--            <span>총<strong>2</strong>건</span>-->
-<!--          </div>-->
+        <div class="cardlist-all-select codepicker-control ">
+          <div class="card-total">
+            <span>총<strong>2</strong>건</span>
+          </div>
 
-<!--          &lt;!&ndash; codepicker 에서 사용 &ndash;&gt;-->
-<!--          <div class="list-select">-->
-<!--              <span class="list-select-title">선택목록</span>-->
-<!--              <button class="list-select-button"> <span>99+</span> </button>-->
-<!--          </div>-->
+          <!-- codepicker 에서 사용 -->
+          <div class="list-select">
+              <span class="list-select-title">선택목록</span>
+              <button class="list-select-button"> <span>99+</span> </button>
+          </div>
 
-<!--          <div class="all-select">-->
-<!--            <dews-checkbox reverse title="전체선택"></dews-checkbox>-->
-<!--          </div>-->
-<!--        </div>-->
+          <div class="all-select">
+            <dews-checkbox reverse title="전체선택"></dews-checkbox>
+          </div>
+        </div>
 
         <div class="cardlist-wrap">
           <!-- 해당 영역 스크롤이 들어가야해서, 높이값 계산 필요.  div.control.height() - div.codepicker-control.height()  -->
@@ -86,60 +86,8 @@ ${this.multi?html`
 <!--                  <p class="name">사업자등록번호</p>-->
 <!--                  <p class="item">100-10-12345</p>-->
 <!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">대표자</p>-->
-<!--                  <p class="item">김더존</p>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">등록일</p>-->
-<!--                  <p class="item">2020-10-27 14:29:00</p>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">매출액</p>-->
-<!--                  <p class="item number">220,000,000,000</p>-->
-<!--                </li>-->
 <!--              </ul>-->
 <!--            </div>-->
-
-
-<!--            <div class="card">-->
-<!--              <div class="card-header">-->
-<!--                <div class="card-control">-->
-<!--                  <ul>-->
-<!--                    <li>-->
-<!--                      <dews-checkbox></dews-checkbox>-->
-<!--                    </li>-->
-<!--                  </ul>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <ul class="list-field">-->
-<!--                <li>-->
-<!--                  <p class="name">거래처코드</p>-->
-<!--                  <p class="item">RC002578</p>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">거래처명</p>-->
-<!--                  <p class="item">㈜더존개발</p>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">사업자등록번호</p>-->
-<!--                  <p class="item">100-10-12345</p>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">대표자</p>-->
-<!--                  <p class="item">김더존</p>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">등록일</p>-->
-<!--                  <p class="item">2020-10-27 14:29:00</p>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                  <p class="name">매출액</p>-->
-<!--                  <p class="item number">220,000,000,000</p>-->
-<!--                </li>-->
-<!--              </ul>-->
-<!--            </div>-->
-<!--          </div>-->
         </div>
       </div>
 
@@ -160,7 +108,6 @@ ${this.multi?html`
           <div class="code-filter-field">
             <!--  해당 영역 component.. 처리  -->
             <ul class="form-field" @change="${this._changeControlValue}">
-              ${this.searchFormList}
 <!--              <li><dews-textbox title="TextBox"></dews-textbox></li>-->
 <!--              <li><dews-datepicker title="DatePicker"></dews-datepicker></li>-->
 <!--              <li><dews-dropdownlist title="DropDown"></dews-dropdownlist></li>-->

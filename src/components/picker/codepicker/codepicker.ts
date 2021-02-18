@@ -1,4 +1,4 @@
-import { internalProperty, property, PropertyValues, query } from 'lit-element';
+import { html, internalProperty, property, PropertyValues, query, TemplateResult } from 'lit-element';
 import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
 
 import template from './codepicker.html';
@@ -106,9 +106,9 @@ export class Codepicker extends PickerBase {
 
   async connectedCallback() {
     super.connectedCallback();
-    console.log('connect');
+    console.log('connect!!');
 
-    this._createSearchContainer();
+    // this._createSearchContainer();
   }
 
   // 적용 버튼 클릭 시
@@ -125,33 +125,8 @@ export class Codepicker extends PickerBase {
   }
 
   private _createSearchContainer() {
-    // 일단 이렇게 받아온다 가정
-    const htmlString =
-      ' <li>\n' +
-      '                <label for="">거래처코드</label>\n' +
-      '                <dews-dropdownlist id="ddl">\n' +
-      '                  <dropdownlist-item title="DATA-1"></dropdownlist-item>\n' +
-      '                  <dropdownlist-item title="DATA-2"></dropdownlist-item>\n' +
-      '                </dews-dropdownlist>\n' +
-      '              </li>\n' +
-      '              <li>\n' +
-      '                <label for="">거래처명</label>\n' +
-      '                <dews-numerictextbox id="ntb"></dews-numerictextbox>\n' +
-      '              </li>' +
-      '              <li>\n' +
-      '                <label for="">등록</label>\n' +
-      '                  <dews-masktextbox id="masktbx3" type="text" placeholder="hint" title="LL-00" mask="LL-00">' +
-      '                   </dews-masktextbox>\n' +
-      '              </li>';
-
-    const parser = new DOMParser(),
-      dom = parser.parseFromString(htmlString, 'text/html');
-
-    //eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    //@ts-ignore
-    for (const item of dom?.body.children) {
-      this.searchFormList.push(item);
-    }
+    const searchDiv = this.querySelector('codepicker-search')! as Node;
+    this._drawerLayout?.querySelector('ul.form-field')?.appendChild(searchDiv);
   }
 
   // 필터 버튼 클릭
@@ -305,22 +280,10 @@ export class Codepicker extends PickerBase {
     this.helpParams = params;
   }
 
-  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    console.log('shouldUpdate');
-    const filterButton = this._drawerLayout?.querySelector('.filter-button') as HTMLElement;
-
-    if (this.formState) {
-      filterButton?.classList.add('setting');
-    } else {
-      filterButton?.classList.remove('setting');
-    }
-
-    return super.shouldUpdate(_changedProperties);
-  }
-
   private _createCard() {
     const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
     let oldCheckIndex: undefined | number = undefined;
+
     this._cardList = cardList;
 
     cardList!.autoBind = true;
@@ -348,6 +311,19 @@ export class Codepicker extends PickerBase {
     this._drawerLayout?.querySelector('.cardlist-wrap')?.append(cardList);
   }
 
+  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
+    console.log('shouldUpdate');
+    const filterButton = this._drawerLayout?.querySelector('.filter-button') as HTMLElement;
+
+    if (this.formState) {
+      filterButton?.classList.add('setting');
+    } else {
+      filterButton?.classList.remove('setting');
+    }
+
+    return super.shouldUpdate(_changedProperties);
+  }
+
   protected firstUpdated(_changedProperties: PropertyValues) {
     console.log('firstUpdated');
     this._drawerLayout?.addEventListener('blur', this._close);
@@ -356,6 +332,8 @@ export class Codepicker extends PickerBase {
     if (this.dataControlType == 'card') {
       this._createCard();
     }
+
+    this._createSearchContainer();
 
     if (this.useFilter) {
       this._searchFormState();
@@ -370,9 +348,7 @@ export class Codepicker extends PickerBase {
     super.updated(_changedProperties);
 
     this.updateComplete.then(() => {
-      const cardList = this.shadowRoot!.querySelector('dews-cardlist') as Cardlist<object>;
-
-      // 추후 변경 예정
+      // 높이 계산 (추후 변경 예정)
       // let cardListHeight: number =
       //   this._drawerLayout?.querySelector('.control')?.clientHeight! -
       //   (cardList.shadowRoot?.querySelector('.dews-container-option-control')?.clientHeight! -
