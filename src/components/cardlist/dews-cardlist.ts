@@ -29,6 +29,7 @@ export type CardlistField = {
     fontWeight: 'normal' | 'bold';
     line: boolean;
   };
+  required?: boolean;
   visible?: boolean;
   _displayIndex: number;
 };
@@ -78,6 +79,7 @@ type CardlistFields = { [key: string]: CardlistField };
 export class Cardlist<T extends object> extends DewsFormComponent {
   static styles = scss;
 
+  // region 속성
   // 데이터 자동 바인딩 여부
   @property({ type: Boolean, attribute: 'auto-bind' })
   autoBind = false;
@@ -90,8 +92,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 카드 헤더 옵션
   @property({ type: Object, attribute: 'header-options' })
   headerOptions = null;
-
-  link = false;
   // 페이징 사용 여부
   @property({ type: Boolean, attribute: 'use-paging' })
   usePaging = false;
@@ -128,15 +128,17 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 체크 이벤트
   @property({ type: Function, attribute: 'onchecked' })
   onChecked?: (args: CardListCheckedEventArgs<T>) => void;
+  // 리스트 선택 사용 유무 (코드피커에서만 사용)
+  @property({ type: Boolean, attribute: 'use-list-select' })
+  useListSelect = false;
 
   // 카드리스트
   @internalProperty()
   private _cardList: TemplateResult[] = [];
-
   // 카드리스트 요소
   @internalProperty()
   private _cardListElement: TemplateResult | null = null;
-
+  // 전체 카운트 관련 내부 속성
   @internalProperty()
   private _totalCount = 0;
   // 전체 선택 요소
@@ -148,6 +150,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 편의 기능 요소
   @internalProperty()
   private _controlSetElement?: TemplateResult | null;
+  // 더보기 버튼 요소
   @internalProperty()
   private _moreButtonElement?: TemplateResult | null;
   // 카드리스트 데이터
@@ -159,6 +162,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 카드 접기/펴기 클래스
   @internalProperty()
   private _cardCollapseClass: string = ''.toString();
+  // endregion
 
   constructor() {
     super();
@@ -180,6 +184,8 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   private _columnSetElement?: TemplateResult | null;
   // 전체 선택 체크박스 요소
   private _allSelectCheckboxElement?: TemplateResult | null;
+  // 코드피커에서만 사용, 리스트 선택 버튼 요소
+  private _listSelectElement?: TemplateResult | null;
   // 데이터 없을 경우 출력 요소
   private _noDataElement?: TemplateResult | null;
   // 내부 옵션
@@ -234,6 +240,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       key-field="name"
       label-field="title"
       checked-field="visible"
+      disabled-field="required"
     ></columnset-button>`;
 
     if (this._fieldList?.length > 0 && this._fieldList[0].field !== undefined) {
@@ -300,20 +307,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
     this._initDatasource();
   }
-
-  private _columnSetOpenHandler = (e: EventArgs) => {
-    console.log('open', e);
-    const columnSet = e.target as Columnsetbutton;
-    // columnSet.addItems(this._fieldList);
-  };
-
-  private _columnSetCompleteHandler = (e: EventArgs) => {
-    console.log('complete', e);
-    const columnSet = e.target as Columnsetbutton;
-    // const itemList = columnSet.getItemList();
-    // console.log(itemList);
-  };
-
+  // 데이터소스 초기화 함수
   private _initDatasource() {
     if (dews.app.main) {
       this._datasource = dews.app.main.currentPage?.getDataSource(this.datasource) as DataSource<T> | undefined;
@@ -386,7 +380,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       this._datasource?.read();
     }
   }
-
+  // 카드리스트 다시그리는 함수
   private _cardListRepeat = (items: any) => {
     const keyFn = (item: any) => {
       console.log('keyFn', item);
@@ -400,6 +394,8 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     return html`${repeat(items, keyFn, itemTemplate)}`;
   };
 
+  // region 요소 생성
+  // 카드리스트 요소 생성
   private _createCardListElement = () => {
     this._checkboxList = [];
 
@@ -417,11 +413,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
     if (this._options._columnType === '2') this.shadowRoot?.querySelector('.cardlist')?.classList.add('col2');
   };
-
-  private _moreButtonClickHandler = (e: any) => {
-    this._datasource?.read();
-  };
-
+  // 더보기 버튼 요소 생성
   private _createMoreButtonElement = () => {
     const nowCount = this._paging?._pagingStart;
     const totalCount = this._paging?._total;
@@ -435,186 +427,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       </div>
     `;
   };
-
-  // 정렬 버튼 클릭 시 drawer-layout 활성화
-  private _sortingSetTouchEvent = (e: TouchEvent) => {
-    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
-    if (!this._sortActive) {
-      e.stopPropagation(); // 처음 열었을 때 drawer-layout 이 닫히지 않게 하기 위해 추가
-      this._sortActive = true;
-      sortDrawerLayout?.setAttribute('active', String(this._sortActive));
-      document.addEventListener('click', this._addEvent);
-    } else {
-      sortDrawerLayout?.setAttribute('active', String(!this._sortActive));
-      this._close();
-    }
-  };
-
-  // 정렬 drawer-layout 에서 적용 버튼 클릭 시
-  private _sortingConfirmTouchEvent = () => {
-    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
-
-    const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
-
-    this._sortObj.field = sortingItem.innerText;
-    this._sortObj.dir = sortingItem.classList.contains('ascending') ? 'asc' : 'desc';
-    this._close();
-
-    this._datasource!.sort(this._sortObj);
-    this._cardData = this._datasource!.sortData() || [];
-
-    this._cardListElement = this._cardListRepeat(this._cardData);
-  };
-
-  // 정렬 drawer-layout 에서 필드 값 클릭 시
-  private _clickSortingItem = (e: Event) => {
-    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
-    let target: HTMLElement = e.target as HTMLElement;
-    if (target?.tagName === 'SPAN') {
-      target = target.parentElement as HTMLElement;
-    }
-    if (target.classList.contains('sorting')) {
-      target.classList.contains('ascending') ? target.classList.remove('ascending') : target.classList.add('ascending');
-    } else {
-      const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
-      sortingItem !== null ? sortingItem.classList.remove('sorting') : '';
-      sortingItem?.classList.contains('ascending') ? sortingItem?.classList.remove('ascending') : '';
-      target.classList.add('sorting');
-    }
-  };
-
-  // 정렬 drawer-layout 이 활성화되어있을 때 다른 영역 클릭 시 닫힐 수 있게
-  private _domClickHandler(e: MouseEvent) {
-    if (e.isTrusted) {
-      if (
-        e.clientY <
-        window.innerHeight -
-          this.shadowRoot!.querySelector('.sort-drawer-layout')?.shadowRoot!.querySelector('.layer-bottom')
-            ?.clientHeight!
-      ) {
-        if (!this._sortActive) {
-          return;
-        } else {
-          this._close();
-        }
-      }
-    }
-  }
-
-  private _addEvent = this._domClickHandler.bind(this);
-
-  // 정렬 drawer-layout 닫기
-  private _close = () => {
-    this._sortActive = false;
-    document.removeEventListener('click', this._addEvent);
-    this.shadowRoot?.querySelector('.sort-drawer-layout')?.removeAttribute('active');
-  };
-
-  // 정렬 drawer-layout 스크롤링
-  private _touchMove(e: any) {
-    // e.passive = true;
-    // e.capture = true;
-    e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
-  }
-
-  // 정렬 drawer-layout 스크롤링
-  private _touchStart(e: any) {
-    this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
-  }
-
-  private _cardClickHandler(e: any) {
-    let cardElement;
-
-    if (e.currentTarget && e.currentTarget.localName === 'div' && e.currentTarget.classList.contains('card')) {
-      cardElement = e.currentTarget;
-    } else {
-      cardElement = e.path[0].closest('div.card');
-    }
-
-    this._activeChange(cardElement);
-  }
-
-  // 활성화 카드 변경
-  private _activeChange = (element: Element) => {
-    const cardElement = element;
-    if (this._activeCardElement) {
-      this._activeCardElement.classList.remove('active');
-    }
-    this._activeCardElement = cardElement;
-    cardElement.classList.add('active');
-  };
-
-  private _allSelectClickHandler(e: any) {
-    const checkbox: Checkbox = e.currentTarget;
-    const checked: boolean = checkbox.checked;
-    const selectCheckboxElements = this.shadowRoot?.querySelectorAll('dews-checkbox.card-select-checkbox');
-
-    if (selectCheckboxElements) {
-      for (let i = 0; i < selectCheckboxElements.length; i++) {
-        const selectCheckboxElement: any = selectCheckboxElements[i];
-
-        selectCheckboxElement.checked = checked;
-        if (checked) {
-          selectCheckboxElement.classList.add('checked');
-        } else {
-          selectCheckboxElement.classList.remove('checked');
-        }
-      }
-      this._checkCount = checked ? this._totalCount : 0;
-    }
-  }
-
-  private _checkClickHandler(e: any) {
-    console.log('check', e);
-    const checkbox: Checkbox = e.currentTarget;
-    const checked: boolean = checkbox.checked;
-    this._checkChange(checkbox, checked);
-  }
-
-  private _checkChange = (checkbox: Checkbox, checked: boolean) => {
-    const allSelectCheckbox: Checkbox | null | undefined = this.shadowRoot?.querySelector(
-      'dews-checkbox.cardlist-all-select-checkbox'
-    );
-    const card: any = checkbox.closest('.card');
-    const checkedArgs = { event: 'checked', checked: checked, checkbox: checkbox, itemIndex: card!.cardIndex };
-    if (checked) {
-      this._checkCount++;
-      if (this._checkCount === this._totalCount && allSelectCheckbox) {
-        allSelectCheckbox.checked = true;
-      }
-      checkbox.classList.add('checked');
-    } else {
-      this._checkCount--;
-      if (allSelectCheckbox && allSelectCheckbox.checked) {
-        allSelectCheckbox.checked = false;
-      }
-      checkbox.classList.remove('checked');
-    }
-
-    this._trigger('checked', checkedArgs);
-  };
-
-  private _collapseButtonClickHandler(e: any) {
-    const collapseButtonElement = e.path[0];
-    const collapseElements = collapseButtonElement.parentElement?.querySelectorAll('li.collapse');
-    const collapse = collapseButtonElement.classList.contains('open');
-
-    if (collapse) {
-      collapseButtonElement.classList.remove('open');
-    } else {
-      collapseButtonElement.classList.add('open');
-    }
-
-    for (let i = 0; i < collapseElements.length; i++) {
-      const collapseElement = collapseElements[i];
-      if (collapse) {
-        collapseElement.classList.remove('open');
-      } else {
-        collapseElement.classList.add('open');
-      }
-    }
-  }
-
   // 카드 요소 생성
   private _createCardElement = (data: any, index?: number) => {
     let headerElement: TemplateResult | null = null;
@@ -700,7 +512,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
         collapse = i >= opt._cardFixedFieldCount ? ' collapse' : ' open';
       }
 
-      if (data[field.field!]) {
+      if (field.visible && data[field.field!]) {
         liElements.push(html`
           <li class="${field.name}${collapse}">
             <p class="name">${field.title}</p>
@@ -723,27 +535,37 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       ${collapseElement}
     </div>`;
   };
-
-  // private _bindEvent = () => {
-  //
-  // }
-
+  // 리스트 선택 요소 생성
+  private _createListSelectElement = () => {
+    this._listSelectElement = this.useListSelect
+      ? html`
+          <div class="list-select">
+            <span class="list-select-title">선택목록</span>
+            <button class="list-select-button"><span></span></button>
+          </div>
+        `
+      : null;
+  };
+  // 전체 선택 요소 생성
   private _createAllSelectElement = () => {
+    // 클래스 추가 필요
     this._allSelectElement =
-      this.useAllSelect || this.useTotalCount
+      this.useAllSelect || this.useListSelect || this.useTotalCount
         ? html`
-            <div class="cardlist-all-select">${this._totalCardCountElement} ${this._allSelectCheckboxElement}</div>
+            <div class="cardlist-all-select">
+              ${this._totalCardCountElement} ${this._listSelectElement} ${this._allSelectCheckboxElement}
+            </div>
           `
         : null;
   };
-
+  // 전체 컨트롤 요소 생성
   private _createControlElement = () => {
     this._controlElement =
       this._options._controlOptions.useSortSet || this._options._controlOptions.useColumnSet
         ? html` <div class="option-control">${this._sortElement} ${this._columnSetElement}</div> `
         : null;
   };
-
+  // 카드 총 개수 요소 생성
   private _createTotalCardCountElement = () => {
     this._totalCardCountElement = this.useTotalCount
       ? html`
@@ -753,25 +575,25 @@ export class Cardlist<T extends object> extends DewsFormComponent {
         `
       : null;
   };
-
+  // 컨트롤 셋 요소 생성
   private _createControlSetElement = () => {
     this._controlSetElement = this.useControl
       ? html` <div class="cardlist-option-control">${this._controlElement}</div> `
       : null;
   };
-
+  // 정렬 요소 생성
   private _createSortElement = () => {
     this._sortElement = this._options._controlOptions.useSortSet ? this._sortElement : null;
   };
-
+  // 컬럼 셋 요소 생성
   private _createColumnSetElement = () => {
     this._columnSetElement = this._options._controlOptions.useColumnSet ? this._columnSetElement : null;
   };
-
+  // 전체 선택 체크박스 요소 생성
   private _createAllSelectCheckboxElement = () => {
     this._allSelectCheckboxElement = this.useAllSelect ? this._allSelectCheckboxElement : null;
   };
-
+  // 요소들 생성
   private _createElements = () => {
     // 정렬 선택 드롭다운리스트 요소
     this._createSortElement();
@@ -783,20 +605,210 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     this._createControlElement();
     // 전체 카드 개수 요소
     this._createTotalCardCountElement();
+    // 리스트 선택 요소 ( 코드피커에서만 사용 )
+    this._createListSelectElement();
     // 전체 카드 개수, 전체 선택 체크박스 부모 요소
     this._createAllSelectElement();
     // 편의기능 요소
     this._createControlSetElement();
   };
+  // endregion
 
-  private _trigger(type: string, args?: any) {
-    const eventArgs = Object.assign({}, args, { target: this });
-    Object.freeze(args);
-    if (type === 'checked') {
-      this._events.emit<CardListCheckedEventArgs<T>>(type, eventArgs);
+  // region 내부 이벤트 핸들러
+  // 필드 선택 컬럼 셋 열림 이벤트 헨들러
+  private _columnSetOpenHandler = (e: EventArgs) => {
+    const columnSet = e.target as Columnsetbutton;
+    columnSet.removeItems();
+    columnSet.setItems(this._fieldList);
+  };
+  // 필드 선택 컬럼 셋 완료 이벤트 헨들러
+  private _columnSetCompleteHandler = (e: EventArgs) => {
+    const columnSet = e.target as Columnsetbutton;
+    const itemList: Array<CardlistField> = columnSet.getItems() as Array<CardlistField>;
+    for (let i = 0; i < this._fieldList.length; i++) {
+      this._fieldList[i].visible = itemList[i].visible;
+    }
+    this._createCardListElement();
+  };
+  // 더보기 버튼 클릭 이벤트 핸들러
+  private _moreButtonClickHandler = (e: any) => {
+    this._datasource?.read();
+  };
+  // 카드 요소 클릭 이벤트 핸들러
+  private _cardClickHandler(e: any) {
+    let cardElement;
+
+    if (e.currentTarget && e.currentTarget.localName === 'div' && e.currentTarget.classList.contains('card')) {
+      cardElement = e.currentTarget;
+    } else {
+      cardElement = e.path[0].closest('div.card');
+    }
+
+    this._activeChange(cardElement);
+  }
+  // 전체 선택 클릭 이벤트 핸들러
+  private _allSelectClickHandler(e: any) {
+    const checkbox: Checkbox = e.currentTarget;
+    const checked: boolean = checkbox.checked;
+    const selectCheckboxElements = this.shadowRoot?.querySelectorAll('dews-checkbox.card-select-checkbox');
+
+    if (selectCheckboxElements) {
+      for (let i = 0; i < selectCheckboxElements.length; i++) {
+        const selectCheckboxElement: any = selectCheckboxElements[i];
+
+        selectCheckboxElement.checked = checked;
+        if (checked) {
+          selectCheckboxElement.classList.add('checked');
+        } else {
+          selectCheckboxElement.classList.remove('checked');
+        }
+      }
+      this._checkCount = checked ? this._totalCount : 0;
+    }
+  }
+  // 카드 체크 요소 클릭 이벤트 헨들러
+  private _checkClickHandler(e: any) {
+    console.log('check', e);
+    const checkbox: Checkbox = e.currentTarget;
+    const checked: boolean = checkbox.checked;
+    this._checkChange(checkbox, checked);
+  }
+  // 카드 안의 열기/닫기 버튼 클릭 이벤트 헨들러
+  private _collapseButtonClickHandler(e: any) {
+    const collapseButtonElement = e.path[0];
+    const collapseElements = collapseButtonElement.parentElement?.querySelectorAll('li.collapse');
+    const collapse = collapseButtonElement.classList.contains('open');
+
+    if (collapse) {
+      collapseButtonElement.classList.remove('open');
+    } else {
+      collapseButtonElement.classList.add('open');
+    }
+
+    for (let i = 0; i < collapseElements.length; i++) {
+      const collapseElement = collapseElements[i];
+      if (collapse) {
+        collapseElement.classList.remove('open');
+      } else {
+        collapseElement.classList.add('open');
+      }
     }
   }
 
+  // 정렬 버튼 클릭 시 drawer-layout 활성화
+  private _sortingSetTouchEvent = (e: TouchEvent) => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+    if (!this._sortActive) {
+      e.stopPropagation(); // 처음 열었을 때 drawer-layout 이 닫히지 않게 하기 위해 추가
+      this._sortActive = true;
+      sortDrawerLayout?.setAttribute('active', String(this._sortActive));
+      document.addEventListener('click', this._addEvent);
+    } else {
+      sortDrawerLayout?.setAttribute('active', String(!this._sortActive));
+      this._close();
+    }
+  };
+  // 정렬 drawer-layout 에서 적용 버튼 클릭 시
+  private _sortingConfirmTouchEvent = () => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+
+    const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
+
+    this._sortObj.field = sortingItem.innerText;
+    this._sortObj.dir = sortingItem.classList.contains('ascending') ? 'asc' : 'desc';
+    this._close();
+
+    this._datasource!.sort(this._sortObj);
+    this._cardData = this._datasource!.sortData() || [];
+
+    this._cardListElement = this._cardListRepeat(this._cardData);
+  };
+  // 정렬 drawer-layout 에서 필드 값 클릭 시
+  private _clickSortingItem = (e: Event) => {
+    const sortDrawerLayout: any = this.shadowRoot?.querySelector('.sort-drawer-layout');
+    let target: HTMLElement = e.target as HTMLElement;
+    if (target?.tagName === 'SPAN') {
+      target = target.parentElement as HTMLElement;
+    }
+    if (target.classList.contains('sorting')) {
+      target.classList.contains('ascending') ? target.classList.remove('ascending') : target.classList.add('ascending');
+    } else {
+      const sortingItem: HTMLElement = sortDrawerLayout.querySelector('.sorting');
+      sortingItem !== null ? sortingItem.classList.remove('sorting') : '';
+      sortingItem?.classList.contains('ascending') ? sortingItem?.classList.remove('ascending') : '';
+      target.classList.add('sorting');
+    }
+  };
+  // 정렬 drawer-layout 이 활성화되어있을 때 다른 영역 클릭 시 닫힐 수 있게
+  private _domClickHandler(e: MouseEvent) {
+    if (e.isTrusted) {
+      if (
+        e.clientY <
+        window.innerHeight -
+          this.shadowRoot!.querySelector('.sort-drawer-layout')?.shadowRoot!.querySelector('.layer-bottom')
+            ?.clientHeight!
+      ) {
+        if (!this._sortActive) {
+          return;
+        } else {
+          this._close();
+        }
+      }
+    }
+  }
+  private _addEvent = this._domClickHandler.bind(this);
+  // 정렬 drawer-layout 닫기
+  private _close = () => {
+    this._sortActive = false;
+    document.removeEventListener('click', this._addEvent);
+    this.shadowRoot?.querySelector('.sort-drawer-layout')?.removeAttribute('active');
+  };
+  // 정렬 drawer-layout 스크롤링
+  private _touchMove(e: any) {
+    // e.passive = true;
+    // e.capture = true;
+    e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
+  }
+  // 정렬 drawer-layout 스크롤링
+  private _touchStart(e: any) {
+    this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
+  }
+  // endregion
+
+  // region 내부 Method
+  // 활성화 카드 변경 함수
+  private _activeChange = (element: Element) => {
+    const cardElement = element;
+    if (this._activeCardElement) {
+      this._activeCardElement.classList.remove('active');
+    }
+    this._activeCardElement = cardElement;
+    cardElement.classList.add('active');
+  };
+  // 체크 변경 함수
+  private _checkChange = (checkbox: Checkbox, checked: boolean) => {
+    const allSelectCheckbox: Checkbox | null | undefined = this.shadowRoot?.querySelector(
+      'dews-checkbox.cardlist-all-select-checkbox'
+    );
+    const card: any = checkbox.closest('.card');
+    const checkedArgs = { event: 'checked', checked: checked, checkbox: checkbox, itemIndex: card!.cardIndex };
+    if (checked) {
+      this._checkCount++;
+      if (this._checkCount === this._totalCount && allSelectCheckbox) {
+        allSelectCheckbox.checked = true;
+      }
+      checkbox.classList.add('checked');
+    } else {
+      this._checkCount--;
+      if (allSelectCheckbox && allSelectCheckbox.checked) {
+        allSelectCheckbox.checked = false;
+      }
+      checkbox.classList.remove('checked');
+    }
+
+    this._trigger('checked', checkedArgs);
+  };
+  // 필드 리스트를 얻어오는 함수
   private _getFields(): void {
     const fieldElements = this.querySelectorAll('cardlist-field');
     const fieldCount = fieldElements.length;
@@ -810,6 +822,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       const type: string | null = fieldElement.getAttribute('type');
       const title: string | null = fieldElement.getAttribute('title');
       const visible: string | null = fieldElement.getAttribute('visible');
+      const required: string | null = fieldElement.getAttribute('required');
 
       fields[name] = { _displayIndex: i };
       fields[name].name = name;
@@ -817,6 +830,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       fields[name].type = type ? type : undefined;
       fields[name].title = title ? title : name;
       fields[name].visible = visible ? visible === 'true' : true;
+      fields[name].required = required ? required === 'true' : false;
 
       fieldList.push(fields[name]);
     }
@@ -824,7 +838,42 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     this._fields = fields;
     this._fieldList = fieldList;
   }
+  // 체크 카드 호출
+  private _getCheckCard(type: 'data' | 'cardIndex') {
+    const checkCards = this.shadowRoot?.querySelectorAll('dews-checkbox.card-select-checkbox.checked');
+    const result = [];
+    if (checkCards && checkCards.length > 0) {
+      for (let i = 0; i < checkCards.length; i++) {
+        const card: any = checkCards[i].closest('.card');
+        result.push(card[type]);
+      }
+    }
+    return result;
+  }
+  // 카드 요소 호출
+  private _getCard = (itemIndex: number): Element | undefined | null => {
+    return this.shadowRoot?.querySelector(`.cardlist-wrap > .cardlist > .card-${itemIndex}}`);
+  };
+  // 카드 인덱스 호출
+  private _getDataIndex = (itemIndex: number): number | undefined => {
+    const data: ObservableArrayItem<T> = this._cardData[itemIndex];
+    let dataIndex: number | undefined = undefined;
+    if (data) {
+      dataIndex = this._datasource?._data?.getIndexByUid(data.uid!);
+    }
+    return dataIndex;
+  };
+  // 이벤트 트리거 함수
+  private _trigger(type: string, args?: any) {
+    const eventArgs = Object.assign({}, args, { target: this });
+    Object.freeze(args);
+    if (type === 'checked') {
+      this._events.emit<CardListCheckedEventArgs<T>>(type, eventArgs);
+    }
+  }
+  // endregion
 
+  // region LifeCycle
   async connectedCallback() {
     super.connectedCallback();
     console.log('connectedCallback');
@@ -839,8 +888,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     columnSetElement.on('open', this._columnSetOpenHandler);
     columnSetElement.on('complete', this._columnSetCompleteHandler);
   }
-
-  // region LifeCycle
   disconnectedCallback() {
     console.log('disconnectedCallback');
     super.disconnectedCallback();
@@ -935,13 +982,13 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
   }
 
-  // endregion
-
   render() {
     console.log('render');
     return template.call(this);
   }
+  // endregion
 
+  // region Method
   // 카드 체크
   cardCheck = (itemIndex: number, checked?: boolean) => {
     const cardElement: Element | null | undefined = this.shadowRoot?.querySelector(
@@ -969,18 +1016,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   getCheckCardData = (): Array<ObservableArrayItem<T>> => {
     return this._getCheckCard('data');
   };
-  // 체크 카드 호출
-  private _getCheckCard(type: 'data' | 'cardIndex') {
-    const checkCards = this.shadowRoot?.querySelectorAll('dews-checkbox.card-select-checkbox.checked');
-    const result = [];
-    if (checkCards && checkCards.length > 0) {
-      for (let i = 0; i < checkCards.length; i++) {
-        const card: any = checkCards[i].closest('.card');
-        result.push(card[type]);
-      }
-    }
-    return result;
-  }
   // 카드 데이터
   cardItems = () => {
     return this._cardData;
@@ -996,17 +1031,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       }
     }
     return this._activeCardElement;
-  };
-  private _getCard = (itemIndex: number): Element | undefined | null => {
-    return this.shadowRoot?.querySelector(`.cardlist-wrap > .cardlist > .card-${itemIndex}}`);
-  };
-  private _getDataIndex = (itemIndex: number): number | undefined => {
-    const data: ObservableArrayItem<T> = this._cardData[itemIndex];
-    let dataIndex: number | undefined = undefined;
-    if (data) {
-      dataIndex = this._datasource?._data?.getIndexByUid(data.uid!);
-    }
-    return dataIndex;
   };
   // 카드 요소
   getCard = (itemIndex: number): Element | undefined | null => {
@@ -1042,4 +1066,5 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   off(type: string, handler: any) {
     this._events.off(type, handler);
   }
+  // endregion
 }
