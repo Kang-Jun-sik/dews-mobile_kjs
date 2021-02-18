@@ -7,7 +7,7 @@
         <input id="numeric-box" type="text" value="${this.value}" ?disabled="${this.disabled}" ?readonly="${this.readonly}" ?placeholder="${this.placeholder}" >
     </span>
     <span id="mask" class="numeric mask" style="display: none">
-        <input type="text" value="${this.value}"  step="${this._step}" min="${this.min}" max="${this.max}" @beforeinput="${this._beforeInput}" @input="${this._inputChange}" @keydown="${this._keydown}" @focusin="${this._focusIn}" @blur="${this._focusBlur}"
+        <input type="text" value="${this.value}"  step="${this._step}" min="${this.min}" max="${this.max}" @beforeinput="${this._beforeInput}" @input="${this._inputChange}" @focusin="${this._focusIn}" @blur="${this._focusBlur}"
         @chage="{this._change}">
     </span>
     ${this.suffix === undefined ? '' :html`<span class="suffix">${this.suffix}</span>`}

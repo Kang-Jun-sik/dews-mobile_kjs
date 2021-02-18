@@ -1,13 +1,12 @@
-import { internalProperty, property, PropertyValues, query } from 'lit-element';
-import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
+import { html, internalProperty, property, PropertyValues, query, TemplateResult } from 'lit-element';
 
 import template from './codepicker.html';
 import scss from './codepicker.scss';
-import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 import { PickerBase } from '../picker-base.js';
 import { Cardlist } from '../../cardlist/dews-cardlist.js';
+import { Checkbox } from '../../checkbox/checkbox.js';
 
-type EVENT = 'setData' | 'change';
+type EVENT_TYPE = 'setData' | 'change';
 
 export class Codepicker extends PickerBase {
   static styles = scss;
@@ -73,9 +72,6 @@ export class Codepicker extends PickerBase {
   private height: string | undefined;
 
   @internalProperty()
-  private total = 50;
-
-  @internalProperty()
   private selectTotal = 0;
 
   @internalProperty()
@@ -102,8 +98,6 @@ export class Codepicker extends PickerBase {
   @internalProperty()
   private _cardList: Cardlist<object> | undefined;
 
-  _Event: EventEmitter = new EventEmitter();
-
   constructor() {
     super();
     this._afterBtnView();
@@ -111,105 +105,27 @@ export class Codepicker extends PickerBase {
 
   async connectedCallback() {
     super.connectedCallback();
-    console.log('connect');
+    console.log('connect!!');
 
-    this._createSearchContainer();
+    // this._createSearchContainer();
   }
 
   // 적용 버튼 클릭 시
   _confirmClickHandler() {
-    const $cardList: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout .cardlist');
-    const $selectItem = $cardList?.querySelectorAll('dews-checkbox');
-    const text = '';
-    const code = '';
-    let selected: object | Array<object> = [];
-    let data;
+    const checkData = this._cardList!.getCheckCardData();
 
-    // 카드리스트의 체크된 항목을 받아오기
-    if (this.multi) {
-      data = [
-        { code: 'code1', text: 'Multi Data' },
-        { code: 'code2', text: 'text2' },
-        { code: 'code3', text: 'text3' },
-        { code: 'code4', text: 'text4' }
-      ];
+    if (checkData?.length > 0) {
+      this.setData(checkData);
     } else {
-      data = { code: 'code1', text: 'Single Data' };
+      this.clearData();
     }
-
-    // 카드리스트에서 받아온 데이터로 수정하기
-    if (this.multi && this.selectTotal > 1) {
-      // $selectItem?.forEach($item => {
-      //   let itemText = ($item?.parentElement?.querySelector(
-      //     'li > p.item[data-value="' + this.textField + '"]'
-      //   ) as HTMLParagraphElement)?.innerHTML;
-      //   let itemCode = ($item?.parentElement?.querySelector(
-      //     'li > p.item[data-value="' + this.codeField + '"]'
-      //   ) as HTMLParagraphElement)?.innerHTML;
-
-      //   (selected as []).push({ code: itemCode, text: itemText });
-      // });
-      selected = data;
-    } else {
-      // selected = { code: code, text: text };
-      selected = data;
-    }
-
-    this.setData(selected);
 
     this._close();
   }
 
-  private _allCheck(e: MouseEvent) {
-    const $el: HTMLElement = e.currentTarget as HTMLElement;
-    const $cardCheckbox = this.shadowRoot!.querySelector('.drawer-layout .cardlist')!.querySelectorAll(
-      'input.card-checkbox'
-    );
-
-    this._allCheckState = $el!.hasAttribute('checked');
-
-    if ((e.target as HTMLElement).localName === 'dews-checkbox') {
-      this._allCheckState = (e.target as HTMLElement).hasAttribute('checked');
-    }
-
-    this._allCheckState ? (this.selectTotal = $cardCheckbox.length) : (this.selectTotal = 0);
-
-    const allCheck = this._allCheckState;
-
-    $cardCheckbox.forEach(function (item) {
-      const $item = item as HTMLInputElement;
-      $item!.checked = allCheck;
-    });
-  }
-
   private _createSearchContainer() {
-    // 일단 이렇게 받아온다 가정
-    const htmlString =
-      ' <li>\n' +
-      '                <label for="">거래처코드</label>\n' +
-      '                <dews-dropdownlist id="ddl">\n' +
-      '                  <dropdownlist-item title="DATA-1"></dropdownlist-item>\n' +
-      '                  <dropdownlist-item title="DATA-2"></dropdownlist-item>\n' +
-      '                </dews-dropdownlist>\n' +
-      '              </li>\n' +
-      '              <li>\n' +
-      '                <label for="">거래처명</label>\n' +
-      '                <dews-numerictextbox id="ntb"></dews-numerictextbox>\n' +
-      '              </li>' +
-      '              <li>\n' +
-      '                <label for="">등록</label>\n' +
-      '                  <dews-masktextbox id="masktbx3" type="text" placeholder="hint" title="LL-00" mask="LL-00">' +
-      '                   </dews-masktextbox>\n' +
-      '              </li>';
-
-    const parser = new DOMParser(),
-      dom = parser.parseFromString(htmlString, 'text/html');
-
-    //eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    //@ts-ignore
-    for (const item of dom?.body.children) {
-      this.searchFormList.push(item);
-    }
+    const searchDiv = this.querySelector('codepicker-search')! as Node;
+    this._drawerLayout?.querySelector('ul.form-field')?.appendChild(searchDiv);
   }
 
   // 필터 버튼 클릭
@@ -273,16 +189,6 @@ export class Codepicker extends PickerBase {
     console.log('triggerCodeDialog');
   }
 
-  // // 이벤트 등록
-  // public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
-  //   this._Event.on(key, handler);
-  // }
-  //
-  // // 이벤트 삭제
-  // public off(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
-  //   this._Event.off(key, handler);
-  // }
-
   /**
    * 코드피커에 코드와 텍스트를 설정합니다.
    * @param {object} data 코드와 텍스트
@@ -305,9 +211,17 @@ export class Codepicker extends PickerBase {
       // 설정할 데이터가 단독일 경우에는 바로 설정한다.
       if (this.codeField in selected) {
         this.code = selected[this.codeField];
+
+        if (this.multi) {
+          this.codes = [];
+        }
       }
       if (this.textField in selected) {
         this.text = selected[this.textField];
+
+        if (this.multi) {
+          this.texts = [];
+        }
       }
     } else if (isArray) {
       // 설정할 데이터가 다수일 경우에는 코드다이얼로그를 열도록 codedialog 이벤트를 발생시킨다.
@@ -325,6 +239,11 @@ export class Codepicker extends PickerBase {
             this.codes.push(item2[this.codeField]);
             this.texts.push(item2[this.textField]);
           });
+        } else {
+          this.code = '';
+          this.text = '';
+          this.codes = [];
+          this.texts = [];
         }
       } else {
         this._open();
@@ -332,7 +251,7 @@ export class Codepicker extends PickerBase {
     }
 
     if (selected) {
-      this._Event.emit('setData', { type: 'setData', target: this, data: selected });
+      this._EVENT.emit('setData', { type: 'setData', target: this, data: selected });
     }
   }
 
@@ -360,6 +279,36 @@ export class Codepicker extends PickerBase {
     this.helpParams = params;
   }
 
+  private _createCard() {
+    const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
+    let oldCheckIndex: undefined | number = undefined;
+
+    this._cardList = cardList;
+
+    cardList!.autoBind = true;
+    cardList!.useTotalCount = true;
+    cardList!.useHeader = true;
+    cardList!.setAttribute('header-options', JSON.stringify({ useBookmark: false })); // 북마크 안나오도록 설정
+    cardList!.setAttribute('codepicker', ''); // 코드피커 내에서 사용하는 카드리스트의 경우 codepicker 추가함
+
+    if (this.multi) {
+      cardList!.useAllSelect = true;
+    }
+
+    cardList.on('checked', (e: any) => {
+      if (!this.multi) {
+        if (typeof oldCheckIndex == 'number' && e.itemIndex !== oldCheckIndex) {
+          const oldChecked = this._cardList!.shadowRoot?.querySelectorAll('dews-checkbox')[oldCheckIndex] as Checkbox;
+          oldChecked.checked = false;
+          oldChecked.classList.remove('checked');
+        }
+        oldCheckIndex = e.itemIndex;
+      }
+    });
+
+    this._drawerLayout?.querySelector('.cardlist-wrap')?.append(cardList);
+  }
+
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     console.log('shouldUpdate');
     const filterButton = this._drawerLayout?.querySelector('.filter-button') as HTMLElement;
@@ -377,21 +326,12 @@ export class Codepicker extends PickerBase {
     console.log('firstUpdated');
     this._drawerLayout?.addEventListener('blur', this._close);
 
+    // dataControlType에 타입에 따라
     if (this.dataControlType == 'card') {
-      const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
-      this._cardList = cardList;
-
-      cardList!.autoBind = true;
-      cardList!.useTotalCount = true;
-      cardList!.height = '430px';
-      cardList!.setAttribute('codepicker', ''); // 코드피커 내에서 사용하는 카드리스트의 경우 codepicker 추가함
-
-      if (this.multi) {
-        cardList!.useAllSelect = true;
-      }
-
-      this._drawerLayout?.querySelector('.cardlist-wrap')?.append(cardList);
+      this._createCard();
     }
+
+    this._createSearchContainer();
 
     if (this.useFilter) {
       this._searchFormState();
@@ -406,20 +346,15 @@ export class Codepicker extends PickerBase {
     super.updated(_changedProperties);
 
     this.updateComplete.then(() => {
-      const cardList = this.shadowRoot!.querySelector('dews-cardlist') as Cardlist<object>;
+      const cardList = this._cardList as Cardlist<object>;
 
-      // 추후 변경 예정
-      // let cardListHeight: number =
-      //   this._drawerLayout?.querySelector('.control')?.clientHeight! -
-      //   (cardList.shadowRoot?.querySelector('.dews-container-option-control')?.clientHeight! -
-      //     cardList.shadowRoot?.querySelector('.cardlist-all-select')?.clientHeight!) -
-      //   42 -
-      //   10;
-      //
+      // 높이 계산 (.control.height - 필터.height(48) - 총건수.height(48))
+      const cardListHeight: number = this._drawerLayout?.querySelector('.control')?.clientHeight! - 48 * 2;
+
       // if (cardListHeight < 250) {
       //   cardListHeight = 250;
       // }
-      // cardList.height = cardListHeight.toString() + 'px';
+      cardList.height = cardListHeight.toString() + 'px';
     });
 
     // _changedProperties.forEach((oldValue, propName) => {

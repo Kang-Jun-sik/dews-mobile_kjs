@@ -27,11 +27,14 @@ export class Weekperiodpicker extends PickerBase {
   @property({ type: String })
   max: string | undefined = undefined;
 
-  @property({ type: String })
-  startDate: string | undefined;
+  @property({ type: String, reflect: true })
+  text = '';
 
-  @property({ type: String })
-  endDate: string | undefined;
+  @property({ type: String, reflect: true })
+  startDate = '';
+
+  @property({ type: String, reflect: true })
+  endDate = '';
 
   @internalProperty()
   private _value = '____/__ ~ ____/__';
@@ -212,6 +215,7 @@ export class Weekperiodpicker extends PickerBase {
     } else {
       this.inputValue = '';
     }
+    this.text = this.inputValue;
     this._close();
   };
 
@@ -313,23 +317,26 @@ export class Weekperiodpicker extends PickerBase {
 
   protected updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
-    if (_changedProperties.has('startDate')) {
-      this._startYear = Number(this.startDate?.slice(0, 4));
-      this._startWeek = Number(this.startDate?.slice(4, 6));
-      (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = `${this.startDate?.slice(
-        0,
-        4
-      )}/${this.startDate?.slice(4, 6)} ~ ${this.endDate?.slice(0, 4)}/${this.endDate?.slice(4, 6)}`;
+    if (_changedProperties.has('startDate') || _changedProperties.has('endDate')) {
+      if (this.startDate !== '' && this.endDate !== '') {
+        this._startYear = Number(this.startDate?.slice(0, 4));
+        this._startWeek = Number(this.startDate?.slice(4, 6));
+        this._endYear = Number(this.endDate?.slice(0, 4));
+        this._endWeek = Number(this.endDate?.slice(4, 6));
+        this._inputValueChange();
+        this.inputValue = (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value;
+      } else {
+        this._startYear = undefined;
+        this._startWeek = undefined;
+        this._endYear = undefined;
+        this._endWeek = undefined;
+        this.startDate = '';
+        this.endDate = '';
+        this._inputValueChange();
+        this.inputValue = '';
+      }
+      this.text = this.inputValue;
     }
-    if (_changedProperties.has('endDate')) {
-      this._endYear = Number(this.endDate?.slice(0, 4));
-      this._endWeek = Number(this.endDate?.slice(4, 6));
-      (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = `${this.startDate?.slice(
-        0,
-        4
-      )}/${this.startDate?.slice(4, 6)} ~ ${this.endDate?.slice(0, 4)}/${this.endDate?.slice(4, 6)}`;
-    }
-
     this._weekSelect();
   }
 

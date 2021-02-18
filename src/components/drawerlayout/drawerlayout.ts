@@ -3,6 +3,9 @@ import { internalProperty, property, PropertyValues } from 'lit-element';
 
 import template from './drawerlayout.html';
 import scss from './drawerlayout.scss';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT_TYPE = 'heightChange';
 
 export class Drawerlayout extends DewsFormComponent {
   static styles = scss;
@@ -15,6 +18,9 @@ export class Drawerlayout extends DewsFormComponent {
 
   @property({ type: Boolean, reflect: true })
   active = false;
+
+  @property({ type: Boolean, reflect: true })
+  dimming = false;
 
   @property({ type: String })
   size: 'large' | 'full' = 'large';
@@ -36,12 +42,24 @@ export class Drawerlayout extends DewsFormComponent {
 
   connectedCallback() {
     super.connectedCallback();
-
     this._height = `calc(100% - ${this.height})`;
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+  }
+
+  /*
+   * 이벤트 생성
+   * */
+  #EVENT = new EventEmitter();
+
+  public on(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height: number }) => void) {
+    this.#EVENT.on(key, handler);
+  }
+
+  public off(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height: number }) => void) {
+    this.#EVENT.off(key, handler);
   }
 
   private _blur(): void {
@@ -51,6 +69,11 @@ export class Drawerlayout extends DewsFormComponent {
   private _mouseMove(e: MouseEvent): void {
     if (this._moveState) {
       this._height = `${this._defaultHeight! + (this._moveStart! - e.screenY)}px`;
+      this.#EVENT.emit('heightChange', {
+        target: this,
+        type: 'heightChange',
+        height: this._defaultHeight! + (this._moveStart! - e.screenY)
+      });
     }
   }
 
@@ -82,6 +105,11 @@ export class Drawerlayout extends DewsFormComponent {
         ) {
           this._moveCheck = true;
           this._height = `${this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY)}px`;
+          this.#EVENT.emit('heightChange', {
+            target: this,
+            type: 'heightChange',
+            height: this._defaultHeight! + (this._moveStart! - e.changedTouches[0].screenY)
+          });
         }
       }
     }

@@ -1,10 +1,12 @@
-import { property, html, TemplateResult } from 'lit-element';
+import { property, html, TemplateResult, PropertyValues, internalProperty } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './numerictextbox.html';
 import scss from './numerictextbox.scss';
 
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT_TYPE = 'change';
 
 export class Numerictextbox extends DewsFormComponent {
   static styles = scss;
@@ -53,6 +55,9 @@ export class Numerictextbox extends DewsFormComponent {
 
   @property({ type: String })
   round: 'round' | 'ceil' | 'floor' = 'round';
+
+  @internalProperty()
+  private text = '';
 
   private _oldValue = '';
   private _rawValue: number | '' = '';
@@ -241,10 +246,8 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) + this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    // this.dispatchEvent(this.onChange);
-
     // 이벤트실행
-    this.Event.emit('_change', { target: this, type: 'change' });
+    this.Event.emit('change', { target: this, type: 'change' });
   }
 
   private _stepperDecrement() {
@@ -260,18 +263,8 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = (Number($input[1].value) - this._step).toString();
     $input[0].value = this.addCommas($input[1].value);
 
-    // this.dispatchEvent(this.onChange);
-
     // 이벤트실행
-    this.Event.emit('_change', { target: this, type: 'change' });
-  }
-
-  private _keydown(e: KeyboardEvent) {
-    const key: string = e.key;
-
-    if (key == 'Enter') {
-      this._focusBlur();
-    }
+    this.Event.emit('change', { target: this, type: 'change' });
   }
 
   private _focusIn() {
@@ -306,9 +299,12 @@ export class Numerictextbox extends DewsFormComponent {
     $input[1].value = this._rawValue.toString();
     $spanMask!.style.display = 'none';
 
+    this.text = this.shadowRoot!.querySelectorAll('input')[0]?.value;
+
     if (Number(this._oldValue) != this._rawValue) {
       // 이벤트실행
-      this.Event.emit('_change', { target: this, type: 'change' });
+      console.log('change 이벤트 발생');
+      this.Event.emit('change', { target: this, type: 'change' });
     }
   }
 
@@ -358,20 +354,39 @@ export class Numerictextbox extends DewsFormComponent {
     this._focusIn();
   }
 
-  public text(): string {
-    const $input = this.shadowRoot!.querySelectorAll('input');
-
-    return $input[0].value;
-  }
-
   // 이벤트 등록
-  public on(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.Event.on('_change', handler);
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.on(key, handler);
   }
 
   // 이벤트 삭제
-  public off(key: 'change', handler: (e: EventArgs, ...args: unknown[]) => void) {
-    this.Event.off('_change', handler);
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this.Event.off(key, handler);
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+
+    _changedProperties.forEach((oldValue, propName) => {
+      let value = this.value;
+      const $input = this.shadowRoot!.querySelectorAll('input');
+
+      if (propName === 'value') {
+        const isValid = this._numericRegex().test(value.toString());
+
+        if (!isValid) {
+          value = Number(value.toString().replace(/[^0-9.-]/g, ''));
+        }
+
+        this._rawValue = value;
+        this.updateComplete.then(() => {
+          $input[0].value = this.addCommas(this._rawValue.toString());
+          $input[1].value = this._rawValue.toString();
+
+          this.text = $input[0].value;
+        });
+      }
+    });
   }
 
   render() {

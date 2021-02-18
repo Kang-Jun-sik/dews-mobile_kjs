@@ -1,4 +1,4 @@
-import { html, internalProperty, property, TemplateResult } from 'lit-element';
+import { property } from 'lit-element';
 
 import template from './searchcontainer.html';
 import scss from './searchcontainer.scss';
@@ -14,6 +14,7 @@ export interface DataSet {
 export interface SearchData {
   id: string;
   title: string;
+  text: string;
   value: string;
   dateTime: string;
 }

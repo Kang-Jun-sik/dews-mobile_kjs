@@ -54,7 +54,7 @@ export const ColumnSet = () => html`<div style="width: 360px">
     label-field="name"
     auto-bind
     onOpen="${(e: any) => {
-      e.target.addItem({ key: '1234', name: '추가되는것' });
+      e.target.setItem({ key: '1234', name: '추가되는것' });
       console.log('onOpen', e);
     }}"
     onComplete="${(e: any) => {

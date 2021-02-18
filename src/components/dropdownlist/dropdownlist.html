@@ -1,4 +1,4 @@
-<div class="dropdownlist-wrap" @click="${this._clickHandler}">
+<div class="dropdownlist-wrap" id="drawer" @click="${this._clickHandler}">
   <label for="">${this.title}</label>
   <span class="select-wrap">
     <span class="select-shape">
@@ -35,14 +35,12 @@ ${this.multi?html`
         </li>
         <slot></slot>
         <!--  ${this.$itemList}-->
-
-        </li>
       </ul>
     </div>
   </div>
 </drawer-layout>
 ` :html`
-<drawer-layout class="drawer-layout" @close="${this._close}"  ?active="${this.active}" scrollEnabled>
+<drawer-layout class="drawer-layout" @close="${this._close}" ?dimming="${this.dimming}" ?active="${this.active}" scrollEnabled>
   <div class="drawer-dropdownlist-single">
     <div class="titlebar">
       <div class="title">${this.title}</div>

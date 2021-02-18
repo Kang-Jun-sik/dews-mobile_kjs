@@ -1,15 +1,15 @@
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
-import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
+import { internalProperty, property, TemplateResult } from 'lit-element';
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
-import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 import { DropdownlistItem } from './dropdownlist-item.js';
 import { DataSource } from '../datasource/dews-datasource.js';
+import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
+import { Columnitem } from '../columnsetbutton/columnitem.js';
 
 type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
 
-export class Dropdownlist extends DewsFormComponent {
+export class Dropdownlist extends DrawerBottomBase {
   static styles = scss;
 
   @property({ type: String })
@@ -18,20 +18,38 @@ export class Dropdownlist extends DewsFormComponent {
   @property({ type: String })
   datasource: string | undefined;
 
-  @property({ type: String })
-  field: string | undefined;
+  @property({ type: String, reflect: true })
+  text = '';
+
+  @property({ type: String, attribute: 'key-field' })
+  field = 'key';
 
   @property({ type: String, attribute: 'label-field' })
-  labelField: string | undefined;
+  labelField = 'label';
 
   @property({ type: String, attribute: 'checked-field' })
-  checkedField: string | undefined;
+  checkedField = 'checked';
 
   @property({ type: String, attribute: 'disabled-field' })
-  disabledField: string | undefined;
+  disabledField = 'disabled';
+
+  @property({ type: Function })
+  onComplete: ((args: EventArgs) => void) | undefined;
+
+  @property({ type: Function })
+  onOpen: ((args: EventArgs) => void) | undefined;
+
+  @property({ type: Function })
+  onClose: ((args: EventArgs) => void) | undefined;
+
+  @property({ type: Function })
+  onChange: ((args: EventArgs) => void) | undefined;
 
   @property({ type: Boolean, attribute: 'auto-bind' })
   autoBind = false;
+
+  @property({ type: Boolean, reflect: true })
+  dimming = false;
 
   @property({ type: Boolean, reflect: true })
   multi = false;
@@ -41,9 +59,6 @@ export class Dropdownlist extends DewsFormComponent {
 
   @property({ type: Boolean, reflect: true })
   readonly = false;
-
-  @property({ type: Boolean, reflect: true })
-  once = false;
 
   @internalProperty()
   active = false;
@@ -60,19 +75,213 @@ export class Dropdownlist extends DewsFormComponent {
 
   select: Array<string> = [];
   private _selectList: Array<boolean> = [];
-  private $nextBtn: TemplateResult | undefined;
-  private _nextItem: number | undefined;
 
   @internalProperty()
   _allCheckState: boolean | undefined = false;
 
   constructor() {
     super();
-    this.#nextBtnView();
+  }
+
+  /**
+   * 체크된 아이템의 data 를 반환합니다.
+   * @return Array<Object> 체크된 아이템의 Array 를 반환함니다.
+   * */
+  getCheckItems(): Array<object> {
+    const resultValue: Array<object> = [];
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      if (($item as DropdownlistItem).checked) {
+        const obj = {
+          [this.field]: ($item as Columnitem).field,
+          [this.labelField]: ($item as Columnitem).label,
+          [this.checkedField]: ($item as Columnitem).checked,
+          [this.disabledField]: ($item as Columnitem).disabled
+        };
+        resultValue.push(obj);
+      }
+    });
+    return resultValue;
+  }
+
+  /**
+   * 드롭다운 아이템리스트를 추가합니다.
+   * @param {Array<Object>} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(key)  아이템의 필드를 설정합니다.(필 수값);
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
+  setCheckItems(data: Array<object>) {
+    data.forEach(DATA => {
+      const map = new Map(Object.entries(DATA));
+      this.checkItem(map.get(`${this.field}`));
+    });
+  }
+
+  /**
+   * 드롭다운 아이템을 가져옵니다.
+   * @param key {String} key-field 아이템의 키 필드입니다.
+   * @return {object} 아이템의 data 를 반환합니다.
+   * */
+  getItem(key: string): object {
+    let resultValue: object = {};
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      if (($item as DropdownlistItem).field === key) {
+        resultValue = {
+          [this.field]: ($item as Columnitem).field,
+          [this.labelField]: ($item as Columnitem).label,
+          [this.checkedField]: ($item as Columnitem).checked,
+          [this.disabledField]: ($item as Columnitem).disabled
+        };
+      }
+    });
+    return resultValue;
+  }
+
+  /**
+   * 드롭다운 아이템리스트를 가져옵니다.
+   * @param key {String} key-field 아이템의 키 필드입니다.
+   * @return Array{Array<object>} 아이템의 data 리스트를 반환합니다.
+   * */
+  getItems(): Array<object> {
+    const resultValue: Array<object> = [];
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      let obj: object = {};
+      obj = {
+        [this.field]: ($item as Columnitem).field,
+        [this.labelField]: ($item as Columnitem).label,
+        [this.checkedField]: ($item as Columnitem).checked,
+        [this.disabledField]: ($item as Columnitem).disabled
+      };
+      console.log('여기');
+      resultValue.push(obj);
+    });
+    return resultValue;
+  }
+
+  /**
+   * 드롭다운 아이템을 추가합니다.
+   * @param {Object} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
+  setItem(data: object) {
+    const item = document.createElement('dropdownlist-item') as DropdownlistItem;
+    for (const mapKey in data) {
+      const map = new Map(Object.entries(data));
+      switch (mapKey) {
+        case `${this.field}`:
+          item.field = map.get(`${this.field}`);
+          break;
+        case `${this.labelField}`:
+          item.label = map.get(`${this.labelField}`);
+          break;
+        case `${this.checkedField}`:
+          item.checked = Boolean(map.get(`${this.checkedField}`));
+          break;
+        case `${this.disabledField}`:
+          item.disabled = Boolean(map.get(`${this.disabledField}`));
+          break;
+      }
+    }
+    this.appendChild(item);
+  }
+
+  /**
+   * 드롭다운 아이템리스트를 추가합니다.
+   * @param {Array<Object>} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(key)  아이템의 필드를 설정합니다.(필 수값);
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
+  setItems(data: Array<object>) {
+    data.forEach(DATA => {
+      this.setItem(DATA);
+    });
+  }
+
+  /**
+   *  드롭다운 아이템을 제거합니다.
+   *  @param key {string} 아이템의 key-field
+   * */
+  removeItem(key: string) {
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      if (($item as DropdownlistItem).field === key) {
+        $item.remove();
+      }
+    });
+  }
+
+  /**
+   *  드롭다운 아이템전체를 제거합니다.
+   * */
+  removeItems() {
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      $item.remove();
+    });
+  }
+
+  /**
+   * 드롭다운 아이템의 옵션을 변경합니다.
+   * @param {Object} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
+  updateItem(data: object) {
+    const map = new Map(Object.entries(data));
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      if (($item as DropdownlistItem).field === map.get(`${this.field}`)) {
+        ($item as DropdownlistItem).label = map.get(`${this.labelField}`);
+        ($item as DropdownlistItem).checked = Boolean(map.get(`${this.checkedField}`));
+        ($item as DropdownlistItem).disabled = Boolean(map.get(`${this.disabled}`));
+      }
+    });
+  }
+
+  /**
+   *  드롭다운 아이템의 모든 체크를 해제합니다.
+   * */
+  uncheckItems() {
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      ($item as DropdownlistItem).checked = false;
+    });
+  }
+
+  /**
+   *  드롭다운 아이템의 체크를 해제합니다.
+   *  @param key {string} 아이템의 key-field
+   * */
+  uncheckItem(key: string) {
+    this._checkChange(key, false);
+  }
+
+  /**
+   *  드롭다운 아이템의 체크합니다.
+   *  @param key {string} 아이템의 key-field
+   * */
+  checkItem(key: string) {
+    this._checkChange(key, true);
+  }
+
+  // key 값으로 체크 상태 변경함수
+  private _checkChange(key: string, state: boolean) {
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      if (($item as DropdownlistItem).field === key) {
+        ($item as DropdownlistItem).checked = state;
+      }
+    });
+  }
+
+  close() {
+    this._close();
   }
 
   //이벤트 객체 생성
   _EVENT = new EventEmitter();
+
   // 이벤트 등록
 
   public on(key: EVENT, handler: (e: EventArgs, ...args: unknown[]) => void) {
@@ -107,6 +316,9 @@ export class Dropdownlist extends DewsFormComponent {
     }
   }
 
+  /**
+   * DATASource 기반으로 컴포넌트 생성
+   * */
   private createItemList() {
     const data = this._datasource?.data();
     let item: DropdownlistItem;
@@ -142,7 +354,7 @@ export class Dropdownlist extends DewsFormComponent {
     });
   }
 
-  private _confirmClickHandler() {
+  _confirmClickHandler = () => {
     this._multiCheck = true;
     this.select = [];
     this._selectList = [];
@@ -154,43 +366,19 @@ export class Dropdownlist extends DewsFormComponent {
         this._selectList.push(false);
       }
     });
-    this._close();
-  }
-
-  #nextBtnView = () => {
-    const $el: HTMLCollection = this.parentElement?.children as HTMLCollection;
-    for (let i = 0; i <= $el.length; i++) {
-      if ($el!.item(i) === this) {
-        this._nextItem = i + 1;
-        if ($el!.length == i + 1) {
-          this.$nextBtn = html``;
-        } else {
-          if (
-            $el!.item(i + 1)?.hasAttribute('disabled') ||
-            $el!.item(i + 1)?.hasAttribute('readonly') ||
-            $el!.item(i + 1)?.localName === 'dews-button' ||
-            $el!.item(i + 1)?.localName === 'dews-radiobutton-group' ||
-            $el!.item(i + 1)?.localName === 'dews-checkbox-group'
-          ) {
-            this.$nextBtn = html``;
-          } else {
-            this.$nextBtn = html`<button class="next-icon-button" @click="${this._nextBtnClickHandler}">
-              <span>다음</span>
-            </button>`;
-          }
-        }
+    if (this.select[0] !== undefined) {
+      if (this.multi) {
+        this.text = `${this.select[0]} ${this.select.length > 1 ? '외' + `${this.select.length - 1}건` : ''}`;
+      } else {
+        this.text = `${this.select[0]}`;
       }
+    } else {
+      this.text = '';
     }
+    this._close();
   };
 
-  private _nextBtnClickHandler(e: MouseEvent) {
-    const $el = this.parentElement?.parentElement?.children[this._nextItem!]?.children[0] as HTMLElement;
-    this._confirmClickHandler();
-    $el?.click();
-  }
-
   click() {
-    this._confirmClickHandler();
     this._clickHandler(new MouseEvent('click'));
   }
 
@@ -204,93 +392,22 @@ export class Dropdownlist extends DewsFormComponent {
     this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
   }
 
-  private _focus() {
-    this.shadowRoot!.querySelector('.select-wrap')?.classList.add('focus');
-  }
-
-  private _blur() {
-    this.shadowRoot!.querySelector('.select-wrap')?.classList.remove('focus');
-  }
-
-  private _clickHandler(e: MouseEvent) {
-    if (!this.disabled && !this.readonly) {
-      const $el: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout');
-      window.scrollTo(
-        0,
-        window.pageYOffset +
-          this.parentElement?.getBoundingClientRect()?.top! -
-          this.shadowRoot!.querySelector('.dropdownlist-wrap')?.clientHeight! -
-          25
-      );
-      this.height = `${this.shadowRoot!.querySelector('.dropdownlist-wrap')!.clientHeight + 120}px`;
-      $el!.height = this.height;
-      this._open();
+  attributeChangedCallback(name: string, old: string | null, value: string | null) {
+    super.attributeChangedCallback(name, old, value);
+    switch (name) {
+      case 'oncomplete':
+        this._EVENT.on('complete', new Function('return ' + value)());
+        break;
+      case 'onopen':
+        this._EVENT.on('open', new Function('return ' + value)());
+        break;
+      case 'onclose':
+        this._EVENT.on('close', new Function('return ' + value)());
+        break;
+      case 'onchange':
+        this._EVENT.on('change', new Function('return ' + value)());
+        break;
     }
-  }
-
-  private _open() {
-    this._focus();
-    this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach(($el, index) => {
-      if (this._selectList[index]) {
-        $el.setAttribute('checked', 'true');
-      }
-    });
-    this.active = true;
-    this._EVENT.emit('open', { target: this, type: 'open' });
-  }
-
-  _close() {
-    this._blur();
-    if (this.multi && !this._multiCheck) {
-      this.shadowRoot!.querySelectorAll('.multi-checkbox').forEach($el => {
-        if ($el.hasAttribute('checked')) {
-          $el.removeAttribute('checked');
-        }
-      });
-    }
-    this.active = false;
-    this._EVENT.emit('close', { target: this, type: 'close' });
-  }
-
-  private _domClickHandelr(e: MouseEvent) {
-    if (e.isTrusted) {
-      if (
-        e.clientY <
-        window.innerHeight -
-          this.shadowRoot!.querySelector('.drawer-layout')?.shadowRoot!.querySelector('.layer-bottom')?.clientHeight!
-      ) {
-        if (!this.active) {
-          return;
-        }
-        if (this._count >= 1) {
-          this._close();
-        }
-      }
-      this._count++;
-    }
-  }
-
-  private _addEvent = this._domClickHandelr.bind(this);
-
-  protected firstUpdated(_changedProperties: PropertyValues) {
-    this.shadowRoot!.querySelector('.drawer-layout')?.addEventListener('blur', this._close);
-    if (this.disabled) {
-      this.shadowRoot!.querySelector('.select-wrap')?.classList.add('disabled');
-    }
-    if (this.readonly) {
-      this.shadowRoot!.querySelector('.select-wrap')?.classList.add('readonly');
-    }
-    super.firstUpdated(_changedProperties);
-  }
-
-  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    if (this.active) {
-      document.addEventListener('click', this._addEvent);
-    } else {
-      this._count = 0;
-      document.removeEventListener('click', this._addEvent);
-    }
-    return super.shouldUpdate(_changedProperties);
   }
 
   render() {

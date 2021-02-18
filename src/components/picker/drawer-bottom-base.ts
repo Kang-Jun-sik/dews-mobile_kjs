@@ -14,6 +14,9 @@ export class DrawerBottomBase extends DewsFormComponent {
   @property({ type: Boolean })
   disabled: boolean | undefined = false;
 
+  @property({ type: Boolean, reflect: true })
+  dimming = false;
+
   @property({ type: Boolean })
   readonly: boolean | undefined = false;
 

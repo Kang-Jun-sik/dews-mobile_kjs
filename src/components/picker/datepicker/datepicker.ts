@@ -16,6 +16,9 @@ export class Datepicker extends PickerBase {
   @property({ type: String, reflect: true })
   value: string | undefined;
 
+  @property({ type: String, reflect: true })
+  text = '';
+
   @internalProperty()
   private $spinnerYear: TemplateResult | undefined;
 
@@ -298,6 +301,7 @@ export class Datepicker extends PickerBase {
     }
     if (this._value?.indexOf('_')! < 0) {
       this.inputValue = this._value;
+      this.text = this.inputValue!;
       this.value = `${this.inputValue?.slice(0, 4)}${this.inputValue?.slice(5, 7)}${this.inputValue?.slice(8, 10)}`;
       this._close();
     } else {
@@ -474,6 +478,27 @@ export class Datepicker extends PickerBase {
       });
     }
 
+    if (_changedProperties.has('value')) {
+      if (this.value === '') {
+        this.inputValue = '';
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__-__';
+        if (this.spinner) {
+          this._spinnerRemove();
+        }
+      } else {
+        this._setYear = Number(this.value!.slice(0, 4));
+        this._setMonth = Number(this.value!.slice(4, 6));
+        this.inputValue = this.value!.slice(0, 4) + '-' + this.value!.slice(4, 6) + '-' + this.value!.slice(6, 8);
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
+        if (this.spinner) {
+          this._spinnerRemove();
+          this._spinnerYearSelect();
+          this._spinnerMonthSelect();
+        }
+      }
+      this.text = this.inputValue;
+    }
+
     if (this.spinner) {
       const year: HTMLElement = this.shadowRoot!.querySelector('.drawer-layout')!.querySelector(
         '.moving-list.year'
@@ -540,19 +565,6 @@ export class Datepicker extends PickerBase {
     } else {
       this._selectChange();
     }
-  }
-
-  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    if (_changedProperties.has('value')) {
-      if (this.value === undefined) {
-        this.inputValue = '';
-        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____-__-__';
-      } else {
-        this.inputValue = this.value!.slice(0, 4) + '-' + this.value!.slice(4, 6) + '-' + this.value!.slice(6, 8);
-        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
-      }
-    }
-    return super.shouldUpdate(_changedProperties);
   }
 
   render() {

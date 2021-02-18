@@ -195,6 +195,21 @@ export class Yearpicker extends PickerBase {
 
   protected updated(_changedProperties: PropertyValues): void {
     super.updated(_changedProperties);
+    if (_changedProperties.has('value')) {
+      if (this.value === '') {
+        this.inputValue = '';
+        this._setYear = undefined;
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____';
+      } else {
+        this.inputValue = this.value!.slice(0, 4);
+        this._setYear = Number(this.inputValue);
+        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
+      }
+      if (this.spinner) {
+        this._spinnerRemove();
+        this._spinnerYearSelect();
+      }
+    }
     if (this.spinner && !this._removeCheck) {
       (this.shadowRoot!.querySelector('.drawer-layout') as HTMLElement)!.querySelectorAll('.clear').forEach($el => {
         $el!.classList.remove('clear');
@@ -209,19 +224,6 @@ export class Yearpicker extends PickerBase {
     } else {
       this._selectChange();
     }
-  }
-
-  protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    if (_changedProperties.has('value')) {
-      if (this.value === undefined) {
-        this.inputValue = '';
-        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = '____';
-      } else {
-        this.inputValue = this.value!.slice(0, 4);
-        (this.shadowRoot?.querySelector('.input') as HTMLInputElement).value = this.inputValue;
-      }
-    }
-    return super.shouldUpdate(_changedProperties);
   }
 
   render() {

@@ -46,6 +46,9 @@ export class Containerbutton extends DrawerRightBase {
   @query('.dataset-nodata')
   datasetNodata: HTMLElement | undefined;
 
+  @query('drawer-layout')
+  drawerLayout: HTMLElement | undefined;
+
   connectedCallback() {
     super.connectedCallback();
     this._iconList = [];
@@ -164,7 +167,7 @@ export class Containerbutton extends DrawerRightBase {
                       ? data.map((item: SearchData) =>
                           item.value
                             ? html`<button @click="${(e: any) => this._showToolTip(e.target, item.title)}">
-                                ${item.value}
+                                ${item.text ? item.text : item.value}
                               </button>`
                             : html``
                         )
@@ -197,7 +200,18 @@ export class Containerbutton extends DrawerRightBase {
       };
       tooltip._target = target;
       tooltip.show();
+
+      // window.addEventListener('scroll', this._removeTooltip.bind(this, tooltip));
+      // this.drawerLayout
+      //   ?.shadowRoot!.querySelector('.layer-content')!
+      //   .addEventListener('scroll', this._removeTooltip.bind(this, tooltip));
     }
+  }
+  private _removeTooltip(tooltip: Tooltip) {
+    tooltip.remove();
+    // window.removeEventListener('scroll', this._removeTooltip);// eslint-disable-next-line max-len
+    // this.drawerLayout?.shadowRoot!.querySelector('.layer-content')!
+    // .removeEventListener('scroll', this._removeTooltip);
   }
 
   /**
@@ -217,8 +231,8 @@ export class Containerbutton extends DrawerRightBase {
             case 'DEWS-MONTHPERIODPICKER':
               {
                 const strArr = data[j].value.split('~');
-                control.startDate = strArr[0];
-                control.endDate = strArr[1];
+                control.startDate = strArr[0] || '';
+                control.endDate = strArr[1] || '';
               }
               break;
             default:
@@ -285,10 +299,8 @@ export class Containerbutton extends DrawerRightBase {
         case 'DEWS-PERIODPICKER':
         case 'DEWS-WEEKPERIODPICKER':
         case 'DEWS-MONTHPERIODPICKER':
-          {
-            // control.startDate = '';
-            // control.endDate = '';
-          }
+          control.startDate = '';
+          control.endDate = '';
           break;
         default:
           control.value = '';
@@ -340,16 +352,19 @@ export class Containerbutton extends DrawerRightBase {
       const control: any = this.contentList[i];
       const id = control.id || '';
       const title = control.title || '';
+      let text = '';
       let value = '';
       switch (control.tagName) {
         case 'DEWS-PERIODPICKER':
         case 'DEWS-WEEKPERIODPICKER':
         case 'DEWS-MONTHPERIODPICKER':
           if (control.startDate && control.endDate) {
+            text = control.text || '';
             value = control.startDate + '~' + control.endDate;
           }
           break;
         default:
+          text = control.text || '';
           value = control.value || '';
       }
 
@@ -358,6 +373,7 @@ export class Containerbutton extends DrawerRightBase {
         id: id,
         title: title,
         value: value,
+        text: text,
         dateTime: date.format(date.parse(new Date()), 'yyyy-MM-dd HH:mm:ss')
       });
       save = true;
