@@ -1,5 +1,4 @@
 import { html, internalProperty, property, PropertyValues, query, TemplateResult } from 'lit-element';
-import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
 
 import template from './codepicker.html';
 import scss from './codepicker.scss';
@@ -288,7 +287,6 @@ export class Codepicker extends PickerBase {
 
     cardList!.autoBind = true;
     cardList!.useTotalCount = true;
-    cardList!.height = '430px';
     cardList!.useHeader = true;
     cardList!.setAttribute('header-options', JSON.stringify({ useBookmark: false })); // 북마크 안나오도록 설정
     cardList!.setAttribute('codepicker', ''); // 코드피커 내에서 사용하는 카드리스트의 경우 codepicker 추가함
@@ -348,18 +346,15 @@ export class Codepicker extends PickerBase {
     super.updated(_changedProperties);
 
     this.updateComplete.then(() => {
-      // 높이 계산 (추후 변경 예정)
-      // let cardListHeight: number =
-      //   this._drawerLayout?.querySelector('.control')?.clientHeight! -
-      //   (cardList.shadowRoot?.querySelector('.dews-container-option-control')?.clientHeight! -
-      //     cardList.shadowRoot?.querySelector('.cardlist-all-select')?.clientHeight!) -
-      //   42 -
-      //   10;
-      //
+      const cardList = this._cardList as Cardlist<object>;
+
+      // 높이 계산 (.control.height - 필터.height(48) - 총건수.height(48))
+      const cardListHeight: number = this._drawerLayout?.querySelector('.control')?.clientHeight! - 48 * 2;
+
       // if (cardListHeight < 250) {
       //   cardListHeight = 250;
       // }
-      // cardList.height = cardListHeight.toString() + 'px';
+      cardList.height = cardListHeight.toString() + 'px';
     });
 
     // _changedProperties.forEach((oldValue, propName) => {
