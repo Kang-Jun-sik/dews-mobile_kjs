@@ -55,11 +55,11 @@ export class Drawerlayout extends DewsFormComponent {
    * */
   #EVENT = new EventEmitter();
 
-  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+  public on(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height: number }) => void) {
     this.#EVENT.on(key, handler);
   }
 
-  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+  public off(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height: number }) => void) {
     this.#EVENT.off(key, handler);
   }
 
