@@ -1,5 +1,4 @@
 import { internalProperty, property, PropertyValues, query } from 'lit-element';
-import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
 
 import template from './codepicker.html';
 import scss from './codepicker.scss';
@@ -128,20 +127,19 @@ export class Codepicker extends PickerBase {
     // 일단 이렇게 받아온다 가정
     const htmlString =
       ' <li>\n' +
-      '                <label for="">거래처코드</label>\n' +
-      '                <dews-dropdownlist id="ddl">\n' +
+      //'                <label for="">거래처코드</label>\n' +
+      '                <dews-dropdownlist id="ddl" title="거래처코드">\n' +
       '                  <dropdownlist-item title="DATA-1"></dropdownlist-item>\n' +
       '                  <dropdownlist-item title="DATA-2"></dropdownlist-item>\n' +
       '                </dews-dropdownlist>\n' +
       '              </li>\n' +
       '              <li>\n' +
-      '                <label for="">거래처명</label>\n' +
-      '                <dews-numerictextbox id="ntb"></dews-numerictextbox>\n' +
+      //'                <label for="">거래처명</label>\n' +
+      '                <dews-datepicker title="거래날짜"></dews-datepicker>\n' +
       '              </li>' +
       '              <li>\n' +
-      '                <label for="">등록</label>\n' +
-      '                  <dews-masktextbox id="masktbx3" type="text" placeholder="hint" title="LL-00" mask="LL-00">' +
-      '                   </dews-masktextbox>\n' +
+      //'                <label for="">등록</label>\n' +
+      '                  <dews-periodpicker title="거래기간"> </dews-periodpicker>\n' +
       '              </li>';
 
     const parser = new DOMParser(),
