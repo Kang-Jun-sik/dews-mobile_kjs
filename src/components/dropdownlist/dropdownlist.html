@@ -40,7 +40,7 @@ ${this.multi?html`
   </div>
 </drawer-layout>
 ` :html`
-<drawer-layout class="drawer-layout" @close="${this._close}"  ?active="${this.active}" scrollEnabled>
+<drawer-layout class="drawer-layout" @close="${this._close}" ?dimming="${this.dimming}" ?active="${this.active}" scrollEnabled>
   <div class="drawer-dropdownlist-single">
     <div class="titlebar">
       <div class="title">${this.title}</div>

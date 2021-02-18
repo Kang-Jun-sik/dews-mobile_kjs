@@ -16,6 +16,9 @@ export class Drawerlayout extends DewsFormComponent {
   @property({ type: Boolean, reflect: true })
   active = false;
 
+  @property({ type: Boolean, reflect: true })
+  dimming = false;
+
   @property({ type: String })
   size: 'large' | 'full' = 'large';
 

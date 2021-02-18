@@ -27,7 +27,7 @@ export const Dropdownlist = () =>
         </ds-schema-model>
       </ds-schema>
     </dews-datasource>
-    <dews-dropdownlist title="DataSource" datasource="datasource1" auto-bind field="name" label-field="name">
+    <dews-dropdownlist title="DataSource" datasource="datasource1" auto-bind key-field="name" label-field="name">
     </dews-dropdownlist>
     <dews-dropdownlist
       key-field="key"

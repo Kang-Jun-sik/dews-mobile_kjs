@@ -49,6 +49,9 @@ export class Dropdownlist extends DrawerBottomBase {
   autoBind = false;
 
   @property({ type: Boolean, reflect: true })
+  dimming = false;
+
+  @property({ type: Boolean, reflect: true })
   multi = false;
 
   @property({ type: Boolean, reflect: true })
@@ -80,6 +83,10 @@ export class Dropdownlist extends DrawerBottomBase {
     super();
   }
 
+  /**
+   * 체크된 아이템의 data 를 반환합니다.
+   * @return Array<Object> 체크된 아이템의 Array 를 반환함니다.
+   * */
   getCheckItems(): Array<object> {
     const resultValue: Array<object> = [];
     this.querySelectorAll('dropdownlist-item').forEach($item => {
@@ -96,6 +103,14 @@ export class Dropdownlist extends DrawerBottomBase {
     return resultValue;
   }
 
+  /**
+   * 드롭다운 아이템리스트를 추가합니다.
+   * @param {Array<Object>} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(key)  아이템의 필드를 설정합니다.(필 수값);
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
   setCheckItems(data: Array<object>) {
     data.forEach(DATA => {
       const map = new Map(Object.entries(DATA));
@@ -103,6 +118,11 @@ export class Dropdownlist extends DrawerBottomBase {
     });
   }
 
+  /**
+   * 드롭다운 아이템을 가져옵니다.
+   * @param key {String} key-field 아이템의 키 필드입니다.
+   * @return {object} 아이템의 data 를 반환합니다.
+   * */
   getItem(key: string): object {
     let resultValue: object = {};
     this.querySelectorAll('dropdownlist-item').forEach($item => {
@@ -118,6 +138,11 @@ export class Dropdownlist extends DrawerBottomBase {
     return resultValue;
   }
 
+  /**
+   * 드롭다운 아이템리스트를 가져옵니다.
+   * @param key {String} key-field 아이템의 키 필드입니다.
+   * @return Array{Array<object>} 아이템의 data 리스트를 반환합니다.
+   * */
   getItems(): Array<object> {
     const resultValue: Array<object> = [];
     this.querySelectorAll('dropdownlist-item').forEach($item => {
@@ -134,6 +159,13 @@ export class Dropdownlist extends DrawerBottomBase {
     return resultValue;
   }
 
+  /**
+   * 드롭다운 아이템을 추가합니다.
+   * @param {Object} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
   setItem(data: object) {
     const item = document.createElement('dropdownlist-item') as DropdownlistItem;
     for (const mapKey in data) {
@@ -156,12 +188,24 @@ export class Dropdownlist extends DrawerBottomBase {
     this.appendChild(item);
   }
 
+  /**
+   * 드롭다운 아이템리스트를 추가합니다.
+   * @param {Array<Object>} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(key)  아이템의 필드를 설정합니다.(필 수값);
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
   setItems(data: Array<object>) {
     data.forEach(DATA => {
       this.setItem(DATA);
     });
   }
 
+  /**
+   *  드롭다운 아이템을 제거합니다.
+   *  @param key {string} 아이템의 key-field
+   * */
   removeItem(key: string) {
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       if (($item as DropdownlistItem).field === key) {
@@ -170,12 +214,22 @@ export class Dropdownlist extends DrawerBottomBase {
     });
   }
 
+  /**
+   *  드롭다운 아이템전체를 제거합니다.
+   * */
   removeItems() {
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       $item.remove();
     });
   }
 
+  /**
+   * 드롭다운 아이템의 옵션을 변경합니다.
+   * @param {Object} data 아이템의 옵션을 설정합니다.
+   * @param {String} data.(label-field)아이템의 라벨을 설정합니다.
+   * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
+   * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
+   * */
   updateItem(data: object) {
     const map = new Map(Object.entries(data));
     this.querySelectorAll('dropdownlist-item').forEach($item => {
@@ -187,10 +241,36 @@ export class Dropdownlist extends DrawerBottomBase {
     });
   }
 
+  /**
+   *  드롭다운 아이템의 모든 체크를 해제합니다.
+   * */
+  uncheckItems() {
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      ($item as DropdownlistItem).checked = false;
+    });
+  }
+
+  /**
+   *  드롭다운 아이템의 체크를 해제합니다.
+   *  @param key {string} 아이템의 key-field
+   * */
+  uncheckItem(key: string) {
+    this._checkChange(key, false);
+  }
+
+  /**
+   *  드롭다운 아이템의 체크합니다.
+   *  @param key {string} 아이템의 key-field
+   * */
   checkItem(key: string) {
+    this._checkChange(key, true);
+  }
+
+  // key 값으로 체크 상태 변경함수
+  private _checkChange(key: string, state: boolean) {
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       if (($item as DropdownlistItem).field === key) {
-        ($item as DropdownlistItem).checked = true;
+        ($item as DropdownlistItem).checked = state;
       }
     });
   }
@@ -236,6 +316,9 @@ export class Dropdownlist extends DrawerBottomBase {
     }
   }
 
+  /**
+   * DATASource 기반으로 컴포넌트 생성
+   * */
   private createItemList() {
     const data = this._datasource?.data();
     let item: DropdownlistItem;
@@ -292,7 +375,6 @@ export class Dropdownlist extends DrawerBottomBase {
     } else {
       this.text = '';
     }
-    console.log('여기임니다');
     this._close();
   };
 

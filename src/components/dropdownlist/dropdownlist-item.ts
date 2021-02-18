@@ -39,7 +39,13 @@ export class DropdownlistItem extends DewsFormComponent {
         this.multi = true;
       }
     }
-
+    if (this.field === undefined) {
+      if (this.label !== undefined && this.label !== '') {
+        this.field = this.label;
+      } else {
+        this.field = this.title;
+      }
+    }
     if (this.title === '') {
       if (this.label !== undefined && this.label !== '') {
         this.title = this.label;
