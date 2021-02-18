@@ -1,6 +1,6 @@
 <div class="timepicker-wrap" id="drawer" @click="${this._clickHandler}">
   <label for="">${this.title}</label>
-  <span class="select-wrap">
+  <span class="select-wrap" tabindex="1">
       <span class="select-shape">
           <span class="select-input">${this.inputValue}</span>
       </span>
@@ -9,7 +9,7 @@
 </div>
 
 
-  <drawer-layout class="drawer-layout" ?dimming="${this.dimming}" @close="${this._close}"  ?active="${this.active}">
+  <drawer-layout class="drawer-layout" ?dimming="${this.dimming}" @close="${this._close}"  ?active="${this.active}" tabindex="-1">
     <div class="drawer-timepicker">
       <div class="titlebar">
         <div class="title">${this.title}</div>
