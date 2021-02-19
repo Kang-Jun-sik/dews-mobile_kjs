@@ -84,21 +84,21 @@ export class ListContainer extends DewsLayoutComponent {
     super.disconnectedCallback();
   }
 
-  private _slotChange(e: Event) {
-    for (let i = 0; i < this.children.length; i++) {
-      if (
-        this.children.item(i)?.tagName === 'CONTAINER-BUTTON' ||
-        this.children.item(i)?.tagName === 'CONTAINER-SUMMARY'
-      ) {
-        this.shadowRoot
-          ?.querySelector('.dews-container-option-control')
-          ?.appendChild(this.children.item(i) as HTMLElement);
-      } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
-        // const li = document.createElement('li');
-        this.shadowRoot?.querySelector('.list-field')?.appendChild(this.children.item(i) as HTMLElement);
-      }
-    }
-  }
+  // private _slotChange(e: Event) {
+  //   for (let i = 0; i < this.children.length; i++) {
+  //     if (
+  //       this.children.item(i)?.tagName === 'CONTAINER-BUTTON' ||
+  //       this.children.item(i)?.tagName === 'CONTAINER-SUMMARY'
+  //     ) {
+  //       this.shadowRoot
+  //         ?.querySelector('.dews-container-option-control')
+  //         ?.appendChild(this.children.item(i) as HTMLElement);
+  //     } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
+  //       // const li = document.createElement('li');
+  //       this.shadowRoot?.querySelector('.list-field')?.appendChild(this.children.item(i) as HTMLElement);
+  //     }
+  //   }
+  // }
 
   render() {
     return template.call(this);
