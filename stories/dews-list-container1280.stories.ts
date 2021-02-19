@@ -37,11 +37,13 @@ export const ListContainer1280 = () => html`<div style="width: 1280px">
         <dews-button text="종결"></dews-button>
         <dews-button text="종결취소"></dews-button>
       </container-button>
+
       <container-summary>
         <span>요약 내용영역</span>
       </container-summary>
+
       <container-content>
-        <dews-textbox title="title#1"></dews-textbox>
+        <dews-cardlist></dews-cardlist>
       </container-content>
     </dews-list-container>
   </dews-box>

@@ -13,6 +13,7 @@ export type PROGRESSBAR_OPTIONS = {
   titlebar?: boolean | object | undefined;
   byte?: boolean | undefined;
   autoClose?: boolean | undefined;
+  cancel?: boolean | undefined;
 };
 
 export class Progressbar extends DewsFormComponent {
@@ -20,6 +21,9 @@ export class Progressbar extends DewsFormComponent {
 
   @property({ type: String })
   progressId: string | undefined = '';
+
+  @property({ type: Boolean })
+  cancel: boolean | undefined = false;
 
   @internalProperty()
   _className = 'progressbar-layer';
@@ -121,6 +125,9 @@ export class Progressbar extends DewsFormComponent {
           break;
         case 'autoClose':
           this._autoClose = this.options[prop];
+          break;
+        case 'cancel':
+          this.cancel = this.options[prop];
           break;
       }
     }

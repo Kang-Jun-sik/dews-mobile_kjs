@@ -53,9 +53,10 @@ wrap
         <!--          <span class="progressbar-text">${this.textTemplate}</span>-->
       </div>
       <!-- 취소 버튼 추가 -->
-      <div class="progressbar-button-wrap">
-        <button type="button" @click="${this.close}" class="progressbar-cancel-button">취소</button>
-      </div>
+      ${this.cancel?html`<div class="progressbar-button-wrap">
+      <button type="button" @click="${this.close}" class="progressbar-cancel-button">취소</button>
+    </div>`: null}
+
       <!--// 취소 버튼 추가 -->
     </div>
   </div>

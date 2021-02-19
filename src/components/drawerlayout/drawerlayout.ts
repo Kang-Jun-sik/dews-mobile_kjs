@@ -39,6 +39,7 @@ export class Drawerlayout extends DewsFormComponent {
   private _moveState: boolean | undefined = false;
   private _moveCheck = false;
   private close: Event = new Event('close');
+  private _portrait = window.matchMedia('(orientation: portrait)').matches;
 
   connectedCallback() {
     super.connectedCallback();
@@ -54,11 +55,11 @@ export class Drawerlayout extends DewsFormComponent {
    * */
   #EVENT = new EventEmitter();
 
-  public on(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height: number }) => void) {
+  public on(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height?: number }) => void) {
     this.#EVENT.on(key, handler);
   }
 
-  public off(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height: number }) => void) {
+  public off(key: EVENT_TYPE, handler: (e: { target: Element; type: string; height?: number }) => void) {
     this.#EVENT.off(key, handler);
   }
 
@@ -133,6 +134,21 @@ export class Drawerlayout extends DewsFormComponent {
     this._defaultHeight = this.shadowRoot!.querySelector('.layer-bottom')?.clientHeight;
     this.shadowRoot!.querySelector('.layer-bottom')?.classList.add('little_moving');
     this._moveState = true;
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    window.addEventListener('resize', () => {
+      if (window.matchMedia('(orientation: portrait)').matches !== this._portrait) {
+        this._portrait = window.matchMedia('(orientation: portrait)').matches;
+        this._height = `calc(100% - ${this.height})`;
+        this._moveCheck = false;
+        this.#EVENT.emit('heightChange', {
+          target: this,
+          type: 'heightChange'
+        });
+      }
+    });
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {

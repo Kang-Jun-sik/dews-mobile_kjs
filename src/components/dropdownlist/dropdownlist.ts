@@ -1,4 +1,4 @@
-import { internalProperty, property, TemplateResult } from 'lit-element';
+import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
@@ -6,6 +6,7 @@ import { DropdownlistItem } from './dropdownlist-item.js';
 import { DataSource } from '../datasource/dews-datasource.js';
 import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
 import { Columnitem } from '../columnsetbutton/columnitem.js';
+import { TouchScroll } from '../utill/touchscroll.js';
 
 type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
 
@@ -73,7 +74,9 @@ export class Dropdownlist extends DrawerBottomBase {
   private _count = 0;
   private _multiCheck = false;
 
+  @internalProperty()
   select: Array<string> = [];
+
   private _selectList: Array<boolean> = [];
 
   @internalProperty()
@@ -116,6 +119,7 @@ export class Dropdownlist extends DrawerBottomBase {
       const map = new Map(Object.entries(DATA));
       this.checkItem(map.get(`${this.field}`));
     });
+    this._selectChange();
   }
 
   /**
@@ -153,7 +157,6 @@ export class Dropdownlist extends DrawerBottomBase {
         [this.checkedField]: ($item as Columnitem).checked,
         [this.disabledField]: ($item as Columnitem).disabled
       };
-      console.log('여기');
       resultValue.push(obj);
     });
     return resultValue;
@@ -186,6 +189,7 @@ export class Dropdownlist extends DrawerBottomBase {
       }
     }
     this.appendChild(item);
+    this._selectChange();
   }
 
   /**
@@ -200,6 +204,7 @@ export class Dropdownlist extends DrawerBottomBase {
     data.forEach(DATA => {
       this.setItem(DATA);
     });
+    this._selectChange();
   }
 
   /**
@@ -212,6 +217,7 @@ export class Dropdownlist extends DrawerBottomBase {
         $item.remove();
       }
     });
+    this._selectChange();
   }
 
   /**
@@ -221,6 +227,7 @@ export class Dropdownlist extends DrawerBottomBase {
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       $item.remove();
     });
+    this._selectChange();
   }
 
   /**
@@ -239,6 +246,7 @@ export class Dropdownlist extends DrawerBottomBase {
         ($item as DropdownlistItem).disabled = Boolean(map.get(`${this.disabled}`));
       }
     });
+    this._selectChange();
   }
 
   /**
@@ -247,6 +255,7 @@ export class Dropdownlist extends DrawerBottomBase {
   uncheckItems() {
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       ($item as DropdownlistItem).checked = false;
+      this.select = [];
     });
   }
 
@@ -256,6 +265,7 @@ export class Dropdownlist extends DrawerBottomBase {
    * */
   uncheckItem(key: string) {
     this._checkChange(key, false);
+    this._selectChange();
   }
 
   /**
@@ -264,6 +274,7 @@ export class Dropdownlist extends DrawerBottomBase {
    * */
   checkItem(key: string) {
     this._checkChange(key, true);
+    this._selectChange();
   }
 
   // key 값으로 체크 상태 변경함수
@@ -356,6 +367,12 @@ export class Dropdownlist extends DrawerBottomBase {
 
   _confirmClickHandler = () => {
     this._multiCheck = true;
+    this._selectChange();
+    this._close();
+  };
+
+  // select변경시 text 변경을 위해 처리
+  private _selectChange() {
     this.select = [];
     this._selectList = [];
     this.querySelectorAll('dropdownlist-item').forEach($el => {
@@ -366,30 +383,15 @@ export class Dropdownlist extends DrawerBottomBase {
         this._selectList.push(false);
       }
     });
-    if (this.select[0] !== undefined) {
-      if (this.multi) {
-        this.text = `${this.select[0]} ${this.select.length > 1 ? '외' + `${this.select.length - 1}건` : ''}`;
-      } else {
-        this.text = `${this.select[0]}`;
-      }
-    } else {
-      this.text = '';
-    }
-    this._close();
-  };
+  }
 
   click() {
     this._clickHandler(new MouseEvent('click'));
   }
 
-  private _touchMove(e: any) {
-    e.passive = true;
-    e.capture = true;
-    e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
-  }
-
-  private _touchStart(e: any) {
-    this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    new TouchScroll(this.shadowRoot?.querySelector('.control') as HTMLElement);
   }
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
@@ -407,6 +409,21 @@ export class Dropdownlist extends DrawerBottomBase {
       case 'onchange':
         this._EVENT.on('change', new Function('return ' + value)());
         break;
+    }
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+    if (_changedProperties.has('select')) {
+      if (this.select[0] !== undefined) {
+        if (this.multi) {
+          this.text = `${this.select[0]} ${this.select.length > 1 ? '외' + `${this.select.length - 1}건` : ''}`;
+        } else {
+          this.text = `${this.select[0]}`;
+        }
+      } else {
+        this.text = '';
+      }
     }
   }
 
