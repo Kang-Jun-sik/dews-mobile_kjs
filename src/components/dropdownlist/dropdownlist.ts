@@ -1,4 +1,4 @@
-import { internalProperty, property, TemplateResult } from 'lit-element';
+import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
@@ -6,6 +6,7 @@ import { DropdownlistItem } from './dropdownlist-item.js';
 import { DataSource } from '../datasource/dews-datasource.js';
 import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
 import { Columnitem } from '../columnsetbutton/columnitem.js';
+import { TouchScroll } from '../utill/touchscroll.js';
 
 type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
 
@@ -153,7 +154,6 @@ export class Dropdownlist extends DrawerBottomBase {
         [this.checkedField]: ($item as Columnitem).checked,
         [this.disabledField]: ($item as Columnitem).disabled
       };
-      console.log('여기');
       resultValue.push(obj);
     });
     return resultValue;
@@ -382,14 +382,9 @@ export class Dropdownlist extends DrawerBottomBase {
     this._clickHandler(new MouseEvent('click'));
   }
 
-  private _touchMove(e: any) {
-    e.passive = true;
-    e.capture = true;
-    e.currentTarget.scrollTo(0, this._startPoint! - e.changedTouches[0].screenY);
-  }
-
-  private _touchStart(e: any) {
-    this._startPoint = e.changedTouches[0].screenY + e.currentTarget.scrollTop;
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    new TouchScroll().TouchScroll(this.shadowRoot?.querySelector('.control') as HTMLElement);
   }
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
