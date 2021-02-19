@@ -42,7 +42,8 @@ export const ListContainer360 = () => html`<div style="width: 360px;display: inl
           <span>요약 내용영역</span>
         </container-summary>
         <container-content>
-          <dews-textbox title="title#1"></dews-textbox>
+          <dews-cardlist></dews-cardlist>
+          <!--          <dews-textbox title="title#1"></dews-textbox>-->
         </container-content>
       </dews-list-container>
     </dews-tab>
