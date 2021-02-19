@@ -66,6 +66,7 @@ export class DropdownlistItem extends DewsFormComponent {
     this.$parent!.select[0] = $el.dataset.value as string;
     this.$parent!._EVENT.emit('select', { target: this, type: 'select', item: this.$parent!.select[0] });
     this.$parent!._EVENT.emit('change', { target: this, type: 'change' });
+    this.$parent!._singleClickHandler();
     this.$parent!.close();
   }
 

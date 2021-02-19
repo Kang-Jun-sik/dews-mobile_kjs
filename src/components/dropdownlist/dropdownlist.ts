@@ -114,12 +114,12 @@ export class Dropdownlist extends DrawerBottomBase {
    * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
    * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
    * */
-  setCheckItems(data: Array<object>) {
-    data.forEach(DATA => {
+  async setCheckItems(data: Array<object>) {
+    await data.forEach(DATA => {
       const map = new Map(Object.entries(DATA));
       this.checkItem(map.get(`${this.field}`));
     });
-    this._selectChange();
+    await this._selectChange();
   }
 
   /**
@@ -200,34 +200,34 @@ export class Dropdownlist extends DrawerBottomBase {
    * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
    * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
    * */
-  setItems(data: Array<object>) {
-    data.forEach(DATA => {
+  async setItems(data: Array<object>) {
+    await data.forEach(DATA => {
       this.setItem(DATA);
     });
-    this._selectChange();
+    await this._selectChange();
   }
 
   /**
    *  드롭다운 아이템을 제거합니다.
    *  @param key {string} 아이템의 key-field
    * */
-  removeItem(key: string) {
-    this.querySelectorAll('dropdownlist-item').forEach($item => {
+  async removeItem(key: string) {
+    await this.querySelectorAll('dropdownlist-item').forEach($item => {
       if (($item as DropdownlistItem).field === key) {
         $item.remove();
       }
     });
-    this._selectChange();
+    await this._selectChange();
   }
 
   /**
    *  드롭다운 아이템전체를 제거합니다.
    * */
-  removeItems() {
-    this.querySelectorAll('dropdownlist-item').forEach($item => {
+  async removeItems() {
+    await this.querySelectorAll('dropdownlist-item').forEach($item => {
       $item.remove();
     });
-    this._selectChange();
+    await this._selectChange();
   }
 
   /**
@@ -237,16 +237,16 @@ export class Dropdownlist extends DrawerBottomBase {
    * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
    * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
    * */
-  updateItem(data: object) {
+  async updateItem(data: object) {
     const map = new Map(Object.entries(data));
-    this.querySelectorAll('dropdownlist-item').forEach($item => {
+    await this.querySelectorAll('dropdownlist-item').forEach($item => {
       if (($item as DropdownlistItem).field === map.get(`${this.field}`)) {
         ($item as DropdownlistItem).label = map.get(`${this.labelField}`);
         ($item as DropdownlistItem).checked = Boolean(map.get(`${this.checkedField}`));
         ($item as DropdownlistItem).disabled = Boolean(map.get(`${this.disabled}`));
       }
     });
-    this._selectChange();
+    await this._selectChange();
   }
 
   /**
@@ -255,35 +255,39 @@ export class Dropdownlist extends DrawerBottomBase {
   uncheckItems() {
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       ($item as DropdownlistItem).checked = false;
-      this.select = [];
     });
+    this.select = [];
   }
 
   /**
    *  드롭다운 아이템의 체크를 해제합니다.
    *  @param key {string} 아이템의 key-field
    * */
-  uncheckItem(key: string) {
-    this._checkChange(key, false);
-    this._selectChange();
+  async uncheckItem(key: string) {
+    await this._checkChange(key, false);
+    await this._selectChange();
   }
 
   /**
    *  드롭다운 아이템의 체크합니다.
    *  @param key {string} 아이템의 key-field
    * */
-  checkItem(key: string) {
-    this._checkChange(key, true);
-    this._selectChange();
+  async checkItem(key: string) {
+    await this._checkChange(key, true);
+    await this._selectChange();
   }
 
   // key 값으로 체크 상태 변경함수
-  private _checkChange(key: string, state: boolean) {
-    this.querySelectorAll('dropdownlist-item').forEach($item => {
+  private async _checkChange(key: string, state: boolean) {
+    await this.querySelectorAll('dropdownlist-item').forEach($item => {
       if (($item as DropdownlistItem).field === key) {
         ($item as DropdownlistItem).checked = state;
       }
     });
+  }
+
+  _singleClickHandler() {
+    this.text = `${this.select[0]}`;
   }
 
   close() {

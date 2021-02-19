@@ -2,6 +2,7 @@ export class TouchScroll {
   constructor(target: HTMLElement) {
     this.TouchScroll(target);
   }
+
   /**
    * touchScroll 처리 함수
    * @param target 스크롤 기능부여할 Element
@@ -19,12 +20,17 @@ export class TouchScroll {
     let scrollChangePoint = 0;
     let updownCheck = false;
     let speed = 5;
+    let maxCount = 60;
+    let _speed = 0;
+    let count = 1;
+    let beforeScroll = 0;
 
     // 터치시작시 시작지점 기록
     function touchStart(e: TouchEvent) {
       startTime = Date.now();
       startPoint = target.scrollTop;
       scrollChangePoint = e.changedTouches[0].screenY + target.scrollTop;
+      animationState = false;
       target.classList.add('scroll');
     }
 
@@ -50,31 +56,32 @@ export class TouchScroll {
       } else {
         updownCheck = false;
       }
-      if (Math.abs(startPoint - endPoint) > 30) {
-        speed = (Math.abs(startPoint - endPoint) / moveTime) * 10;
-        animation();
-      } else {
-        target.classList.remove('scroll');
-      }
+      speed = (Math.abs(startPoint - endPoint) / moveTime) * 100;
+      _speed = speed / (Math.abs(startPoint - endPoint) + speed);
+      maxCount = Math.abs(startPoint - endPoint) + speed;
+      animation();
     }
-
-    // 애니메이션 처리
-    let count = 1;
+    // 애니메이션 처리()
     function animation() {
       if (animationState) {
         count++;
-        if (count >= Math.abs(startPoint - endPoint) / 3) {
-          animationState = false;
-        }
+        let scrollTo = 0;
         if (updownCheck) {
-          target.scrollTo(0, target.scrollTop - speed);
+          scrollTo = target.scrollTop - speed / 10;
         } else {
-          target.scrollTo(0, target.scrollTop + speed);
+          scrollTo = target.scrollTop + speed / 10;
         }
-        if (count % 3 === 0 && speed < Math.abs(startPoint - endPoint)) {
-          speed++;
+        if ((speed <= _speed && count >= maxCount) || speed === 0 || beforeScroll === scrollTo) {
+          animationState = false;
+          return;
         }
-        window.webkitRequestAnimationFrame(animation);
+        beforeScroll = scrollTo;
+        target.scrollTo(0, scrollTo);
+
+        if (speed >= 0) {
+          speed -= _speed;
+        }
+        window.requestAnimationFrame(animation);
       } else {
         count = 1;
         target.classList.remove('scroll');
