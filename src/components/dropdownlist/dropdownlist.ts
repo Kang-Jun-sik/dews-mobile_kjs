@@ -384,7 +384,7 @@ export class Dropdownlist extends DrawerBottomBase {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    new TouchScroll().TouchScroll(this.shadowRoot?.querySelector('.control') as HTMLElement);
+    new TouchScroll(this.shadowRoot?.querySelector('.control') as HTMLElement);
   }
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
