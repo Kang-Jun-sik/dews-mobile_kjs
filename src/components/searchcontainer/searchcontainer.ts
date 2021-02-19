@@ -15,7 +15,7 @@ export interface SearchData {
   id: string;
   title: string;
   text: string;
-  value: string;
+  value: any;
   dateTime: string;
 }
 

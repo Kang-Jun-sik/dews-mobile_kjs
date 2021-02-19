@@ -19,6 +19,9 @@ export class Radiobutton extends DewsFormComponent {
   @property({ type: Boolean, reflect: true })
   checked = false;
 
+  @property({ type: String })
+  value = '';
+
   /*
    * Event
    * */

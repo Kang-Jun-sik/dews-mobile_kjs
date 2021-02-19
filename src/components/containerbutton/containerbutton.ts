@@ -74,13 +74,13 @@ export class Containerbutton extends DrawerRightBase {
 
     if (this.setButton) {
       this._iconList.push(html` <li class="data-set">
-        <button class="set" @click="${this._setClick}"><span>Data Set</span></button>
+        <button class="set" @click="${this._dataSet}"><span>Data Set</span></button>
       </li>`);
     }
     if (this.captureButton) {
       this._iconList.push(
         html` <li class="data-capture">
-          <button class="capture" @click="${this._captureClick}">
+          <button class="capture" @click="${this._dataCapture}">
             <span>Data Capture</span>
           </button>
         </li>`
@@ -89,7 +89,7 @@ export class Containerbutton extends DrawerRightBase {
     if (this.resetButton) {
       this._iconList.push(
         html` <li class="data-reset">
-          <button class="reset" @click="${this._resetClick}">
+          <button class="reset" @click="${this._dataReset}">
             <span>Data Reset</span>
           </button>
         </li>`
@@ -100,7 +100,7 @@ export class Containerbutton extends DrawerRightBase {
   /**
    * set 버튼 클릭시 처리
    */
-  public _setClick() {
+  public _dataSet() {
     this._renderDataList();
     this._open();
   }
@@ -157,7 +157,7 @@ export class Containerbutton extends DrawerRightBase {
                 <div class="dataset">
                   <div class="header">
                     <span class="date">${data[0].dateTime}</span>
-                    <button class="apply-button" @click="${this._setData.bind(this, data)}">적용</button>
+                    <button class="apply-button" @click="${this._bindData.bind(this, data)}">적용</button>
                     <button class="delete-button" @click="${this._reomveData.bind(this, dataSet.data, i)}">
                       <span>삭제</span>
                     </button>
@@ -219,7 +219,7 @@ export class Containerbutton extends DrawerRightBase {
    * @param data
    * @private
    */
-  private _setData(data: SearchData[]) {
+  private _bindData(data: SearchData[]) {
     for (let i = 0; i < this.contentList.length; i++) {
       const control: any = this.contentList[i];
 
@@ -234,6 +234,10 @@ export class Containerbutton extends DrawerRightBase {
                 control.startDate = strArr[0] || '';
                 control.endDate = strArr[1] || '';
               }
+              break;
+            case 'DEWS-DROPDOWNLIST':
+              control.removeItems();
+              control.setCheckItems(data[j].value);
               break;
             default:
               control.value = data[j].value;
@@ -292,7 +296,7 @@ export class Containerbutton extends DrawerRightBase {
    * reset 버튼 클릭시 처리
    *
    */
-  public _resetClick() {
+  public _dataReset() {
     for (let i = 0; i < this.contentList.length; i++) {
       const control: any = this.contentList[i];
       switch (control.tagName) {
@@ -301,6 +305,9 @@ export class Containerbutton extends DrawerRightBase {
         case 'DEWS-MONTHPERIODPICKER':
           control.startDate = '';
           control.endDate = '';
+          break;
+        case 'DEWS-DROPDOWNLIST':
+          control.uncheckItems();
           break;
         default:
           control.value = '';
@@ -321,7 +328,7 @@ export class Containerbutton extends DrawerRightBase {
    * capture 버튼 클릭시 처리
    * @private
    */
-  public _captureClick() {
+  public _dataCapture() {
     const searchData: SearchData[] = [];
 
     const defalut = {
@@ -362,6 +369,14 @@ export class Containerbutton extends DrawerRightBase {
             text = control.text || '';
             value = control.startDate + '~' + control.endDate;
           }
+          break;
+        case 'DEWS-CHECKBOX-GROUP':
+          text = control.value.length > 0 ? control.value.join(',') : '';
+          value = control.value.length > 0 ? control.value : '';
+          break;
+        case 'DEWS-DROPDOWNLIST':
+          text = control.text || '';
+          value = control.getCheckItems().length > 0 ? control.getCheckItems() : '';
           break;
         default:
           text = control.text || '';

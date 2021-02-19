@@ -29,6 +29,9 @@ export class Checkbox extends DewsFormComponent {
   @property({ type: Boolean })
   reverse = false;
 
+  @property({ type: String })
+  value = '';
+
   private _className = 'dews-checkbox-wrap';
 
   connectedCallback() {
