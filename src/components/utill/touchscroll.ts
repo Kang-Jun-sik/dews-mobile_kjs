@@ -1,4 +1,7 @@
 export class TouchScroll {
+  constructor(target: HTMLElement) {
+    this.TouchScroll(target);
+  }
   /**
    * touchScroll 처리 함수
    * @param target 스크롤 기능부여할 Element
@@ -22,7 +25,7 @@ export class TouchScroll {
       startTime = Date.now();
       startPoint = target.scrollTop;
       scrollChangePoint = e.changedTouches[0].screenY + target.scrollTop;
-      animationState = false;
+      target.classList.add('scroll');
     }
 
     // 터치이동 모션 처리
@@ -50,16 +53,16 @@ export class TouchScroll {
       if (Math.abs(startPoint - endPoint) > 30) {
         speed = (Math.abs(startPoint - endPoint) / moveTime) * 10;
         animation();
+      } else {
+        target.classList.remove('scroll');
       }
     }
 
     // 애니메이션 처리
     let count = 1;
     function animation() {
-      console.log(speed, Math.abs(startPoint - endPoint));
       if (animationState) {
         count++;
-        console.log(Math.abs(startPoint - endPoint));
         if (count >= Math.abs(startPoint - endPoint) / 3) {
           animationState = false;
         }
@@ -74,6 +77,7 @@ export class TouchScroll {
         window.webkitRequestAnimationFrame(animation);
       } else {
         count = 1;
+        target.classList.remove('scroll');
       }
     }
   }
