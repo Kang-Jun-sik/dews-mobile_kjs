@@ -21,6 +21,9 @@ export class Progressbar extends DewsFormComponent {
   @property({ type: String })
   progressId: string | undefined = '';
 
+  @property({ type: Boolean })
+  cancel = false;
+
   @internalProperty()
   _className = 'progressbar-layer';
 

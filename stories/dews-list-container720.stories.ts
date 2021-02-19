@@ -42,7 +42,7 @@ export const ListContainer720 = () => html`<div style="width: 720px">
           <span>요약 내용영역</span>
         </container-summary>
         <container-content>
-          <dews-textbox title="title#1"></dews-textbox>
+          <dews-cardlist></dews-cardlist>
         </container-content>
       </dews-list-container>
     </dews-tab>
