@@ -30,6 +30,7 @@ export const Dropdownlist = () =>
     <dews-dropdownlist title="DataSource" datasource="datasource1" auto-bind key-field="name" label-field="name">
     </dews-dropdownlist>
     <dews-dropdownlist
+      id="ab"
       key-field="key"
       label-field="name"
       title="multi"
@@ -55,7 +56,7 @@ export const Dropdownlist = () =>
       <dropdownlist-item title="DATA-5"></dropdownlist-item>
       <dropdownlist-item title="DATA-6"></dropdownlist-item>
     </dews-dropdownlist>
-    <dews-dropdownlist title="single">
+    <dews-dropdownlist title="single" id="bbb">
       <dropdownlist-item title="DATA-1"></dropdownlist-item>
       <dropdownlist-item title="DATA-2"></dropdownlist-item>
       <dropdownlist-item title="DATA-3"></dropdownlist-item>

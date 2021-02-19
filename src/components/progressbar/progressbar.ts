@@ -2,7 +2,7 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './progressbar.html';
 import scss from './progressbar.scss';
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
+import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
 export type PROGRESSBAR_OPTIONS = {
   total: number;
