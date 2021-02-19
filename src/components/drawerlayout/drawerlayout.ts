@@ -135,6 +135,14 @@ export class Drawerlayout extends DewsFormComponent {
     this._moveState = true;
   }
 
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    window.addEventListener('resize', () => {
+      this._height = `calc(100% - ${this.height})`;
+      this._moveCheck = false;
+    });
+  }
+
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('active') !== undefined && !this.right) {
       if ((!_changedProperties.get('active') && this._moveCheck) || this.height === '200px') {
