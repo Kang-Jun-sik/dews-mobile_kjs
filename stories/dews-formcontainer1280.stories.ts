@@ -13,6 +13,38 @@ export const FormContainer1280 = () => html`<div style="width: 1280px">
       </container-button>
       <container-content>
         <form-section title="기본정보">
+          <dews-dropdownlist
+            id="ddl1"
+            title="dropdownlist"
+            datasource="datasource1"
+            auto-bind
+            key-field="key"
+            label-field="label"
+            onOpen="${(e: any) => {
+              e.target.setItems([
+                { key: '1234', label: '리스트 추가1' },
+                { key: '1235', label: '리스트 추가2' },
+                { key: '1236', label: '리스트 추가3' }
+              ]);
+            }}"
+          ></dews-dropdownlist>
+
+          <dews-dropdownlist
+            id="ddl2"
+            title="multi dropdownlist"
+            multi
+            datasource="datasource1"
+            auto-bind
+            key-field="key"
+            label-field="label"
+            onOpen="${(e: any) => {
+              e.target.setItems([
+                { key: '1234', label: '리스트 추가1' },
+                { key: '1235', label: '리스트 추가2' },
+                { key: '1236', label: '리스트 추가3' }
+              ]);
+            }}"
+          ></dews-dropdownlist>
           <dews-textbox id="tbx01" title="1"></dews-textbox>
           <dews-textbox id="tbx02" title="2"></dews-textbox>
           <dews-textbox id="tbx03" title="3"></dews-textbox>

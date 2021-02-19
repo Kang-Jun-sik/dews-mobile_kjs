@@ -1,8 +1,9 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
-import { html, internalProperty, property, TemplateResult } from 'lit-element';
+import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './radiobutton-group.html';
 import scss from './radiobutton-group.scss';
+import { Radiobutton } from '../radiobutton/radiobutton.js';
 
 export class RadiobuttonGroup extends DewsFormComponent {
   static styles = scss;
@@ -12,6 +13,9 @@ export class RadiobuttonGroup extends DewsFormComponent {
 
   @property({ type: String })
   align: 'horizontal' | 'vertical' = 'horizontal';
+
+  @property({ type: String, reflect: true })
+  value = '';
 
   @internalProperty()
   private $_radioButtonListTemp: Array<TemplateResult> = [];
@@ -24,6 +28,25 @@ export class RadiobuttonGroup extends DewsFormComponent {
     this._radioButtonView();
   }
 
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+
+    _changedProperties.forEach((oldValue, propName) => {
+      const $el = this.shadowRoot!.querySelectorAll('dews-radiobutton');
+      const value = this.value;
+
+      if (propName === 'value') {
+        for (let i = 0; i < $el.length; i++) {
+          const radio = $el.item(i) as Radiobutton;
+          radio.checked = false;
+          if (this.value === radio.value) {
+            radio.checked = true;
+          }
+        }
+      }
+    });
+  }
+
   private _radioButtonView() {
     const $el: HTMLCollection = this.children;
     const $checkedList: Array<Element> = [];
@@ -33,6 +56,7 @@ export class RadiobuttonGroup extends DewsFormComponent {
       }
       if ($el.item(i)?.hasAttribute('checked')) {
         $checkedList.push($el.item(i)!);
+        this.value = ($el.item(i) as Radiobutton).value;
       }
     }
     if ($checkedList.length >= 2) {
@@ -55,8 +79,12 @@ export class RadiobuttonGroup extends DewsFormComponent {
     const $el = this.shadowRoot!.querySelectorAll('dews-radiobutton');
     if ((e.target as HTMLElement).localName == 'dews-radiobutton') {
       for (let i = 0; i < $el.length; i++) {
+        const radio: Radiobutton = $el.item(i) as Radiobutton;
         if ($el.item(i) !== e.target && !(e.target as HTMLElement).hasAttribute('disabled')) {
           $el.item(i).removeAttribute('checked');
+        }
+        if (radio.checked) {
+          this.value = radio.value;
         }
       }
     }
