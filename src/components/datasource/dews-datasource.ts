@@ -2,6 +2,7 @@ import { internalProperty, property, PropertyValues } from 'lit-element';
 import { Transport } from './transport.js';
 import { Schema } from './schema.js';
 import {
+  ajax,
   api,
   EventEmitter,
   ObservableArray,
@@ -164,7 +165,7 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
     } else if (this.transport?.read) {
       const readElement = this.transport.read;
       // let response: T[];
-      let requestData: any;
+      let requestData: any = {};
       if (this.paging) {
         requestData = {
           paging: true,
@@ -175,9 +176,11 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
 
       try {
         if (readElement.type === 'get') {
-          response = await api.get(readElement.url, { params: requestData });
+          response = await ajax.get<any>(readElement.url, { params: requestData });
+          response = response.data;
         } else {
-          response = await api.post(readElement.url, { data: requestData });
+          response = await ajax.post(readElement.url, { data: requestData });
+          response = response.data;
         }
         const responseData: ObservableArray<T> = ObservableArray.create(response.data, this.schema?.model?.idFields);
         if (this.paging && this._data) {
