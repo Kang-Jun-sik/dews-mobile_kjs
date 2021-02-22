@@ -115,7 +115,7 @@ export class Dropdownlist extends DrawerBottomBase {
    * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
    * */
   async setCheckItems(data: Array<object>) {
-    await data.forEach(DATA => {
+    await Array.from(data).forEach(DATA => {
       const map = new Map(Object.entries(DATA));
       this.checkItem(map.get(`${this.field}`));
     });

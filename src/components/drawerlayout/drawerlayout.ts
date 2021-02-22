@@ -94,6 +94,11 @@ export class Drawerlayout extends DewsFormComponent {
     }
   }
 
+  private _touchStop(e: TouchEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   private _touchMove(e: TouchEvent & AddEventListenerOptions) {
     e.preventDefault();
     e.passive = true;

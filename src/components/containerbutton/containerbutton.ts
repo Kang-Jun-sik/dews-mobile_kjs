@@ -1,4 +1,4 @@
-import { html, internalProperty, property, TemplateResult } from 'lit-element';
+import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import template from './containerbutton.html';
 import scss from './containerbutton.scss';
 import { DataSet, SearchContainer, SearchData } from '../searchcontainer/searchcontainer.js';
@@ -8,6 +8,7 @@ import { Messagebox } from '../messagebox/dews-messagebox.js';
 import { date } from '@dews/dews-mobile-core';
 import DrawerRightBase from '../base/DrawerRightBase.js';
 import { query } from 'lit-element/lib/decorators';
+import { TouchScroll } from '../utill/touchscroll.js';
 
 const userId = 'kuyoungjun';
 const menuId = 'MA0001';
@@ -39,6 +40,8 @@ export class Containerbutton extends DrawerRightBase {
   private $parent: SearchContainer | FormContainer | undefined;
 
   private contentList: Array<TemplateResult> = [];
+
+  private _scrollHandler: EventListener | undefined;
 
   @query('.dews-snackbar.dataset')
   snackbar: HTMLElement | undefined;
@@ -201,17 +204,21 @@ export class Containerbutton extends DrawerRightBase {
       tooltip._target = target;
       tooltip.show();
 
-      // window.addEventListener('scroll', this._removeTooltip.bind(this, tooltip));
-      // this.drawerLayout
-      //   ?.shadowRoot!.querySelector('.layer-content')!
-      //   .addEventListener('scroll', this._removeTooltip.bind(this, tooltip));
+      this._scrollHandler = this._removeTooltip.bind(this, tooltip) as EventListener;
+
+      window.addEventListener('scroll', this._scrollHandler);
+      this.drawerLayout?.shadowRoot!.querySelector('.layer-content')!.addEventListener('scroll', this._scrollHandler);
     }
   }
+
   private _removeTooltip(tooltip: Tooltip) {
     tooltip.remove();
-    // window.removeEventListener('scroll', this._removeTooltip);// eslint-disable-next-line max-len
-    // this.drawerLayout?.shadowRoot!.querySelector('.layer-content')!
-    // .removeEventListener('scroll', this._removeTooltip);
+    if (this._scrollHandler) {
+      window.removeEventListener('scroll', this._scrollHandler);
+      this.drawerLayout
+        ?.shadowRoot!.querySelector('.layer-content')!
+        .removeEventListener('scroll', this._scrollHandler);
+    }
   }
 
   /**
@@ -236,7 +243,7 @@ export class Containerbutton extends DrawerRightBase {
               }
               break;
             case 'DEWS-DROPDOWNLIST':
-              control.removeItems();
+              control.uncheckItems();
               control.setCheckItems(data[j].value);
               break;
             default:
@@ -424,6 +431,11 @@ export class Containerbutton extends DrawerRightBase {
     if (this.shadowRoot?.querySelector('#custom')?.children.length === 0) {
       this.shadowRoot?.querySelector('.option-custom-button')?.remove();
     }
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    new TouchScroll(this.shadowRoot?.querySelector('.dataset-list') as HTMLElement);
   }
 
   render() {

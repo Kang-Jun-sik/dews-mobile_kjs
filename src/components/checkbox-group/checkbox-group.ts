@@ -45,14 +45,21 @@ export class CheckboxGroup extends DewsFormComponent {
       const $el = this.shadowRoot!.querySelectorAll('dews-checkbox');
 
       if (propName === 'value') {
-        for (let i = 0; i < $el.length; i++) {
-          const checkbox = $el.item(i) as Checkbox;
-          checkbox.checked = false;
-
-          for (let j = 0; j < this.value.length; j++) {
-            if (this.value[j] === checkbox.value) {
-              checkbox.checked = true;
+        if (this.value.length > 0) {
+          for (let i = 0; i < this.value.length; i++) {
+            if (this.value[i]) {
+              for (let j = 0; j < $el.length; j++) {
+                const checkbox = $el.item(i) as Checkbox;
+                if (this.value[j] === checkbox.value) {
+                  checkbox.checked = true;
+                }
+              }
             }
+          }
+        } else {
+          for (let i = 0; i < $el.length; i++) {
+            const checkbox = $el.item(i) as Checkbox;
+            checkbox.checked = false;
           }
         }
       }
@@ -65,8 +72,9 @@ export class CheckboxGroup extends DewsFormComponent {
 
   private _checkedChange(e: MouseEvent) {
     const $el = this.shadowRoot!.querySelectorAll('dews-checkbox');
-    this.value = [];
     if ((e.target as HTMLElement).localName == 'dews-checkbox') {
+      this.value = [];
+
       for (let i = 0; i < $el.length; i++) {
         const check: Checkbox = $el.item(i) as Checkbox;
 
