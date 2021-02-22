@@ -44,10 +44,15 @@ export class Drawerlayout extends DewsFormComponent {
   connectedCallback() {
     super.connectedCallback();
     this._height = `calc(100% - ${this.height})`;
+    window.addEventListener('animationend', this._animationHandler);
+  }
+  _animationHandler() {
+    console.log('animation 끝!!');
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    window.removeEventListener('animationend', this._animationHandler);
   }
 
   /*

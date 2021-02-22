@@ -8,6 +8,36 @@
   @include reset();
 }
 @include dews-codepicker();
-@include dews-drawer-codepicker();
+//@include dews-drawer-codepicker();
+
+.drawer-codepicker {
+  position: relative;
+  height: 100%;
+
+  @include layer-titlebar();
+
+  .control {
+    position: relative;
+    overflow-y: auto;
+    height: calc(100% - 60px - 23px); // 100% - .titlebar - .layer-moving-button
+  }
+
+  .dews-cardlist.codepicker {
+    padding: 0 20px;
+    @include cardlist('codepicker');
+  }
+
+  //code filter
+  .layer-code-filter {
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    background-color: #f7f7f7;
+  }
+}
 
 
