@@ -40,26 +40,26 @@ ${this.multi?html`
     <div class="control" scrollEnabled>
 
       <!-- //active -->
-      <div class="layer-code-filter ${this.filterActive?'active': ''}">
-        <div class="code-filter">
-          <div class="code-filter-search">
-            <!-- 조건 설정 시 setting 추가  -->
-            <!-- filter 사용 안 할 경우, disabled  -->
-            <button class="filter-button ${this.filterDisabled}" @click="${this._clickFilter}"><span>filiter</span>
-            </button>
-            <!-- input 활성화시 active -->
-            <span class="code-filter-input">
-                <input type="text">
-                <button class="clear-button"><span>초기화</span></button>
-                <button class="search-button"><span>검색</span></button>
-            </span>
-          </div>
-          <div class="code-filter-field">
-            <!--  해당 영역 component.. 처리/  -->
-            <ul class="form-field" @change="${this._changeControlValue}">
-            </ul>
-          </div>
-        </div>
+      <div class="layer-code-filter ">
+
+<!--          <div class="code-filter-search">-->
+<!--            &lt;!&ndash; 조건 설정 시 setting 추가  &ndash;&gt;-->
+<!--            &lt;!&ndash; filter 사용 안 할 경우, disabled  &ndash;&gt;-->
+<!--            <button class="filter-button ${this.filterDisabled}" @click="${this._clickFilter}"><span>filiter</span>-->
+<!--            </button>-->
+<!--            &lt;!&ndash; input 활성화시 active &ndash;&gt;-->
+<!--            <span class="code-filter-input">-->
+<!--                <input type="text">-->
+<!--                <button class="clear-button"><span>초기화</span></button>-->
+<!--                <button class="search-button"><span>검색</span></button>-->
+<!--            </span>-->
+<!--          </div>-->
+<!--          <div class="code-filter-field">-->
+<!--            &lt;!&ndash;  해당 영역 component.. 처리  &ndash;&gt;-->
+<!--&lt;!&ndash;            <ul class="form-field" @change="${this._changeControlValue}">&ndash;&gt;-->
+<!--&lt;!&ndash;            </ul>&ndash;&gt;-->
+<!--          </div>-->
+
       </div>
 
       <!--.codepicker 제거함-->
