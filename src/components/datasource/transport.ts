@@ -16,6 +16,9 @@ export class TransportRead extends LitElement {
   @property({ type: String })
   type: 'get' | 'post' = 'get';
 
+  @property({ type: Object })
+  data? = undefined;
+
   protected createRenderRoot(): Element | ShadowRoot {
     return this;
   }

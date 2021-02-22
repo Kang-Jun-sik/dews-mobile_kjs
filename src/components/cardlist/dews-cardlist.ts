@@ -9,7 +9,7 @@ import { DataSource, ObservableArrayItem } from '../datasource/dews-datasource.j
 import { SortType } from '../datasource/Sort.js';
 import { Columnsetbutton } from '../columnsetbutton/columnsetbutton.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
-import { CardListCheckedEventArgs } from './Event.js';
+import { CardListChangeEventArgs, CardListCheckedEventArgs } from './Event.js';
 
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -128,6 +128,9 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 체크 이벤트
   @property({ type: Function, attribute: 'onchecked' })
   onChecked?: (args: CardListCheckedEventArgs<T>) => void;
+  // 변경 이벤트
+  @property({ type: Function, attribute: 'onchange' })
+  onChange?: (args: CardListChangeEventArgs<T>) => void;
   // 리스트 선택 사용 유무 (코드피커에서만 사용)
   @property({ type: Boolean, attribute: 'use-list-select' })
   useListSelect = false;
@@ -527,6 +530,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       .cardIndex="${index}"
       .data="${data}"
       @click="${this._cardClickHandler}"
+      @mousedown="${this._mouseDownHandler}"
     >
       ${headerElement}
       <ul class="list-field">
@@ -645,6 +649,18 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     }
 
     this._activeChange(cardElement);
+  }
+  private _mouseDownHandler(e: any) {
+    let cardElement;
+
+    if (e.currentTarget && e.currentTarget.localName === 'div' && e.currentTarget.classList.contains('card')) {
+      cardElement = e.currentTarget;
+    } else {
+      cardElement = e.path[0].closest('div.card');
+    }
+    const changeArgs = { card: cardElement };
+
+    this._trigger('change', changeArgs);
   }
   // 전체 선택 클릭 이벤트 핸들러
   private _allSelectClickHandler(e: any) {
@@ -864,11 +880,16 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     return dataIndex;
   };
   // 이벤트 트리거 함수
-  private _trigger(type: string, args?: any) {
-    const eventArgs = Object.assign({}, args, { target: this });
-    Object.freeze(args);
+  private _trigger(type: string, args?: unknown) {
     if (type === 'checked') {
+      const eventArgs = new CardListCheckedEventArgs(Object.assign({}, args, { target: this }));
+      Object.freeze(args);
       this._events.emit<CardListCheckedEventArgs<T>>(type, eventArgs);
+    }
+    if (type === 'change') {
+      const eventArgs = new CardListChangeEventArgs(Object.assign({}, args, { target: this }));
+      Object.freeze(args);
+      this._events.emit<CardListChangeEventArgs<T>>(type, eventArgs);
     }
   }
   // endregion
@@ -885,8 +906,10 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     console.log('updateComplete');
     // 컬럼 셋 이벤트 헨들러 등록
     const columnSetElement = this.shadowRoot?.querySelector('columnset-button') as Columnsetbutton;
-    columnSetElement.on('open', this._columnSetOpenHandler);
-    columnSetElement.on('complete', this._columnSetCompleteHandler);
+    if (columnSetElement) {
+      columnSetElement.on('open', this._columnSetOpenHandler);
+      columnSetElement.on('complete', this._columnSetCompleteHandler);
+    }
   }
   disconnectedCallback() {
     console.log('disconnectedCallback');
@@ -979,6 +1002,10 @@ export class Cardlist<T extends object> extends DewsFormComponent {
     if (name === 'onchecked') {
       const ch = new Function('return ' + value)();
       this._events.on<CardListCheckedEventArgs<T>>('checked', ch);
+    }
+    if (name === 'onchange') {
+      const ch = new Function('return ' + value)();
+      this._events.on<CardListChangeEventArgs<T>>('change', ch);
     }
   }
 
