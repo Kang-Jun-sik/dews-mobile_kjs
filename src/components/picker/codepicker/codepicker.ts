@@ -128,11 +128,12 @@ export class Codepicker extends PickerBase {
   }
 
   private _createSearchContainer() {
-    const li = this.querySelectorAll('codepicker-search li');
+    const $search = this.querySelector('codepicker-search')!;
+    this._drawerLayout?.querySelector('.layer-code-filter')?.appendChild($search);
 
-    for (let i = 0; i < li.length; i++) {
-      this._drawerLayout?.querySelector('ul.form-field')?.appendChild(li[i]);
-    }
+    // for (let i = 0; i < li.length; i++) {
+    //   ?.appendChild(li[i]);
+    // }
   }
 
   // 필터 버튼 클릭
