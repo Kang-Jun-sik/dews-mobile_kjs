@@ -13,8 +13,8 @@ export const Codepicker = () => html`<div style="width: 360px">
     }}"
   >
     <ds-transport>
-      <ds-transport-read url="http://10.106.4.176:3000/api/baseData" type="post"></ds-transport-read>
-      <!--      <ds-transport-save url="http://10.106.4.176:3000/api/batchSave"></ds-transport-save>-->
+      <ds-transport-read url="http://localhost:3000/api/baseData" type="post"></ds-transport-read>
+      <ds-transport-save url="http://localhost:3000/api/batchSave"></ds-transport-save>
     </ds-transport>
     <ds-schema>
       <ds-schema-model id-fields="emp_id, name">
@@ -35,26 +35,15 @@ export const Codepicker = () => html`<div style="width: 360px">
     </dews-cardlist>
 
     <codepicker-search>
-      <li>
-        <label>이름</label>
-        <dews-dropdownlist id="ddl1">
-          <dropdownlist-item title="DATA-1"></dropdownlist-item>
-          <dropdownlist-item title="DATA-2"></dropdownlist-item>
-        </dews-dropdownlist>
-      </li>
-
-      <li>
-        <label>나이</label>
-        <dews-dropdownlist id="ddl2">
-          <dropdownlist-item title="DATA-1">1</dropdownlist-item>
-          <dropdownlist-item title="DATA-2">2</dropdownlist-item>
-        </dews-dropdownlist>
-      </li>
-
-      <li>
-        <label>주소</label>
-        <dews-textbox id="txtbox"> </dews-textbox>
-      </li>
+      <dews-dropdownlist id="ddl1" title="이름">
+        <dropdownlist-item title="DATA-1"></dropdownlist-item>
+        <dropdownlist-item title="DATA-2"></dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-dropdownlist id="ddl2" title="주소">
+        <dropdownlist-item title="DATA-1">1</dropdownlist-item>
+        <dropdownlist-item title="DATA-2">2</dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-textbox id="txtbox" title="나이"> </dews-textbox>
     </codepicker-search>
   </dews-codepicker>
 
@@ -66,26 +55,15 @@ export const Codepicker = () => html`<div style="width: 360px">
     </dews-cardlist>
 
     <codepicker-search>
-      <li>
-        <label>이름</label>
-        <dews-dropdownlist id="ddl1">
-          <dropdownlist-item title="DATA-1"></dropdownlist-item>
-          <dropdownlist-item title="DATA-2"></dropdownlist-item>
-        </dews-dropdownlist>
-      </li>
-
-      <li>
-        <label>나이</label>
-        <dews-dropdownlist id="ddl2">
-          <dropdownlist-item title="DATA-1">1</dropdownlist-item>
-          <dropdownlist-item title="DATA-2">2</dropdownlist-item>
-        </dews-dropdownlist>
-      </li>
-
-      <li>
-        <label>주소</label>
-        <dews-textbox id="txtbox"> </dews-textbox>
-      </li>
+      <dews-dropdownlist id="ddl1" title="이름">
+        <dropdownlist-item title="DATA-1"></dropdownlist-item>
+        <dropdownlist-item title="DATA-2"></dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-dropdownlist id="ddl2" title="주소">
+        <dropdownlist-item title="DATA-1">1</dropdownlist-item>
+        <dropdownlist-item title="DATA-2">2</dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-textbox id="txtbox" title="나이"> </dews-textbox>
     </codepicker-search>
   </dews-codepicker>
 </div>`;

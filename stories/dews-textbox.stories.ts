@@ -9,7 +9,8 @@ export const TextBox = () => html`<div style="width: 360px">
   <dews-box title="box">
     <dews-search-container>
       <container-content>
-        <dews-textbox></dews-textbox>
+        <dews-textbox title="multi" multi></dews-textbox>
+        <dews-datepicker title="datepicker"></dews-datepicker>
         <dews-textbox title="default"></dews-textbox>
         <dews-textbox title="disabled" disabled></dews-textbox>
         <dews-textbox title="readonly" readonly></dews-textbox>
