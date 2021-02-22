@@ -33,13 +33,12 @@ export class RadiobuttonGroup extends DewsFormComponent {
 
     _changedProperties.forEach((oldValue, propName) => {
       const $el = this.shadowRoot!.querySelectorAll('dews-radiobutton');
-      const value = this.value;
 
       if (propName === 'value') {
         for (let i = 0; i < $el.length; i++) {
           const radio = $el.item(i) as Radiobutton;
           radio.checked = false;
-          if (this.value === radio.value) {
+          if (radio.value && this.value === radio.value) {
             radio.checked = true;
           }
         }
