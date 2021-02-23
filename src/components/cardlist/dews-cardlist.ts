@@ -332,7 +332,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
         this._datasource.pagingCount = this.pagingCount;
       }
 
-      this._datasource.on('requestEnd', (e: any) => {
+      this._datasource.on('_dataBound', (e: any) => {
         console.log('requestEnd', e);
         if (this.usePaging) {
           if (e.response.total) {
