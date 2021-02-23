@@ -180,7 +180,7 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
         } else {
           response = await api.post(readElement.url, { data: requestData });
         }
-        const responseData: ObservableArray<T> = ObservableArray.create(response, this.schema?.model?.idFields);
+        const responseData: ObservableArray<T> = ObservableArray.create(response.data, this.schema?.model?.idFields);
         if (this.paging && this._data) {
           this._data.__state__.historicalMode = false;
           this._data.push(...responseData);
