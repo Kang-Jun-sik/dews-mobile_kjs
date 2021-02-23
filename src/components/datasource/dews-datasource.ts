@@ -12,7 +12,12 @@ import {
 } from '@dews/dews-mobile-core';
 import { HttpRequestConfig, HttpResponse } from '@dews/dews-mobile-core/dist/types/utils/comm/HttpClient';
 import { Sort, SortType } from './Sort.js';
-import { DataSourceChangeEventArgs, DataSourceRequestStartEventArgs, DataSourceRequestEndEventArgs } from './Event.js';
+import {
+  DataSourceChangeEventArgs,
+  DataSourceRequestStartEventArgs,
+  DataSourceRequestEndEventArgs,
+  DataSourceDataBoundEventArgs
+} from './Event.js';
 import { DewsDataComponent } from '../base/DewsDataComponent.js';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -20,7 +25,7 @@ import { DewsDataComponent } from '../base/DewsDataComponent.js';
 
 type DirectionType = 'asc' | 'desc';
 
-type DataSourceEventType = 'change' | 'requestStart' | 'requestEnd';
+type DataSourceEventType = 'change' | 'requestStart' | 'requestEnd' | '_dataBound';
 
 export type ObservableArrayItem<T extends object> = T & Partial<ObservableObjectProxyInterface<T>>;
 
@@ -158,11 +163,11 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
    * @return {Promise} 데이터 읽고 발생하는 Promise 객체
    */
   async read(): Promise<void> {
-    this._trigger('requestStart', { type: 'read' });
     let response: any;
     if (this.localData) {
       this._data = ObservableArray.create(this.localData, this.schema?.model?.idFields);
     } else if (this.transport?.read) {
+      this._trigger('requestStart', { type: 'read' });
       const readElement = this.transport.read;
       // let response: T[];
       let requestData: any = {};
@@ -192,9 +197,9 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
         console.log('err', error);
         throw error;
       }
+      this._trigger('requestEnd', { type: 'read', response: response });
     }
-
-    this._trigger('requestEnd', { type: 'read', response: response });
+    this._trigger('_dataBound', { data: response.data });
 
     this._bindDataEvent();
   }
@@ -249,6 +254,8 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   data(data?: T[]): ObservableArrayItem<T>[] | undefined {
     if (data) {
       this._data = ObservableArray.create(data, this.schema?.model?.idFields);
+      this._bindDataEvent();
+      this._trigger('_dataBound', { data: data });
     }
     return this._data ? [...this._data] : undefined;
   }
@@ -321,6 +328,8 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
       this._events.emit<DataSourceRequestStartEventArgs<T>>(type, eventArgs);
     } else if (type === 'requestEnd') {
       this._events.emit<DataSourceRequestEndEventArgs<T>>(type, eventArgs);
+    } else if (type === '_dataBound') {
+      this._events.emit<DataSourceDataBoundEventArgs<T>>(type, eventArgs);
     }
   }
 

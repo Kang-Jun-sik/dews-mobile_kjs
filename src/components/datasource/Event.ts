@@ -51,3 +51,16 @@ export class DataSourceRequestEndEventArgs<T extends object> extends DataSourceE
     super(init);
   }
 }
+
+export class DataSourceDataBoundEventArgs<T extends object> extends EventArgs<DataSource<T>> {
+  event = '_dataBound';
+  data: unknown;
+  type?: string;
+
+  constructor(init?: Partial<DataSourceDataBoundEventArgs<T>>) {
+    super();
+    if (init) {
+      Object.assign(this, init);
+    }
+  }
+}
