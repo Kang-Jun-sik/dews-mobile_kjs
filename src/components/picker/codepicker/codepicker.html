@@ -9,7 +9,7 @@ ${this.multi?html`
           </span>
         <!--   멀티일 경우 span.select-multi 추가  -->
           <span class="select-multi">
-              ${(this.texts.length > 1)?html` 외 <strong>${this.texts.length}</strong>건` : ''}
+              ${(this.texts.length > 1)?html` 외 <strong>${this.texts.length - 1}</strong>건` : ''}
           </span>
       </span>
       <span class="select-icon code-picker-icon"></span>
@@ -55,7 +55,7 @@ ${this.multi?html`
             </span>
           </div>
           <div class="code-filter-field">
-            <!--  해당 영역 component.. 처리  -->
+            <!--  해당 영역 component.. 처리/  -->
             <ul class="form-field" @change="${this._changeControlValue}">
             </ul>
           </div>
@@ -116,3 +116,4 @@ ${this.multi?html`
     </div>
   </div>
 </drawer-layout>
+<slot @slotchange="${this._slotChange}"></slot>

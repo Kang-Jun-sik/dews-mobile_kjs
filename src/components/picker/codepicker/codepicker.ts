@@ -100,6 +100,7 @@ export class Codepicker extends PickerBase {
   private _cardList: Cardlist<object> | undefined;
 
   private _isFirstUpdated = true;
+  private _selectList: Array<number> | undefined;
 
   constructor() {
     super();
@@ -115,15 +116,15 @@ export class Codepicker extends PickerBase {
 
   // 적용 버튼 클릭 시
   _confirmClickHandler() {
-    const checkData = this._cardList!.getCheckCardData();
+    const checkData = this._cardList?.getCheckCardData();
 
-    if (checkData?.length > 0) {
+    if (checkData && checkData.length > 0) {
       this.setData(checkData);
     } else {
       this.clearData();
     }
 
-    this._close();
+    this._close('confirm');
   }
 
   private _createSearchContainer() {
@@ -258,6 +259,7 @@ export class Codepicker extends PickerBase {
 
     if (selected) {
       this._EVENT.emit('setData', { type: 'setData', target: this, data: selected });
+      this._selectList = this._cardList?.getCheckCardIndex();
     }
   }
 
@@ -289,52 +291,50 @@ export class Codepicker extends PickerBase {
     const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
     let oldCheckIndex: undefined | number = undefined;
 
-    this._cardList = cardList;
+    if (cardList) {
+      cardList!.autoBind = true;
+      cardList!.useTotalCount = true;
+      cardList!.useHeader = true;
+      cardList!.useListSelect = true;
+      cardList!.setAttribute('header-options', JSON.stringify({ useBookmark: false })); // 북마크 안나오도록 설정
+      cardList!.setAttribute('codepicker', ''); // 코드피커 내에서 사용하는 카드리스트의 경우 codepicker 추가함
 
-    cardList!.autoBind = true;
-    cardList!.useTotalCount = true;
-    cardList!.useHeader = true;
-    cardList!.useListSelect = true;
-    cardList!.setAttribute('header-options', JSON.stringify({ useBookmark: false })); // 북마크 안나오도록 설정
-    cardList!.setAttribute('codepicker', ''); // 코드피커 내에서 사용하는 카드리스트의 경우 codepicker 추가함
+      if (this.multi) {
+        cardList!.useAllSelect = true;
+      }
 
-    if (this.multi) {
-      cardList!.useAllSelect = true;
-    }
-
-    cardList.on('checked', (e: any) => {
-      if (!this.multi) {
-        if (typeof oldCheckIndex == 'number' && e.itemIndex !== oldCheckIndex) {
-          const oldChecked = this._cardList!.shadowRoot?.querySelectorAll('dews-checkbox')[oldCheckIndex] as Checkbox;
-          oldChecked.checked = false;
-          oldChecked.classList.remove('checked');
+      cardList.on('checked', (e: any) => {
+        if (!this.multi) {
+          if (typeof oldCheckIndex == 'number' && e.itemIndex !== oldCheckIndex) {
+            const oldChecked = this._cardList?.shadowRoot?.querySelectorAll('dews-checkbox')[oldCheckIndex] as Checkbox;
+            oldChecked.checked = false;
+            oldChecked.classList.remove('checked');
+          }
+          oldCheckIndex = e.itemIndex;
         }
-        oldCheckIndex = e.itemIndex;
-      }
 
-      const allSelectElement = this._cardList?.shadowRoot!.querySelector('.cardlist-all-select') as HTMLElement;
-      const spanElement = allSelectElement.querySelector('.list-select-button>span') as HTMLElement;
+        const allSelectElement = this._cardList?.shadowRoot!.querySelector('.cardlist-all-select') as HTMLElement;
+        const spanElement = allSelectElement.querySelector('.list-select-button>span') as HTMLElement;
 
-      if (this._cardList!.getCheckCardIndex().length == 0) {
-        spanElement!.style.display = 'none';
-      } else {
-        spanElement!.style.display = 'block';
-        spanElement!.innerText = this._cardList!.getCheckCardIndex().length.toString();
-      }
+        if (this._cardList?.getCheckCardIndex().length == 0) {
+          spanElement!.style.display = 'none';
+        } else {
+          spanElement!.style.display = 'block';
+          spanElement!.innerText = this._cardList!.getCheckCardIndex().length.toString();
+        }
 
-      if (allSelectElement?.classList.contains('select')) {
-        this._showCheckedCard(true);
-      }
-    });
-
-    this._drawerLayout?.querySelector('.cardlist-wrap')?.append(cardList);
+        if (allSelectElement?.classList.contains('select')) {
+          this._showCheckedCard(true);
+        }
+      });
+    }
   }
 
   private _showCheckedCard(selectFlag: boolean): boolean | undefined {
     const uncheckedCards = this._cardList?.shadowRoot?.querySelectorAll(
-      'dews-checkbox.card-select-checkbox:not(.checked)'
+      'dews-checkbox.card-select-checkbox:not([checked])'
     );
-    const checkedCards = this._cardList?.shadowRoot?.querySelectorAll('dews-checkbox.card-select-checkbox.checked');
+    const checkedCards = this._cardList?.shadowRoot?.querySelectorAll('dews-checkbox.card-select-checkbox[checked]');
 
     if (uncheckedCards && uncheckedCards?.length > 0) {
       for (let i = 0; i < uncheckedCards.length; i++) {
@@ -353,19 +353,68 @@ export class Codepicker extends PickerBase {
     }
   }
 
-  // _close(type?: string) {
-  //   // 모든 상태 초기화
-  //   if (type !== 'confirm') {
-  //   }
-  //   this._clear();
-  // }
+  _close(type?: string) {
+    super._close();
 
-  private _clear() {
+    if (type !== 'confirm') {
+      this._setSelectedData();
+    }
+  }
+
+  // 적용 안하고 그냥 닫았을 경우, 선택되어있던 데이터로 되돌리기.
+  private _setSelectedData() {
     const allSelectElement = this._cardList?.shadowRoot!.querySelector('.cardlist-all-select') as HTMLElement;
-    const allCheckElement = allSelectElement.querySelector('dews-checkbox.cardlist-all-select-checkbox') as Checkbox;
-    const spanElement = allSelectElement.querySelector('.list-select-button>span') as HTMLElement;
+    const allCheckElement = allSelectElement?.querySelector('dews-checkbox.cardlist-all-select-checkbox') as Checkbox;
+    const checkboxs = this._cardList?.shadowRoot!.querySelectorAll('dews-checkbox.card-select-checkbox') as NodeList;
+    const spanElement = allSelectElement?.querySelector('.list-select-button>span') as HTMLElement;
+    const checkedIndexs = this._selectList;
 
-    allCheckElement.checked = false;
+    if (!checkedIndexs || (checkedIndexs && checkedIndexs.length == 0)) {
+      if (allCheckElement) {
+        allCheckElement.checked = false;
+      }
+
+      if (checkboxs && checkboxs.length > 0) {
+        for (let i = 0; i < checkboxs.length; i++) {
+          const checked = checkboxs[i] as Checkbox;
+          checked.checked = false;
+          checked.classList.remove('checked');
+        }
+      }
+      allSelectElement?.classList.remove('select');
+      spanElement!.style.display = 'none';
+    } else {
+      if (this.multi) {
+        for (let i = 0; i < checkboxs.length; i++) {
+          const checked = checkboxs[i] as Checkbox;
+          for (let j = 0; j < checkedIndexs.length; j++) {
+            if (checkedIndexs[j] === i) {
+              checked.checked = true;
+              break;
+            } else {
+              checked.checked = false;
+              checked.classList.remove('checked');
+            }
+          }
+        }
+      } else {
+        const checked = checkedIndexs[0] as number;
+        const checkbox = checkboxs[checked] as Checkbox;
+        for (let i = 0; i < checkboxs.length; i++) {
+          const checked = checkboxs[i] as Checkbox;
+          checked.checked = false;
+          checked.classList.remove('checked');
+        }
+        checkbox.checked = true;
+      }
+
+      if (allCheckElement) {
+        checkboxs.length == checkedIndexs.length ? (allCheckElement.checked = true) : (allCheckElement.checked = false);
+      }
+
+      spanElement.style.display = 'block';
+      spanElement.innerText = checkedIndexs.length.toString();
+    }
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
@@ -383,14 +432,14 @@ export class Codepicker extends PickerBase {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     console.log('firstUpdated');
-    this._drawerLayout?.addEventListener('blur', this._close);
+    // this._drawerLayout?.addEventListener('blur', this._close);
 
     // dataControlType에 타입에 따라
     if (this.dataControlType == 'card') {
       this._createCard();
     }
 
-    this._createSearchContainer();
+    // this._createSearchContainer();
 
     if (this.useFilter) {
       this._searchFormState();
@@ -407,7 +456,7 @@ export class Codepicker extends PickerBase {
   // 초기화, drawerLayout의 높이 변경 시 카드리스트 높이 다시 세팅
   private _setCardlistHeight(drawerLayout: Drawerlayout) {
     const controlHeight = drawerLayout.querySelector('.control')?.clientHeight as number;
-    const nodataElement = this._cardList!.shadowRoot?.querySelector('.card-nodata') as HTMLElement;
+    const nodataElement = this._cardList?.shadowRoot?.querySelector('.card-nodata') as HTMLElement;
 
     // 높이 계산 (.control.height - 필터.height(48) - 총건수.height(48))
     this._cardList!.height = (controlHeight - 48 * 2).toString() + 'px';
@@ -421,8 +470,8 @@ export class Codepicker extends PickerBase {
   // 카드리스트의 전체선택 체크박스 클릭 시
   private _allCheckHandler() {
     const allSelectElement = this._cardList?.shadowRoot!.querySelector('.cardlist-all-select') as HTMLElement;
-    const allCheckElement = allSelectElement.querySelector('dews-checkbox.cardlist-all-select-checkbox') as Checkbox;
-    const spanElement = allSelectElement.querySelector('.list-select-button>span') as HTMLElement;
+    const allCheckElement = allSelectElement?.querySelector('dews-checkbox.cardlist-all-select-checkbox') as Checkbox;
+    const spanElement = allSelectElement?.querySelector('.list-select-button>span') as HTMLElement;
     const nodataElement = this._cardList?.shadowRoot!.querySelector(
       '.cardlist-wrap > .cardlist > .card-nodata'
     ) as HTMLElement;
@@ -431,6 +480,7 @@ export class Codepicker extends PickerBase {
     if (allCheckElement.checked) {
       spanElement!.style.display = 'block';
       spanElement!.innerText = this._cardList!.getCheckCardIndex().length.toString();
+      this._showCheckedCard(true);
     } else {
       spanElement!.style.display = 'none';
 
@@ -473,40 +523,57 @@ export class Codepicker extends PickerBase {
       allSelectElement?.classList.add('select');
 
       nodata = this._showCheckedCard(true);
-
-      // nodata ? (noDataDiv.style.display = 'block') : (noDataDiv.style.display = 'none');
       nodata ? (nodataElement.style.display = 'block') : (nodataElement.style.display = 'none');
     }
   }
 
   protected updated(_changedProperties: PropertyValues) {
-    console.log('updated');
+    console.log('updated!!!!!!');
 
     super.updated(_changedProperties);
 
     this.updateComplete.then(() => {
-      const allSelectElement = this._cardList?.shadowRoot!.querySelector('.cardlist-all-select') as HTMLElement;
-      const allCheckElement = allSelectElement.querySelector('dews-checkbox.cardlist-all-select-checkbox') as Checkbox;
-      const selectButtonElement = allSelectElement.querySelector('.list-select-button') as HTMLButtonElement;
-      const spanElement = allSelectElement.querySelector('.list-select-button>span') as HTMLElement;
-
-      this._setCardlistHeight(this._drawerLayout);
+      const allSelectElement = this._cardList?.shadowRoot?.querySelector('.cardlist-all-select') as HTMLElement;
+      const allCheckElement = allSelectElement?.querySelector('dews-checkbox.cardlist-all-select-checkbox') as Checkbox;
+      const selectButtonElement = allSelectElement?.querySelector('.list-select-button') as HTMLButtonElement;
+      const spanElement = allSelectElement?.querySelector('.list-select-button>span') as HTMLElement;
 
       if (this._isFirstUpdated) {
         allSelectElement?.classList.add('codepicker-control');
 
         allCheckElement?.addEventListener('click', this._allCheckHandler.bind(this));
 
-        selectButtonElement.addEventListener('click', this._selectButtonHandler.bind(this));
+        selectButtonElement?.addEventListener('click', this._selectButtonHandler.bind(this));
+      }
 
-        if (this._cardList!.getCheckCardIndex().length == 0) {
-          spanElement!.style.display = 'none';
-        } else {
-          spanElement!.style.display = 'block';
+      if (this._cardList) {
+        this._setCardlistHeight(this._drawerLayout);
+
+        if (spanElement) {
+          if (this._cardList?.getCheckCardIndex().length == 0) {
+            spanElement.style.display = 'none';
+          } else {
+            spanElement.style.display = 'block';
+          }
         }
       }
 
       this._isFirstUpdated = false;
+    });
+  }
+
+  private _slotChange() {
+    Array.from(this.children).forEach($el => {
+      if ($el.tagName === 'DEWS-CARDLIST') {
+        const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
+
+        this._cardList = cardList;
+        this._drawerLayout?.querySelector('.cardlist-wrap')?.append(this._cardList);
+      }
+
+      if ($el.tagName === 'CODEPICKER-SEARCH') {
+        this._createSearchContainer();
+      }
     });
   }
 
