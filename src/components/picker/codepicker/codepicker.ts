@@ -7,8 +7,9 @@ import { Cardlist } from '../../cardlist/dews-cardlist.js';
 import { Checkbox } from '../../checkbox/checkbox.js';
 import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
 import { TouchScroll } from '../../utill/touchscroll.js';
+import { EventArgs } from '@dews/dews-mobile-core';
 
-type EVENT_TYPE = 'setData' | 'change';
+type EVENT_TYPE = 'setData' | 'change' | 'codeSearch' | 'open' | 'close';
 
 export class Codepicker extends PickerBase {
   static styles = scss;
@@ -98,7 +99,7 @@ export class Codepicker extends PickerBase {
   private _allCheckState = false;
 
   @internalProperty()
-  private _cardList: Cardlist<object> | undefined;
+  public _cardList: Cardlist<object> | undefined;
 
   private _isFirstUpdated = true;
   private _selectList: Array<number> | undefined;
@@ -287,6 +288,15 @@ export class Codepicker extends PickerBase {
     }
 
     this.helpParams = params;
+  }
+
+  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this._EVENT.on(key, handler);
+  }
+
+  // 이벤트 삭제
+  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+    this._EVENT.off(key, handler);
   }
 
   private _createCard() {
