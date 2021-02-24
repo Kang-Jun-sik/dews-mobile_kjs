@@ -6,6 +6,7 @@ import { PickerBase } from '../picker-base.js';
 import { Cardlist } from '../../cardlist/dews-cardlist.js';
 import { Checkbox } from '../../checkbox/checkbox.js';
 import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
+import { TouchScroll } from '../../utill/touchscroll.js';
 
 type EVENT_TYPE = 'setData' | 'change';
 
@@ -435,6 +436,8 @@ export class Codepicker extends PickerBase {
     console.log('firstUpdated');
     // this._drawerLayout?.addEventListener('blur', this._close);
 
+    new TouchScroll(this.shadowRoot?.querySelector('.control') as HTMLElement);
+
     // dataControlType에 타입에 따라
     if (this.dataControlType == 'card') {
       this._createCard();
@@ -539,13 +542,12 @@ export class Codepicker extends PickerBase {
       const selectButtonElement = allSelectElement?.querySelector('.list-select-button') as HTMLButtonElement;
       const spanElement = allSelectElement?.querySelector('.list-select-button>span') as HTMLElement;
 
-      if (this._isFirstUpdated) {
-        allSelectElement?.classList.add('codepicker-control');
-
-        allCheckElement?.addEventListener('click', this._allCheckHandler.bind(this));
-
-        selectButtonElement?.addEventListener('click', this._selectButtonHandler.bind(this));
-      }
+      // if (this._isFirstUpdated) {
+      // 이벤트 다중 등록됨..
+      allSelectElement?.classList.add('codepicker-control');
+      allCheckElement?.addEventListener('click', this._allCheckHandler.bind(this));
+      selectButtonElement?.addEventListener('click', this._selectButtonHandler.bind(this));
+      // }
 
       if (this._cardList) {
         this._setCardlistHeight(this._drawerLayout);
@@ -570,6 +572,8 @@ export class Codepicker extends PickerBase {
 
         this._cardList = cardList;
         this._drawerLayout?.querySelector('.cardlist-wrap')?.append(this._cardList);
+
+        new TouchScroll(this._cardList?.shadowRoot?.querySelector('.cardlist') as HTMLElement);
       }
 
       if ($el.tagName === 'CODEPICKER-SEARCH') {
