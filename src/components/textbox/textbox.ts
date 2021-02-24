@@ -57,7 +57,8 @@ export class Textbox extends DewsFormComponent {
   }
 
   private _onFocus(e: FocusEvent) {
-    this.dispatchEvent(new CustomEvent('focusin', { detail: { target: e.target as EventTarget } }));
+    this.#EVENT.emit('focus', { target: this, type: 'change', preventDefault: e.preventDefault });
+    // this.dispatchEvent(new CustomEvent('focusin', { detail: { target: e.target as EventTarget } }));
   }
 
   private _keyDownHandler(e: KeyboardEvent) {
@@ -68,7 +69,8 @@ export class Textbox extends DewsFormComponent {
 
   private _onChange(e: InputEvent) {
     this.value = (e.target as HTMLInputElement)!.value;
-    this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
+    this.#EVENT.emit('change', { target: this, type: 'change', preventDefault: e.preventDefault });
+    // this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
   }
 
   private _show(message: string, type: string) {
