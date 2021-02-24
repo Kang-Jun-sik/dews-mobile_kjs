@@ -3,6 +3,9 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './textbox.html';
 import scss from './textbox.scss';
+import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+
+type EVENT_TYPE = 'focus' | 'blur' | 'change';
 
 export class Textbox extends DewsFormComponent {
   static styles = scss;
@@ -34,6 +37,8 @@ export class Textbox extends DewsFormComponent {
   @property({ type: String, reflect: true })
   value = '';
 
+  #EVENT = new EventEmitter();
+
   connectedCallback() {
     super.connectedCallback();
     // disabled 와 readonly 중 disabled 를 우선 처리한다.
@@ -52,12 +57,20 @@ export class Textbox extends DewsFormComponent {
   }
 
   private _onFocus(e: FocusEvent) {
-    this.dispatchEvent(new CustomEvent('focusin', { detail: { target: e.target as EventTarget } }));
+    this.#EVENT.emit('focus', { target: this, type: 'change', preventDefault: e.preventDefault });
+    // this.dispatchEvent(new CustomEvent('focusin', { detail: { target: e.target as EventTarget } }));
+  }
+
+  private _keyDownHandler(e: KeyboardEvent) {
+    if (e.code === 'Enter') {
+      (e.target as HTMLInputElement).blur();
+    }
   }
 
   private _onChange(e: InputEvent) {
     this.value = (e.target as HTMLInputElement)!.value;
-    this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
+    this.#EVENT.emit('change', { target: this, type: 'change', preventDefault: e.preventDefault });
+    // this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
   }
 
   private _show(message: string, type: string) {
@@ -72,6 +85,19 @@ export class Textbox extends DewsFormComponent {
   click() {
     this.shadowRoot!.querySelector('input')?.focus();
   }
+  on = (
+    key: EVENT_TYPE,
+    handler: (e: { target: Textbox; type: string; value: string }, ...args: unknown[]) => void
+  ) => {
+    this.#EVENT.on(key, handler);
+  };
+
+  off = (
+    key: EVENT_TYPE,
+    handler: (e: { target: Textbox; type: string; value: string }, ...args: unknown[]) => void
+  ) => {
+    this.#EVENT.off(key, handler);
+  };
 
   error: Function = (message: string) => {
     this._show(message, 'error');
