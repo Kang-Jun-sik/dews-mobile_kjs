@@ -71,7 +71,8 @@ import {
   Codepicker,
   Monthperiodpicker,
   Weekperiodpicker,
-  Codepickersearch
+  Codepickersearch,
+  Zipcodepicker
 } from './components/exports.js';
 
 window.customElements.define('columnset-button', Columnsetbutton);
@@ -87,6 +88,7 @@ window.customElements.define('dews-weekperiodpicker', Weekperiodpicker);
 window.customElements.define('dews-monthperiodpicker', Monthperiodpicker);
 window.customElements.define('dews-codepicker', Codepicker);
 window.customElements.define('codepicker-search', Codepickersearch);
+window.customElements.define('dews-zipcodepicker', Zipcodepicker);
 
 window.customElements.define('dews-masktextbox', Masktextbox);
 window.customElements.define('dews-numerictextbox', Numerictextbox);
