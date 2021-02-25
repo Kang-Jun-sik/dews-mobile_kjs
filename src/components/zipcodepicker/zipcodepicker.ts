@@ -1,8 +1,9 @@
 import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
 import template from './zipcodepicker.html';
 import scss from './zipcodepicker.scss';
-import { property } from 'lit-element';
+import { property, PropertyValues } from 'lit-element';
 import { Textbox } from '../textbox/textbox.js';
+import { TouchScroll } from '../utill/touchscroll.js';
 
 type ADDRESS_TYPE = 'jibun' | 'street' | 'userselect';
 type EVENT_TYPES = 'complete' | 'change' | 'open' | 'close';
@@ -44,10 +45,20 @@ export class Zipcodepicker extends DrawerBottomBase {
 
   constructor() {
     super();
-    const script = document.createElement('script');
-    script.addEventListener('load', this.scriptLoadEvent);
-    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
-    this.appendChild(script);
+    const postCodeScript = document.querySelector('#daum_postcode') as HTMLScriptElement;
+    if (postCodeScript === null) {
+      const script = document.createElement('script');
+      script.addEventListener('load', this.scriptLoadEvent);
+      script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+      script.id = 'daum_postcode';
+      document.body.appendChild(script);
+    } else {
+      if (postCodeScript.hasAttribute('load')) {
+        this._scriptLoad.bind(this)();
+      } else {
+        postCodeScript.addEventListener('load', this.scriptLoadEvent);
+      }
+    }
   }
 
   // 이벤트 등록
@@ -59,7 +70,7 @@ export class Zipcodepicker extends DrawerBottomBase {
     this._EVENT.on(key, handler);
   }
 
-  private _scriptLoad(e: Event) {
+  private _scriptLoad() {
     (this.shadowRoot?.querySelector('dews-textbox') as Textbox)?.on('change', this._valueChange);
     this._createZip(this);
   }
@@ -123,6 +134,7 @@ export class Zipcodepicker extends DrawerBottomBase {
   private _zipcode: any;
   private _createZip(self: Zipcodepicker) {
     const target = self.shadowRoot?.querySelector('#iframe') as HTMLElement;
+    (document.querySelector('#daum_postcode') as HTMLScriptElement).setAttribute('load', '');
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     this._zipcode = new daum.Postcode({
@@ -134,6 +146,11 @@ export class Zipcodepicker extends DrawerBottomBase {
       width: '100%',
       height: '100%'
     }).embed(target, { autoClose: false });
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    new TouchScroll(this.shadowRoot?.querySelector('.iframe') as HTMLElement);
   }
 
   render() {
