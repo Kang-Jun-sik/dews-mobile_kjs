@@ -1,5 +1,3 @@
-import { api } from '@dews/dews-mobile-core';
-
 const AUTH_TOKEN_KEY = 'erp10:mobile:auth:token';
 const AUTH_TOKEN_DETAIL_KEY = 'erp10:mobile:auth:token:detail';
 
@@ -37,7 +35,7 @@ export class AuthenticateService {
    */
   static saveAuthorizedUserData(): Promise<object> {
     return new Promise<object>(function (resolve, reject) {
-      api
+      dews.api
         .get('/api/CM/AuthenticationAccountService/account')
         .then(data => {
           const tokenDetail = data['access_token_details'];
@@ -61,7 +59,7 @@ export class AuthenticateService {
   static authenticateForIDE(token: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       if (token) {
-        api
+        dews.api
           .get(`/api/CM/AccountService/login/keyModel/${token}`)
           .then((data: string) => {
             // 인증 토큰 획득 성공
