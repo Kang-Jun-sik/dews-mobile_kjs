@@ -5,7 +5,7 @@ import scss from './codepickersearch.scss';
 import { Codepicker } from './codepicker.js';
 import { TemplateResult } from 'lit-html/ts3.4/lib/template-result';
 import { DataSource } from '../../datasource/dews-datasource.js';
-import { api } from '@dews/dews-mobile-core';
+import { Cardlist } from '../../cardlist/dews-cardlist.js';
 
 export class Codepickersearch extends DewsFormComponent {
   static styles = scss;
@@ -112,23 +112,23 @@ export class Codepickersearch extends DewsFormComponent {
   }
 
   private async _search() {
-    const datasourceId = this.$parent._cardList?.datasource;
-    const param: any = {};
+    const cardList: Cardlist<object> | undefined = this.$parent.shadowRoot!.querySelector(
+      'dews-cardlist'
+    ) as Cardlist<object>;
+    const datasourceId = cardList?.datasource;
 
+    // ds 조회
     this._datasource = dews.app.main?.currentPage?.getDataSource(datasourceId);
     if (this._datasource === undefined) {
       this._datasource = document.getElementById(`${datasourceId}`) as DataSource;
     }
 
-    if (this.codeFilterInput?.value) {
-      param['keyword'] = this.codeFilterInput?.value;
-    }
+    this.$parent._codeSearchEmit();
+  }
 
-    const data = await api.post('http://localhost:3000/api/baseData', {
-      data: param
-    });
-
-    this._datasource.data(data.data);
+  private _touchStop(e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
   }
 
   private _keydown(e: KeyboardEvent) {
@@ -138,7 +138,7 @@ export class Codepickersearch extends DewsFormComponent {
   }
 
   render() {
-    return html` <div class="code-filter ${this.filterActive ? 'active' : ''}">
+    return html` <div class="code-filter ${this.filterActive ? 'active' : ''}" @touchmove="${this._touchStop}">
         <div class="code-filter-search">
           <!-- 조건 설정 시 setting 추가  -->
           <!-- filter 사용 안 할 경우, disabled  -->

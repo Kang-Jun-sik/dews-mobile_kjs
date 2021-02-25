@@ -99,7 +99,7 @@ export class Codepicker extends PickerBase {
   private _allCheckState = false;
 
   @internalProperty()
-  public _cardList: Cardlist<object> | undefined;
+  private _cardList: Cardlist<object> | undefined;
 
   private _isFirstUpdated = true;
   private _selectList: Array<number> | undefined;
@@ -264,6 +264,10 @@ export class Codepicker extends PickerBase {
       this._EVENT.emit('setData', { type: 'setData', target: this, data: selected });
       this._selectList = this._cardList?.getCheckCardIndex();
     }
+  }
+
+  public _codeSearchEmit() {
+    this._EVENT.emit('codeSearch', { type: 'codeSearch', target: this, cardList: this._cardList });
   }
 
   public clearData() {
