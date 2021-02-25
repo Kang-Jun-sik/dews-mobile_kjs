@@ -8,7 +8,6 @@
 
   ${this.reset?html`<span class="zipcode-reset">
     <dews-button type="icon" size="large" icon="ico-reset" @click="$${this._resetClickHandler}"></dews-button>
-
   </span>` : ''}
 
   <span class="zipcode-address"  @click="${this._clickHandler}">
@@ -20,10 +19,10 @@
   ` :''}
 </div>
 
-<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" dimming tabindex="-1">
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}"  tabindex="-1">
   <div class="drawer-zipcodepicker" >
     <div class="titlebar">
-      <div class="title">${this.title}</div>
+      <div class="title">우편번호</div>
     </div>
     <div class="control">
       <div id="iframe"></div>
