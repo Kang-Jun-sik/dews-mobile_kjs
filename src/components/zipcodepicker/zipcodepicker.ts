@@ -148,10 +148,6 @@ export class Zipcodepicker extends DrawerBottomBase {
     }).embed(target, { autoClose: false });
   }
 
-  protected firstUpdated(_changedProperties: PropertyValues) {
-    super.firstUpdated(_changedProperties);
-    new TouchScroll(this.shadowRoot?.querySelector('.iframe') as HTMLElement);
-  }
 
   render() {
     return template.call(this);
