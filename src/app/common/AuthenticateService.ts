@@ -20,7 +20,6 @@ export class AuthenticateService {
 
   static setAuthorizedToken(data: unknown): void {
     // 인증 토큰을 세션 스토리지에 저장
-    console.log(data);
     sessionStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(data));
   }
   static setAuthorizedDetailToken(data: unknown): void {
@@ -37,8 +36,8 @@ export class AuthenticateService {
     return new Promise<object>(function (resolve, reject) {
       dews.api
         .get('/api/CM/AuthenticationAccountService/account')
-        .then(data => {
-          const tokenDetail = data['access_token_details'];
+        .then(result => {
+          const tokenDetail = result.data['access_token_details'];
 
           // 세션 스토리지에 사용자 정보 저장
           AuthenticateService.setAuthorizedDetailToken(JSON.stringify(tokenDetail));
@@ -61,13 +60,13 @@ export class AuthenticateService {
       if (token) {
         dews.api
           .get(`/api/CM/AccountService/login/keyModel/${token}`)
-          .then((data: string) => {
+          .then(result => {
             // 인증 토큰 획득 성공
-            AuthenticateService.setAuthorizedToken(data);
+            AuthenticateService.setAuthorizedToken(result.data);
 
             // 사용자 정보를 세션 스토리지에 저장
             AuthenticateService.saveAuthorizedUserData()
-              .then(() => resolve(data))
+              .then(() => resolve(result.data))
               .catch(() => reject());
           })
           .catch(() => {
