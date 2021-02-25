@@ -1,15 +1,14 @@
 ${this.multi? html`
 <!-- textarea 일때 -->
 <div class="textbox-wrap">
-  <label for="multi-textbox">${this.title}</label>
+  ${this.title ===''?'' : html`<label for="multi-textbox">${this.title}</label>`}
   <textarea @input="${this._onChange}" class="dews-multi-input"  id="multi-textbox" value="${this.value}" ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"></textarea>
-
 </div>
 `
 :html`
 <!-- input box 일때 -->
 <div class="textbox-wrap">
-  <label for="textbox">${this.title}</label>
+  ${this.title ===''?'' : html`<label for="textbox">${this.title}</label>`}
   <input type="${this.type}" class="dews-input" @keydown="${this._keyDownHandler}"  @input="${this._onChange}" value="${this.value}" id="textbox"  ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"/>
 </div>
 `

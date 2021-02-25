@@ -1,0 +1,32 @@
+<!--active, readonly, disabled, required-->
+<div class="zipcodepicker zipcodepicker-wrap" id="drawer">
+  <label for="">${this.title}</label>
+  <span class="zipcode-input" @click="${this._clickHandler}">
+    <input type="number" value="${this.zipCode}" readonly>
+    <button><span>검색</span></button>
+  </span>
+
+  ${this.reset?html`<span class="zipcode-reset">
+    <dews-button type="icon" size="large" icon="ico-reset" @click="$${this._resetClickHandler}"></dews-button>
+
+  </span>` : ''}
+
+  <span class="zipcode-address"  @click="${this._clickHandler}">
+    <input type="text" readonly value="${this.address}">
+  </span>
+  ${this.detail?html`<span class="zipcode-detail">
+    <dews-textbox placeholder="상세주소" ?disabled="${this.disabled}" value="${this.detailAddress}" ?readonly="${this.readonly}" ?require="${this.required}"></dews-textbox>
+  </span>
+  ` :''}
+</div>
+
+<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" dimming tabindex="-1">
+  <div class="drawer-zipcodepicker" >
+    <div class="titlebar">
+      <div class="title">${this.title}</div>
+    </div>
+    <div class="control">
+      <div id="iframe"></div>
+    </div>
+  </div>
+</drawer-layout>

@@ -23,8 +23,9 @@ export class DrawerBottomBase extends DewsFormComponent {
   @property({ type: Boolean })
   required: boolean | undefined = false;
 
-  @internalProperty()
-  protected active: boolean | undefined = false;
+  @property({ type: Boolean, reflect: true })
+  active: boolean | undefined = false;
+
   protected _afterItem: number | undefined;
   protected $nextBtn: TemplateResult | undefined;
   protected count: number | undefined = 0;

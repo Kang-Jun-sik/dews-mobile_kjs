@@ -61,6 +61,14 @@ export class Textbox extends DewsFormComponent {
     // this.dispatchEvent(new CustomEvent('focusin', { detail: { target: e.target as EventTarget } }));
   }
 
+  focus(options?: FocusOptions) {
+    if (this.multi) {
+      (this.shadowRoot?.querySelector('textarea') as HTMLElement).focus(options);
+    } else {
+      (this.shadowRoot?.querySelector('input') as HTMLElement).focus(options);
+    }
+  }
+
   private _keyDownHandler(e: KeyboardEvent) {
     if (e.code === 'Enter') {
       (e.target as HTMLInputElement).blur();
@@ -69,7 +77,7 @@ export class Textbox extends DewsFormComponent {
 
   private _onChange(e: InputEvent) {
     this.value = (e.target as HTMLInputElement)!.value;
-    this.#EVENT.emit('change', { target: this, type: 'change', preventDefault: e.preventDefault });
+    this.#EVENT.emit('change', { target: this, type: 'change', preventDefault: e.preventDefault, value: this.value });
     // this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
   }
 
@@ -99,12 +107,12 @@ export class Textbox extends DewsFormComponent {
     this.#EVENT.off(key, handler);
   };
 
-  error: Function = (message: string) => {
+  error(message: string) {
     this._show(message, 'error');
-  };
-  warning: Function = (message: string) => {
+  }
+  warning(message: string) {
     this._show(message, 'warning');
-  };
+  }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('value') !== undefined && !this.multi) {

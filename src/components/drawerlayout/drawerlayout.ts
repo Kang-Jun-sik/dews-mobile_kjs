@@ -44,15 +44,9 @@ export class Drawerlayout extends DewsFormComponent {
   connectedCallback() {
     super.connectedCallback();
     this._height = `calc(100% - ${this.height})`;
-    window.addEventListener('animationend', this._animationHandler);
   }
-  _animationHandler() {
-    console.log('animation 끝!!');
-  }
-
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('animationend', this._animationHandler);
   }
 
   /*
@@ -148,27 +142,54 @@ export class Drawerlayout extends DewsFormComponent {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    window.addEventListener('resize', () => {
-      if (window.matchMedia('(orientation: portrait)').matches !== this._portrait) {
-        this._portrait = window.matchMedia('(orientation: portrait)').matches;
-        this._height = `calc(100% - ${this.height})`;
-        this._moveCheck = false;
-        this.#EVENT.emit('heightChange', {
-          target: this,
-          type: 'heightChange'
-        });
+  }
+  _beforeTop = 0;
+
+  keypadStateChange() {
+    const layerBottom = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
+    if (window.innerWidth + window.innerHeight !== this._originalSize) {
+      if (this.active) {
+        layerBottom.style.top = `${this._beforeTop}px`;
+        this._height = `${window.innerHeight}px`;
       }
-    });
+    } else {
+      if (this.active) {
+        layerBottom.style.top = '';
+        this._height = `calc(100% - ${this.height})`;
+      }
+    }
+    if (window.matchMedia('(orientation: portrait)').matches !== this._portrait) {
+      this._portrait = window.matchMedia('(orientation: portrait)').matches;
+      this._height = `calc(100% - ${this.height})`;
+      this._moveCheck = false;
+      this.#EVENT.emit('heightChange', {
+        target: this,
+        type: 'heightChange'
+      });
+    }
   }
 
+  private keypadStateChangeEvent = this.keypadStateChange.bind(this);
+  private _originalSize = 0;
+  private _outerHeight = 0;
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('active') !== undefined && !this.right) {
       if ((!_changedProperties.get('active') && this._moveCheck) || this.height === '200px') {
         this._height = `calc(100% - ${this.height})`;
         this._moveCheck = false;
+        const layerBottom = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
+        this._beforeTop = layerBottom.offsetTop;
+      }
+      if (!_changedProperties.get('active')) {
+        console.log('resize 이벤트!! 등록');
+        this._originalSize = window.innerWidth + window.innerHeight;
+        this._outerHeight = window.outerHeight;
+        window.addEventListener('resize', this.keypadStateChangeEvent);
+      } else {
+        console.log('resize 이벤트!! 제거');
+        window.removeEventListener('resize', this.keypadStateChangeEvent);
       }
     }
-
     return super.shouldUpdate(_changedProperties);
   }
 
