@@ -178,7 +178,7 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
         };
       }
 
-      if (this.transport.read.data) {
+      if (this.transport?.read?.data) {
         requestData = Object.assign({}, this.transport.read.data, requestData);
       }
 
