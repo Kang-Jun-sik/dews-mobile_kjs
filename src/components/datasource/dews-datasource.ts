@@ -169,7 +169,6 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
     } else if (this.transport?.read) {
       this._trigger('requestStart', { type: 'read' });
       const readElement = this.transport.read;
-      // let response: T[];
       let requestData: any = {};
       if (this.paging) {
         requestData = {
@@ -177,6 +176,10 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
           pagingCount: this.pagingCount,
           pagingStart: this.pagingStart
         };
+      }
+
+      if (this.transport.read.data) {
+        requestData = Object.assign({}, this.transport.read.data, requestData);
       }
 
       try {
