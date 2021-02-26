@@ -19,6 +19,13 @@ export class TransportRead extends LitElement {
   @property({ type: Object })
   data? = undefined;
 
+  attributeChangedCallback(name: string, old: string | null, value: string | null) {
+    super.attributeChangedCallback(name, old, value);
+    if (name === 'data' && value) {
+      return JSON.parse(value);
+    }
+  }
+
   protected createRenderRoot(): Element | ShadowRoot {
     return this;
   }
