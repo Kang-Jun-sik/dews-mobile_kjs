@@ -22,7 +22,7 @@
   :html`
   <div class="layer-drawer" @touchmove="${this._touchMove}" @touchend="${this._touchEnd}">
   <div class="overlay" @touchmove="${this._touchStop}" ></div>
-  <div class="layer layer-bottom" style="height: ${this._height};">
+  <div class="layer layer-bottom" style="height: ${this._height}; ">
     <div class="layer-moving-button">
       ${this.scrollEnabled ? html`<span class="moving-button" @touchstart="${this._touchStart}"></span>`:html`<span class="fixed-button" @touchstart="${this._touchStart}"></span>`}
     </div>

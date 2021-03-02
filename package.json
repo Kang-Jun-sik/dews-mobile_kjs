@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@dews/dews-mobile-core": "^0.1.6",
-    "@dews/dews-mobile-style": "^1.1.6",
+    "@dews/dews-mobile-style": "^1.1.7",
     "@open-wc/building-rollup": "^1.0.0",
     "@open-wc/demoing-storybook": "^2.0.0",
     "@open-wc/eslint-config": "^4.2.0",
@@ -53,7 +53,7 @@
     "prettier": "^2.2.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^2.6.3",
-    "rollup": "^2.39.1",
+    "rollup": "^2.40.0",
     "sinon": "^9.2.4",
     "through2": "^4.0.2",
     "tslib": "^1.11.0",
