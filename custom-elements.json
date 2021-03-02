@@ -259,6 +259,11 @@
           "name": "type",
           "type": "\"get\" | \"post\"",
           "default": "\"get\""
+        },
+        {
+          "name": "data",
+          "type": "undefined",
+          "default": "\"undefined\""
         }
       ],
       "properties": [
@@ -273,6 +278,12 @@
           "attribute": "type",
           "type": "\"get\" | \"post\"",
           "default": "\"get\""
+        },
+        {
+          "name": "data",
+          "attribute": "data",
+          "type": "undefined",
+          "default": "\"undefined\""
         }
       ]
     },
@@ -334,20 +345,24 @@
           "type": "string | undefined"
         },
         {
-          "name": "field",
-          "type": "string | undefined"
+          "name": "key-field",
+          "type": "string",
+          "default": "\"key\""
         },
         {
           "name": "label-field",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"label\""
         },
         {
           "name": "checked-field",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"checked\""
         },
         {
           "name": "disabled-field",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"disabled\""
         },
         {
           "name": "auto-bind",
@@ -360,12 +375,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean | undefined",
           "default": "false"
         },
         {
           "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
           "type": "boolean | undefined",
           "default": "false"
         }
@@ -403,23 +428,27 @@
         },
         {
           "name": "field",
-          "attribute": "field",
-          "type": "string | undefined"
+          "attribute": "key-field",
+          "type": "string",
+          "default": "\"key\""
         },
         {
           "name": "labelField",
           "attribute": "label-field",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"label\""
         },
         {
           "name": "checkedField",
           "attribute": "checked-field",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"checked\""
         },
         {
           "name": "disabledField",
           "attribute": "disabled-field",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"disabled\""
         },
         {
           "name": "autoBind",
@@ -435,12 +464,18 @@
         {
           "name": "off",
           "type": "(key: EVENT_TYPE, handler: (e: EventArgs<unknown>, ...args: unknown[]) => void) => void",
-          "default": "\"(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) => {\\n    const ab = this.getItemList();\\n\\n    return this._EVENT.off(key, handler);\\n  }\""
+          "default": "\"(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) => {\\n    return this._EVENT.off(key, handler);\\n  }\""
         },
         {
           "name": "disabled",
           "attribute": "disabled",
           "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
           "default": "false"
         },
         {
@@ -452,6 +487,12 @@
         {
           "name": "required",
           "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
           "type": "boolean | undefined",
           "default": "false"
         },
@@ -555,6 +596,56 @@
           "default": "\"\""
         },
         {
+          "name": "datasource",
+          "type": "string | undefined"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "key-field",
+          "type": "string",
+          "default": "\"key\""
+        },
+        {
+          "name": "label-field",
+          "type": "string",
+          "default": "\"label\""
+        },
+        {
+          "name": "checked-field",
+          "type": "string",
+          "default": "\"checked\""
+        },
+        {
+          "name": "disabled-field",
+          "type": "string",
+          "default": "\"disabled\""
+        },
+        {
+          "name": "onComplete",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onOpen",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onClose",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onChange",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "auto-bind",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "multi",
           "type": "boolean",
           "default": "false"
@@ -565,17 +656,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "once",
-          "type": "boolean",
+          "name": "required",
+          "type": "boolean | undefined",
           "default": "false"
         },
         {
-          "name": "columnSet",
+          "name": "active",
           "type": "boolean",
           "default": "false"
         }
@@ -593,14 +689,86 @@
           "default": "\"\""
         },
         {
+          "name": "datasource",
+          "attribute": "datasource",
+          "type": "string | undefined"
+        },
+        {
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "field",
+          "attribute": "key-field",
+          "type": "string",
+          "default": "\"key\""
+        },
+        {
+          "name": "labelField",
+          "attribute": "label-field",
+          "type": "string",
+          "default": "\"label\""
+        },
+        {
+          "name": "checkedField",
+          "attribute": "checked-field",
+          "type": "string",
+          "default": "\"checked\""
+        },
+        {
+          "name": "disabledField",
+          "attribute": "disabled-field",
+          "type": "string",
+          "default": "\"disabled\""
+        },
+        {
+          "name": "onComplete",
+          "attribute": "onComplete",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onOpen",
+          "attribute": "onOpen",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onClose",
+          "attribute": "onClose",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "onChange",
+          "attribute": "onChange",
+          "type": "((args: EventArgs<unknown>) => void) | undefined"
+        },
+        {
+          "name": "autoBind",
+          "attribute": "auto-bind",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "multi",
           "attribute": "multi",
           "type": "boolean",
           "default": "false"
         },
         {
+          "name": "select",
+          "type": "string[]",
+          "default": "[]"
+        },
+        {
           "name": "disabled",
           "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "attribute": "dimming",
           "type": "boolean",
           "default": "false"
         },
@@ -611,26 +779,16 @@
           "default": "false"
         },
         {
-          "name": "once",
-          "attribute": "once",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "columnSet",
-          "attribute": "columnSet",
-          "type": "boolean",
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
           "default": "false"
         },
         {
           "name": "active",
+          "attribute": "active",
           "type": "boolean",
           "default": "false"
-        },
-        {
-          "name": "select",
-          "type": "string[]",
-          "default": "[]"
         },
         {
           "name": "version",
@@ -643,6 +801,12 @@
           "name": "click"
         },
         {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
           "name": "setScrollOffset"
         }
       ]
@@ -651,6 +815,11 @@
       "name": "dews-datepicker",
       "path": "./src/dews-mobile.ts",
       "attributes": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "\"\""
+        },
         {
           "name": "title",
           "type": "string",
@@ -691,12 +860,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean | undefined",
           "default": "false"
         },
         {
           "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
           "type": "boolean | undefined",
           "default": "false"
         }
@@ -706,6 +885,12 @@
           "name": "styles",
           "type": "CSSResult",
           "default": "\"scss\""
+        },
+        {
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "title",
@@ -759,6 +944,12 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "attribute": "readonly",
           "type": "boolean | undefined",
@@ -767,6 +958,12 @@
         {
           "name": "required",
           "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
           "type": "boolean | undefined",
           "default": "false"
         },
@@ -796,14 +993,17 @@
       "path": "./src/dews-mobile.ts",
       "attributes": [
         {
-          "name": "endValue",
-          "type": "string | undefined",
+          "name": "text",
+          "type": "string",
           "default": "\"\""
         },
         {
-          "name": "startValue",
-          "type": "string | undefined",
-          "default": "\"\""
+          "name": "endDate",
+          "type": "string | undefined"
+        },
+        {
+          "name": "startDate",
+          "type": "string | undefined"
         },
         {
           "name": "title",
@@ -846,12 +1046,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean",
           "default": "false"
         },
         {
           "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
           "type": "boolean | undefined",
           "default": "false"
         }
@@ -863,16 +1073,20 @@
           "default": "\"scss\""
         },
         {
-          "name": "endValue",
-          "attribute": "endValue",
-          "type": "string | undefined",
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
           "default": "\"\""
         },
         {
-          "name": "startValue",
-          "attribute": "startValue",
-          "type": "string | undefined",
-          "default": "\"\""
+          "name": "endDate",
+          "attribute": "endDate",
+          "type": "string | undefined"
+        },
+        {
+          "name": "startDate",
+          "attribute": "startDate",
+          "type": "string | undefined"
         },
         {
           "name": "title",
@@ -927,6 +1141,12 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "attribute": "readonly",
           "type": "boolean",
@@ -935,6 +1155,12 @@
         {
           "name": "required",
           "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
           "type": "boolean | undefined",
           "default": "false"
         },
@@ -962,7 +1188,13 @@
       "attributes": [
         {
           "name": "value",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "min",
@@ -983,12 +1215,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean | undefined",
           "default": "false"
         },
         {
           "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
           "type": "boolean | undefined",
           "default": "false"
         }
@@ -1006,7 +1248,14 @@
         {
           "name": "value",
           "attribute": "value",
-          "type": "string | undefined"
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "min",
@@ -1031,6 +1280,12 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "attribute": "readonly",
           "type": "boolean | undefined",
@@ -1039,6 +1294,12 @@
         {
           "name": "required",
           "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
           "type": "boolean | undefined",
           "default": "false"
         },
@@ -1104,12 +1365,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean | undefined",
           "default": "false"
         },
         {
           "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
           "type": "boolean | undefined",
           "default": "false"
         }
@@ -1172,6 +1443,12 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "attribute": "readonly",
           "type": "boolean | undefined",
@@ -1180,6 +1457,12 @@
         {
           "name": "required",
           "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
           "type": "boolean | undefined",
           "default": "false"
         },
@@ -1248,12 +1531,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean | undefined",
           "default": "false"
         },
         {
           "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
           "type": "boolean | undefined",
           "default": "false"
         }
@@ -1316,6 +1609,12 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "attribute": "readonly",
           "type": "boolean | undefined",
@@ -1324,6 +1623,210 @@
         {
           "name": "required",
           "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-weekperiodpicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "startDate",
+          "attribute": "startDate",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "endDate",
+          "attribute": "endDate",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "inputValue",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined",
+          "default": "\"undefined\""
+        },
+        {
+          "name": "spinner",
+          "attribute": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "visible",
+          "attribute": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "hdDisabled",
+          "attribute": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
           "type": "boolean | undefined",
           "default": "false"
         },
@@ -1350,14 +1853,17 @@
       "path": "./src/dews-mobile.ts",
       "attributes": [
         {
-          "name": "end",
-          "type": "string | undefined",
+          "name": "text",
+          "type": "string",
           "default": "\"\""
         },
         {
-          "name": "start",
-          "type": "string | undefined",
-          "default": "\"\""
+          "name": "endDate",
+          "type": "string | undefined"
+        },
+        {
+          "name": "startDate",
+          "type": "string | undefined"
         },
         {
           "name": "title",
@@ -1400,12 +1906,22 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "type": "boolean",
           "default": "false"
         },
         {
           "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
           "type": "boolean | undefined",
           "default": "false"
         }
@@ -1417,16 +1933,20 @@
           "default": "\"scss\""
         },
         {
-          "name": "end",
-          "attribute": "end",
-          "type": "string | undefined",
+          "name": "text",
+          "attribute": "text",
+          "type": "string",
           "default": "\"\""
         },
         {
-          "name": "start",
-          "attribute": "start",
-          "type": "string | undefined",
-          "default": "\"\""
+          "name": "endDate",
+          "attribute": "endDate",
+          "type": "string | undefined"
+        },
+        {
+          "name": "startDate",
+          "attribute": "startDate",
+          "type": "string | undefined"
         },
         {
           "name": "title",
@@ -1481,6 +2001,12 @@
           "default": "false"
         },
         {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "readonly",
           "attribute": "readonly",
           "type": "boolean",
@@ -1489,6 +2015,521 @@
         {
           "name": "required",
           "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-codepicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "multi",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "placeholder",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "help-code",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "code-field",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "text-field",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "help-params",
+          "type": "string | object | Function",
+          "default": "\"\""
+        },
+        {
+          "name": "help-custom",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "help-view-url",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "help-api-url",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "help-title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "data-control-type",
+          "type": "string",
+          "default": "\"card\""
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "multi",
+          "attribute": "multi",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "placeholder",
+          "attribute": "placeholder",
+          "type": "string | undefined",
+          "default": "\"\""
+        },
+        {
+          "name": "helpCode",
+          "attribute": "help-code",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "codeField",
+          "attribute": "code-field",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "textField",
+          "attribute": "text-field",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "helpParams",
+          "attribute": "help-params",
+          "type": "string | object | Function",
+          "default": "\"\""
+        },
+        {
+          "name": "helpCustom",
+          "attribute": "help-custom",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "helpViewUrl",
+          "attribute": "help-view-url",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "helpApiUrl",
+          "attribute": "help-api-url",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "helpTitle",
+          "attribute": "help-title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "dataControlType",
+          "attribute": "data-control-type",
+          "type": "string",
+          "default": "\"card\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined"
+        },
+        {
+          "name": "inputValue",
+          "type": "string | undefined"
+        },
+        {
+          "name": "min",
+          "attribute": "min",
+          "type": "string | undefined",
+          "default": "\"19000101\""
+        },
+        {
+          "name": "max",
+          "attribute": "max",
+          "type": "string | undefined",
+          "default": "\"21000101\""
+        },
+        {
+          "name": "spinner",
+          "attribute": "spinner",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "visible",
+          "attribute": "holidays-visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "hdDisabled",
+          "attribute": "holidays-disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "close"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "codepicker-search",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "filterDisabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "filterActive",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "filterDisabled",
+          "attribute": "filterDisabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "filterActive",
+          "attribute": "filterActive",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "codeFilterInput",
+          "type": "HTMLInputElement | undefined"
+        },
+        {
+          "name": "btnFilter",
+          "type": "HTMLButtonElement | undefined"
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "default": "\"test\""
+        }
+      ],
+      "events": [
+        {
+          "name": "setScrollOffset"
+        }
+      ]
+    },
+    {
+      "name": "dews-zipcodepicker",
+      "path": "./src/dews-mobile.ts",
+      "attributes": [
+        {
+          "name": "type",
+          "type": "ADDRESS_TYPE",
+          "default": "\"street\""
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "zipCode",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "detailAddress",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disalbed",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "detail",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "reset",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "type": "boolean | undefined",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult",
+          "default": "\"scss\""
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "ADDRESS_TYPE",
+          "default": "\"street\""
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "address",
+          "attribute": "address",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "zipCode",
+          "attribute": "zipCode",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "detailAddress",
+          "attribute": "detailAddress",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "disalbed",
+          "attribute": "disalbed",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "detail",
+          "attribute": "detail",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "reset",
+          "attribute": "reset",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean | undefined",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "attribute": "dimming",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "readonly",
+          "attribute": "readonly",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "attribute": "active",
           "type": "boolean | undefined",
           "default": "false"
         },
@@ -1857,12 +2898,6 @@
       ],
       "events": [
         {
-          "name": "focus"
-        },
-        {
-          "name": "change"
-        },
-        {
           "name": "setScrollOffset"
         }
       ]
@@ -1978,14 +3013,14 @@
           "default": "\"\""
         },
         {
-          "name": "error",
-          "type": "Function",
-          "default": "\"(message: string) => {\\n    this._show(message, 'error');\\n  }\""
+          "name": "on",
+          "type": "(key: EVENT_TYPE, handler: (e: { target: Textbox; type: string; value: string; }, ...args: unknown[]) => void) => void",
+          "default": "\"(\\n    key: EVENT_TYPE,\\n    handler: (e: { target: Textbox; type: string; value: string }, ...args: unknown[]) => void\\n  ) => {\\n    this.#EVENT.on(key, handler);\\n  }\""
         },
         {
-          "name": "warning",
-          "type": "Function",
-          "default": "\"(message: string) => {\\n    this._show(message, 'warning');\\n  }\""
+          "name": "off",
+          "type": "(key: EVENT_TYPE, handler: (e: { target: Textbox; type: string; value: string; }, ...args: unknown[]) => void) => void",
+          "default": "\"(\\n    key: EVENT_TYPE,\\n    handler: (e: { target: Textbox; type: string; value: string }, ...args: unknown[]) => void\\n  ) => {\\n    this.#EVENT.off(key, handler);\\n  }\""
         },
         {
           "name": "version",
@@ -1994,12 +3029,6 @@
         }
       ],
       "events": [
-        {
-          "name": "focusin"
-        },
-        {
-          "name": "change"
-        },
         {
           "name": "setScrollOffset"
         }
@@ -2276,6 +3305,11 @@
           "name": "align",
           "type": "\"horizontal\" | \"vertical\"",
           "default": "\"horizontal\""
+        },
+        {
+          "name": "value",
+          "type": "string[]",
+          "default": "[]"
         }
       ],
       "properties": [
@@ -2295,6 +3329,12 @@
           "attribute": "align",
           "type": "\"horizontal\" | \"vertical\"",
           "default": "\"horizontal\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string[]",
+          "default": "[]"
         },
         {
           "name": "version",
@@ -2335,6 +3375,11 @@
           "name": "reverse",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "\"\""
         }
       ],
       "properties": [
@@ -2373,6 +3418,12 @@
           "default": "false"
         },
         {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
           "name": "version",
           "type": "string",
           "default": "\"test\""
@@ -2407,6 +3458,11 @@
           "name": "checked",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "\"\""
         }
       ],
       "properties": [
@@ -2440,6 +3496,12 @@
           "default": "false"
         },
         {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
           "name": "version",
           "type": "string",
           "default": "\"test\""
@@ -2459,11 +3521,6 @@
       "path": "./src/dews-mobile.ts",
       "attributes": [
         {
-          "name": "title",
-          "type": "string",
-          "default": "\"title\""
-        },
-        {
           "name": "disabled",
           "type": "boolean",
           "default": "false"
@@ -2472,6 +3529,11 @@
           "name": "align",
           "type": "\"horizontal\" | \"vertical\"",
           "default": "\"horizontal\""
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "\"\""
         }
       ],
       "properties": [
@@ -2479,12 +3541,6 @@
           "name": "styles",
           "type": "CSSResult",
           "default": "\"scss\""
-        },
-        {
-          "name": "title",
-          "attribute": "title",
-          "type": "string",
-          "default": "\"title\""
         },
         {
           "name": "disabled",
@@ -2497,6 +3553,12 @@
           "attribute": "align",
           "type": "\"horizontal\" | \"vertical\"",
           "default": "\"horizontal\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
         },
         {
           "name": "version",
@@ -2539,6 +3601,11 @@
           "default": "false"
         },
         {
+          "name": "paging-count",
+          "type": "number",
+          "default": "20"
+        },
+        {
           "name": "use-control-set",
           "type": "boolean",
           "default": "false"
@@ -2577,6 +3644,19 @@
           "name": "column-type",
           "type": "string",
           "default": "\"1\""
+        },
+        {
+          "name": "onchecked",
+          "type": "((args: CardListCheckedEventArgs<T>) => void) | undefined"
+        },
+        {
+          "name": "onchange",
+          "type": "((args: CardListChangeEventArgs<T>) => void) | undefined"
+        },
+        {
+          "name": "use-list-select",
+          "type": "boolean",
+          "default": "false"
         }
       ],
       "properties": [
@@ -2609,18 +3689,14 @@
           "type": "null"
         },
         {
-          "name": "link",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
           "name": "usePaging",
           "attribute": "use-paging",
           "type": "boolean",
           "default": "false"
         },
         {
-          "name": "pageCount",
+          "name": "pagingCount",
+          "attribute": "paging-count",
           "type": "number",
           "default": "20"
         },
@@ -2671,6 +3747,72 @@
           "attribute": "column-type",
           "type": "string",
           "default": "\"1\""
+        },
+        {
+          "name": "onChecked",
+          "attribute": "onchecked",
+          "type": "((args: CardListCheckedEventArgs<T>) => void) | undefined"
+        },
+        {
+          "name": "onChange",
+          "attribute": "onchange",
+          "type": "((args: CardListChangeEventArgs<T>) => void) | undefined"
+        },
+        {
+          "name": "useListSelect",
+          "attribute": "use-list-select",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "cardCheck",
+          "type": "(itemIndex: number, checked?: boolean | undefined) => boolean | undefined",
+          "default": "\"(itemIndex: number, checked?: boolean) => {\\n    const cardElement: Element | null | undefined = this.shadowRoot?.querySelector(\\n      `.cardlist-wrap > .cardlist > .card-${itemIndex}`\\n    );\\n    let cardChecked: boolean | undefined = undefined;\\n    if (this._options._useHeader && this._options._headerOptions.useCheckbox) {\\n      const selectCheckbox: Checkbox | null | undefined = cardElement?.querySelector(\\n        'dews-checkbox.card-select-checkbox'\\n      );\\n      if (typeof checked === 'boolean') {\\n        this._checkChange(selectCheckbox!, checked);\\n      } else {\\n        cardChecked = selectCheckbox!.checked;\\n      }\\n    }\\n\\n    return cardChecked;\\n  }\""
+        },
+        {
+          "name": "getCheckCardIndex",
+          "type": "() => number[]",
+          "default": "\"(): Array<number> => {\\n    return this._getCheckCard('cardIndex');\\n  }\""
+        },
+        {
+          "name": "getCheckCardData",
+          "type": "() => ObservableArrayItem<T>[]",
+          "default": "\"(): Array<ObservableArrayItem<T>> => {\\n    return this._getCheckCard('data');\\n  }\""
+        },
+        {
+          "name": "cardItems",
+          "type": "() => ObservableArrayItem<T>[]",
+          "default": "\"() => {\\n    return this._cardData;\\n  }\""
+        },
+        {
+          "name": "select",
+          "type": "(itemIndex?: number | undefined) => Element | undefined",
+          "default": "\"(itemIndex?: number): Element | undefined => {\\n    if (itemIndex) {\\n      const cardElement: Element | null | undefined = this.shadowRoot?.querySelector(\\n        `.cardlist-wrap > .cardlist > .card-${itemIndex}`\\n      );\\n      if (cardElement) {\\n        this._activeChange(cardElement);\\n      }\\n    }\\n    return this._activeCardElement;\\n  }\""
+        },
+        {
+          "name": "getCard",
+          "type": "(itemIndex: number) => Element | null | undefined",
+          "default": "\"(itemIndex: number): Element | undefined | null => {\\n    return this._getCard(itemIndex);\\n  }\""
+        },
+        {
+          "name": "addCard",
+          "type": "(data: T) => void",
+          "default": "\"(data: T) => {\\n    this._datasource?.add(data);\\n  }\""
+        },
+        {
+          "name": "removeCard",
+          "type": "(itemIndex: number) => void",
+          "default": "\"(itemIndex: number) => {\\n    if (this.useControl && this.controlOptions.useSortSet) {\\n      const dataIndex = this._getDataIndex(itemIndex);\\n      if (dataIndex) this._datasource?.delete(dataIndex);\\n    }\\n    this._datasource?.delete(itemIndex);\\n  }\""
+        },
+        {
+          "name": "getValue",
+          "type": "(itemIndex: number, field: keyof T) => void",
+          "default": "\"(itemIndex: number, field: keyof T) => {\\n    // return this._datasource?.__data__[itemIndex][field];\\n  }\""
+        },
+        {
+          "name": "setValue",
+          "type": "(itemIndex: number, field: keyof T, value: unknown) => void",
+          "default": "\"(itemIndex: number, field: keyof T, value: unknown) => {\\n    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore\\n    // @ts-ignore\\n    this._datasource?.__data__[itemIndex][field] = value;\\n  }\""
         },
         {
           "name": "version",
@@ -2795,6 +3937,19 @@
           "default": "\"\""
         },
         {
+          "name": "field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "label",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "checked",
           "type": "boolean",
           "default": "false"
@@ -2811,6 +3966,22 @@
           "attribute": "title",
           "type": "string",
           "default": "\"\""
+        },
+        {
+          "name": "field",
+          "attribute": "field",
+          "type": "string | undefined"
+        },
+        {
+          "name": "label",
+          "attribute": "label",
+          "type": "string | undefined"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
         },
         {
           "name": "checked",
@@ -2978,6 +4149,11 @@
       "path": "./src/dews-mobile.ts",
       "attributes": [
         {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
           "name": "min",
           "type": "number",
           "default": "0"
@@ -3008,6 +4184,12 @@
           "name": "styles",
           "type": "CSSResult",
           "default": "\"scss\""
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
         },
         {
           "name": "min",
@@ -3093,6 +4275,11 @@
           "name": "progressId",
           "type": "string | undefined",
           "default": "\"\""
+        },
+        {
+          "name": "cancel",
+          "type": "boolean | undefined",
+          "default": "false"
         }
       ],
       "properties": [
@@ -3106,6 +4293,12 @@
           "attribute": "progressId",
           "type": "string | undefined",
           "default": "\"\""
+        },
+        {
+          "name": "cancel",
+          "attribute": "cancel",
+          "type": "boolean | undefined",
+          "default": "false"
         },
         {
           "name": "textTemplate",
@@ -3590,15 +4783,6 @@
           "attribute": "col",
           "type": "number",
           "default": "1"
-        },
-        {
-          "name": "snackbar",
-          "type": "HTMLElement | undefined"
-        },
-        {
-          "name": "active",
-          "type": "boolean",
-          "default": "false"
         }
       ],
       "events": [
@@ -3726,10 +4910,10 @@
         },
         {
           "name": "pageType",
-          "type": "\"scroll\" | \"background\" | \"button\" | \"virtualScroll\" | undefined"
+          "type": "\"button\" | \"scroll\" | \"background\" | \"virtualScroll\" | undefined"
         },
         {
-          "name": "pageSize",
+          "name": "pagingCount",
           "type": "number | undefined"
         },
         {
@@ -3755,11 +4939,11 @@
         {
           "name": "pageType",
           "attribute": "pageType",
-          "type": "\"scroll\" | \"background\" | \"button\" | \"virtualScroll\" | undefined"
+          "type": "\"button\" | \"scroll\" | \"background\" | \"virtualScroll\" | undefined"
         },
         {
-          "name": "pageSize",
-          "attribute": "pageSize",
+          "name": "pagingCount",
+          "attribute": "pagingCount",
           "type": "number | undefined"
         },
         {
@@ -3792,6 +4976,14 @@
         {
           "name": "error",
           "type": "(() => {}) | undefined"
+        },
+        {
+          "name": "paging",
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "pagingStart",
+          "type": "number | undefined"
         }
       ],
       "events": [
@@ -3816,6 +5008,11 @@
         },
         {
           "name": "active",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
           "type": "boolean",
           "default": "false"
         },
@@ -3856,6 +5053,12 @@
         {
           "name": "active",
           "attribute": "active",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "dimming",
+          "attribute": "dimming",
           "type": "boolean",
           "default": "false"
         },
@@ -3962,6 +5165,23 @@
         {
           "name": "resetButton",
           "attribute": "data-reset",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "snackbar",
+          "type": "HTMLElement | undefined"
+        },
+        {
+          "name": "datasetNodata",
+          "type": "HTMLElement | undefined"
+        },
+        {
+          "name": "drawerLayout",
+          "type": "HTMLElement | undefined"
+        },
+        {
+          "name": "active",
           "type": "boolean",
           "default": "false"
         }

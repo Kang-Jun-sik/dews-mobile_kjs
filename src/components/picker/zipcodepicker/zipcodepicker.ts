@@ -1,9 +1,8 @@
-import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
+import { DrawerBottomBase } from '../drawer-bottom-base.js';
 import template from './zipcodepicker.html';
 import scss from './zipcodepicker.scss';
-import { property, PropertyValues } from 'lit-element';
-import { Textbox } from '../textbox/textbox.js';
-import { TouchScroll } from '../utill/touchscroll.js';
+import { property } from 'lit-element';
+import { Textbox } from '../../textbox/textbox.js';
 
 type ADDRESS_TYPE = 'jibun' | 'street' | 'userselect';
 type EVENT_TYPES = 'complete' | 'change' | 'open' | 'close';
@@ -147,7 +146,6 @@ export class Zipcodepicker extends DrawerBottomBase {
       height: '100%'
     }).embed(target, { autoClose: false });
   }
-
 
   render() {
     return template.call(this);

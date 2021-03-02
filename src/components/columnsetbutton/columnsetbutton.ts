@@ -139,7 +139,7 @@ export class Columnsetbutton extends DrawerBottomBase {
   }
 
   removeItems() {
-    this.shadowRoot?.querySelector('#table')?.remove();
+    this.shadowRoot?.querySelector('tbody')?.remove();
     const tbody = document.createElement('tbody');
     tbody.id = 'table';
     this.shadowRoot?.querySelector('.column-list')?.appendChild(tbody);
@@ -187,8 +187,9 @@ export class Columnsetbutton extends DrawerBottomBase {
    * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
    * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
    * */
-  setItems(data: Array<object>) {
-    data.forEach(Data => {
+  async setItems(data: Array<object>) {
+    await this.removeItems();
+    await data.forEach(Data => {
       this.setItem(Data);
     });
   }

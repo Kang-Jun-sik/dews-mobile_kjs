@@ -45,6 +45,7 @@ export class Drawerlayout extends DewsFormComponent {
     super.connectedCallback();
     this._height = `calc(100% - ${this.height})`;
   }
+
   disconnectedCallback() {
     super.disconnectedCallback();
   }
@@ -119,6 +120,7 @@ export class Drawerlayout extends DewsFormComponent {
       }
     }
   }
+
   private _touchEnd(e: TouchEvent) {
     this._moveState = false;
     this._moveEnd = e.changedTouches[0].screenY;
@@ -142,36 +144,59 @@ export class Drawerlayout extends DewsFormComponent {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
+    this._portrait = window.matchMedia('(orientation: portrait)').matches;
+    const $el = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
+    if ($el) {
+      $el.style.visibility = 'hidden';
+    }
+
+    $el?.addEventListener('transitionend', () => {
+      if (!this.active) {
+        $el.style.visibility = 'hidden';
+      }
+    });
+
+    $el?.addEventListener('transitionstart', () => {
+      if (this.active) {
+        $el.style.visibility = 'visible';
+      }
+    });
   }
-  _beforeTop = 0;
+
+  private _beforeTop = 0;
 
   keypadStateChange() {
     const layerBottom = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
-    if (window.innerWidth + window.innerHeight !== this._originalSize) {
-      if (this.active) {
-        layerBottom.style.top = `${this._beforeTop}px`;
-        this._height = `${window.innerHeight}px`;
-      }
-    } else {
-      if (this.active) {
-        layerBottom.style.top = '';
-        this._height = `calc(100% - ${this.height})`;
-      }
-    }
-    if (window.matchMedia('(orientation: portrait)').matches !== this._portrait) {
-      this._portrait = window.matchMedia('(orientation: portrait)').matches;
+    if (this.orientationChange) {
+      this.orientationChange = false;
       this._height = `calc(100% - ${this.height})`;
       this._moveCheck = false;
       this.#EVENT.emit('heightChange', {
         target: this,
         type: 'heightChange'
       });
+      return;
+    } else {
+      if (window.innerWidth + window.innerHeight + 100 < this._originalSize) {
+        if (window.innerWidth + window.innerHeight !== this._originalSize) {
+          if (this.active) {
+            layerBottom.style.top = `${this._beforeTop}px`;
+            this._height = `${window.innerHeight}px`;
+          }
+        } else {
+          if (this.active) {
+            layerBottom.style.top = '';
+            this._height = `calc(100% - ${this.height})`;
+          }
+        }
+      }
     }
   }
 
   private keypadStateChangeEvent = this.keypadStateChange.bind(this);
   private _originalSize = 0;
   private _outerHeight = 0;
+
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('active') !== undefined && !this.right) {
       if ((!_changedProperties.get('active') && this._moveCheck) || this.height === '200px') {
@@ -181,16 +206,23 @@ export class Drawerlayout extends DewsFormComponent {
         this._beforeTop = layerBottom.offsetTop;
       }
       if (!_changedProperties.get('active')) {
-        console.log('resize 이벤트!! 등록');
         this._originalSize = window.innerWidth + window.innerHeight;
         this._outerHeight = window.outerHeight;
         window.addEventListener('resize', this.keypadStateChangeEvent);
+        window.addEventListener('orientationchange', this.orientationChangeEvent);
       } else {
-        console.log('resize 이벤트!! 제거');
         window.removeEventListener('resize', this.keypadStateChangeEvent);
+        window.removeEventListener('orientationchange', this.orientationChangeEvent);
       }
     }
     return super.shouldUpdate(_changedProperties);
+  }
+
+  private orientationChangeEvent = this.orientation.bind(this);
+  private orientationChange = false;
+
+  private orientation() {
+    this.orientationChange = true;
   }
 
   protected updated(_changedProperties: PropertyValues) {
