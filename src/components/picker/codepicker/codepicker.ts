@@ -101,7 +101,7 @@ export class Codepicker extends PickerBase {
   @internalProperty()
   private _cardList: Cardlist<object> | undefined;
 
-  private _isFirstUpdated = true;
+  private _isCreatedCardlist = false;
   private _selectList: Array<number> | undefined;
 
   constructor() {
@@ -556,12 +556,13 @@ export class Codepicker extends PickerBase {
       const selectButtonElement = allSelectElement?.querySelector('.list-select-button') as HTMLButtonElement;
       const spanElement = allSelectElement?.querySelector('.list-select-button>span') as HTMLElement;
 
-      // if (this._isFirstUpdated) {
-      // 이벤트 다중 등록됨..
-      allSelectElement?.classList.add('codepicker-control');
-      allCheckElement?.addEventListener('click', this._allCheckHandler.bind(this));
-      selectButtonElement?.addEventListener('click', this._selectButtonHandler.bind(this));
-      // }
+      if (this._isCreatedCardlist && allCheckElement) {
+        allSelectElement?.classList.add('codepicker-control');
+        allCheckElement?.addEventListener('click', this._allCheckHandler.bind(this));
+        selectButtonElement?.addEventListener('click', this._selectButtonHandler.bind(this));
+
+        this._isCreatedCardlist = false;
+      }
 
       if (this._cardList) {
         this._setCardlistHeight(this._drawerLayout);
@@ -574,8 +575,6 @@ export class Codepicker extends PickerBase {
           }
         }
       }
-
-      this._isFirstUpdated = false;
     });
   }
 
@@ -588,6 +587,8 @@ export class Codepicker extends PickerBase {
         this._drawerLayout?.querySelector('.cardlist-wrap')?.append(this._cardList);
 
         new TouchScroll(this._cardList?.shadowRoot?.querySelector('.cardlist') as HTMLElement);
+
+        this._isCreatedCardlist = true;
       }
 
       if ($el.tagName === 'CODEPICKER-SEARCH') {
