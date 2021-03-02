@@ -13,6 +13,6 @@
     ${this.suffix === undefined ? '' :html`<span class="suffix">${this.suffix}</span>`}
     ${this._button}
   </div>
-  <span class="input-state error">필수 입력 항목입니다.</span>
+  ${this.$state}
   <!-- error / warning  -->
 </div>

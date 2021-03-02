@@ -4,6 +4,7 @@ import template from './masktextbox.html';
 import scss from './masktextbox.scss';
 import { query } from 'lit-element/lib/decorators.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+import { html } from 'lit-html';
 
 type EVENT_TYPE = 'change' | 'focus' | 'blur';
 
@@ -71,10 +72,7 @@ export class Masktextbox extends DewsFormComponent {
   private _active = false;
 
   @internalProperty()
-  private stateType = '';
-
-  @internalProperty()
-  private stateMessage = '';
+  $state = html``;
 
   private _old: string | undefined = '';
   private _oldValue: string | undefined = '';
@@ -463,7 +461,7 @@ export class Masktextbox extends DewsFormComponent {
     }
 
     if (validCheck) {
-      this._hideMsg();
+      this._showMsg('reset', 'reset');
     } else {
       this.warning('적합하지 않은 형식입니다.');
     }
@@ -491,22 +489,23 @@ export class Masktextbox extends DewsFormComponent {
   }
 
   /**
-   * 상태 표시를 숨깁니다.
-   */
-  private _hideMsg() {
-    this.stateType = '';
-    this.stateMessage = '';
-  }
-
-  /**
    * 상태 표시를 보여줍니다.
    * @param message
    * @param type
    * @private
    */
   private _showMsg(message: string, type: string) {
-    this.stateType = type;
-    this.stateMessage = message;
+    switch (type) {
+      case 'error':
+        this.$state = html`<span class="input-state error">${message}</span>`;
+        break;
+      case 'warning':
+        this.$state = html`<span class="input-state warning">${message}</span>`;
+        break;
+      case 'reset':
+        this.$state = html``;
+        break;
+    }
   }
 
   error: Function = (message: string) => {
@@ -514,6 +513,10 @@ export class Masktextbox extends DewsFormComponent {
   };
   warning: Function = (message: string) => {
     this._showMsg(message, 'warning');
+  };
+
+  stateReset: Function = () => {
+    this._showMsg('reset', 'reset');
   };
 
   public focus() {

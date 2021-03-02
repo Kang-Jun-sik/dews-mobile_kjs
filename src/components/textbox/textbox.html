@@ -3,7 +3,7 @@ ${this.multi? html`
 <div class="textbox-wrap">
   ${this.title ===''?'' : html`<label for="multi-textbox">${this.title}</label>`}
   <textarea @input="${this._onChange}" class="dews-multi-input"  id="multi-textbox" value="${this.value}" ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"></textarea>
-  <span class="input-state error">필수 입력 항목입니다.</span>
+  ${this.$state}
   <!-- error / warning  -->
 </div>
 `
@@ -12,7 +12,7 @@ ${this.multi? html`
 <div class="textbox-wrap">
   ${this.title ===''?'' : html`<label for="textbox">${this.title}</label>`}
   <input type="${this.type}" class="dews-input" @keydown="${this._keyDownHandler}"  @input="${this._onChange}" value="${this.value}" id="textbox"  ?disabled="${this.disabled}" ?readonly="${this.readonly}" placeholder="${this.placeholder}"/>
-  <span class="input-state error">필수 입력 항목입니다.</span>
+  ${this.$state}
   <!-- error / warning  -->
 </div>
 `
