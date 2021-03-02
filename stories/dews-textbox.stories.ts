@@ -6,18 +6,11 @@ export default {
 };
 
 export const TextBox = () => html`<div style="width: 360px">
-  <dews-box title="box">
-    <dews-search-container>
-      <container-content>
-        <dews-textbox title="multi" multi></dews-textbox>
-        <dews-datepicker title="datepicker"></dews-datepicker>
-        <dews-textbox title="default"></dews-textbox>
-        <dews-textbox title="disabled" disabled></dews-textbox>
-        <dews-textbox title="readonly" readonly></dews-textbox>
-        <dews-textbox title="disabled readonly" disabled readonly></dews-textbox>
-        <dews-textbox title="placeholder" placeholder="placeholder"></dews-textbox>
-        <dews-textbox type="password" title="password"></dews-textbox>
-      </container-content>
-    </dews-search-container>
-  </dews-box>
+  <dews-textbox title="multi" multi></dews-textbox>
+  <dews-textbox id="textbox" title="default"></dews-textbox>
+  <dews-textbox title="disabled" disabled></dews-textbox>
+  <dews-textbox title="readonly" readonly></dews-textbox>
+  <dews-textbox title="disabled readonly" disabled readonly></dews-textbox>
+  <dews-textbox title="placeholder" placeholder="placeholder"></dews-textbox>
+  <dews-textbox type="password" title="password"></dews-textbox>
 </div>`;

@@ -2,7 +2,7 @@
 <div class="numeric-textbox-wrap ${this.disabled?'disabled':''}  ${this.readonly?'readonly':''}">
   ${this._title}
   <div class="numeric-wrap">
-    ${this.prefix === undefined ? '' : html`<span class="prefix">${this.prefix}</span>`}
+    ${this.prefix === '' ? '' : html`<span class="prefix">${this.prefix}</span>`}
     <span id="view" class="numeric view ${this.disabled?'disabled':''}" @click="${this._focusIn}">
         <input id="numeric-box" type="text" value="${this.value}" ?disabled="${this.disabled}" ?readonly="${this.readonly}" ?placeholder="${this.placeholder}" >
     </span>
@@ -10,7 +10,7 @@
         <input type="text" value="${this.value}"  step="${this._step}" min="${this.min}" max="${this.max}" @beforeinput="${this._beforeInput}" @input="${this._inputChange}" @focusin="${this._focusIn}" @blur="${this._focusBlur}"
         @chage="{this._change}">
     </span>
-    ${this.suffix === undefined ? '' :html`<span class="suffix">${this.suffix}</span>`}
+    ${this.suffix === '' ? '' :html`<span class="suffix">${this.suffix}</span>`}
     ${this._button}
   </div>
   ${this.$state}

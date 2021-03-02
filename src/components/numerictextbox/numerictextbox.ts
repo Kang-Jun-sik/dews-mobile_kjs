@@ -33,7 +33,7 @@ export class Numerictextbox extends DewsFormComponent {
   prefix = '';
 
   @property({ type: String })
-  suffix: string | undefined;
+  suffix = '';
 
   @property({ type: String })
   format = '#,##0.00';
