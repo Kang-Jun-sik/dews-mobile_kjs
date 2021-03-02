@@ -131,32 +131,8 @@ export class Codepicker extends PickerBase {
 
   private _createSearchContainer() {
     const $search = this.querySelector('codepicker-search')!;
+
     this._drawerLayout?.querySelector('.layer-code-filter')?.appendChild($search);
-
-    // for (let i = 0; i < li.length; i++) {
-    //   ?.appendChild(li[i]);
-    // }
-  }
-
-  // 필터 버튼 클릭
-  private _clickFilter(e: MouseEvent) {
-    this.filterActive = !this.filterActive;
-  }
-
-  private _clickSearch(e: MouseEvent) {
-    console.log('_clickSearch');
-  }
-
-  private _searchKeywordEnter(e: KeyboardEvent) {
-    const $searchButton = this._drawerLayout?.querySelector('.search-button') as HTMLElement;
-
-    // if (e.key === 'Enter') {
-    //   $searchButton?.click();
-    // }
-  }
-
-  private _searchKeyword() {
-    console.log('code search');
   }
 
   private _clickListButton() {
@@ -167,26 +143,6 @@ export class Codepicker extends PickerBase {
     } else {
       layerCodeList?.classList.remove('select-list');
     }
-  }
-
-  // 내부 컴포넌트의 change가 발생하면 서치폼의 change가 발생하면서 컴포넌트들의 validate를 체크
-  // 듀스 컨트롤 찾아서 거기서 validate가 하나라도 true 이면 state를 on 으로 변경
-  private _searchFormState() {
-    const searchFormField = this._drawerLayout?.querySelector('.code-filter-field ul');
-
-    // console.log(searchFormField!.querySelectorAll('[tagName^="dews-"]')); // 방법 찾기 (tag 명으로 하위 컴포넌트들 찾기)
-    // console.log(searchFormField!.querySelectorAll('*[id]')); // 방법 찾기 (tag 명으로 하위 컴포넌트들 찾기)
-    // const formControls = searchFormField?.querySelectorAll('dews-dropdownlist,dews-numerictextbox,dews-datepicker');
-    const formControls = searchFormField?.querySelectorAll('dews-dropdownlist, dews-numerictextbox');
-
-    formControls?.forEach(item => {
-      const instance = item as any;
-
-      instance.on('change', () => {
-        this.formState = !!instance.value;
-        console.log('state: ', this.formState);
-      });
-    });
   }
 
   /**
@@ -455,12 +411,6 @@ export class Codepicker extends PickerBase {
     // dataControlType에 타입에 따라
     if (this.dataControlType == 'card') {
       this._createCard();
-    }
-
-    // this._createSearchContainer();
-
-    if (this.useFilter) {
-      this._searchFormState();
     }
 
     // drawerLayout의 높이값이 변경되면 카드리스트의 높이 다시 세팅팅
