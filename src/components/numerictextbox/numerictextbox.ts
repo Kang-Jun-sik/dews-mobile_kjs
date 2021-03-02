@@ -59,6 +59,9 @@ export class Numerictextbox extends DewsFormComponent {
   @internalProperty()
   private text = '';
 
+  @internalProperty()
+  private $state = html``;
+
   private _oldValue = '';
   private _rawValue: number | '' = '';
   private _step = 1;
@@ -353,6 +356,33 @@ export class Numerictextbox extends DewsFormComponent {
   public focus(): void {
     this._focusIn();
   }
+
+  private _show(message: string, type: string) {
+    // 경고 표시 등을 나타나게 한다.
+    switch (type) {
+      case 'error':
+        this.$state = html`<span class="input-state error">${message}</span>`;
+        break;
+      case 'warning':
+        this.$state = html`<span class="input-state warning">${message}</span>`;
+        break;
+      case 'reset':
+        this.$state = html``;
+        break;
+    }
+  }
+
+  error: Function = (message: string) => {
+    this._show(message, 'error');
+  };
+
+  warning: Function = (message: string) => {
+    this._show(message, 'warning');
+  };
+
+  stateReset: Function = () => {
+    this._show('reset', 'reset');
+  };
 
   // 이벤트 등록
   public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {

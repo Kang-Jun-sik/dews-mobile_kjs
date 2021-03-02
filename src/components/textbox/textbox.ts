@@ -1,9 +1,10 @@
-import { property, PropertyValues } from 'lit-element';
+import { internalProperty, property, PropertyValues } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './textbox.html';
 import scss from './textbox.scss';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+import { html } from 'lit-html';
 
 type EVENT_TYPE = 'focus' | 'blur' | 'change';
 
@@ -36,6 +37,9 @@ export class Textbox extends DewsFormComponent {
 
   @property({ type: String, reflect: true })
   value = '';
+
+  @internalProperty()
+  $state = html``;
 
   #EVENT = new EventEmitter();
 
@@ -81,15 +85,6 @@ export class Textbox extends DewsFormComponent {
     // this.dispatchEvent(new CustomEvent('change', { detail: { target: e.target as EventTarget } }));
   }
 
-  private _show(message: string, type: string) {
-    // 경고 표시 등을 나타나게 한다.
-    if (type === 'error') {
-      alert(message);
-    } else if (type === 'warning') {
-      alert(message);
-    }
-  }
-
   click() {
     this.shadowRoot!.querySelector('input')?.focus();
   }
@@ -107,12 +102,31 @@ export class Textbox extends DewsFormComponent {
     this.#EVENT.off(key, handler);
   };
 
-  error(message: string) {
+  private _show(message: string, type: string) {
+    // 경고 표시 등을 나타나게 한다.
+    switch (type) {
+      case 'error':
+        this.$state = html`<span class="input-state error">${message}</span>`;
+        break;
+      case 'warning':
+        this.$state = html`<span class="input-state warning">${message}</span>`;
+        break;
+      case 'reset':
+        this.$state = html``;
+        break;
+    }
+  }
+  error: Function = (message: string) => {
     this._show(message, 'error');
-  }
-  warning(message: string) {
+  };
+
+  warning: Function = (message: string) => {
     this._show(message, 'warning');
-  }
+  };
+
+  stateReset: Function = () => {
+    this._show('reset', 'reset');
+  };
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('value') !== undefined && !this.multi) {
