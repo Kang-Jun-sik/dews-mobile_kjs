@@ -1,39 +1,17 @@
+@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+
+//======================================
+// dews-main-content
+//======================================
+* {
+  @include reset();
+}
+@include dews-main-content();
+
 .page-hide {
   display: none;
 }
 .page-show {
   display: block;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-#contents {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  // min-height: calc(100vh - 53px - 56px);
-  // margin: 53px 0 0;
-  padding: 53px 0 0;
-  // padding-top: 53px;
-  background-color: #efeff4;
-}
-.footer {
-  position: relative;
-  height: calc(100vh - 53px);
-  background-color: #efeff4;
-}
-.footer img {
-  display: block;
-  margin: 0 auto;
-  padding-top: 48px;
-}
-@media screen and (min-width: 1024px) {
-  .footer {
-    height: 56px;
-  }
-  .footer img {
-    display: none;
-  }
 }
