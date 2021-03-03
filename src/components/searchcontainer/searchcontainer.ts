@@ -34,9 +34,11 @@ export class SearchContainer extends DewsLayoutComponent {
   private _slotChange(e: Event) {
     Array.from(this.children).forEach($el => {
       if ($el?.tagName === 'CONTAINER-BUTTON') {
-        this.shadowRoot?.querySelector('.dews-container-option-control')?.appendChild($el as HTMLElement);
+        $el.slot = 'button';
+        // this.shadowRoot?.querySelector('.dews-container-option-control')?.appendChild($el as HTMLElement);
       } else if ($el?.tagName === 'CONTAINER-CONTENT') {
-        this.shadowRoot?.querySelector('.dews-search-field')?.appendChild($el as HTMLElement);
+        $el.slot = 'content';
+        // this.shadowRoot?.querySelector('.dews-search-field')?.appendChild($el as HTMLElement);
       }
     });
   }

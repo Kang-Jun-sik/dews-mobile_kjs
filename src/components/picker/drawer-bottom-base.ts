@@ -130,13 +130,15 @@ export class DrawerBottomBase extends DewsFormComponent {
   }
 
   protected _scrollChange($el: Element): void {
-    window.scrollTo(
-      0,
-      window.pageYOffset +
-        $el.parentElement!.getBoundingClientRect()?.top -
-        $el.shadowRoot!.getElementById('drawer')!.clientHeight -
-        25
-    );
+    if ($el.parentElement) {
+      window.scrollTo(
+        0,
+        window.pageYOffset +
+          $el.parentElement!.getBoundingClientRect()!.top -
+          $el.shadowRoot!.getElementById('drawer')!.clientHeight -
+          25
+      );
+    }
   }
 
   protected domEvent: EventListener = this._domClickHandler.bind(this) as EventListener;

@@ -33,7 +33,7 @@ ${this.multi?html`
                   <dews-checkbox ?checked="${this._allCheckState}"></dews-checkbox>
                 </span>
         </li>
-        <slot></slot>
+        <slot @slotchange="${this._slotChange}"></slot>
         <!--  ${this.$itemList}-->
       </ul>
     </div>
@@ -47,7 +47,7 @@ ${this.multi?html`
     </div>
     <div class="control" >
       <ul class="list">
-        <slot></slot>
+        <slot @slotchange="${this._slotChange}"></slot>
 <!--        ${this.$itemList}-->
       </ul>
     </div>

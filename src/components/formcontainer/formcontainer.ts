@@ -17,11 +17,14 @@ export class FormContainer extends DewsLayoutComponent {
   private _slotChange(e: Event) {
     for (let i = 0; i < this.children.length; i++) {
       if (this.children.item(i)?.tagName === 'CONTAINER-BUTTON') {
-        this.shadowRoot
-          ?.querySelector('.dews-container-option-control')
-          ?.appendChild(this.children.item(i) as HTMLElement);
+        (this.children.item(i) as HTMLElement).slot = 'button';
+        // this.shadowRoot
+        //   ?.querySelector('.dews-container-option-control')
+        //   ?.appendChild(this.children.item(i) as HTMLElement);
       } else if (this.children.item(i)?.tagName === 'CONTAINER-CONTENT') {
-        this.shadowRoot?.querySelector('.dews-container-option-control')?.append(this.children.item(i) as HTMLElement);
+        (this.children.item(i) as HTMLElement).slot = 'content';
+        // this.shadowRoot?.querySelector('.dews-container-option-conztrol')?
+        // .append(this.children.item(i) as HTMLElement);
       }
     }
   }

@@ -1,6 +1,8 @@
 <div class="dews-container-option-control">
   ${this.title == undefined?null :html`<h3 class="option-sub-title">${this.title}</h3>`}
+  <slot name="button"></slot>
 </div>
+<slot name="content"></slot>
 <slot @slotchange="${this._slotChange}">
 </slot>
 

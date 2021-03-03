@@ -38,6 +38,7 @@ export const CardList = () => html`
         auto-bind
         datasource="datasource1"
         column-type="2"
+        use-total-count
         use-card-header
         use-card-collapse
         header-options=${JSON.stringify({
@@ -49,7 +50,6 @@ export const CardList = () => html`
           useBookmark: true,
           status: 'complete'
         })}
-        use-total-count
         use-control-set
         use-all-select
       >

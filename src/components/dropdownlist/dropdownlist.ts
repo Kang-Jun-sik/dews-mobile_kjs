@@ -90,8 +90,8 @@ export class Dropdownlist extends DrawerBottomBase {
    * 체크된 아이템의 data 를 반환합니다.
    * @return Array<Object> 체크된 아이템의 Array 를 반환함니다.
    * */
-  getCheckItems(): Array<object> {
-    const resultValue: Array<object> = [];
+  getCheckItems(): Array<any> {
+    const resultValue: Array<any> = [];
     this.querySelectorAll('dropdownlist-item').forEach($item => {
       if (($item as DropdownlistItem).checked) {
         const obj = {
@@ -104,6 +104,25 @@ export class Dropdownlist extends DrawerBottomBase {
       }
     });
     return resultValue;
+  }
+
+  /**
+   * 체크된 아이템의 data 를 반환합니다.
+   * @return any 체크된 아이템의 Object 를 반환함니다.
+   * */
+  getCheckItem(): any {
+    let obj = {};
+    this.querySelectorAll('dropdownlist-item').forEach($item => {
+      if (($item as DropdownlistItem).checked) {
+        return (obj = {
+          [this.field]: ($item as Columnitem).field,
+          [this.labelField]: ($item as Columnitem).label,
+          [this.checkedField]: ($item as Columnitem).checked,
+          [this.disabledField]: ($item as Columnitem).disabled
+        });
+      }
+    });
+    return obj;
   }
 
   /**
@@ -429,6 +448,15 @@ export class Dropdownlist extends DrawerBottomBase {
         this.text = '';
       }
     }
+  }
+
+  private _slotChange() {
+    this.select = [];
+    Array.from(this.children).forEach($el => {
+      if (($el as DropdownlistItem).checked) {
+        this.select.push(($el as DropdownlistItem).title);
+      }
+    });
   }
 
   render() {
