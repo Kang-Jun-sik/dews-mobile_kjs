@@ -110,9 +110,12 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
 
   private _bindDataEvent(): void {
     // ObserveArray 인스턴스화 할 경우 새로 등록 필요
-    this._data?.onChange(e => {
-      this._triggerChange(e);
-    });
+    this._data?.onChange(this._triggerChange);
+  }
+
+  private _bindDataRemoveEvent(): void {
+    // ObserveArray 인스턴스화 할 경우 새로 등록 필요
+    this._data?.removeChange(this._triggerChange);
   }
 
   async connectedCallback() {
@@ -126,9 +129,12 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   }
 
   // region LifeCycle
-  disconnectedCallback() {
+  async disconnectedCallback() {
     console.log('disconnectedCallback');
     super.disconnectedCallback();
+
+    await this.updateComplete;
+    this._bindDataRemoveEvent();
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {

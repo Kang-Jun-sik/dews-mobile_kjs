@@ -401,7 +401,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 카드리스트 요소 생성
   private _createCardListElement = () => {
     this._checkboxList = [];
-
     if (this._datasource) {
       const dataList = this._cardData;
       this._totalCount = dataList.length;
@@ -894,24 +893,29 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   }
   // endregion
 
+  private _first = true;
+
   // region LifeCycle
   async connectedCallback() {
     super.connectedCallback();
     console.log('connectedCallback');
-    this._getFields();
-    this._initOptions();
-    this._createElements();
-
-    await this.updateComplete;
-    console.log('updateComplete');
-    // 컬럼 셋 이벤트 헨들러 등록
-    const columnSetElement = this.shadowRoot?.querySelector('columnset-button') as Columnsetbutton;
-    if (columnSetElement) {
-      columnSetElement.on('open', this._columnSetOpenHandler);
-      columnSetElement.on('complete', this._columnSetCompleteHandler);
+    if (this._first) {
+      this._getFields();
+      this._first = false;
+      await this.updateComplete;
+      await this._initOptions();
+      await this._createElements();
+      console.log('updateComplete');
+      // 컬럼 셋 이벤트 헨들러 등록
+      const columnSetElement = this.shadowRoot?.querySelector('columnset-button') as Columnsetbutton;
+      if (columnSetElement) {
+        columnSetElement.on('open', this._columnSetOpenHandler);
+        columnSetElement.on('complete', this._columnSetCompleteHandler);
+      }
     }
   }
-  disconnectedCallback() {
+
+  async disconnectedCallback() {
     console.log('disconnectedCallback');
     super.disconnectedCallback();
   }
