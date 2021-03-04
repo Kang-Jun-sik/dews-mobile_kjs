@@ -188,27 +188,29 @@ export class Dropdownlist extends DrawerBottomBase {
    * @param {Boolean} data.(checked-field) 아이템의 초기 체크유무를 설정합니다.
    * @param {Boolean} data.(disabled-field) 아이템의 선택 가능여부를 설정합니다.
    * */
-  setItem(data: object) {
-    const item = document.createElement('dropdownlist-item') as DropdownlistItem;
-    for (const mapKey in data) {
-      const map = new Map(Object.entries(data));
-      switch (mapKey) {
-        case `${this.field}`:
-          item.field = map.get(`${this.field}`);
-          break;
-        case `${this.labelField}`:
-          item.label = map.get(`${this.labelField}`);
-          break;
-        case `${this.checkedField}`:
-          item.checked = Boolean(map.get(`${this.checkedField}`));
-          break;
-        case `${this.disabledField}`:
-          item.disabled = Boolean(map.get(`${this.disabledField}`));
-          break;
+  async setItem(data: object) {
+    await this.removeItems().then(() => {
+      const item = document.createElement('dropdownlist-item') as DropdownlistItem;
+      for (const mapKey in data) {
+        const map = new Map(Object.entries(data));
+        switch (mapKey) {
+          case `${this.field}`:
+            item.field = map.get(`${this.field}`);
+            break;
+          case `${this.labelField}`:
+            item.label = map.get(`${this.labelField}`);
+            break;
+          case `${this.checkedField}`:
+            item.checked = Boolean(map.get(`${this.checkedField}`));
+            break;
+          case `${this.disabledField}`:
+            item.disabled = Boolean(map.get(`${this.disabledField}`));
+            break;
+        }
       }
-    }
-    this.appendChild(item);
-    this._selectChange();
+      this.appendChild(item);
+      this._selectChange();
+    });
   }
 
   /**

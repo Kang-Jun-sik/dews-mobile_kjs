@@ -87,7 +87,7 @@ export class Zipcodepicker extends DrawerBottomBase {
     (this.shadowRoot?.querySelector('dews-textbox') as Textbox).warning(message);
   }
 
-  private _oncomplete(data: any) {
+  private async _oncomplete(data: any) {
     let addr = '';
     let selectType: ADDRESS_TYPE = this.type;
     switch (this.type) {
@@ -118,15 +118,22 @@ export class Zipcodepicker extends DrawerBottomBase {
     if (this.detail) {
       (this.shadowRoot?.querySelector('dews-textbox') as Textbox).focus();
     }
-    this.shadowRoot?.querySelector('iframe')?.remove();
-    this._createZip(this);
+    await this._remove();
+    await this._createZip(this);
+  }
+
+  private async _remove() {
+    await this.shadowRoot?.querySelector('#iframe')?.remove();
+    const div = document.createElement('div');
+    div.id = 'iframe';
+    await this.shadowRoot?.querySelector('.control')?.appendChild(div);
   }
 
   private async _resetClickHandler(e: Event) {
     this.address = '';
     this.detailAddress = '';
     this.zipCode = '';
-    await this.shadowRoot?.querySelector('iframe')?.remove();
+    await this._remove();
     await this._createZip(this);
   }
 
