@@ -27,11 +27,31 @@ export const Codepicker = () => html`<div style="width: 360px">
     </ds-schema>
   </dews-datasource>
 
-  <dews-codepicker title="싱글" help-title="싱글도움창" code-field="age" text-field="name">
+  <dews-codepicker title="싱글" help-title="싱글도움창" code-field="age" text-field="name" id="c1">
     <dews-cardlist datasource="datasource1">
       <cardlist-field name="name" field="name" title="이름"></cardlist-field>
       <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
       <cardlist-field name="address" field="address" title="주소"></cardlist-field>
+    </dews-cardlist>
+
+    <codepicker-search filter-disabled>
+      <dews-dropdownlist id="ddl1" title="이름">
+        <dropdownlist-item title="DATA-1"></dropdownlist-item>
+        <dropdownlist-item title="DATA-2"></dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-dropdownlist id="ddl2" title="주소">
+        <dropdownlist-item title="DATA-1">1</dropdownlist-item>
+        <dropdownlist-item title="DATA-2">2</dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-textbox id="txtbox" title="나이"> </dews-textbox>
+    </codepicker-search>
+  </dews-codepicker>
+
+  <dews-codepicker multi title="멀티" help-title="사원 코드 도움창" code-field="age" text-field="name" id="c2">
+    <dews-cardlist datasource="datasource1">
+      <cardlist-field name="name" field="name" title="이름"></cardlist-field>
+      <cardlist-field name="address" field="address" title="주소"></cardlist-field>
+      <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
     </dews-cardlist>
 
     <codepicker-search>
@@ -47,7 +67,43 @@ export const Codepicker = () => html`<div style="width: 360px">
     </codepicker-search>
   </dews-codepicker>
 
-  <dews-codepicker multi title="멀티" help-title="사원 코드 도움창" code-field="age" text-field="name">
+  <dews-codepicker
+    multi
+    title="readonly"
+    help-title="사원 코드 도움창"
+    code-field="age"
+    text-field="name"
+    id="c2"
+    readonly
+  >
+    <dews-cardlist datasource="datasource1">
+      <cardlist-field name="name" field="name" title="이름"></cardlist-field>
+      <cardlist-field name="address" field="address" title="주소"></cardlist-field>
+      <cardlist-field name="age" field="age" title="나이" type="number"></cardlist-field>
+    </dews-cardlist>
+
+    <codepicker-search>
+      <dews-dropdownlist id="ddl1" title="이름">
+        <dropdownlist-item title="DATA-1"></dropdownlist-item>
+        <dropdownlist-item title="DATA-2"></dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-dropdownlist id="ddl2" title="주소">
+        <dropdownlist-item title="DATA-1">1</dropdownlist-item>
+        <dropdownlist-item title="DATA-2">2</dropdownlist-item>
+      </dews-dropdownlist>
+      <dews-textbox id="txtbox" title="나이"> </dews-textbox>
+    </codepicker-search>
+  </dews-codepicker>
+
+  <dews-codepicker
+    multi
+    title="disabled"
+    help-title="사원 코드 도움창"
+    code-field="age"
+    text-field="name"
+    id="c2"
+    disabled
+  >
     <dews-cardlist datasource="datasource1">
       <cardlist-field name="name" field="name" title="이름"></cardlist-field>
       <cardlist-field name="address" field="address" title="주소"></cardlist-field>

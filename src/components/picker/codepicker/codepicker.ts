@@ -1,4 +1,4 @@
-import { html, internalProperty, property, PropertyValues, query, TemplateResult } from 'lit-element';
+import { internalProperty, property, PropertyValues, query } from 'lit-element';
 
 import template from './codepicker.html';
 import scss from './codepicker.scss';
@@ -59,6 +59,18 @@ export class Codepicker extends PickerBase {
   @property({ type: String, attribute: 'data-control-type' })
   dataControlType = 'card';
 
+  @property()
+  private text: string | undefined;
+
+  @property()
+  private texts: Array<string> = [];
+
+  @property()
+  private code: string | undefined;
+
+  @property()
+  private codes: Array<string> = [];
+
   @internalProperty()
   private useFilter = true;
 
@@ -69,31 +81,10 @@ export class Codepicker extends PickerBase {
   private filterDisabled = false;
 
   @internalProperty()
-  private searchFilterSet = false;
-
-  @internalProperty()
   private height: string | undefined;
 
   @internalProperty()
   private selectTotal = 0;
-
-  @internalProperty()
-  private text: string | undefined;
-
-  @internalProperty()
-  private texts: Array<string> = [];
-
-  @internalProperty()
-  private code: string | undefined;
-
-  @internalProperty()
-  private codes: Array<string> = [];
-
-  @internalProperty()
-  private formState = false;
-
-  @internalProperty()
-  private searchFormList: Array<HTMLCollection> = [];
 
   @internalProperty()
   private _allCheckState = false;
@@ -110,10 +101,15 @@ export class Codepicker extends PickerBase {
   }
 
   async connectedCallback() {
-    super.connectedCallback();
     console.log('connect!!');
+    super.connectedCallback();
 
-    // this._createSearchContainer();
+    // disabled 와 readonly 중 disabled 를 우선 처리한다.
+    if (this.disabled && this.readonly) {
+      this.readonly = false;
+    } else if (this.readonly) {
+      this.disabled = false;
+    }
   }
 
   // 적용 버튼 클릭 시
@@ -133,26 +129,6 @@ export class Codepicker extends PickerBase {
     const $search = this.querySelector('codepicker-search')!;
 
     this._drawerLayout?.querySelector('.layer-code-filter')?.appendChild($search);
-  }
-
-  private _clickListButton() {
-    const layerCodeList = this._drawerLayout?.querySelector('.cardlist-all-select') as HTMLElement;
-
-    if (!layerCodeList.classList.contains('select-list')) {
-      layerCodeList?.classList.add('select-list');
-    } else {
-      layerCodeList?.classList.remove('select-list');
-    }
-  }
-
-  /**
-   * 코드 도움 다이얼로그 이벤트를 발생시킵니다.
-   * @param {string} [keyword] 검색어
-   * @param {object|array} [initData] 초기화 데이터
-   * @private
-   */
-  private _triggerCodeDialog() {
-    console.log('triggerCodeDialog');
   }
 
   /**
@@ -269,6 +245,7 @@ export class Codepicker extends PickerBase {
       cardList!.useHeader = true;
       cardList!.useListSelect = true;
       cardList!.setAttribute('header-options', JSON.stringify({ useBookmark: false })); // 북마크 안나오도록 설정
+      cardList!.setAttribute('use-control-set', ''); // 컬럼
       cardList!.setAttribute('codepicker', ''); // 코드피커 내에서 사용하는 카드리스트의 경우 codepicker 추가함
 
       if (this.multi) {
@@ -391,13 +368,6 @@ export class Codepicker extends PickerBase {
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     console.log('shouldUpdate');
-    const filterButton = this._drawerLayout?.querySelector('.filter-button') as HTMLElement;
-
-    if (this.formState) {
-      filterButton?.classList.add('setting');
-    } else {
-      filterButton?.classList.remove('setting');
-    }
 
     return super.shouldUpdate(_changedProperties);
   }
@@ -462,8 +432,8 @@ export class Codepicker extends PickerBase {
 
   // 카드리스트의 .list-select-button 클릭 시
   private _selectButtonHandler() {
-    const allSelectElement = this._cardList?.shadowRoot!.querySelector('.cardlist-all-select') as HTMLElement;
-    let nodataElement = this._cardList?.shadowRoot!.querySelector(
+    const allSelectElement = this._cardList?.shadowRoot?.querySelector('.cardlist-all-select') as HTMLElement;
+    let nodataElement = this._cardList?.shadowRoot?.querySelector(
       '.cardlist-wrap > .cardlist > .card-nodata'
     ) as HTMLElement;
     let nodata: boolean | undefined = undefined;
@@ -476,7 +446,7 @@ export class Codepicker extends PickerBase {
 
       this._setCardlistHeight(this._drawerLayout);
     } else {
-      if (!this._cardList?.shadowRoot!.querySelector('.cardlist-wrap > .cardlist > .card-nodata')) {
+      if (!this._cardList?.shadowRoot?.querySelector('.cardlist-wrap > .cardlist > .card-nodata')) {
         const noDataDiv = document.createElement('div');
         const noDataSpan = document.createElement('span');
 
