@@ -2,6 +2,8 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 import template from './complex.html';
 import scss from './complex.scss';
 import { html, property, PropertyValues, TemplateResult } from 'lit-element';
+import { Button, SIZE_LIST } from '../button/button.js';
+import { Dropdownbutton } from '../dropdownbutton/dropdownbutton.js';
 
 export enum WIDTH_TYPE {
   variable = 'variable',
@@ -52,6 +54,21 @@ export class Complex extends DewsFormComponent {
       this.setAttribute('required', '');
     }
 
+    // 버튼 크기 수정
+    switch (component.tagName) {
+      case 'DEWS-BUTTON':
+        if ((component as Button).size !== 'large') {
+          (component as Button).size = SIZE_LIST.large;
+        }
+        break;
+      case 'DEWS-DROPDOWNBUTTON':
+        if ((component as Dropdownbutton).size !== 'large') {
+          (component as Dropdownbutton).size = SIZE_LIST.large;
+        }
+        break;
+    }
+
+    // width 수정
     switch (component.tagName) {
       case 'SPAN':
         if (component.classList.contains('text')) {
