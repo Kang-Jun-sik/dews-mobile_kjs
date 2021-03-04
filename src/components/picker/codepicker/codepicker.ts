@@ -59,17 +59,17 @@ export class Codepicker extends PickerBase {
   @property({ type: String, attribute: 'data-control-type' })
   dataControlType = 'card';
 
-  @property()
-  private text: string | undefined;
+  @property({ type: String })
+  text: string | undefined;
 
   @property()
-  private texts: Array<string> = [];
+  texts: Array<string> = [];
+
+  @property({ type: String })
+  code: string | undefined;
 
   @property()
-  private code: string | undefined;
-
-  @property()
-  private codes: Array<string> = [];
+  codes: Array<string> = [];
 
   @internalProperty()
   private useFilter = true;
