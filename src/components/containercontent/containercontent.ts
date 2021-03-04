@@ -23,7 +23,7 @@ export class Containercontent extends DewsLayoutComponent {
 
   private _slotChange(e: Event) {
     Array.from(this.children).forEach($el => {
-      if (this.parentElement?.className === 'dews-search-field') {
+      if (this.parentElement?.tagName === 'DEWS-SEARCH-CONTAINER') {
         const li = document.createElement('li');
         li.appendChild($el as HTMLElement);
         this.shadowRoot?.querySelector('.form-field')?.appendChild(li);

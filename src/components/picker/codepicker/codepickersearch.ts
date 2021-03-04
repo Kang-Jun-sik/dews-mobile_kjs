@@ -41,7 +41,6 @@ export class Codepickersearch extends DewsFormComponent {
 
   connectedCallback() {
     super.connectedCallback();
-
     if (this.childElementCount === 0) {
       this.filterDisabled = true;
     }
@@ -49,47 +48,49 @@ export class Codepickersearch extends DewsFormComponent {
 
   private _slotChange(e: Event) {
     Array.from(this.children).forEach($el => {
-      const li = document.createElement('li');
-      li.appendChild($el as HTMLElement);
-      li.slot = 'content';
-      this.appendChild(li);
-      this.formList.push($el as any);
+      if ($el.tagName !== 'LI') {
+        const li = document.createElement('li');
+        li.appendChild($el as HTMLElement);
+        li.slot = 'content';
+        this.appendChild(li);
+        this.formList.push($el as any);
 
-      ($el as any).on('change', () => {
-        let dirty = false;
-        for (let i = 0; i < this.formList.length; i++) {
-          const control: any = this.formList[i];
-          switch (control.tagName) {
-            case 'DEWS-PERIODPICKER':
-            case 'DEWS-WEEKPERIODPICKER':
-            case 'DEWS-MONTHPERIODPICKER':
-              if (control.startDate && control.endDate) {
-                dirty = true;
-              }
-              break;
-            case 'DEWS-CHECKBOX-GROUP':
-              if (control.value.length > 0) {
-                dirty = true;
-              }
-              break;
-            case 'DEWS-DROPDOWNLIST':
-              if (control.getCheckItems().length > 0) {
-                dirty = true;
-              }
-              break;
-            default:
-              if (control.value) {
-                dirty = true;
-              }
+        ($el as any).on('change', () => {
+          let dirty = false;
+          for (let i = 0; i < this.formList.length; i++) {
+            const control: any = this.formList[i];
+            switch (control.tagName) {
+              case 'DEWS-PERIODPICKER':
+              case 'DEWS-WEEKPERIODPICKER':
+              case 'DEWS-MONTHPERIODPICKER':
+                if (control.startDate && control.endDate) {
+                  dirty = true;
+                }
+                break;
+              case 'DEWS-CHECKBOX-GROUP':
+                if (control.value.length > 0) {
+                  dirty = true;
+                }
+                break;
+              case 'DEWS-DROPDOWNLIST':
+                if (control.getCheckItems().length > 0) {
+                  dirty = true;
+                }
+                break;
+              default:
+                if (control.value) {
+                  dirty = true;
+                }
+            }
           }
-        }
 
-        if (dirty) {
-          this.btnFilter?.classList.add('setting');
-        } else {
-          this.btnFilter?.classList.remove('setting');
-        }
-      });
+          if (dirty) {
+            this.btnFilter?.classList.add('setting');
+          } else {
+            this.btnFilter?.classList.remove('setting');
+          }
+        });
+      }
     });
   }
 
@@ -180,7 +181,7 @@ export class Codepickersearch extends DewsFormComponent {
         </div>
         <div class="code-filter-field">
           <ul class="form-field">
-            <slot name="content"></slot>
+            <slot id="content" name="content"></slot>
           </ul>
         </div>
       </div>
