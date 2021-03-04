@@ -21,6 +21,9 @@ export class PickerBase extends DrawerBottomBase {
   @property({ type: Boolean })
   spinner: boolean | undefined = false;
 
+  @property({ type: Boolean })
+  dimming = false;
+
   @property({ type: Boolean, attribute: 'holidays-visible' })
   visible = false;
 

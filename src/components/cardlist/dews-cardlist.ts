@@ -938,7 +938,7 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   protected updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
     console.log('updated', this);
-    if (typeof _changedProperties.get('_totalCount') === 'number' && this._totalCount > 0) {
+    if (typeof _changedProperties.get('_totalCount') === 'number' && this._totalCount >= 0) {
       this._createTotalCardCountElement();
       this._createAllSelectElement();
     }
