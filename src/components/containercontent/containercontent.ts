@@ -25,6 +25,7 @@ export class Containercontent extends DewsLayoutComponent {
     Array.from(this.children).forEach($el => {
       if (this.parentElement?.tagName === 'DEWS-SEARCH-CONTAINER') {
         const li = document.createElement('li');
+        li.classList.add('col');
         li.appendChild($el as HTMLElement);
         this.shadowRoot?.querySelector('.form-field')?.appendChild(li);
       } else {
