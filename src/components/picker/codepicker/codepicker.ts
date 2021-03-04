@@ -127,8 +127,7 @@ export class Codepicker extends PickerBase {
 
   private _createSearchContainer() {
     const $search = this.querySelector('codepicker-search')!;
-
-    this._drawerLayout?.querySelector('.layer-code-filter')?.appendChild($search);
+    $search.slot = 'search';
   }
 
   /**
@@ -226,12 +225,18 @@ export class Codepicker extends PickerBase {
     this.helpParams = params;
   }
 
-  public on(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+  public on(
+    key: EVENT_TYPE,
+    handler: (e: { data: any; target: Codepicker; type: string }, ...args: unknown[]) => void
+  ) {
     this._EVENT.on(key, handler);
   }
 
   // 이벤트 삭제
-  public off(key: EVENT_TYPE, handler: (e: EventArgs, ...args: unknown[]) => void) {
+  public off(
+    key: EVENT_TYPE,
+    handler: (e: { data: any; target: Codepicker; type: string }, ...args: unknown[]) => void
+  ) {
     this._EVENT.off(key, handler);
   }
 

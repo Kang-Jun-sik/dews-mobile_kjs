@@ -1,5 +1,5 @@
 import { DewsFormComponent } from '../../base/DewsFormComponent.js';
-import { internalProperty, property, query } from 'lit-element';
+import { internalProperty, property, PropertyValues, query } from 'lit-element';
 import { html } from 'lit-html';
 import scss from './codepickersearch.scss';
 import { Codepicker } from './codepicker.js';
@@ -21,6 +21,9 @@ export class Codepickersearch extends DewsFormComponent {
   // 필터영역 액티브 여부
   @property()
   filterActive = false;
+
+  @property({ type: String, reflect: true })
+  value: string | null = '';
 
   @internalProperty()
   private _datasource?: DataSource;
@@ -48,8 +51,8 @@ export class Codepickersearch extends DewsFormComponent {
     Array.from(this.children).forEach($el => {
       const li = document.createElement('li');
       li.appendChild($el as HTMLElement);
-      this.shadowRoot?.querySelector('.form-field')?.appendChild(li);
-
+      li.slot = 'content';
+      this.appendChild(li);
       this.formList.push($el as any);
 
       ($el as any).on('change', () => {
@@ -148,6 +151,13 @@ export class Codepickersearch extends DewsFormComponent {
     }
   }
 
+  attributeChangedCallback(name: string, old: string | null, value: string | null) {
+    super.attributeChangedCallback(name, old, value);
+    if (name === 'value') {
+      this.value = value;
+    }
+  }
+
   render() {
     return html` <div class="code-filter ${this.filterActive ? 'active' : ''}" @touchmove="${this._touchStop}">
         <div class="code-filter-search">
@@ -163,13 +173,15 @@ export class Codepickersearch extends DewsFormComponent {
           </button>
           <!-- input 활성화시 active -->
           <span class="code-filter-input">
-            <input type="text" @keydown="${this._keydown}" />
+            <input type="text" @keydown="${this._keydown}" value="${this.value}" />
             <button class="clear-button" @click="${this._clear}"><span>초기화</span></button>
             <button class="search-button" @click="${this._search}"><span>검색</span></button>
           </span>
         </div>
         <div class="code-filter-field">
-          <ul class="form-field"></ul>
+          <ul class="form-field">
+            <slot name="content"></slot>
+          </ul>
         </div>
       </div>
       <slot @slotchange="${this._slotChange}"></slot>`;
