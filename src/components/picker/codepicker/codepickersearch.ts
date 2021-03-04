@@ -9,18 +9,16 @@ import { Cardlist } from '../../cardlist/dews-cardlist.js';
 
 export class Codepickersearch extends DewsFormComponent {
   static styles = scss;
+
   private $parent: Codepicker;
 
   private formList: Array<TemplateResult> = [];
 
-  constructor() {
-    super();
-    this.$parent = this.parentElement as Codepicker;
-  }
-
-  @property()
+  // 필터영역 사용할 지 여부
+  @property({ type: Boolean, attribute: 'filter-disabled' })
   filterDisabled = false;
 
+  // 필터영역 액티브 여부
   @property()
   filterActive = false;
 
@@ -32,6 +30,19 @@ export class Codepickersearch extends DewsFormComponent {
 
   @query('.filter-button')
   btnFilter: HTMLButtonElement | undefined;
+
+  constructor() {
+    super();
+    this.$parent = this.parentElement as Codepicker;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.childElementCount === 0) {
+      this.filterDisabled = true;
+    }
+  }
 
   private _slotChange(e: Event) {
     Array.from(this.children).forEach($el => {
@@ -142,7 +153,12 @@ export class Codepickersearch extends DewsFormComponent {
         <div class="code-filter-search">
           <!-- 조건 설정 시 setting 추가  -->
           <!-- filter 사용 안 할 경우, disabled  -->
-          <button class="filter-button ${this.filterDisabled}" @click="${this._clickFilter}">
+          <button
+            class="filter-button ${this.filterDisabled ? 'disabled' : ''}"
+            @click="${this._clickFilter}"
+            ?disabled="${this.filterDisabled ? 'disabled' : ''}"
+          >
+            <!--          >-->
             <span>filiter</span>
           </button>
           <!-- input 활성화시 active -->
