@@ -138,6 +138,17 @@ export class Zipcodepicker extends DrawerBottomBase {
     // @ts-ignore
     this._zipcode = new daum.Postcode({
       oncomplete: self._oncomplete.bind(self),
+      theme: {
+        bgColor: '#fcfcfc', //바탕 배경색
+        searchBgColor: '#ffffff', //검색창 배경색
+        contentBgColor: '#ffffff', //본문 배경색(검색결과,결과없음,첫화면,검색서제스트)
+        pageBgColor: '#ffffff', //페이지 배경색
+        textColor: '#333333', //기본 글자색
+        queryTextColor: '#222222', //검색창 글자색
+        postcodeTextColor: '#fa4256', //우편번호 글자색
+        emphTextColor: '#177aff', //강조 글자색
+        outlineColor: '#eoeoeo' //테두리
+      },
       // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
       onresize: function (size: any) {
         target.style.height = size.height + 'px';
