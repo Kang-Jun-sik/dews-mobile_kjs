@@ -11,10 +11,10 @@
   </span>` : ''}
 
   <span class="zipcode-address"  @click="${this._clickHandler}">
-    <input type="text" readonly value="${this.address}">
+    <input type="text" readonly value="${this.address?this.address:''}">
   </span>
   ${this.detail?html`<span class="zipcode-detail">
-    <dews-textbox placeholder="상세주소" ?disabled="${this.disabled}" value="${this.detailAddress}" ?readonly="${this.readonly}" ?require="${this.required}"></dews-textbox>
+    <dews-textbox placeholder="상세주소" ?disabled="${this.disabled}" value="${this.detailAddress? this.detailAddress:''}" ?readonly="${this.readonly}" ?require="${this.required}"></dews-textbox>
   </span>
   ` :''}
 </div>
