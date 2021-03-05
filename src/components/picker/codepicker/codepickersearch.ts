@@ -6,6 +6,7 @@ import { Codepicker } from './codepicker.js';
 import { TemplateResult } from 'lit-html/ts3.4/lib/template-result';
 import { DataSource } from '../../datasource/dews-datasource.js';
 import { Cardlist } from '../../cardlist/dews-cardlist.js';
+import { DrawerBottomBase } from '../drawer-bottom-base.js';
 
 export class Codepickersearch extends DewsFormComponent {
   static styles = scss;
@@ -50,6 +51,9 @@ export class Codepickersearch extends DewsFormComponent {
     Array.from(this.children).forEach($el => {
       if ($el.tagName !== 'LI') {
         const li = document.createElement('li');
+        if ($el instanceof DrawerBottomBase) {
+          $el.dimming = true;
+        }
         li.appendChild($el as HTMLElement);
         li.slot = 'content';
         this.appendChild(li);
