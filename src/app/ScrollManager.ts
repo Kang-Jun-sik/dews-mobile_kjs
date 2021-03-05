@@ -65,7 +65,7 @@ export class ScrollManager {
       this.areaList.forEach((item, index) => {
         let areaOffset = window.pageYOffset + item.getBoundingClientRect().top - this.headerHeight;
         areaOffset = areaOffset - (index !== 0 ? this.areaDividerHeight : 0);
-        this.areaOffsetMap.set(areaOffset, item);
+        this.areaOffsetMap.set(Math.floor(areaOffset), item);
       });
     }
   }
