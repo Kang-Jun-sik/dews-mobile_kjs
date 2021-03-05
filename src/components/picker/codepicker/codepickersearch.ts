@@ -163,9 +163,11 @@ export class Codepickersearch extends DewsFormComponent {
           </button>
           <!-- input 활성화시 active -->
           <span class="code-filter-input">
-            <input type="text" @keydown="${this._keydown}" />
-            <button class="clear-button" @click="${this._clear}"><span>초기화</span></button>
-            <button class="search-button" @click="${this._search}"><span>검색</span></button>
+            <form action="">
+              <input type="search" name="q" @keydown="${this._keydown}" />
+              <button class="clear-button" @click="${this._clear}"><span>초기화</span></button>
+              <button class="search-button" @click="${this._search}"><span>검색</span></button>
+            </form>
           </span>
         </div>
         <div class="code-filter-field">
