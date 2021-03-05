@@ -106,31 +106,15 @@ export class Codepickersearch extends DewsFormComponent {
    * form-field 컴포넌트를 value 값을 초기화 합니다.
    * @private
    */
-  private _clear() {
-    (this.codeFilterInput as HTMLInputElement).value = '';
+  private _clear(e: Event) {
+    e.preventDefault();
 
-    for (let i = 0; i < this.formList.length; i++) {
-      const control: any = this.formList[i];
-      switch (control.tagName) {
-        case 'DEWS-PERIODPICKER':
-        case 'DEWS-WEEKPERIODPICKER':
-        case 'DEWS-MONTHPERIODPICKER':
-          control.startDate = '';
-          control.endDate = '';
-          break;
-        case 'DEWS-DROPDOWNLIST':
-          control.uncheckItems();
-          break;
-        default:
-          control.value = '';
-      }
-    }
-    if (this.btnFilter?.classList.contains('setting')) {
-      this.btnFilter?.classList.remove('setting');
-    }
+    (this.codeFilterInput as HTMLInputElement).value = '';
+    (this.codeFilterInput as HTMLInputElement).removeAttribute('val');
   }
 
-  private async _search() {
+  private _search(e?: Event) {
+    e?.preventDefault();
     const cardList: Cardlist<object> | undefined = this.$parent.shadowRoot!.querySelector(
       'dews-cardlist'
     ) as Cardlist<object>;
@@ -141,6 +125,7 @@ export class Codepickersearch extends DewsFormComponent {
     if (this._datasource === undefined) {
       this._datasource = document.getElementById(`${datasourceId}`) as DataSource;
     }
+    this.codeFilterInput?.setAttribute('val', this.codeFilterInput.value);
 
     this.$parent._codeSearchEmit();
   }
@@ -152,7 +137,20 @@ export class Codepickersearch extends DewsFormComponent {
 
   private _keydown(e: KeyboardEvent) {
     if (e.key === 'Enter') {
+      e.preventDefault();
       this._search();
+    }
+  }
+
+  private _blur(e: FocusEvent) {
+    if (
+      !(e.relatedTarget as HTMLElement).classList.contains('search-button') ||
+      !(e.relatedTarget as HTMLElement).classList.contains('clear-button')
+    ) {
+      const preVal = this.codeFilterInput?.getAttribute('val');
+      if (typeof preVal === 'string') {
+        (this.codeFilterInput as HTMLInputElement).value = preVal;
+      }
     }
   }
 
@@ -178,9 +176,11 @@ export class Codepickersearch extends DewsFormComponent {
           </button>
           <!-- input 활성화시 active -->
           <span class="code-filter-input">
-            <input type="text" @keydown="${this._keydown}" value="${this.value}" />
-            <button class="clear-button" @click="${this._clear}"><span>초기화</span></button>
-            <button class="search-button" @click="${this._search}"><span>검색</span></button>
+            <form action="">
+              <input type="search" name="q" @keydown="${this._keydown}" @blur="${this._blur}" value="${this.value}"/>
+              <button class="clear-button" @click="${this._clear}"><span>초기화</span></button>
+              <button class="search-button" @click="${this._search}"><span>검색</span></button>
+            </form>
           </span>
         </div>
         <div class="code-filter-field">
