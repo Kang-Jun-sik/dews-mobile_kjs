@@ -1,5 +1,5 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
-import { html, internalProperty, property, TemplateResult } from 'lit-element';
+import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
@@ -24,11 +24,11 @@ export class DrawerBottomBase extends DewsFormComponent {
   required: boolean | undefined = false;
 
   @property({ type: Boolean, reflect: true })
-  active: boolean | undefined = false;
+  active = false;
 
   protected _afterItem: number | undefined;
   protected $nextBtn: TemplateResult | undefined;
-  protected count: number | undefined = 0;
+  protected count = 0;
 
   protected _EVENT = new EventEmitter();
 
@@ -103,11 +103,13 @@ export class DrawerBottomBase extends DewsFormComponent {
         window.innerHeight -
           this.shadowRoot!.querySelector('.drawer-layout')!.shadowRoot!.querySelector('.layer-bottom')!.clientHeight
       ) {
-        if (this.count! > 0) {
-          this._close();
+        if (this.active && this.count > 0) {
+          this._close.call(this);
         } else {
-          this.count!++;
+          this.count = 1;
         }
+      } else {
+        this.count = 1;
       }
     }
   }
@@ -121,7 +123,7 @@ export class DrawerBottomBase extends DewsFormComponent {
   }
 
   protected _clickHandler(e: MouseEvent): void {
-    if (!this.disabled && !this.readonly && this.active === false) {
+    if (!this.disabled && !this.readonly && !this.active) {
       const $el: Drawerlayout | null = this.shadowRoot!.querySelector('.drawer-layout');
       $el!.height = `${this.shadowRoot!.getElementById('drawer')!.clientHeight + 120}px`;
       this._scrollChange(this);
@@ -130,7 +132,7 @@ export class DrawerBottomBase extends DewsFormComponent {
   }
 
   protected _scrollChange($el: Element): void {
-    if ($el.parentElement) {
+    if ($el.parentElement && !this.dimming) {
       window.scrollTo(
         0,
         window.pageYOffset +
@@ -145,18 +147,30 @@ export class DrawerBottomBase extends DewsFormComponent {
 
   protected _close(): void {
     this.shadowRoot!.querySelector('.select-wrap')?.classList.remove('focus');
-    this.count = 0;
     this.#event_emit('close');
     this.active = false;
     this._blur();
     this.dispatchEvent(new Event('close'));
-    document.removeEventListener('click', this.domEvent);
   }
   protected _open(): void {
     this._focus();
     this.active = true;
     this.#event_emit('open');
     this.dispatchEvent(new Event('open'));
-    document.addEventListener('click', this.domEvent);
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+    if (_changedProperties.has('active')) {
+      if (this.active !== _changedProperties.get('active')) {
+        if (this.active) {
+          this.count = 0;
+          document.addEventListener('click', this.domEvent);
+        } else {
+          this.count = 0;
+          document.removeEventListener('click', this.domEvent);
+        }
+      }
+    }
   }
 }
