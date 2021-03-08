@@ -77,7 +77,9 @@ import {
   Monthperiodpicker,
   Weekperiodpicker,
   Codepickersearch,
-  Zipcodepicker
+  Zipcodepicker,
+  Sortbutton,
+  SortbuttonItem
 } from './components/exports.js';
 
 window.customElements.define('columnset-button', Columnsetbutton);
@@ -135,3 +137,5 @@ window.customElements.define('drawer-layout', Drawerlayout);
 window.customElements.define('container-content', Containercontent);
 window.customElements.define('container-button', Containerbutton);
 window.customElements.define('container-summary', Containersummary);
+window.customElements.define('sort-button', Sortbutton);
+window.customElements.define('sort-item', SortbuttonItem);

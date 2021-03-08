@@ -1,0 +1,10 @@
+@import 'node_modules/@dews/dews-mobile-style/scss/variables/variables';
+@import 'node_modules/@dews/dews-mobile-style/scss/mixins/_mixins';
+
+//======================================
+// cardlist sorting item
+//======================================
+* {
+  @include reset();
+}
+@include dews-drawer-sortbutton-item();
