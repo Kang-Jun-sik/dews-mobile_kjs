@@ -51,3 +51,5 @@ export { Monthperiodpicker } from './picker/monthperiodpicker/monthperiodpicker.
 export { Codepicker } from './picker/codepicker/codepicker.js';
 export { Codepickersearch } from './picker/codepicker/codepickersearch.js';
 export { Zipcodepicker } from './picker/zipcodepicker/zipcodepicker.js';
+export { Sortbutton } from './sortbutton/sortbutton.js';
+export { SortbuttonItem } from './sortbutton/sortbutton-item.js';

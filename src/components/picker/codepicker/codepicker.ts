@@ -509,6 +509,7 @@ export class Codepicker extends PickerBase {
         const cardList = this.querySelector('dews-cardlist') as Cardlist<object>;
 
         this._cardList = cardList;
+        this._cardList.dimming = true;
         this._drawerLayout?.querySelector('.cardlist-wrap')?.append(this._cardList);
 
         new TouchScroll(this._cardList?.shadowRoot?.querySelector('.cardlist') as HTMLElement);

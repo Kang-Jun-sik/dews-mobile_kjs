@@ -19,7 +19,16 @@ export class PickerBase extends DrawerBottomBase {
   max: string | undefined = '21000101';
 
   @property({ type: Boolean })
-  spinner: boolean | undefined = false;
+  spinner = false;
+
+  @property({ type: Boolean })
+  disabled = false;
+
+  @property({ type: Boolean })
+  required = false;
+
+  @property({ type: Boolean })
+  readonly = false;
 
   @property({ type: Boolean })
   dimming = false;
