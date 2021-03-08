@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 import '../src/dews-mobile.js';
 // eslint-disable-next-line import/extensions
-import { Progressbar, PROGRESSBAR_OPTIONS } from '../src/components/progressbar/progressbar';
+import { Progressbar, ProgressbarOptions } from '../src/components/progressbar/progressbar';
 
 export default {
   title: 'Progressbar'
@@ -27,7 +27,7 @@ export const Progressbar1 = () => html`<div style="width: 360px">
         modal: true,
         // textTemplate: '품목을 #=percent# 설정중 입니다',
         textTemplate: '품목을 #=percent# 설정중 입니다',
-        target: 'target1'
+        target: document.querySelector('#target1') as HTMLElement
       });
     }}"
   >
@@ -53,7 +53,7 @@ export const Progressbar1 = () => html`<div style="width: 360px">
       showProgressbar('progress4', {
         total: 7,
         modal: true,
-        // textTemplate: '품목을 #=percent# 설정중 입니다',
+        textTemplate: '품목을 #=percent# 설정중 입니다',
         alterTextTemplate: '#=progress#'
       });
     }}"
@@ -66,7 +66,7 @@ export const Progressbar1 = () => html`<div style="width: 360px">
         total: 7,
         modal: true,
         autoClose: false,
-        // textTemplate: '품목을 #=percent# 설정중 입니다',
+        textTemplate: '품목을 #=percent# 설정중 입니다',
         alterTextTemplate: '#=progress#'
       });
     }}"
@@ -151,11 +151,8 @@ export const Progressbar1 = () => html`<div style="width: 360px">
   <!--  </dews-area-panel>-->
 </div>`;
 
-function showProgressbar(id?: string, options?: PROGRESSBAR_OPTIONS) {
-  const pb = new Progressbar();
-  pb.progressId = id;
-  pb.options = options;
-  pb._initProgress();
+function showProgressbar(id: string, options?: ProgressbarOptions) {
+  const pb = new Progressbar(id, options);
 
   // 값을 임의로 증가시켜 프로그래스바가 동작할 수 있게 만들어주는 코드
   if (options && options.byte) {

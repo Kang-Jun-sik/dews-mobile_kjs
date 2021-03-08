@@ -18,11 +18,13 @@ declare global {
 
 import { app } from './app/ApplicationContext.js';
 import { api, ajax } from '@dews/dews-mobile-core';
+import { ui } from './app/GlobalComponentRegister.js';
 
 window.dews = {
   app,
   api,
-  ajax
+  ajax,
+  ui
 };
 
 import {

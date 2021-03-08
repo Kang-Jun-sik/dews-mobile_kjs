@@ -4,17 +4,17 @@ import template from './progressbar.html';
 import scss from './progressbar.scss';
 import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
-export type PROGRESSBAR_OPTIONS = {
+export interface ProgressbarOptions {
   total: number;
   modal?: boolean | undefined;
   textTemplate?: string | undefined;
   alterTextTemplate?: string | undefined;
-  target?: string | undefined;
+  target?: HTMLElement | null | undefined;
   titlebar?: boolean | object | undefined;
   byte?: boolean | undefined;
   autoClose?: boolean | undefined;
   cancel?: boolean | undefined;
-};
+}
 
 export class Progressbar extends DewsFormComponent {
   static styles = scss;
@@ -43,23 +43,19 @@ export class Progressbar extends DewsFormComponent {
   @internalProperty()
   _titlebar: boolean | object | undefined = false;
 
-  // @property({ type: Object })
-  options: PROGRESSBAR_OPTIONS | undefined = {
-    total: -1
-  };
-
   private _total = -1;
   private _modal: boolean | undefined = false;
   private _originTextTemplate: string | undefined = undefined;
   private _originAlterTextTemplate: string | undefined = undefined;
-  private _target: string | undefined = undefined;
+  private _target: HTMLElement | undefined | null;
   private _byte: boolean | undefined = false;
   private _autoClose: boolean | undefined = true;
   private _status = '';
   private _current = 0;
 
-  constructor() {
+  constructor(id: string, options?: ProgressbarOptions) {
     super();
+    this._initProgress(id, options);
   }
 
   render() {
@@ -70,13 +66,13 @@ export class Progressbar extends DewsFormComponent {
     super.firstUpdated(_changedProperties);
   }
 
-  _initProgress() {
-    if (this.options && this.options.total <= 0) {
+  _initProgress(id: string, options?: ProgressbarOptions) {
+    if (options && options?.total <= 0) {
       console.log('total 값은 0보다 커야합니다.');
       this.close();
       return;
     }
-    if (this.progressId === undefined) {
+    if (id === undefined) {
       console.log('progressId 를 설정해주세요');
       this.close();
       return;
@@ -84,8 +80,8 @@ export class Progressbar extends DewsFormComponent {
     const body = document.querySelector('body');
 
     if (body !== null) {
-      if (this.options?.target !== undefined) {
-        const targetElement = body.querySelector<HTMLElement>('#' + this.options.target);
+      if (options?.target !== undefined) {
+        const targetElement = options.target;
         if (targetElement !== null) {
           targetElement.style.position = 'relative';
           this._className += ' field';
@@ -97,40 +93,19 @@ export class Progressbar extends DewsFormComponent {
     }
 
     this._className += ' active';
-
-    for (const prop in this.options) {
-      switch (prop) {
-        case 'total':
-          this._total = this.options[prop];
-          break;
-        case 'modal':
-          this._modal = this.options[prop];
-          break;
-        case 'textTemplate':
-          this._textTemplate = this.options[prop];
-          this._originTextTemplate = this.options[prop];
-          break;
-        case 'alterTextTemplate':
-          this._alterTextTemplate = this.options[prop];
-          this._originAlterTextTemplate = this.options[prop];
-          break;
-        case 'target':
-          this._target = this.options[prop];
-          break;
-        case 'titlebar':
-          this._titlebar = this.options[prop];
-          break;
-        case 'byte':
-          this._byte = this.options[prop];
-          break;
-        case 'autoClose':
-          this._autoClose = this.options[prop];
-          break;
-        case 'cancel':
-          this.cancel = this.options[prop];
-          break;
-      }
+    if (options) {
+      this._total = options.total;
     }
+    this._modal = options?.modal || false;
+    this._textTemplate = options?.textTemplate;
+    this._originTextTemplate = options?.textTemplate;
+    this._alterTextTemplate = options?.alterTextTemplate;
+    this._originAlterTextTemplate = options?.alterTextTemplate;
+    this._target = options?.target;
+    this._titlebar = options?.titlebar || false;
+    this._byte = options?.byte || false;
+    this._autoClose = options?.autoClose || true;
+    this.cancel = options?.cancel;
 
     if (this._modal) {
       this._className += ' bg-add';

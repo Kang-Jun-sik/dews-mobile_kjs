@@ -2,16 +2,26 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './loading.html';
 import scss from './loading.scss';
-import { property } from 'lit-element';
+import { internalProperty } from 'lit-element';
+
+export interface LoadingOptions {
+  target?: HTMLElement | null;
+  message?: string;
+}
 
 export class Loading extends DewsFormComponent {
   static styles = scss;
 
-  @property({ type: String })
-  message = 'Loading...';
+  constructor(option?: LoadingOptions) {
+    super();
+    this.target = option?.target;
+    this.message = option?.message;
+  }
 
-  @property({ type: String })
-  target = 'page';
+  @internalProperty()
+  message: string | undefined = 'Loading...';
+
+  target: HTMLElement | undefined | null;
 
   private _className = 'dews-loading';
 
@@ -19,14 +29,15 @@ export class Loading extends DewsFormComponent {
     return template.call(this);
   }
 
+  // 로딩 띄우기
   show() {
     const body = document.querySelector('body');
     if (body !== null) {
-      if (this.target === 'page') {
+      if (!this.target) {
         this._className += ' page';
         body.append(this);
       } else {
-        const targetElement = body.querySelector<HTMLElement>('#' + this.target);
+        const targetElement = this.target;
         if (targetElement !== null) {
           targetElement.style.position = 'relative';
           this._className += ' field';
@@ -36,18 +47,27 @@ export class Loading extends DewsFormComponent {
     }
   }
 
+  // 로딩 없애기
   hide() {
     let loading;
-    if (this.target === 'page') {
+    if (!this.target) {
       loading = document.querySelector('body>dews-loading');
     } else {
-      const body = document.querySelector('body');
-      if (body !== null) {
-        loading = body.querySelector('#' + this.target + '>dews-loading');
+      // 타겟에서 띄운 로딩을 찾아서 지우기 위한 코드
+      const childrenList = this.target?.children;
+      for (let i = 0; i < childrenList?.length; i++) {
+        if (childrenList[i].tagName === 'DEWS-LOADING') {
+          loading = childrenList[i];
+          break;
+        }
+        const body = document.querySelector('body');
+        if (body !== null) {
+          // loading = body.querySelector('#' + this.target + '>dews-loading');
+          loading = this.target.querySelector('dews-loading');
+        }
       }
     }
-
-    if (loading !== null && loading !== undefined) {
+    if (loading) {
       loading.remove();
     }
   }

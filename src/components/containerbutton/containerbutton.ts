@@ -4,7 +4,7 @@ import scss from './containerbutton.scss';
 import { DataSet, SearchContainer, SearchData } from '../searchcontainer/searchcontainer.js';
 import { FormContainer } from '../formcontainer/formcontainer.js';
 import { Tooltip } from '../tooltip/tooltip.js';
-import { Messagebox } from '../messagebox/dews-messagebox.js';
+import { Messagebox } from '../messagebox/messagebox.js';
 import { date } from '@dews/dews-mobile-core';
 import DrawerRightBase from '../base/DrawerRightBase.js';
 import { query } from 'lit-element/lib/decorators';
@@ -194,14 +194,13 @@ export class Containerbutton extends DrawerRightBase {
 
   private _showToolTip(target: HTMLElement, title: string) {
     if (title) {
-      const tooltip = new Tooltip();
-      tooltip.options = {
+      const tooltip = new Tooltip(target, {
         type: 'normal',
         text: title,
         position: 'bottom',
         fadeOutTime: 0
-      };
-      tooltip._target = target;
+      });
+
       tooltip.show();
 
       this._scrollHandler = this._removeTooltip.bind(this, tooltip) as EventListener;
@@ -260,14 +259,11 @@ export class Containerbutton extends DrawerRightBase {
    * @private
    */
   private _removeAllData() {
-    const msgBox = new Messagebox();
-    msgBox.message = '데이터 Set 내역을 모두 삭제하시겠습니까?';
-    msgBox.options = {
+    const msgBox = new Messagebox('데이터 Set 내역을 모두 삭제하시겠습니까?', 'alert', {
       id: 'msgBox5',
       align: 'center',
       icon: 'question'
-    };
-    msgBox.show();
+    });
 
     msgBox.yes(() => {
       const list = JSON.parse(localStorage.dataSet);
