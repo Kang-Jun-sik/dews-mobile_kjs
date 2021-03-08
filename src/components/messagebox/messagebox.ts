@@ -7,33 +7,41 @@ import { property } from 'lit-element';
 type ALIGN_LIST = 'center' | 'left' | 'right';
 type ICON_LIST = 'success' | 'info' | 'error' | 'question' | 'warning';
 type CHECKBOX_TYPE = 'none' | 'never' | 'today';
-export type MSGBOX_OPTIONS = {
+// alert - 확인버튼 | confirm - 예/아니오버튼 (cancel 이 true 면 예/아니오/취소버튼) | error - 확인버튼
+export type MESSAGEBOX_TYPE = 'alert' | 'confirm' | 'error';
+export interface MessageboxOptions {
   align?: ALIGN_LIST | undefined;
   icon?: ICON_LIST | undefined;
   cancel?: boolean | undefined;
   showCheckbox?: CHECKBOX_TYPE | undefined;
   id?: string | undefined;
-};
+}
 
 export class Messagebox extends DewsFormComponent {
   static styles = scss;
 
-  constructor() {
+  constructor(message: string, messageBoxType: MESSAGEBOX_TYPE, options: MessageboxOptions) {
     super();
+
+    this.message = message;
+    this._messageboxType = messageBoxType;
+    this._align = options.align || 'center';
+    this._cancel = options.cancel || false;
+    this._showCheckbox = options.showCheckbox || 'none';
+    this._id = options.id || '';
+    this._icon = options.icon || 'success';
+
+    if (this._getCookie(this._id) === 'Y') {
+      this.remove();
+    } else {
+      this._show();
+    }
   }
 
   @property({ type: String })
   message = '';
 
-  @property({ type: Object })
-  options: MSGBOX_OPTIONS = {
-    align: 'center',
-    icon: 'success',
-    cancel: false,
-    showCheckbox: 'none',
-    id: ''
-  };
-
+  private _messageboxType = 'alert';
   private _icon: ICON_LIST | undefined = 'success';
   private _align: ALIGN_LIST | undefined = 'center';
   private _cancel: boolean | undefined = false;
@@ -47,43 +55,9 @@ export class Messagebox extends DewsFormComponent {
   private _resolves: Array<Function> = [];
   private _rejects: Array<Function> = [];
   private _callbackResult: string | undefined = '';
-  // alert - 확인버튼 | confirm - 예/아니오버튼 (cancel 이 true 면 예/아니오/취소버튼) | error - 확인버튼
-  private _messageboxType = 'alert';
 
   render() {
     return template.call(this);
-  }
-
-  // 메시지박스 출력
-  show() {
-    for (const prop in this.options) {
-      switch (prop) {
-        case 'align':
-          this._align = this.options[prop];
-          break;
-        case 'cancel':
-          this._cancel = this.options[prop];
-          break;
-        case 'showCheckbox':
-          this._showCheckbox = this.options[prop];
-          break;
-        case 'id':
-          this._id = this.options[prop];
-          break;
-        case 'icon':
-          this._icon = this.options.icon;
-          // TODO 지금은 보여지기 위해 임의로 question 또는 warning 일 경우 '아니오' 버튼이 나올 수 있게 했으므로 추후 삭제 필요
-          if (this.options.icon === 'question' || this.options.icon === 'warning') {
-            this._messageboxType = 'confirm';
-          }
-          break;
-      }
-    }
-    if (this._getCookie(this._id) === 'Y') {
-      this.remove();
-    } else {
-      this._show();
-    }
   }
 
   done(fn: Function) {

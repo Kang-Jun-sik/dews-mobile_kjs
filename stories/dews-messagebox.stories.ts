@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 import '../src/dews-mobile.js';
 // eslint-disable-next-line import/extensions
-import { Messagebox, MSGBOX_OPTIONS } from '../src/components/messagebox/dews-messagebox';
+import { Messagebox } from '../src/components/messagebox/messagebox';
 
 export default {
   title: 'Messagebox'
@@ -15,7 +15,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
       <button
         id="msgBox1"
         @click="${() => {
-          showMsgBox('저장이 완료되었습니다.', {
+          new Messagebox('저장이 완료되었습니다.', 'alert', {
             id: 'msgBox1',
             align: 'center',
             icon: 'success'
@@ -43,7 +43,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
         <button
           id="msgBox2"
           @click="${() => {
-            showMsgBox('조건에 해당하는 데이터가 없습니다.', {
+            new Messagebox('조건에 해당하는 데이터가 없습니다.', 'alert', {
               id: 'msgBox2',
               align: 'center',
               icon: 'info'
@@ -72,7 +72,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
             <button
               id="msgBox3"
               @click="${() => {
-                showMsgBox('서버와 연결이 끊겼습니다.', {
+                new Messagebox('서버와 연결이 끊겼습니다.', 'error', {
                   id: 'msgBox3',
                   align: 'center',
                   icon: 'error'
@@ -99,7 +99,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
             <button
               id="msgBox4"
               @click="${() => {
-                showMsgBox('저장되지 않은 정보가 있습니다.\n그래도 진행하시겠습니까?', {
+                new Messagebox('저장되지 않은 정보가 있습니다.\n그래도 진행하시겠습니까?', 'confirm', {
                   id: 'msgBox4',
                   align: 'center',
                   icon: 'warning',
@@ -129,7 +129,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
     <button
       id="msgBox5"
       @click="${() => {
-        showMsgBox('변경된 사항이 있습니다.\n저장하시겠습니까?', {
+        new Messagebox('변경된 사항이 있습니다.\n저장하시겠습니까?', 'error', {
           id: 'msgBox5',
           align: 'center',
           icon: 'question'
@@ -154,7 +154,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
     <button
       id="msgBox6"
       @click="${() => {
-        showMsgBox('해당 앱을 기본으로 설정하시겠습니까?', {
+        new Messagebox('해당 앱을 기본으로 설정하시겠습니까?', 'alert', {
           id: 'msgBox6',
           align: 'center',
           icon: 'question',
@@ -180,7 +180,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
     <button
       id="msgBox7"
       @click="${() => {
-        showMsgBox('해당 앱을 기본으로 설정하시겠습니까?', {
+        new Messagebox('해당 앱을 기본으로 설정하시겠습니까?', 'confirm', {
           id: 'msgBox7',
           align: 'center',
           icon: 'question',
@@ -206,7 +206,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
     <button
       id="msgBox8"
       @click="${() => {
-        showMsgBox('조건에 해당하는 데이터가 없습니다.', {
+        new Messagebox('조건에 해당하는 데이터가 없습니다.', 'alert', {
           id: 'msgBox8',
           align: 'center',
           icon: 'info',
@@ -232,7 +232,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
     <button
       id="msgBox9"
       @click="${() => {
-        showMsgBox('저장되지 않은 데이터가 있습니다.\n그래도 진행하시겠습니까?', {
+        new Messagebox('저장되지 않은 데이터가 있습니다.\n그래도 진행하시겠습니까?', 'error', {
           id: 'msgBox9',
           align: 'left',
           icon: 'warning'
@@ -257,7 +257,7 @@ export const Messagebox1 = () => html`<div style="width: 360px">
     <button
       id="msgBox10"
       @click="${() => {
-        showMsgBox('저장되지 않은 데이터가 있습니다.\n그래도 진행하시겠습니까?', {
+        new Messagebox('저장되지 않은 데이터가 있습니다.\n그래도 진행하시겠습니까?', 'confirm', {
           id: 'msgBox10',
           align: 'right',
           icon: 'warning'
@@ -277,11 +277,3 @@ export const Messagebox1 = () => html`<div style="width: 360px">
     </button>
   </dews-box>
 </div> `;
-
-function showMsgBox(message: string, options: MSGBOX_OPTIONS) {
-  const msgBox = new Messagebox();
-  msgBox.message = message;
-  msgBox.options = options;
-  msgBox.show();
-  return msgBox;
-}

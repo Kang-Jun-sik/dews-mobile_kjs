@@ -23,7 +23,7 @@ export { Tabs } from './tabs/tabs.js';
 export { Tab } from './tab/tab.js';
 export { Datepicker } from './picker/datepicker/datepicker.js';
 export { Timepicker } from './picker/timepicker/timepicker.js';
-export { Messagebox } from './messagebox/dews-messagebox.js';
+export { Messagebox } from './messagebox/messagebox.js';
 export { Snackbar } from './snackbar/snackbar.js';
 export { Loading } from './loading/loading.js';
 export { Complex } from './Complex/Complex.js';

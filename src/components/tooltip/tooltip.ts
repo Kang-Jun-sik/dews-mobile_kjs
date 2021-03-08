@@ -2,11 +2,11 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './tooltip.html';
 import scss from './tooltip.scss';
-import { internalProperty, property, PropertyValues } from 'lit-element';
+import { internalProperty, PropertyValues } from 'lit-element';
 
 type TOOLTIP_TYPE = 'normal' | 'required' | 'title';
 type TOOLTIP_POSITION = 'top' | 'bottom';
-export type TOOLTIP_OPTIONS = {
+export interface TooltipOptions {
   type?: TOOLTIP_TYPE;
   text?: string;
   position?: TOOLTIP_POSITION;
@@ -14,23 +14,23 @@ export type TOOLTIP_OPTIONS = {
   fadeOutTime?: number;
   closeButton?: boolean;
   title?: string;
-};
+}
 
 export class Tooltip extends DewsFormComponent {
   static styles = scss;
 
-  @property({ type: Object })
-  options: TOOLTIP_OPTIONS = {
-    type: 'normal',
-    text: '',
-    position: 'bottom',
-    durationTime: 0,
-    fadeOutTime: 2000,
-    closeButton: true,
-    title: undefined
-  };
+  constructor(target: HTMLElement, option?: TooltipOptions) {
+    super();
+    this._type = option?.type || 'normal';
+    this._text = option?.text || '';
+    this._position = option?.position || 'bottom';
+    this._durationTime = option?.durationTime || 0;
+    this._fadeOutTime = option?.fadeOutTime || 2000;
+    this._closeButton = option?.closeButton || true;
+    this._title = option?.title;
+    this._target = target;
+  }
 
-  @property({ type: Object })
   _target: HTMLElement | null = null;
 
   @internalProperty()
@@ -48,13 +48,13 @@ export class Tooltip extends DewsFormComponent {
   @internalProperty()
   _tooltipTop = '0px';
 
-  private _type: TOOLTIP_TYPE | undefined = 'normal';
-  private _closeButton: boolean | undefined = true;
-  private _durationTime: number | undefined = 0;
-  private _fadeOutTime: number | undefined = 2000;
-  private _position: TOOLTIP_POSITION | undefined = 'bottom';
-  private _text: string | undefined = '';
-  private _title: string | undefined = undefined;
+  _type: TOOLTIP_TYPE | undefined;
+  _closeButton: boolean | undefined;
+  _durationTime: number | undefined;
+  _fadeOutTime: number | undefined;
+  _position: TOOLTIP_POSITION | undefined;
+  private _text: string | undefined;
+  private _title: string | undefined;
   private _showFlag = true;
 
   render() {
@@ -140,32 +140,6 @@ export class Tooltip extends DewsFormComponent {
 
       if (body !== null) {
         body.append(this);
-      }
-
-      for (const prop in this.options) {
-        switch (prop) {
-          case 'type':
-            this._type = this.options[prop];
-            break;
-          case 'text':
-            this._text = this.options[prop];
-            break;
-          case 'position':
-            this._position = this.options[prop];
-            break;
-          case 'durationTime':
-            this._durationTime = this.options[prop];
-            break;
-          case 'fadeOutTime':
-            this._fadeOutTime = this.options[prop];
-            break;
-          case 'closeButton':
-            this._closeButton = this.options[prop];
-            break;
-          case 'title':
-            this._title = this.options[prop];
-            break;
-        }
       }
 
       if (this._position === 'top') {

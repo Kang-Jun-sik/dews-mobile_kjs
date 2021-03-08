@@ -1,18 +1,17 @@
 import { html } from 'lit-html';
 import '../src/dews-mobile.js';
 // eslint-disable-next-line import/extensions
-import { Tooltip, TOOLTIP_OPTIONS } from '../src/components/tooltip/tooltip';
+import { Tooltip, TooltipOptions } from '../src/components/tooltip/tooltip';
 
 export default {
   title: 'Tooltip'
 };
 
 export const Tooltip1 = () => html`<div style="width: 360px">
-  <!--  <dews-tooltip></dews-tooltip>-->
   <button
     id="showTooltip"
     @click="${() => {
-      showTooltip(document.querySelector('div#targetDiv'), {
+      showTooltip(document.querySelector('#targetDiv'), {
         type: 'normal',
         text:
           'tooltiptooltiptooltiptooltiptooltiptooltiptooltiptooltip' +
@@ -33,7 +32,7 @@ export const Tooltip1 = () => html`<div style="width: 360px">
   <button
     id="showTooltip"
     @click="${() => {
-      showTooltip(document.querySelector('div#targetDiv2'), {
+      showTooltip(document.querySelector('#targetDiv2'), {
         // type: 'title',
         text: 'tooltipTop',
         position: 'top',
@@ -50,11 +49,11 @@ export const Tooltip1 = () => html`<div style="width: 360px">
   <button
     id="showTooltip"
     @click="${() => {
-      showTooltip(document.querySelector('div#targetDiv2'), {
+      showTooltip(document.querySelector('#targetDiv2'), {
         type: 'title',
         text: 'title text',
         position: 'top',
-        closeButton: false,
+        // closeButton: false,
         title: 'TITLE',
         // durationTime: 2000,
         fadeOutTime: 5000
@@ -67,12 +66,12 @@ export const Tooltip1 = () => html`<div style="width: 360px">
   <button
     id="showTooltip"
     @click="${() => {
-      showTooltip(document.querySelector('div#targetDiv'), {
+      showTooltip(document.querySelector('#targetDiv'), {
         type: 'required',
-        // text: 'tooltipTop',
-        // position: 'bottom',
-        // closeButton: false,
-        // title: 'TITLE',
+        text: 'tooltipTop',
+        position: 'bottom',
+        closeButton: true,
+        title: 'TITLE',
         durationTime: 2000,
         fadeOutTime: 3000
       });
@@ -84,9 +83,7 @@ export const Tooltip1 = () => html`<div style="width: 360px">
   <div id="targetDiv2" style="border: 1px solid blue; width: 300px; height: 300px;">DIV</div>
 </div>`;
 
-function showTooltip(target: HTMLElement | null, options: TOOLTIP_OPTIONS) {
-  const tooltip = new Tooltip();
-  tooltip.options = options;
-  tooltip._target = target;
+function showTooltip(target: HTMLElement | null, options: TooltipOptions) {
+  const tooltip = new Tooltip(target as HTMLElement, options);
   tooltip.show();
 }

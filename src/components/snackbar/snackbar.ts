@@ -4,21 +4,19 @@ import template from './snackbar.html';
 import scss from './snackbar.scss';
 import { property, PropertyValues } from 'lit-element';
 
-type ICON_LIST = 'success' | 'warning' | 'error' | 'info' | 'loading';
-export type SNACKBAR_OPTIONS =
-  | {
-      icon?: ICON_LIST | undefined;
-      exposureTime?: number | undefined;
-    }
-  | ICON_LIST
-  | boolean
-  | undefined;
+export type ICON_LIST = 'success' | 'warning' | 'error' | 'info' | 'loading';
+export interface SnackbarOptions {
+  icon?: ICON_LIST | undefined;
+  exposureTime?: number | undefined;
+}
 
 export class Snackbar extends DewsFormComponent {
   static styles = scss;
 
-  constructor() {
+  constructor(message: string, options?: SnackbarOptions | ICON_LIST | boolean) {
     super();
+    this.message = message;
+    this.showSnackBar(options);
   }
 
   @property({ type: String })
@@ -30,8 +28,6 @@ export class Snackbar extends DewsFormComponent {
   @property({ type: String })
   _className = 'dews-snackbar fadein';
 
-  options: SNACKBAR_OPTIONS = undefined;
-
   private _icon: ICON_LIST | undefined = 'success';
   private _exposureTime: number | undefined = 2;
   private _showIcon = true;
@@ -41,23 +37,16 @@ export class Snackbar extends DewsFormComponent {
     return template.call(this);
   }
 
-  showSnackBar() {
-    if (typeof this.options === 'object') {
-      for (const prop in this.options) {
-        switch (prop) {
-          case 'icon':
-            this._icon = this.options[prop];
-            break;
-          case 'exposureTime':
-            this._exposureTime = this.options[prop];
-            break;
-        }
-      }
-    } else if (typeof this.options === 'boolean' && !this.options) {
+  showSnackBar(options?: SnackbarOptions | ICON_LIST | boolean) {
+    if (typeof options === 'object') {
+      this._icon = options?.icon;
+      this._exposureTime = options?.exposureTime;
+    } else if (typeof options === 'boolean' && !options) {
       this._showIcon = false;
-    } else if (typeof this.options === 'string') {
-      this._icon = this.options;
+    } else if (typeof options === 'string') {
+      this._icon = options;
     }
+
     this._show();
   }
 
