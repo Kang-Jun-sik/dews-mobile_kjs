@@ -13,3 +13,8 @@
 
 @include dews-drawer-dataset();
 @include dews-snackbar();
+
+::slotted(li) {
+  flex: 0 0 auto;
+  margin-right: 8px;
+}
