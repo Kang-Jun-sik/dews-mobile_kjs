@@ -421,17 +421,18 @@ export class Containerbutton extends DrawerRightBase {
       const li = document.createElement('li');
       if ($el.tagName !== 'LI') {
         li.appendChild($el as Element);
-        this.shadowRoot?.querySelector('#custom')?.appendChild(li);
+        li.slot = 'content';
+        this.appendChild(li);
       }
     });
-    if (this.shadowRoot?.querySelector('#custom')?.children.length === 0) {
-      this.shadowRoot?.querySelector('.option-custom-button')?.remove();
-    }
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     new TouchScroll(this.shadowRoot?.querySelector('.dataset-list') as HTMLElement);
+    if (this.children.length === 0) {
+      this.shadowRoot?.querySelector('.option-custom-button')?.remove();
+    }
   }
 
   render() {
