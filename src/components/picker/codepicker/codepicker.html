@@ -29,7 +29,7 @@ ${this.multi?html`
 </div>
 `}
 
-<drawer-layout class="drawer-layout" @close="${this._close}" ?active="${this.active}" scrollEnabled tabindex="-1">
+<drawer-layout class="drawer-layout" fix @close="${this._close}" ?active="${this.active}" scrollEnabled tabindex="-1">
   <div class="drawer-codepicker">
     <div class="titlebar">
       <div class="title">${this.helpTitle}</div>

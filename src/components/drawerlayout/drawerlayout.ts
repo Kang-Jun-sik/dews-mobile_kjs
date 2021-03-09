@@ -3,7 +3,7 @@ import { internalProperty, property, PropertyValues } from 'lit-element';
 
 import template from './drawerlayout.html';
 import scss from './drawerlayout.scss';
-import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+import { EventEmitter } from '@dews/dews-mobile-core';
 
 type EVENT_TYPE = 'heightChange';
 
@@ -27,6 +27,9 @@ export class Drawerlayout extends DewsFormComponent {
 
   @property({ type: String })
   height: string | undefined = '200px';
+
+  @property({ type: Boolean, reflect: true })
+  fix = false;
 
   @property({ type: Boolean })
   scrollEnabled = false;
@@ -192,16 +195,17 @@ export class Drawerlayout extends DewsFormComponent {
         this.keypadOpen = !this.keypadOpen;
         if (this.keypadOpen) {
           this._beforeHeight = layerBottom.offsetHeight;
-          layerBottom.style.top = `0px`;
-          layerBottom.style.bottom = `inherit`;
-          this._height = `100%`;
+          layerBottom.style.top = `52px`;
+          this._height = `calc(100% -  52px)`;
         } else {
-          layerBottom.style.top = '';
-          this._height = `${this._beforeHeight}px`;
+          if (!this.fix) {
+            layerBottom.style.top = '';
+            this._height = `${this._beforeHeight}px`;
+          }
         }
         break;
       default:
-        if (this.keypadOpen) {
+        if (this.keypadOpen && !this.fix) {
           this.keypadOpen = false;
           layerBottom.style.top = '';
           this._height = `${this._beforeHeight}px`;
