@@ -163,59 +163,51 @@ export class Drawerlayout extends DewsFormComponent {
     });
   }
 
-  private _beforeTop = 0;
-
-  keypadStateChange() {
-    const layerBottom = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
-    if (this.orientationChange) {
-      this.orientationChange = false;
-      this._height = `calc(100% - ${this.height})`;
-      this._moveCheck = false;
-      this.#EVENT.emit('heightChange', {
-        target: this,
-        type: 'heightChange'
-      });
-      return;
-    } else {
-      if (window.innerWidth + window.innerHeight + 100 < this._originalSize) {
-        if (window.innerWidth + window.innerHeight !== this._originalSize) {
-          if (this.active) {
-            layerBottom.style.top = `${this._beforeTop}px`;
-            this._height = `${window.innerHeight}px`;
-          }
-        } else {
-          if (this.active) {
-            layerBottom.style.top = '';
-            this._height = `calc(100% - ${this.height})`;
-          }
-        }
-      }
-    }
-  }
-
-  private keypadStateChangeEvent = this.keypadStateChange.bind(this);
-  private _originalSize = 0;
-  private _outerHeight = 0;
-
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
     if (_changedProperties.get('active') !== undefined && !this.right) {
-      if ((!_changedProperties.get('active') && this._moveCheck) || this.height === '200px') {
-        this._height = `calc(100% - ${this.height})`;
-        this._moveCheck = false;
-        const layerBottom = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
-        this._beforeTop = layerBottom.offsetTop;
-      }
       if (!_changedProperties.get('active')) {
-        this._originalSize = window.innerWidth + window.innerHeight;
-        this._outerHeight = window.outerHeight;
-        window.addEventListener('resize', this.keypadStateChangeEvent);
+        window.addEventListener('click', this._windowClickEVENT);
         window.addEventListener('orientationchange', this.orientationChangeEvent);
       } else {
-        window.removeEventListener('resize', this.keypadStateChangeEvent);
+        window.removeEventListener('click', this._windowClickEVENT);
         window.removeEventListener('orientationchange', this.orientationChangeEvent);
       }
     }
     return super.shouldUpdate(_changedProperties);
+  }
+
+  private keypadOpen = false;
+
+  private _windowClickEVENT = this._windowClickHandler.bind(this);
+
+  private _beforeHeight = 0;
+  _windowClickHandler(e: any) {
+    const target = e.path[0];
+    const layerBottom = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
+    switch (target.tagName) {
+      case 'INPUT':
+      case 'DEWS-TEXTBOX':
+      case 'DEWS-NUMERICTEXTBOX':
+      case 'DEWS-MASKBOX':
+        this.keypadOpen = !this.keypadOpen;
+        if (this.keypadOpen) {
+          this._beforeHeight = layerBottom.offsetHeight;
+          layerBottom.style.top = `0px`;
+          layerBottom.style.bottom = `inherit`;
+          this._height = `100%`;
+        } else {
+          layerBottom.style.top = '';
+          this._height = `${this._beforeHeight}px`;
+        }
+        break;
+      default:
+        if (this.keypadOpen) {
+          this.keypadOpen = false;
+          layerBottom.style.top = '';
+          this._height = `${this._beforeHeight}px`;
+        }
+        break;
+    }
   }
 
   private orientationChangeEvent = this.orientation.bind(this);
@@ -223,6 +215,15 @@ export class Drawerlayout extends DewsFormComponent {
 
   private orientation() {
     this.orientationChange = true;
+    if (this.orientationChange) {
+      this.orientationChange = false;
+      this._moveCheck = false;
+      this._height = `calc(100% - ${this.height})`;
+      this.#EVENT.emit('heightChange', {
+        target: this,
+        type: 'heightChange'
+      });
+    }
   }
 
   protected updated(_changedProperties: PropertyValues) {
