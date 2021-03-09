@@ -31,7 +31,7 @@ export class ScrollManager {
     if (pageYOffset === 0) {
       // anchor disabled event
       this.hideAnchor();
-    } else if (pageYOffset > 0) {
+    } else if (pageYOffset > 0 && !matchMedia('screen and (min-width: 1024px)').matches) {
       // anchor enabled event
       this.showAnchor();
       this.checkScrollPosition(pageYOffset);

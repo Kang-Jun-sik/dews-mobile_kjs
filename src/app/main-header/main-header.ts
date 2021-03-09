@@ -103,8 +103,13 @@ export class MainHeader extends LitElement {
    */
   private clickAnchor(area: AreaType) {
     this.focusedArea = area;
-    area.scrollIntoView();
-    window.scroll(0, pageYOffset - this.headerHeight - this.areaDividerHeight);
+    window.scrollBy({
+      top: area.getBoundingClientRect().y - this.headerHeight - this.areaDividerHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
+    // area.scrollIntoView();
+    // window.scroll(0, pageYOffset - this.headerHeight - this.areaDividerHeight);
   }
 
   render() {
