@@ -1,6 +1,6 @@
 {
   "name": "@dews/dews-mobile",
-  "version": "1.0.022",
+  "version": "1.0.023",
   "description": "Webcomponent dews-mobile following open-wc recommendations",
   "author": "dews-mobile",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "wca": "web-component-analyzer analyze src --outFile custom-elements.json"
   },
   "dependencies": {
+    "jwt-decode": "^3.1.2",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0"
   },
