@@ -1,6 +1,6 @@
 {
   "name": "@dews/dews-mobile",
-  "version": "1.0.021",
+  "version": "1.0.023",
   "description": "Webcomponent dews-mobile following open-wc recommendations",
   "author": "dews-mobile",
   "license": "MIT",
@@ -19,12 +19,13 @@
     "wca": "web-component-analyzer analyze src --outFile custom-elements.json"
   },
   "dependencies": {
+    "jwt-decode": "^3.1.2",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0"
   },
   "devDependencies": {
     "@dews/dews-mobile-core": "^0.1.6",
-    "@dews/dews-mobile-style": "^1.1.9",
+    "@dews/dews-mobile-style": "^1.1.12",
     "@open-wc/building-rollup": "^1.0.0",
     "@open-wc/demoing-storybook": "^2.0.0",
     "@open-wc/eslint-config": "^4.2.0",

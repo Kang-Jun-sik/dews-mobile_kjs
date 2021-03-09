@@ -20,19 +20,41 @@ export class MobileAppAuthenticationManager implements AuthenticationManagerInte
   }
 
   async authenticate(): Promise<void> {
-    // nativeApp에서 토큰을 받아오는 API호출
-    this._accessToken = window.DzMobileBridge.func_getHeaderAccessToken!();
-    this._detailToken = window.DzMobileBridge.func_getHeaderDetailToken!();
+    return new Promise((resolve, reject) => {
+      // func_getHeaderAccessToken함수를 호출하면, 네이티브에서 dz_getHeaderAccessToken함수 호출로 token 전달
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      window.DzMobileBridge.dz_getHeaderAccessToken = (token: string) => {
+        if (token) {
+          const data = JSON.parse(token).data;
 
-    // 세션에 불러온 토큰값 저장
-    AuthenticateService.setAuthorizedToken(this._accessToken);
-    AuthenticateService.setAuthorizedDetailToken(this._detailToken);
+          this._accessToken = data.access_token;
+          // 세션에 불러온 토큰값 저장
+          AuthenticateService.setAuthorizedToken(data);
 
-    // 토큰이 있으면 인증완료
-    this._isAuthenticated = true;
+          resolve();
+        } else {
+          reject();
+        }
+      };
 
-    alert(this._accessToken);
+      // func_getHeaderDetailToken 호출하면, 네이티브에서 dz_getHeaderDetailToken 호출로 token 전달
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      window.DzMobileBridge.dz_getHeaderDetailToken = (token: string) => {
+        if (token) {
+          this._detailToken = JSON.parse(token).data.access_token_details;
 
-    return Promise.resolve();
+          // 세션에 불러온 토큰값 저장
+          AuthenticateService.setAuthorizedDetailToken(this._detailToken);
+        }
+      };
+
+      // nativeApp에서 토큰을 받아오는 API호출
+      window.DzMobileBridge.func_getHeaderAccessToken!();
+      window.DzMobileBridge.func_getHeaderDetailToken!();
+
+      // 토큰이 있으면 인증완료
+      // this._isAuthenticated = !!this._accessToken;
+      this._isAuthenticated = true;
+    });
   }
 }

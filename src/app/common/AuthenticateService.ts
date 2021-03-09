@@ -1,5 +1,77 @@
+import JwtDecode from 'jwt-decode';
+
 const AUTH_TOKEN_KEY = 'erp10:mobile:auth:token';
 const AUTH_TOKEN_DETAIL_KEY = 'erp10:mobile:auth:token:detail';
+
+/**
+ * 인증된 사용자 정보
+ */
+export interface AuthorizedUser {
+  /**
+   * 사용자 이름
+   */
+  username: string;
+  /**
+   * 사용자 아이디
+   */
+  userid: string;
+  /**
+   * 회사 이름
+   */
+  companyName?: string;
+  /**
+   * 회사 코드
+   */
+  companyCode?: string;
+  /**
+   * 그룹 코드
+   */
+  groupCode?: string;
+  /**
+   * 그룹 이름
+   */
+  groupName?: string;
+
+  /**
+   * 직급 코드
+   */
+  dutyCode?: string;
+
+  /**
+   * 직급 이름
+   */
+  dutyName?: string;
+
+  /**
+   * 타임존 코드
+   */
+  timezone?: string;
+
+  /**
+   * 사용자 프로필 사진 경로
+   */
+  userpic?: string;
+
+  /**
+   * 사용자 설정 언어
+   */
+  language?: string;
+
+  /**
+   * 사번
+   */
+  empCode?: string;
+
+  /**
+   * 그룹 통합 사번
+   */
+  gEmpCode?: string;
+
+  /**
+   * 원그리드 관리자 여부
+   */
+  isOneGridSystemUser?: string;
+}
 
 export class AuthenticateService {
   /**
@@ -18,13 +90,30 @@ export class AuthenticateService {
     return !!sessionStorage.getItem(AUTH_TOKEN_KEY);
   }
 
+  // 인증 토큰을 세션 스토리지에 저장
   static setAuthorizedToken(data: unknown): void {
-    // 인증 토큰을 세션 스토리지에 저장
     sessionStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(data));
   }
+
+  // 인증 토큰을 세션 스토리지에 저장
   static setAuthorizedDetailToken(data: unknown): void {
-    // 인증 토큰을 세션 스토리지에 저장
     sessionStorage.setItem(AUTH_TOKEN_DETAIL_KEY, JSON.stringify(data));
+  }
+
+  /**
+   * 인증된 사용자의 정보를 가져옵니다.
+   * @returns {AuthorizedUser} 인증된 사용자 정보
+   */
+  static getAuthorizedUser(): AuthorizedUser | null {
+    const strAuth: string | null = sessionStorage.getItem(AUTH_TOKEN_DETAIL_KEY);
+    if (strAuth) {
+      return AuthenticateService.parseJwt(strAuth) as AuthorizedUser;
+    }
+    return null;
+  }
+
+  private static parseJwt(token: string): object {
+    return JwtDecode<object>(token);
   }
 
   /**

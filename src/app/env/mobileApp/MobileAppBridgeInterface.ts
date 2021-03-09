@@ -6,4 +6,8 @@ export interface MobileAppBridgeInterface {
   func_getHeaderAccessToken?: () => string;
   func_getHeaderDetailToken?: () => string;
   func_getUserInfo?: () => string;
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  dz_getHeaderAccessToken(token: string): void;
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  dz_getHeaderDetailToken(token: string): void;
 }
