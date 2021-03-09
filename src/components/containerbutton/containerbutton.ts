@@ -417,13 +417,13 @@ export class Containerbutton extends DrawerRightBase {
   }
 
   private _slotChange(e: Event) {
-    for (let i = 0; i < this.children.length; i++) {
+    Array.from(this.children).forEach($el => {
       const li = document.createElement('li');
-      if (this.children.item(i)?.tagName !== 'LI') {
-        li.appendChild(this.children.item(i) as Element);
+      if ($el.tagName !== 'LI') {
+        li.appendChild($el as Element);
         this.shadowRoot?.querySelector('#custom')?.appendChild(li);
       }
-    }
+    });
     if (this.shadowRoot?.querySelector('#custom')?.children.length === 0) {
       this.shadowRoot?.querySelector('.option-custom-button')?.remove();
     }
