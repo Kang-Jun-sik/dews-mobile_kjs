@@ -1,4 +1,12 @@
-import { customElement, html, internalProperty, LitElement, property, TemplateResult } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  LitElement,
+  property,
+  PropertyValues,
+  TemplateResult
+} from 'lit-element';
 import { AreaType, DewsBizPage } from '../base/exports.js';
 import { classMap } from 'lit-html/directives/class-map';
 import { PageLoadedEventArgs } from '../PageLoadedEventArgs.js';
@@ -6,6 +14,7 @@ import { PageLoadedEventArgs } from '../PageLoadedEventArgs.js';
 import scss from './main-header.scss';
 import template from './main-header.html';
 import { SystemType } from '../SystemTypeEnum.js';
+import { TouchActive } from '../../components/utill/touchActive.js';
 
 @customElement('main-header')
 export class MainHeader extends LitElement {
@@ -110,6 +119,14 @@ export class MainHeader extends LitElement {
     });
     // area.scrollIntoView();
     // window.scroll(0, pageYOffset - this.headerHeight - this.areaDividerHeight);
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    const touchActive = new TouchActive();
+    touchActive.TouchActive(this.shadowRoot?.querySelector('.history-back-button') as HTMLElement);
+    touchActive.TouchActive(this.shadowRoot?.querySelector('.all-menu-button') as HTMLElement);
+    touchActive.TouchActive(this.shadowRoot?.querySelector('.title-close-button') as HTMLElement);
   }
 
   render() {

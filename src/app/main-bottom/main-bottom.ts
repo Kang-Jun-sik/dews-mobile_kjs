@@ -1,10 +1,11 @@
-import { customElement, html, internalProperty, LitElement, query, TemplateResult } from 'lit-element';
+import { customElement, html, internalProperty, LitElement, PropertyValues, query, TemplateResult } from 'lit-element';
 import { MainButtonSet } from './MainButtons.js';
 import { FocusChangedEventArgs } from '../FocusChangedEventArgs.js';
 
 import scss from './main-bottom.scss';
 import template from './main-bottom.html';
 import { PageLoadedEventArgs } from '../PageLoadedEventArgs.js';
+import { TouchActive } from '../../components/utill/touchActive.js';
 
 @customElement('main-bottom')
 export class MainBottom extends LitElement {
@@ -57,12 +58,33 @@ export class MainBottom extends LitElement {
 
       result = html`
         <li class="main-button ${mainButton.hidden ? 'hide' : ''}">
-          <button class="${type}" @click="${(e: MouseEvent) => mainButton.click(e)}">${title}</button>
+          <button
+            class="${type}"
+            @click="${(e: MouseEvent) => mainButton.click(e)}"
+            @touchstart="${this._touchstart}"
+            @touchend="${this._touchend}"
+          >
+            ${title}
+          </button>
         </li>
       `;
     }
-
     return result;
+  }
+
+  private _touchstart(e: Event) {
+    (e.target as HTMLElement).classList.add('touch');
+  }
+  private _touchend(e: Event) {
+    (e.target as HTMLElement).classList.remove('touch');
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    const touchActive = new TouchActive();
+    this.shadowRoot?.querySelectorAll('.sub-buttons > button').forEach($el => {
+      touchActive.TouchActive($el as HTMLElement);
+    });
   }
 
   render() {
