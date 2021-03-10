@@ -175,7 +175,8 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
     } else if (this.transport?.read) {
       this._trigger('requestStart', { type: 'read' });
       const readElement = this.transport.read;
-      let requestData: any = {};
+      let requestData: any = {},
+        readData;
       if (this.paging) {
         requestData = {
           paging: true,
@@ -185,7 +186,12 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
       }
 
       if (this.transport?.read?.data) {
-        requestData = Object.assign({}, this.transport.read.data, requestData);
+        if (this.transport.read.data instanceof Function) {
+          readData = this.transport.read.data.call();
+        } else {
+          readData = this.transport.read.data;
+        }
+        requestData = Object.assign({}, readData, requestData);
       }
 
       try {
@@ -307,6 +313,12 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
 
   commit(): void {
     this._data?.commit();
+  }
+
+  setTransportReadData(data: any) {
+    if (this.transport && this.transport.read) {
+      this.transport.read.data = data;
+    }
   }
 
   on(type: string, handler: any) {

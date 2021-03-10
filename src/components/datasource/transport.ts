@@ -1,5 +1,6 @@
 import { customElement, LitElement, property, PropertyValues } from 'lit-element';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 @customElement('ds-transport-read')
 export class TransportRead extends LitElement {
   constructor() {
@@ -16,14 +17,14 @@ export class TransportRead extends LitElement {
   @property({ type: String })
   type: 'get' | 'post' = 'get';
 
-  @property({ type: Object })
-  data? = undefined;
+  // @property({ type: Object })
+  data: any = null;
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
     super.attributeChangedCallback(name, old, value);
-    if (name === 'data' && value) {
-      return JSON.parse(value);
-    }
+    // if (name === 'data' && value) {
+    //   return JSON.parse(value);
+    // }
   }
 
   protected createRenderRoot(): Element | ShadowRoot {
