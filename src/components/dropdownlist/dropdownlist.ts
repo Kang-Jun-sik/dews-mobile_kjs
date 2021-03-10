@@ -336,7 +336,7 @@ export class Dropdownlist extends DrawerBottomBase {
 
   connectedCallback() {
     super.connectedCallback();
-    this.value = (this.querySelector('dropdownlist-item[checked]') as DropdownlistItem).value;
+    this.value = (this.querySelector('dropdownlist-item[checked]') as DropdownlistItem)?.value;
 
     if (this.disabled && this.readonly) {
       this.readonly = false;

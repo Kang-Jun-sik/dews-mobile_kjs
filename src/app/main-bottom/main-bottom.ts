@@ -82,7 +82,7 @@ export class MainBottom extends LitElement {
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     const touchActive = new TouchActive();
-    this.shadowRoot?.querySelectorAll('.sub-buttons > button').forEach($el => {
+    this.shadowRoot?.querySelectorAll('button').forEach($el => {
       touchActive.TouchActive($el as HTMLElement);
     });
   }
