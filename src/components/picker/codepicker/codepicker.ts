@@ -101,7 +101,6 @@ export class Codepicker extends PickerBase {
   }
 
   async connectedCallback() {
-    console.log('connect!!');
     super.connectedCallback();
 
     // disabled 와 readonly 중 disabled 를 우선 처리한다.
@@ -210,7 +209,7 @@ export class Codepicker extends PickerBase {
   }
 
   public focus() {
-    console.log('focus');
+    // console.log('focus');
   }
 
   public setHelpParams(helpParams: object | Function) {
@@ -372,13 +371,10 @@ export class Codepicker extends PickerBase {
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    console.log('shouldUpdate');
-
     return super.shouldUpdate(_changedProperties);
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
-    console.log('firstUpdated');
     // this._drawerLayout?.addEventListener('blur', this._close);
 
     new TouchScroll(this.shadowRoot?.querySelector('.control') as HTMLElement);
@@ -471,8 +467,6 @@ export class Codepicker extends PickerBase {
   }
 
   protected updated(_changedProperties: PropertyValues) {
-    console.log('updated!!!!!!');
-
     super.updated(_changedProperties);
 
     this.updateComplete.then(() => {
@@ -524,7 +518,6 @@ export class Codepicker extends PickerBase {
   }
 
   render() {
-    console.log('render');
     return template.call(this);
   }
 }

@@ -5,7 +5,6 @@ import { customElement, LitElement, property, PropertyValues } from 'lit-element
 export class TransportRead extends LitElement {
   constructor() {
     super();
-    console.log('read constructor');
     if (this.parentElement?.tagName !== 'DS-TRANSPORT') {
       throw 'ds-transport 태그가 존재하지 않습니다.';
     }
@@ -39,7 +38,6 @@ export class TransportSave extends LitElement {
 
   constructor() {
     super();
-    console.log('save constructor');
     if (this.parentElement?.tagName !== 'DS-TRANSPORT') {
       throw 'ds-transport 태그가 존재하지 않습니다.';
     }
@@ -57,7 +55,6 @@ export class Transport extends LitElement {
 
   constructor() {
     super();
-    console.log('transport constructor', this);
     if (this.parentElement?.tagName !== 'DEWS-DATASOURCE') {
       throw 'dews-datasource 태그가 존재하지 않습니다.';
     }
@@ -66,7 +63,6 @@ export class Transport extends LitElement {
   }
 
   private _createRead(): void {
-    console.log('transport/_createRead');
     const readElement: TransportRead | null = this.querySelector('ds-transport-read');
     if (readElement) {
       this.read = readElement;
@@ -81,39 +77,31 @@ export class Transport extends LitElement {
   }
 
   async connectedCallback() {
-    console.log('ds-transport connectedCallback');
     super.connectedCallback();
     await this.updateComplete;
-    console.log('transport updateComplete');
   }
 
   disconnectedCallback() {
-    console.log('ds-transport disconnectedCallback');
     super.disconnectedCallback();
   }
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
-    console.log('ds-transport attributeChangedCallback');
     super.attributeChangedCallback(name, old, value);
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    console.log('ds-transport shouldUpdate');
     return super.shouldUpdate(_changedProperties);
   }
 
   protected update(changedProperties: PropertyValues) {
-    console.log('ds-transport updated');
     super.update(changedProperties);
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
-    console.log('ds-transport firstUpdated');
     super.firstUpdated(_changedProperties);
   }
 
   protected updated(_changedProperties: PropertyValues) {
-    console.log('ds-transport updated');
     super.updated(_changedProperties);
   }
 

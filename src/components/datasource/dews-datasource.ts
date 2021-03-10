@@ -2,7 +2,6 @@ import { internalProperty, property, PropertyValues } from 'lit-element';
 import { Transport } from './transport.js';
 import { Schema } from './schema.js';
 import {
-  ajax,
   api,
   EventEmitter,
   ObservableArray,
@@ -10,7 +9,7 @@ import {
   ObservableObject,
   ObservableObjectProxyInterface
 } from '@dews/dews-mobile-core';
-import { HttpRequestConfig, HttpResponse } from '@dews/dews-mobile-core/dist/types/utils/comm/HttpClient';
+import { HttpRequestConfig } from '@dews/dews-mobile-core/dist/types/utils/comm/HttpClient';
 import { Sort, SortType } from './Sort.js';
 import {
   DataSourceChangeEventArgs,
@@ -81,7 +80,6 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
 
   constructor() {
     super();
-    console.log('ds constructor');
     if (!this.getAttribute('id')) {
       throw '데이터소스 컴포넌트의 아이디가 없습니다.';
     }
@@ -97,7 +95,6 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   }
 
   private _createSchema(): void {
-    console.log('_createSchema');
     const schemaElement: Schema<T> | null = this.querySelector('ds-schema');
     if (schemaElement) {
       this.schema = schemaElement;
@@ -121,16 +118,13 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   async connectedCallback() {
     super.connectedCallback();
 
-    console.log('connectedCallback');
     await this.updateComplete;
     this._bindEvent();
     this._bindDataEvent();
-    console.log('ds updateComplete');
   }
 
   // region LifeCycle
   async disconnectedCallback() {
-    console.log('disconnectedCallback');
     super.disconnectedCallback();
 
     await this.updateComplete;
@@ -138,22 +132,18 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    console.log('shouldUpdate');
     return super.shouldUpdate(_changedProperties);
   }
 
   protected update(changedProperties: PropertyValues) {
-    console.log('updated');
     super.update(changedProperties);
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
-    console.log('firstUpdated');
     super.firstUpdated(_changedProperties);
   }
 
   protected updated(_changedProperties: PropertyValues) {
-    console.log('updated');
     super.updated(_changedProperties);
   }
 
@@ -330,13 +320,11 @@ export class DataSource<T extends object = object> extends DewsDataComponent {
   }
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
-    console.log('attributeChangedCallback');
     super.attributeChangedCallback(name, old, value);
     if (name === 'onchange') {
       // const changeHandler = eval(value!);
       const ch = new Function('return ' + value)();
       this._events.on<DataSourceChangeEventArgs<T>>('change', ch);
-      console.log(`name: ${name}, ${old}, ${value}`);
     }
   }
 

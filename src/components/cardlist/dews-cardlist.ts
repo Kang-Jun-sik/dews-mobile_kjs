@@ -352,7 +352,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       }
 
       this._datasource.on('_dataBound', (e: any) => {
-        console.log('requestEnd', e);
         if (this.usePaging) {
           if (e.response.total) {
             this._paging._total = e.response.total;
@@ -382,7 +381,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
       });
 
       this._datasource.on('change', (e: DataSourceChangeEventArgs<T>) => {
-        console.log('datasource change', e);
         if (e.type === 'add' || e.type === 'update' || e.type === 'delete') {
           if (this.useControl && this.controlOptions.useSortSet) {
             this._cardData = this._datasource!.sortData() || [];
@@ -405,14 +403,11 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // 카드리스트 다시그리는 함수
   private _cardListRepeat = (items: any) => {
     const keyFn = (item: any) => {
-      console.log('keyFn', item);
       return item.uid;
     };
     const itemTemplate = (item: any, index: number) => {
-      console.log('itemTemplate', item, index);
       return this._createCardElement(item, index);
     };
-    console.log('cardListFn');
     return html`${repeat(items, keyFn, itemTemplate)}`;
   };
 
@@ -702,7 +697,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   }
   // 카드 체크 요소 클릭 이벤트 헨들러
   private _checkClickHandler(e: any) {
-    console.log('check', e);
     const checkbox: Checkbox = e.currentTarget;
     const checked: boolean = checkbox.checked;
     this._checkChange(checkbox, checked);
@@ -866,14 +860,12 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   // region LifeCycle
   async connectedCallback() {
     super.connectedCallback();
-    console.log('connectedCallback');
     if (this._first) {
       this._getFields();
       this._first = false;
       await this.updateComplete;
       await this._initOptions();
       await this._createElements();
-      console.log('updateComplete');
       // 컬럼 셋 이벤트 헨들러 등록
       const columnSetElement = this.shadowRoot?.querySelector('columnset-button') as Columnsetbutton;
       if (columnSetElement) {
@@ -888,28 +880,23 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   }
 
   async disconnectedCallback() {
-    console.log('disconnectedCallback');
     super.disconnectedCallback();
   }
 
   protected shouldUpdate(_changedProperties: PropertyValues): boolean {
-    console.log('shouldUpdate', this);
     return super.shouldUpdate(_changedProperties);
   }
 
   protected update(changedProperties: PropertyValues) {
     super.update(changedProperties);
-    console.log('update', this);
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    console.log('firstUpdated', this);
   }
 
   protected updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
-    console.log('updated', this);
     if (typeof _changedProperties.get('_totalCount') === 'number' && this._totalCount >= 0) {
       this._createTotalCardCountElement();
       this._createAllSelectElement();
@@ -971,7 +958,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
     super.attributeChangedCallback(name, old, value);
-    console.log('attributeChanged');
     if (name === 'header-options' || name === 'control-options') {
       return JSON.parse(value!);
     }
@@ -986,7 +972,6 @@ export class Cardlist<T extends object> extends DewsFormComponent {
   }
 
   render() {
-    console.log('render');
     return template.call(this);
   }
   // endregion

@@ -62,7 +62,7 @@ export class Card<T extends object> extends DewsFormComponent {
   protected update(changedProperties: PropertyValues) {
     super.update(changedProperties);
     if (this.data) {
-      console.log('card updated', changedProperties);
+      // console.log('card updated', changedProperties);
     }
   }
 
@@ -71,13 +71,12 @@ export class Card<T extends object> extends DewsFormComponent {
     this._createCardElement();
 
     this.onclick = e => {
-      console.log('card click', e);
+      //   console.log('card click', e);
     };
   }
 
   attributeChangedCallback(name: string, old: string | null, value: string | null) {
     super.attributeChangedCallback(name, old, value);
-    console.log('attributeChanged');
     if (name === 'header-options' || name === 'control-options') {
       return JSON.parse(value!);
     }
