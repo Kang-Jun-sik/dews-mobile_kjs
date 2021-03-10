@@ -31,6 +31,9 @@ export class Drawerlayout extends DewsFormComponent {
   @property({ type: Boolean, reflect: true })
   fix = false;
 
+  @property({ type: Boolean, reflect: true, attribute: 'height-fix' })
+  heightFix = false;
+
   @property({ type: Boolean })
   scrollEnabled = false;
 
@@ -193,7 +196,7 @@ export class Drawerlayout extends DewsFormComponent {
       case 'DEWS-NUMERICTEXTBOX':
       case 'DEWS-MASKBOX':
         this.keypadOpen = !this.keypadOpen;
-        if (this.keypadOpen) {
+        if (this.keypadOpen && !this.heightFix) {
           this._beforeHeight = layerBottom.offsetHeight;
           layerBottom.style.top = `52px`;
           this._height = `calc(100% -  52px)`;

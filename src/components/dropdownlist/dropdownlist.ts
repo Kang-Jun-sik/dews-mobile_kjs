@@ -61,6 +61,9 @@ export class Dropdownlist extends DrawerBottomBase {
   @property({ type: Boolean, reflect: true })
   readonly = false;
 
+  @property({ type: String, reflect: true })
+  value = '';
+
   @internalProperty()
   active = false;
 
@@ -333,6 +336,8 @@ export class Dropdownlist extends DrawerBottomBase {
 
   connectedCallback() {
     super.connectedCallback();
+    this.value = (this.querySelector('dropdownlist-item[checked]') as DropdownlistItem).value;
+
     if (this.disabled && this.readonly) {
       this.readonly = false;
     }
@@ -454,10 +459,8 @@ export class Dropdownlist extends DrawerBottomBase {
 
   private _slotChange() {
     this.select = [];
-    Array.from(this.children).forEach($el => {
-      if (($el as DropdownlistItem).checked) {
-        this.select.push(($el as DropdownlistItem).title);
-      }
+    this.querySelectorAll('dropdownlist-item[checked]').forEach($el => {
+      this.select.push(($el as DropdownlistItem).title);
     });
   }
 

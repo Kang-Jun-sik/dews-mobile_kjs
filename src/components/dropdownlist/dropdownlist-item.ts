@@ -20,6 +20,9 @@ export class DropdownlistItem extends DewsFormComponent {
   @property({ type: String, reflect: true })
   label: string | undefined;
 
+  @property({ type: String, reflect: true })
+  value = '';
+
   @property({ type: Boolean, reflect: true })
   disabled = false;
 
@@ -64,6 +67,7 @@ export class DropdownlistItem extends DewsFormComponent {
     });
     this.checked = true;
     this.$parent!.select[0] = $el.dataset.value as string;
+    this.$parent!.value = this.value;
     this.$parent!._EVENT.emit('select', { target: this, type: 'select', item: this.$parent!.select[0] });
     this.$parent!._EVENT.emit('change', { target: this, type: 'change' });
     this.$parent!._singleClickHandler();
@@ -80,6 +84,7 @@ export class DropdownlistItem extends DewsFormComponent {
       }
     } else {
       if ((e.target as HTMLElement).localName !== 'dews-checkbox') {
+        this.$parent!.value = this.value;
         this.$parent?._EVENT.emit('checked', { target: this, type: 'checked' });
         $el.setAttribute('checked', 'true');
       }
