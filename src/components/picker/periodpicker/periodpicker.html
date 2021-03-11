@@ -14,7 +14,7 @@
   <div class="drawer-periodpicker">
     <div class="titlebar">
       <div class="title">${this.title}</div>
-      <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
+      <button class="confirm-button will-touch" @click="${this._confirmClickHandler}">적용</button>
       ${this.$nextBtn}
     </div>
 
@@ -27,7 +27,7 @@
                       value="${this._value}" @beforeinput="${this._beforeInputHandler}" @input="${this._inputHandler}"/>
             </span>
           </span>
-        <button class="clear-button" @click="${this._removeClickHandler}">
+        <button class="clear-button will-button" @click="${this._removeClickHandler}">
           <span>초기화</span>
         </button>
       </div>
@@ -41,9 +41,9 @@
 
 
             ${(this.mode==='option' ?'' :html`
-            <button class="prev calendar-button" @click="${this._beforeClickHandler}"><span>이전</span></button>
+            <button class="prev calendar-button will-touch" @click="${this._beforeClickHandler}"><span>이전</span></button>
             <button class="fast calendar-button" @click="${this._modeClickHandler}"><span>${this._modeView}</span></button>
-            <button class="next calendar-button" @click="${this._afterClickHandler}"><span>다음</span></button>
+            <button class="next calendar-button will-touch" @click="${this._afterClickHandler}"><span>다음</span></button>
             `)}
 
 
@@ -68,16 +68,16 @@
             <!-- 월 기간 피커일 경우 아래 period-week 삭제 -->
             <div class="period-week period">
               <ul>
-                <li @click="${this._optionBtnClickHandler}" data-index="0">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="0">
                   <button><span>주간</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="1">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="1">
                   <button><span>전주</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="2">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="2">
                   <button><span>당월</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="3">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="3">
                   <button><span>전월</span></button>
                 </li>
               </ul>
@@ -85,69 +85,69 @@
 
             <div class="period-quarter period">
               <ul>
-                <li @click="${this._optionBtnClickHandler}" data-index="4">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="4">
                   <button><span>1/4분기</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="5">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="5">
                   <button><span>2/4분기</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="6">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="6">
                   <button><span>3/4분기</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="7">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="7">
                   <button><span>4/4분기</span></button>
                 </li>
               </ul>
             </div>
             <div class="period-half period">
               <ul>
-                <li @click="${this._optionBtnClickHandler}" data-index="8">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="8">
                   <button><span>상반기</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="9">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="9">
                   <button><span>하반기</span></button>
                 </li>
-                <li @click="${this._optionBtnClickHandler}" data-index="10">
+                <li class="will-touch" @click="${this._optionBtnClickHandler}" data-index="10">
                   <button><span>올해</span></button>
                 </li>
               </ul>
             </div>
             <div class="period-month period">
               <ul>
-                <li @click="${this._optionMonthClickHandler}" data-value="1">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="1">
                   <button><span>1월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="2">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="2">
                   <button><span>2월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="3">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="3">
                   <button><span>3월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="4">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="4">
                   <button><span>4월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="5">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="5">
                   <button><span>5월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="6">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="6">
                   <button><span>6월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="7">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="7">
                   <button><span>7월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="8">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="8">
                   <button><span>8월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="9">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="9">
                   <button><span>9월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="10">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="10">
                   <button><span>10월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="11">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="11">
                   <button><span>11월</span></button>
                 </li>
-                <li @click="${this._optionMonthClickHandler}" data-value="12">
+                <li class="will-touch" @click="${this._optionMonthClickHandler}" data-value="12">
                   <button><span>12월</span></button>
                 </li>
               </ul>

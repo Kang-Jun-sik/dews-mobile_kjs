@@ -13,7 +13,7 @@
     <div class="drawer-timepicker">
       <div class="titlebar">
         <div class="title">${this.title}</div>
-        <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
+        <button class="confirm-button will-touch" @click="${this._confirmClickHandler}">적용</button>
         ${this.$nextBtn}
 
       </div>
@@ -26,7 +26,7 @@
                       value="${this._value}" @beforeinput="${this._beforeInputHandler}" @input="${this._inputHandler}" readonly="readonly">
             </span>
           </span>
-          <button class="clear-button" @click="${this._removeClickHandler}">
+          <button class="clear-button will-touch" @click="${this._removeClickHandler}">
             <span>초기화</span>
           </button>
           </div>
