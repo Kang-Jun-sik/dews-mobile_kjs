@@ -1,5 +1,6 @@
 import { LitElement, PropertyValues } from 'lit-element';
 import { getDewsComponentList } from '../dews-component-list.js';
+import { TouchActive } from '../utill/touchActive.js';
 
 /**
  * 전체 컴포넌트의 상속
@@ -49,7 +50,14 @@ export abstract class DewsComponent extends LitElement {
         }
       }
     }
-
     return element;
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    const touchActiveChange = new TouchActive();
+    this.shadowRoot?.querySelectorAll('.will-touch')?.forEach($el => {
+      touchActiveChange.TouchActive($el as HTMLElement);
+    });
   }
 }
