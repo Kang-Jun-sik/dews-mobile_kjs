@@ -1,5 +1,5 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
+import { html, property, PropertyValues, TemplateResult } from 'lit-element';
 import { Drawerlayout } from '../drawerlayout/drawerlayout.js';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
@@ -87,7 +87,7 @@ export class DrawerBottomBase extends DewsFormComponent {
           ) {
             this.$nextBtn = html``;
           } else {
-            this.$nextBtn = html`<button class="next-icon-button" @click="${this._nextBtnClickHandler}">
+            this.$nextBtn = html`<button class="next-icon-button will-touch" @click="${this._nextBtnClickHandler}">
               <span>다음</span>
             </button>`;
           }
