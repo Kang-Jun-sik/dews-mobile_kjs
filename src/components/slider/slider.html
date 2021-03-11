@@ -52,8 +52,8 @@ ${this.sliderType === 'range'?html`
       </div>
     </div>
   </div>
-  <button class="slider-stepper minus"  ?disabled="${this.disabled}" @click="${this._minusBtnClick}"><span>-</span></button>
-  <button class="slider-stepper plus" ?disabled="${this.disabled}" @click="${this._plusBtnClick}"><span>+</span></button>
+  <button class="slider-stepper minus will-touch"  ?disabled="${this.disabled}" @click="${this._minusBtnClick}"><span>-</span></button>
+  <button class="slider-stepper plus will-touch" ?disabled="${this.disabled}" @click="${this._plusBtnClick}"><span>+</span></button>
 
   <div class="slider-quantity">
     <span class="quantity">${ this.min }</span>
