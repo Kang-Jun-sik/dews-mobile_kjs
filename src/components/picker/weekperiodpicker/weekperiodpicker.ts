@@ -1,5 +1,3 @@
-import { DewsFormComponent } from '../../base/DewsFormComponent.js';
-
 import template from './weekperiodpicker.html';
 import scss from './weekperiodpicker.scss';
 import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
@@ -302,7 +300,7 @@ export class Weekperiodpicker extends PickerBase {
     const weeks: Array<TemplateResult> = [];
     for (let i = 1; i <= 52; i++) {
       weeks.push(
-        html` <li class="week" @click="${this._weekClickHandler}" data-value="${i}">
+        html` <li class="week will-touch" @click="${this._weekClickHandler}" data-value="${i}">
           <button><span>${i}주</span></button>
         </li>`
       );

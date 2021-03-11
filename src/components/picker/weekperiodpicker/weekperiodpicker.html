@@ -16,7 +16,7 @@
   <div class="drawer-periodpicker">
     <div class="titlebar">
       <div class="title">${this.title}</div>
-      <button class="confirm-button" @click="${this._confirmClickHandler}">적용</button>
+      <button class="confirm-button will-touch" @click="${this._confirmClickHandler}">적용</button>
       ${this.$nextBtn}
     </div>
 
@@ -29,7 +29,7 @@
                       value="${this._value}" @beforeinput="${this._beforeInputHandler}" @input="${this._inputHandler}"/>
             </span>
           </span>
-        <button class="clear-button" @click="${this._removeClickHandler}">
+        <button class="clear-button will-touch" @click="${this._removeClickHandler}">
           <span>초기화</span>
         </button>
       </div>
@@ -37,9 +37,9 @@
       <div class="layer-calendar-wrap">
         <div class="calender-header">
           <div class="header">
-            <button class="prev calendar-button" @click="${this._beforeClickHandler}"><span>이전</span></button>
+            <button class="prev calendar-button will-touch" @click="${this._beforeClickHandler}"><span>이전</span></button>
             <button class="fast calendar-button" @click="${this._modeClickHandler}"><span>${this._modeView}</span></button>
-            <button class="next calendar-button" @click="${this._afterClickHandler}"><span>다음</span></button>
+            <button class="next calendar-button will-touch" @click="${this._afterClickHandler}"><span>다음</span></button>
           </div>
         </div>
 
