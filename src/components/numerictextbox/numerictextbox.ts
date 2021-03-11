@@ -1,4 +1,4 @@
-import { property, html, TemplateResult, PropertyValues, internalProperty } from 'lit-element';
+import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './numerictextbox.html';
@@ -229,8 +229,8 @@ export class Numerictextbox extends DewsFormComponent {
       }
       this._button = html`
         <span class="stepper">
-          <button class="button-stepper minus" @click="${this._stepperDecrement}"></button>
-          <button class="button-stepper plus" @click="${this._stepperIncrement}"></button>
+          <button class="button-stepper minus will-touch" @click="${this._stepperDecrement}"></button>
+          <button class="button-stepper plus will-touch" @click="${this._stepperIncrement}"></button>
         </span>
       `;
     }

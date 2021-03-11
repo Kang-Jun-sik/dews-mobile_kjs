@@ -77,13 +77,13 @@ export class Containerbutton extends DrawerRightBase {
 
     if (this.setButton) {
       this._iconList.push(html` <li class="data-set">
-        <button class="set" @click="${this._dataSet}"><span>Data Set</span></button>
+        <button class="set will-touch" @click="${this._dataSet}"><span>Data Set</span></button>
       </li>`);
     }
     if (this.captureButton) {
       this._iconList.push(
         html` <li class="data-capture">
-          <button class="capture" @click="${this._dataCapture}">
+          <button class="capture will-touch" @click="${this._dataCapture}">
             <span>Data Capture</span>
           </button>
         </li>`
@@ -92,7 +92,7 @@ export class Containerbutton extends DrawerRightBase {
     if (this.resetButton) {
       this._iconList.push(
         html` <li class="data-reset">
-          <button class="reset" @click="${this._dataReset}">
+          <button class="reset will-touch" @click="${this._dataReset}">
             <span>Data Reset</span>
           </button>
         </li>`
@@ -161,7 +161,7 @@ export class Containerbutton extends DrawerRightBase {
                   <div class="header">
                     <span class="date">${data[0].dateTime}</span>
                     <button class="apply-button" @click="${this._bindData.bind(this, data)}">적용</button>
-                    <button class="delete-button" @click="${this._reomveData.bind(this, dataSet.data, i)}">
+                    <button class="delete-button will-touch" @click="${this._reomveData.bind(this, dataSet.data, i)}">
                       <span>삭제</span>
                     </button>
                   </div>
