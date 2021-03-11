@@ -314,10 +314,12 @@ export class PickerBase extends DrawerBottomBase {
     this._removeCheck = false;
   }
 
+  // eslint-disable-next-line
   protected _inputChange() {
     //  오버라이드 될부분
   }
 
+  // eslint-disable-next-line
   protected _spinnerPickerViewChange(y?: number, m?: number) {
     //  오버라이드 될부분
   }
@@ -552,9 +554,11 @@ export class PickerBase extends DrawerBottomBase {
                 <span>${count}</span>
               </div>`);
             } else {
-              returnValue.push(html` <div data-value="${count}" @click="${this._dayClickHandler}" class="day weekend">
-                <span>${count}</span>
-              </div>`);
+              returnValue.push(
+                html` <div data-value="${count}" @click="${this._dayClickHandler}" class="day weekend will-touch">
+                  <span>${count}</span>
+                </div>`
+              );
             }
           } else if (
             max < date.getTime(todayYear, todayMonth, count) ||
@@ -566,7 +570,7 @@ export class PickerBase extends DrawerBottomBase {
             </div>`);
           } else {
             // 평일
-            returnValue.push(html` <div data-value="${count}" @click="${this._dayClickHandler}" class="day">
+            returnValue.push(html` <div data-value="${count}" @click="${this._dayClickHandler}" class="day will-touch">
               <span>${count}</span>
             </div>`);
           }
@@ -603,7 +607,9 @@ export class PickerBase extends DrawerBottomBase {
         );
       } else {
         _mountView.push(
-          html` <div class="month" data-value="${i}" @click="${this._monthClickHandler}"><span>${i}</span></div>`
+          html` <div class="month will-touch" data-value="${i}" @click="${this._monthClickHandler}">
+            <span>${i}</span>
+          </div>`
         );
       }
     }
@@ -655,7 +661,7 @@ export class PickerBase extends DrawerBottomBase {
           );
         } else {
           _yearView.push(
-            html` <div class="year" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
+            html` <div class="year will-touch" data-value="${todayYearStart + i}" @click="${this._yearClickHandler}">
               <span>${todayYearStart + i}</span>
             </div>`
           );
