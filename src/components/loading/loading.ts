@@ -2,7 +2,7 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './loading.html';
 import scss from './loading.scss';
-import { internalProperty } from 'lit-element';
+import { eventOptions, internalProperty } from 'lit-element';
 
 export interface LoadingOptions {
   target?: HTMLElement | null;
@@ -73,6 +73,7 @@ export class Loading extends DewsFormComponent {
   }
 
   // 로딩 출력 후 오버레이 영역의 터치 스크롤링을 막음
+  @eventOptions({ passive: false })
   private _onTouchmove(e: TouchEvent) {
     e.preventDefault();
   }

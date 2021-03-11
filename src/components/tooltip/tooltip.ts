@@ -2,7 +2,7 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './tooltip.html';
 import scss from './tooltip.scss';
-import { internalProperty, PropertyValues } from 'lit-element';
+import { eventOptions, internalProperty, PropertyValues } from 'lit-element';
 
 type TOOLTIP_TYPE = 'normal' | 'required' | 'title';
 type TOOLTIP_POSITION = 'top' | 'bottom';
@@ -63,7 +63,7 @@ export class Tooltip extends DewsFormComponent {
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('click', this.touchEvent);
+    document.addEventListener('click', this.touchEvent, { passive: true });
   }
 
   disconnectedCallback() {

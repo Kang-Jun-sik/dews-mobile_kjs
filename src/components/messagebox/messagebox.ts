@@ -2,7 +2,7 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './messagebox.html';
 import scss from './messagebox.scss';
-import { property } from 'lit-element';
+import { eventOptions, property } from 'lit-element';
 
 type ALIGN_LIST = 'center' | 'left' | 'right';
 type ICON_LIST = 'success' | 'info' | 'error' | 'question' | 'warning';
@@ -184,11 +184,13 @@ export class Messagebox extends DewsFormComponent {
   }
 
   // 메시지박스 출력 후 오버레이 영역의 터치 스크롤링을 막음
+  @eventOptions({ passive: true })
   private _onTouchmove(e: TouchEvent) {
     e.preventDefault();
   }
 
   // 메시지박스 출력 후 오버레이 영역의 스크롤링을 막음
+  @eventOptions({ passive: false })
   private _onWheel(e: Event) {
     e.preventDefault();
   }

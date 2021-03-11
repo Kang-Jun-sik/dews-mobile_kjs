@@ -1,5 +1,5 @@
 import { DewsFormComponent } from '../base/DewsFormComponent.js';
-import { internalProperty, property, PropertyValues } from 'lit-element';
+import { eventOptions, internalProperty, property, PropertyValues } from 'lit-element';
 
 import template from './drawerlayout.html';
 import scss from './drawerlayout.scss';
@@ -100,11 +100,13 @@ export class Drawerlayout extends DewsFormComponent {
     }
   }
 
+  @eventOptions({ passive: true })
   private _touchStop(e: TouchEvent) {
     e.stopPropagation();
     e.preventDefault();
   }
 
+  @eventOptions({ passive: true })
   private _touchMove(e: TouchEvent & AddEventListenerOptions) {
     e.preventDefault();
     e.passive = true;
@@ -127,6 +129,7 @@ export class Drawerlayout extends DewsFormComponent {
     }
   }
 
+  @eventOptions({ passive: true })
   private _touchEnd(e: TouchEvent) {
     this._moveState = false;
     this._moveEnd = e.changedTouches[0].screenY;
@@ -141,6 +144,7 @@ export class Drawerlayout extends DewsFormComponent {
     this.dispatchEvent(this.close);
   }
 
+  @eventOptions({ passive: true })
   private _touchStart(e: TouchEvent) {
     this._moveStart = e.changedTouches[0].screenY;
     this._defaultHeight = this.shadowRoot!.querySelector('.layer-bottom')?.clientHeight;

@@ -5,8 +5,8 @@ export class TouchActive {
    * */
   TouchActive(target?: HTMLElement) {
     if (target) {
-      target.addEventListener('touchstart', touchStart);
-      target.addEventListener('touchend', touchEnd);
+      target.addEventListener('touchstart', touchStart, { capture: false, once: false, passive: true });
+      target.addEventListener('touchend', touchEnd, { capture: false, once: false, passive: true });
     }
 
     // 터치시작시 touch class 주입

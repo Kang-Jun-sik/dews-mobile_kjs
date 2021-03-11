@@ -1,4 +1,13 @@
-import { customElement, html, internalProperty, LitElement, PropertyValues, query, TemplateResult } from 'lit-element';
+import {
+  customElement,
+  eventOptions,
+  html,
+  internalProperty,
+  LitElement,
+  PropertyValues,
+  query,
+  TemplateResult
+} from 'lit-element';
 import { MainButtonSet } from './MainButtons.js';
 import { FocusChangedEventArgs } from '../FocusChangedEventArgs.js';
 
@@ -72,9 +81,12 @@ export class MainBottom extends LitElement {
     return result;
   }
 
+  @eventOptions({ passive: true })
   private _touchstart(e: Event) {
     (e.target as HTMLElement).classList.add('touch');
   }
+
+  @eventOptions({ passive: true })
   private _touchend(e: Event) {
     (e.target as HTMLElement).classList.remove('touch');
   }

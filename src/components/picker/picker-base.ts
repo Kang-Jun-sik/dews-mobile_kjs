@@ -1,4 +1,4 @@
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
+import { eventOptions, html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import { DrawerBottomBase } from './drawer-bottom-base.js';
 import { DateUtill } from '../base/DateUtill.js';
 
@@ -208,6 +208,7 @@ export class PickerBase extends DrawerBottomBase {
   }
 
   //  터치 이벤트 처리 ex) 스와이프 효과를 위해 처리
+  @eventOptions({ passive: true })
   private _touchMoveHandler(e: TouchEvent): void {
     e.preventDefault();
     this._moveCheck = true;
@@ -228,6 +229,7 @@ export class PickerBase extends DrawerBottomBase {
     }
   }
 
+  @eventOptions({ passive: true })
   private _touchStartHandler(e: TouchEvent): void {
     if (!this.spinner) {
       this._touchStartPoint = e.changedTouches[0].pageX;
@@ -252,7 +254,7 @@ export class PickerBase extends DrawerBottomBase {
       });
     }
   }
-
+  @eventOptions({ passive: true })
   private _touchEndHandler(e: TouchEvent) {
     if (!this.spinner) {
       const $el = e.currentTarget as HTMLElement;

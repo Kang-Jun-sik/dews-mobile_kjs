@@ -1,4 +1,4 @@
-import { internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
+import { eventOptions, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';

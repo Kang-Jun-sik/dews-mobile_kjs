@@ -2,7 +2,7 @@ import { DewsFormComponent } from '../base/DewsFormComponent.js';
 
 import template from './slider.html';
 import scss from './slider.scss';
-import { property, PropertyValues } from 'lit-element';
+import { eventOptions, property, PropertyValues } from 'lit-element';
 
 type SLIDER_TYPE = 'range' | 'stepper';
 type valueType = {
@@ -87,6 +87,7 @@ export class Slider extends DewsFormComponent {
     }
   }
 
+  @eventOptions({ passive: true })
   private _touchHandler(e: TouchEvent, buttonType: string) {
     if (this.disabled) {
       return;
@@ -119,10 +120,12 @@ export class Slider extends DewsFormComponent {
     return Math.round((((newValue / this.step) * this.pixelWidth) / this.sliderWidth) * 100);
   }
 
+  @eventOptions({ passive: true })
   private _touchStartHandler(e: TouchEvent) {
     this._tickButtonClassName = 'slider-handle active';
   }
 
+  @eventOptions({ passive: true })
   private _touchEndHandler(e: TouchEvent) {
     this._tickButtonClassName = 'slider-handle';
   }

@@ -8,9 +8,9 @@ export class TouchScroll {
    * @param target 스크롤 기능부여할 Element
    * */
   TouchScroll(target: HTMLElement) {
-    target.addEventListener('touchstart', touchStart);
-    target.addEventListener('touchmove', touchMove);
-    target.addEventListener('touchend', touchEnd);
+    target.addEventListener('touchstart', touchStart, { capture: false, once: false, passive: true });
+    target.addEventListener('touchmove', touchMove, { capture: false, once: false, passive: true });
+    target.addEventListener('touchend', touchEnd, { capture: false, once: false, passive: true });
     let startTime = 0;
     let endTime = 0;
     let startPoint = 0;

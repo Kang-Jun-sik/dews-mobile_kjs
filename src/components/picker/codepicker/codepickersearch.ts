@@ -1,5 +1,5 @@
 import { DewsFormComponent } from '../../base/DewsFormComponent.js';
-import { internalProperty, property, PropertyValues, query } from 'lit-element';
+import { eventOptions, internalProperty, property, PropertyValues, query } from 'lit-element';
 import { html } from 'lit-html';
 import scss from './codepickersearch.scss';
 import { Codepicker } from './codepicker.js';
@@ -130,6 +130,7 @@ export class Codepickersearch extends DewsFormComponent {
     this.$parent._codeSearchEmit();
   }
 
+  @eventOptions({ passive: true })
   private _touchStop(e: Event) {
     e.stopPropagation();
     e.preventDefault();
@@ -177,7 +178,7 @@ export class Codepickersearch extends DewsFormComponent {
           <!-- input 활성화시 active -->
           <span class="code-filter-input">
             <form action="">
-              <input type="search" name="q" @keydown="${this._keydown}" @blur="${this._blur}" value="${this.value}"/>
+              <input type="search" name="q" @keydown="${this._keydown}" @blur="${this._blur}" value="${this.value}" />
               <button class="clear-button" @click="${this._clear}"><span>초기화</span></button>
               <button class="search-button" @click="${this._search}"><span>검색</span></button>
             </form>

@@ -1,5 +1,5 @@
 import { DewsAreaComponent } from '../base/exports.js';
-import { internalProperty, LitElement, property, PropertyValues } from 'lit-element';
+import { eventOptions, internalProperty, LitElement, property, PropertyValues } from 'lit-element';
 import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
 
 import template from './box.html';
@@ -30,7 +30,7 @@ export class Box extends DewsAreaComponent {
     await this.updateComplete;
     this.shadowRoot?.querySelector('.dews-box-content-wrap')?.addEventListener('transitionend', this.#animationEnd);
     this.shadowRoot?.querySelector('.dews-box-content-wrap')?.addEventListener('transitionstart', this.#animationStart);
-    this.addEventListener('click', this._clickEvent);
+    this.addEventListener('click', this._clickEvent, { passive: true });
   }
 
   disconnectedCallback() {

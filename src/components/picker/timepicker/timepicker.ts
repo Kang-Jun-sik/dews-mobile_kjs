@@ -1,5 +1,5 @@
 import { DewsFormComponent } from '../../base/DewsFormComponent.js';
-import { html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
+import { eventOptions, html, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 
 import template from './timepicker.html';
 import scss from './timepicker.scss';
@@ -377,6 +377,7 @@ export class Timepicker extends DrawerBottomBase {
     ($el!.parentElement as HTMLElement).style.transform = `translateY(-${num! * height}px)`;
   }
 
+  @eventOptions({ passive: true })
   private _touchStartHandler(e: TouchEvent) {
     this._touchStartPoint = e.changedTouches[0].pageY;
     this._touchStartPosition = Math.abs(
@@ -385,6 +386,7 @@ export class Timepicker extends DrawerBottomBase {
     (e.currentTarget as HTMLElement)!.parentElement!.querySelector('.select')?.classList.remove('select');
   }
 
+  @eventOptions({ passive: true })
   private _touchMoveHandler(e: TouchEvent) {
     e.preventDefault();
     const $el = (e.currentTarget! as HTMLElement)!.parentElement;
@@ -400,6 +402,7 @@ export class Timepicker extends DrawerBottomBase {
     }
   }
 
+  @eventOptions({ passive: true })
   private _touchEndHandler(e: TouchEvent) {
     const $el = (e.currentTarget! as HTMLElement)!.parentElement;
     const height = (e.currentTarget as HTMLElement).children.item(0)!.clientHeight;

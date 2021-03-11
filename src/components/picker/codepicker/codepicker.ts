@@ -2,16 +2,15 @@ import { internalProperty, property, PropertyValues, query } from 'lit-element';
 
 import template from './codepicker.html';
 import scss from './codepicker.scss';
-import { PickerBase } from '../picker-base.js';
 import { Cardlist } from '../../cardlist/dews-cardlist.js';
 import { Checkbox } from '../../checkbox/checkbox.js';
 import { Drawerlayout } from '../../drawerlayout/drawerlayout.js';
 import { TouchScroll } from '../../utill/touchscroll.js';
-import { EventArgs } from '@dews/dews-mobile-core';
+import { DrawerBottomBase } from '../drawer-bottom-base.js';
 
 type EVENT_TYPE = 'setData' | 'change' | 'codeSearch' | 'open' | 'close';
 
-export class Codepicker extends PickerBase {
+export class Codepicker extends DrawerBottomBase {
   static styles = scss;
 
   @query('drawer-layout')
