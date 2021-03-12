@@ -9,6 +9,12 @@ export class PageModule {
 
 @singleton()
 export class PageHistoryManager {
+  constructor() {
+    if (window.DzMobileBridge) {
+      window.DzMobileBridge.moveBackPage = this.removeLatestPageHistory.bind(this);
+    }
+  }
+
   private contents: Element | null | undefined;
   private history: PageModule[] = [];
 
@@ -29,9 +35,9 @@ export class PageHistoryManager {
     }
   }
 
-  public moveBackPage(e: Event) {
+  public moveBackPage(e?: Event) {
     // historyBack click 이벤트에 대한 처리
-    if (!e.cancelable) {
+    if (!e || (e && !e.cancelable)) {
       // history back Event 발생 전에 처리해야 할 이벤트 추가 해야 함
       console.log(e);
       this.removeLatestPageHistory();
