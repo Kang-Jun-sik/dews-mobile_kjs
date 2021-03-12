@@ -10,4 +10,5 @@ export interface MobileAppBridgeInterface {
   dz_getHeaderAccessToken(token: string): void;
   // eslint-disable-next-line @typescript-eslint/camelcase
   dz_getHeaderDetailToken(token: string): void;
+  moveBackPage(): void;
 }
