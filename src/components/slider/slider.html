@@ -8,7 +8,7 @@ ${this.sliderType === 'range'?html`
       ></div>
       <button
         ?disabled="${this.disabled}"
-        class="slider-handle start"
+        class="slider-handle will-touch start"
         style="left: calc(${this._startBtnLocation + '%'} - 7px)"
         @touchmove="${(e:TouchEvent)=>this._touchHandler(e, 'start')}"
       >
@@ -16,7 +16,7 @@ ${this.sliderType === 'range'?html`
       </button>
       <button
         ?disabled="${this.disabled}"
-        class="slider-handle end"
+        class="slider-handle will-touch end"
         @touchmove="${(e:TouchEvent)=>this._touchHandler(e, 'end')}"
         style="left: calc(${this._endBtnLocation + '%'} - 7px)"
       >
