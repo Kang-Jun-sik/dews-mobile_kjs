@@ -5,7 +5,12 @@ export default {
   title: 'Checkbox'
 };
 
-export const CheckBox = () => html` <div style="width: 360px">
+export const CheckBox = () => html` <style>
+    html {
+      font-size: 15px;
+    }
+  </style>
+  <div style="width: 360px">
     <dews-checkbox-group id="chkgroup1">
       <dews-checkbox label="Check Box1" value="Check Box1" checked reverse bookmark> </dews-checkbox>
       <dews-checkbox label="Check Box2" value="Check Box2" title="Check Box2 reverse" reverse> </dews-checkbox>

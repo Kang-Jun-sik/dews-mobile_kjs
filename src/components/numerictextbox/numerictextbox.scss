@@ -10,7 +10,4 @@
 * {
   @include reset();
 }
-.undefined {
-  opacity: 0;
-}
 @include dews-numerictextbox();

@@ -5,7 +5,11 @@ export default {
   title: 'NumbericTextbox'
 };
 
-export const NumericTextBox = () => html`
+export const NumericTextBox = () => html`<style>
+  html {
+    font-size: 15px;
+  }
+</style>
   <div style="width: 360px">
      <span> 기본</span>
     <dews-numerictextbox
