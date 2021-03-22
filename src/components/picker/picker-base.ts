@@ -441,7 +441,6 @@ export class PickerBase extends DrawerBottomBase {
   protected _yearSpinnerPickerView(): TemplateResult {
     const yearMin = Number(this.min!.slice(0, 4));
     const yearMax = Number(this.max!.slice(0, 4));
-
     const $spinnerYear: Array<TemplateResult> = [];
     for (let i = 0; yearMin + i <= yearMax; i++) {
       // 년도 생성

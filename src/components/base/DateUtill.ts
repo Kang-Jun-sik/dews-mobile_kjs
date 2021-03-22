@@ -6,8 +6,8 @@ export class DateUtill {
    * @param d: 일
    * @return 시간을 반환합니다.
    * */
-  getTime(y: number, m: number, d: number): number {
-    return new Date(y, m - 1, d).getTime();
+  getTime(y: number, m: number, d: number, h?: number, M?: number): number {
+    return M ? new Date(y, m - 1, d, h, M).getTime() : new Date(y, m - 1, d).getTime();
   }
 
   getDay(y: number, m: number): number {
