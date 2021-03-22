@@ -53,3 +53,6 @@ export { Codepickersearch } from './picker/codepicker/codepickersearch.js';
 export { Zipcodepicker } from './picker/zipcodepicker/zipcodepicker.js';
 export { Sortbutton } from './sortbutton/sortbutton.js';
 export { SortbuttonItem } from './sortbutton/sortbutton-item.js';
+export { Datetimepicker } from './picker/datetimepicker/datetimepicker.js';
+export { Qrcode } from './qrcode/qrcode.js';
+export { Barcode } from './barcode/barcode.js';

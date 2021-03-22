@@ -79,7 +79,10 @@ import {
   Codepickersearch,
   Zipcodepicker,
   Sortbutton,
-  SortbuttonItem
+  SortbuttonItem,
+  Datetimepicker,
+  Qrcode,
+  Barcode
 } from './components/exports.js';
 
 window.customElements.define('columnset-button', Columnsetbutton);
@@ -112,6 +115,7 @@ window.customElements.define('dews-cardlist', Cardlist);
 window.customElements.define('dews-complex', Complex);
 window.customElements.define('dews-togglebutton', Togglebutton);
 window.customElements.define('dropdownlist-item', DropdownlistItem);
+window.customElements.define('dews-datetimepicker', Datetimepicker);
 
 window.customElements.define('dews-messagebox', Messagebox);
 window.customElements.define('dews-snackbar', Snackbar);
@@ -119,6 +123,8 @@ window.customElements.define('dews-loading', Loading);
 window.customElements.define('dews-slider', Slider);
 window.customElements.define('dews-tooltip', Tooltip);
 window.customElements.define('dews-progressbar', Progressbar);
+window.customElements.define('dews-qrcode', Qrcode);
+window.customElements.define('dews-barcode', Barcode);
 
 window.customElements.define('dews-area-panel', AreaPanel);
 window.customElements.define('area-item', AreaItem);

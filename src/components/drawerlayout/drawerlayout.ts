@@ -31,6 +31,9 @@ export class Drawerlayout extends DewsFormComponent {
   @property({ type: Boolean, reflect: true })
   fix = false;
 
+  @property({ type: Boolean, reflect: true })
+  allfix = false;
+
   @property({ type: Boolean, reflect: true, attribute: 'height-fix' })
   heightFix = false;
 
@@ -108,7 +111,7 @@ export class Drawerlayout extends DewsFormComponent {
 
   @eventOptions({ passive: true })
   private _touchMove(e: TouchEvent & AddEventListenerOptions) {
-    e.preventDefault();
+    // e.preventDefault();
     e.passive = true;
     e.capture = true;
     if (this.scrollEnabled) {
@@ -194,6 +197,9 @@ export class Drawerlayout extends DewsFormComponent {
   _windowClickHandler(e: any) {
     const target = e.path[0];
     const layerBottom = this.shadowRoot?.querySelector('.layer-bottom') as HTMLElement;
+    if (this.allfix) {
+      return;
+    }
     switch (target.tagName) {
       case 'INPUT':
       case 'DEWS-TEXTBOX':

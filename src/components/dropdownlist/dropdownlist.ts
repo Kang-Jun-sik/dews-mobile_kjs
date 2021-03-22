@@ -1,7 +1,7 @@
 import { eventOptions, internalProperty, property, PropertyValues, TemplateResult } from 'lit-element';
 import template from './dropdownlist.html';
 import scss from './dropdownlist.scss';
-import { EventArgs, EventEmitter } from '@dews/dews-mobile-core';
+import { EventEmitter } from '@dews/dews-mobile-core';
 import { DropdownlistItem } from './dropdownlist-item.js';
 import { DataSource } from '../datasource/dews-datasource.js';
 import { DrawerBottomBase } from '../picker/drawer-bottom-base.js';
@@ -9,6 +9,7 @@ import { Columnitem } from '../columnsetbutton/columnitem.js';
 import { TouchScroll } from '../utill/touchscroll.js';
 
 type EVENT = 'change' | 'open' | 'close' | 'select' | 'dataBound';
+type EventArgs = { target: Dropdownlist | DropdownlistItem; type: EVENT; item?: DropdownlistItem };
 
 export class Dropdownlist extends DrawerBottomBase {
   static styles = scss;
